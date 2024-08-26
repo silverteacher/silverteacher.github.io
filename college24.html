@@ -40,6 +40,8 @@
             padding: 0.5rem;
             border-radius: 0.25rem;
             margin-top: 0.5rem;
+            font-size: 0.875rem; /* Taille de police réduite */
+            color: #4a5568; /* Gris plus foncé */
         }
 
         .dark-mode {
@@ -58,6 +60,14 @@
 
         .completed {
             background-color: #d1fad1; /* Background color for completed tasks */
+        }
+
+        .action-buttons {
+            margin-top: 0.5rem; /* Espacement entre la note et le bouton */
+        }
+
+        .action-buttons button {
+            margin-right: 0.5rem; /* Espacement entre les boutons s'il y en a plusieurs */
         }
     </style>
 </head>
@@ -137,9 +147,14 @@
                     { id: 6, text: "À la fin du premier trimestre, faire un point.", note: "Vérifier que toutes les classes ont bien complété les campagnes de rentrée. C'est le moment de faire un petit bilan en vie de classe.", completed: false },
                     { id: 7, text: "Au début de la nouvelle année civile, on peut relancer d'autres campagnes pour habituer les élèves à cette routine.", note: "Dans la nouvelle certification, les élèves peuvent développer leurs compétences numériques et faire monter leur score Pix.", completed: false },
                     { id: 8, text: "Réserver les salles pupitres pour faire passer les élèves de troisième.", note: "Il faudra bloquer des créneaux de deux heures pour faire passer les certifications.", completed: false },
-                    { id: 9, text: "Faire la checklist pour les sites qui pourraient être bloqués pendant la certification.", note: "Les élèves ont besoin de se connecter à un certain nombre de sites, il est bon de vérifier en amont qu'ils pourront y avoir accès sans mal.", completed: false },
-                    { id: 10, text: "Vérifier la certificabilité des élèves.", note: "Soit en vérifiant dans leur profil Pix, soit en croisant les doigts, mais cela marche mieux en vérifiant. La certifiabilité est nécessaire pour valider une certification.", completed: false },
-                    { id: 11, text: "Passage de la certification Pix pour tous les élèves de 3e.", note: "Les codes seront donnés au moment de la certification pour éviter toute fraude.", completed: false },
+                    { id: 9, text: "Distribuer les codes de campagnes pour les enseignants des classes concernées.", note: "Les enseignants de technologie peuvent être très sollicités pour cela.", completed: false },
+                    { id: 10, text: "Faire passer les certifications avant le début du dernier trimestre.", note: "Les élèves peuvent passer la certification de chez eux si le protocole sanitaire l'exige.", completed: false },
+                ]
+            },
+            {
+                category: "Finalisation",
+                items: [
+                    { id: 11, text: "Récupérer les résultats et les diffuser aux élèves.", note: "Les résultats de certification sont transmis aux familles et aux élèves via l'ENT.", completed: false },
                     { id: 12, text: "Récupérer les attestations et les communiquer aux familles.", note: "Il est possible de récupérer les attestations des élèves pour les communiquer via Pronote.", completed: false },
                 ]
             },
@@ -223,15 +238,19 @@
 
                     const completeButton = document.createElement('button');
                     completeButton.className = 'ml-4 px-3 py-1 bg-green-500 text-white rounded';
-                    completeButton.innerText = task.completed ? 'Recommencer' : 'Compléter';
+                    completeButton.innerText = task.completed ? 'Annuler' : 'Vérifier';
                     completeButton.addEventListener('click', () => {
                         task.completed = !task.completed;
                         renderTasks();
                     });
 
+                    const actionButtons = document.createElement('div');
+                    actionButtons.className = 'action-buttons';
+                    actionButtons.appendChild(completeButton);
+
                     taskContent.appendChild(taskText);
                     taskContent.appendChild(taskNote);
-                    taskContent.appendChild(completeButton);
+                    taskContent.appendChild(actionButtons);
 
                     taskItem.appendChild(checkBox);
                     taskItem.appendChild(taskContent);
