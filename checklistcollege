@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check List Collège</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+    <style>
+        body {
+            background: var(--bg-color, linear-gradient(to right, #a3d5f7, #f7e6a3, #d3f7a3));
+            min-height: 100vh;
+            color: var(--text-color, #000);
+        }
+
+        #progressBar {
+            background: var(--bg-color, linear-gradient(to right, #a3d5f7, #f7e6a3, #d3f7a3));
+        }
+
+        .task-item {
+            background-color: var(--task-bg-color, #f0f4f8);
+        }
+
+        .task-note {
+            background-color: var(--task-note-bg-color, #e2e8f0);
+        }
+
+        .dark-mode {
+            --bg-color: #333;
+            --text-color: #fff;
+            --task-bg-color: #444;
+            --task-note-bg-color: #555;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body class="p-4">
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-xl p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-bold text-blue-600">Check List Collège</h1>
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleDarkMode()" class="text-blue-500">Mode Sombre</button>
+                <a href="mailto:ambassadeurspix@ac-lille.fr" class="text-blue-500 flex items-center">
+                    <i data-lucide="mail" class="icon"></i> Contact
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-blue-100 text-blue-700 border border-blue-300 p-4 rounded mb-6">
+            <h2 class="text-lg font-semibold">Voici une liste des opérations sur l'année à réaliser pour la certification Pix des élèves afin de vous aider dans votre travail de planification à l'année</h2>
+        </div>
+
+        <div class="flex justify-between items-center mb-4">
+            <div class="flex space-x-4">
+                <button onclick="filterTasks('all')" class="px-4 py-2 bg-blue-500 text-white rounded">Tout</button>
+                <button onclick="filterTasks('completed')" class="px-4 py-2 bg-green-500 text-white rounded">Complété</button>
+                <button onclick="filterTasks('pending')" class="px-4 py-2 bg-yellow-500 text-white rounded">En attente</button>
+            </div>
+            <button onclick="exportTasks()" class="px-4 py-2 bg-blue-500 text-white rounded">Exporter en CSV</button>
+        </div>
+
+        <ul id="taskList" class="space-y-2">
+            <!-- Les tâches apparaîtront ici -->
+        </ul>
+
+        <div class="mt-6">
+            <div class="flex justify-between items-center mb-2">
+                <span id="progressText">Progression : 0 / 15</span>
+                <div class="flex items-center space-x-2">
+                    <span id="levelIcon" class="icon"></span>
+                    <div id="progressIcons" class="flex space-x-1"></div>
+                </div>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 relative">
+                <div id="progressBar" class="h-2.5 rounded-full bg-green-500 absolute top-0 left-0 transition-all duration-500 ease-out" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div id="celebration" class="text-center mt-6 text-4xl hidden">🎉</div>
+
+        <!-- Section de statistiques -->
+        <div id="statistics" class="mt-6 bg-gray-100 p-4 rounded-lg shadow">
+            <h3 class="text-lg font-semibold mb-2">Statistiques</h3>
+            <p>Tâches complétées : <span id="completedCount">0</span> / <span id="totalCount">15</span></p>
+        </div>
+
+        <button onclick="addTask()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Ajouter une tâche</button>
+    </div>
+
+    <script>
+        const defaultTasks = [
+            {
+                category: "Préparation",
+                items: [
+                    { id: 0, text: "Le chef d'établissement se connecte à Pix Orga pour mettre à jour la liste des administrateurs.", note: "En effet, chaque année, les enseignants en charge de Pix peuvent avoir cessé leurs fonctions ou quitté l'établissement.", deadline: "2023-09-01", completed: false },
+                    { id: 1, text: "Le responsable d'affectation vérifie que la ressource Pix est bien affectée à tous les élèves.", note: "Par défaut le responsable d'affectation des ressources via la console du Gar est le chef d'établissement mais il peut déléguer cette tâche.", deadline: "2023-09-15", completed: false },
+                    { id: 2, text: "Créer les campagnes de rentrée pour les élèves au mois de septembre.", note: "Les chefs d'établissement peuvent déléguer cette action à des collègues et travailler soit par niveau soit par classe. Il ne faut pas oublier de prévenir les responsables légaux des élèves.", deadline: "2023-09-30", completed: false },
+                ]
+            },
+            {
+                category: "Exécution",
+                items: [
+                    { id: 3, text: "Mettre la base Siècle à jour et importer le fichier XML à jour dans Pix Orga.", note: "Il faudra répéter cette action si la base est modifiée. Arrivée ou départ d'un élève de l'établissement.", deadline: "2023-10-01", completed: false },
+                    { id: 4, text: "Communiquer les codes de campagnes aux enseignants dès que possible.", note: "Tous les enseignants peuvent se lancer avec leurs élèves.", deadline: "2023-10-15", completed: false },
+                    { id: 5, text: "Lancer des campagnes pour les 6e.", note: "Cette étape est importante pour les élèves qui découvrent en même temps que leur nouvelle vie au collège, le fonctionnement d'un ordinateur et d'un clavier.", deadline: "2023-11-01", completed: false },
+                ]
+            },
+            {
+                category: "Suivi",
+                items: [
+                    { id: 6, text: "À la fin du premier trimestre, faire un point.", note: "Vérifier que toutes les classes ont bien complété les campagnes de rentrée. C'est le moment de faire un petit bilan en vie de classe.", deadline: "2023-12-15", completed: false },
+                    { id: 7, text: "Au début de la nouvelle année civile, on peut relancer d'autres campagnes pour habituer les élèves à cette routine.", note: "Dans la nouvelle certification, les élèves peuvent développer leurs compétences numériques et faire monter leur score Pix.", deadline: "2024-01-10", completed: false },
+                    { id: 8, text: "Réserver les salles pupitres pour faire passer les élèves de troisième.", note: "Il faudra bloquer des créneaux de deux heures pour faire passer les certifications.", deadline: "2024-03-01", completed: false },
+                    { id: 9, text: "Faire la checklist pour les sites qui pourraient être bloqués pendant la certification.", note: "Les élèves ont besoin de se connecter à un certain nombre de sites, il est bon de vérifier en amont qu'ils pourront y avoir accès sans mal.", deadline: "2024-03-15", completed: false },
+                    { id: 10, text: "Vérifier la certificabilité des élèves.", note: "Soit en vérifiant dans leur profil Pix, soit en croisant les doigts, mais cela marche mieux en vérifiant. La certifiabilité est nécessaire pour valider une certification.", deadline: "2024-04-01", completed: false },
+                    { id: 11, text: "Passage de la certification Pix pour tous les élèves de 3e.", note: "Les codes seront donnés au moment de la certification pour éviter toute fraude.", deadline: "2024-04-15", completed: false },
+                    { id: 12, text: "Récupérer les attestations et les communiquer aux familles.", note: "Il est possible de récupérer les attestations des élèves pour les communiquer via Pronote.", deadline: "2024-05-01", completed: false },
+                ]
+            },
+            {
+                category: "Clôture",
+                items: [
+                    { id: 13, text: "Archiver les campagnes de certification dans Pix Orga.", note: "Il est crucial de conserver une trace des certifications des élèves, surtout ceux de troisième.", deadline: "2024-06-01", completed: false },
+                    { id: 14, text: "Supprimer les campagnes de l'année précédente.", note: "Cela permet de préparer le terrain pour la nouvelle année scolaire.", deadline: "2024-06-15", completed: false }
+                ]
+            }
+        ];
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function filterTasks(filter) {
+            const tasks = document.querySelectorAll('#taskList li');
+            tasks.forEach(task => {
+                if (filter === 'all') {
+                    task.style.display = '';
+                } else if (filter === 'completed' && task.classList.contains('completed')) {
+                    task.style.display = '';
+                } else if (filter === 'pending' && !task.classList.contains('completed')) {
+                    task.style.display = '';
+                } else {
+                    task.style.display = 'none';
+                }
+            });
+        }
+
+        function exportTasks() {
+            const csvContent = "data:text/csv;charset=utf-8," + defaultTasks.map(task => task.category + '\n' + task.items.map(item => `${item.text.replace(/,/g, '')},${item.note.replace(/,/g, '')},${item.deadline},${item.completed}`).join('\n')).join('\n\n');
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'tasks.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function addTask() {
+            const newTaskText = prompt("Entrez la nouvelle tâche :");
+            const newTaskNote = prompt("Entrez la note associée à cette tâche :");
+            const newTaskDeadline = prompt("Entrez la date limite (AAAA-MM-JJ) :");
+            if (newTaskText && newTaskNote && newTaskDeadline) {
+                const newTask = { id: defaultTasks.length, text: newTaskText, note: newTaskNote, deadline: newTaskDeadline, completed: false };
+                defaultTasks.push(newTask);
+                renderTasks();
+            }
+        }
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+
+            let totalTasks = 0;
+            let completedTasks = 0;
+
+            defaultTasks.forEach(taskGroup => {
+                const categoryHeader = document.createElement('h3');
+                categoryHeader.className = 'text-xl font-semibold text-blue-600 mt-6';
+                categoryHeader.innerText = taskGroup.category;
+                taskList.appendChild(categoryHeader);
+
+                taskGroup.items.forEach(task => {
+                    totalTasks++;
+
+                    const taskItem = document.createElement('li');
+                    taskItem.className = 'task-item p-4 rounded-lg shadow-md flex justify-between items-start';
+                    if (task.completed) {
+                        taskItem.classList.add('completed', 'bg-green-100');
+                        completedTasks++;
+                    } else {
+                        taskItem.classList.add('bg-gray-100');
+                    }
+
+                    const taskText = document.createElement('span');
+                    taskText.className = 'task-text';
+                    taskText.innerText = task.text;
+
+                    const taskNote = document.createElement('p');
+                    taskNote.className = 'task-note text-gray-600 mt-2';
+                    taskNote.innerText = task.note;
+
+                    const taskDeadline = document.createElement('p');
+                    taskDeadline.className = 'task-deadline text-gray-600 mt-2';
+                    taskDeadline.innerText = `Date limite : ${task.deadline}`;
+
+                    const completeButton = document.createElement('button');
+                    completeButton.className = 'ml-4 px-3 py-1 bg-green-500 text-white rounded';
+                    completeButton.innerText = task.completed ? 'Recommencer' : 'Compléter';
+                    completeButton.addEventListener('click', () => {
+                        task.completed = !task.completed;
+                        renderTasks();
+                    });
+
+                    taskItem.appendChild(taskText);
+                    taskItem.appendChild(taskNote);
+                    taskItem.appendChild(taskDeadline);
+                    taskItem.appendChild(completeButton);
+
+                    taskList.appendChild(taskItem);
+                });
+            });
+
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const completedCount = document.getElementById('completedCount');
+            const totalCount = document.getElementById('totalCount');
+
+            const progress = (completedTasks / totalTasks) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.innerText = `Progression : ${completedTasks} / ${totalTasks}`;
+            completedCount.innerText = completedTasks;
+            totalCount.innerText = totalTasks;
+
+            const celebration = document.getElementById('celebration');
+            if (completedTasks === totalTasks) {
+                celebration.classList.remove('hidden');
+            } else {
+                celebration.classList.add('hidden');
+            }
+        }
+
+        window.onload = function () {
+            renderTasks();
+        }
+    </script>
+</body>
+
+</html>
