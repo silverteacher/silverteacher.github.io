@@ -123,6 +123,10 @@
         </div>
     </div>
 
+    <div class="footer">
+        <img src="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2023/12/cropped-dranea-150x150.png" alt="Logo" class="mx-auto mt-6">
+    </div>
+
     <script>
         const defaultTasks = [
             {
@@ -145,141 +149,200 @@
                 category: "Suivi",
                 items: [
                     { id: 6, text: "À la fin du premier trimestre, faire un point.", note: "Vérifier que toutes les classes ont bien complété les campagnes de rentrée. C'est le moment de faire un petit bilan en vie de classe.", completed: false },
-                    { id: 7, text: "Au début de la nouvelle année civile, on peut relancer d'autres campagnes pour habituer les élèves à cette routine.", note: "Dans la nouvelle certification, les élèves peuvent développer leurs compétences numériques et faire monter leur score Pix.", completed: false },
-                    { id: 8, text: "Réserver les salles pupitres pour faire passer les élèves de troisième.", note: "Il faudra bloquer des créneaux de deux heures pour faire passer les certifications.", completed: false },
-                    { id: 9, text: "Distribuer les codes de campagnes pour les enseignants des classes concernées.", note: "Les enseignants de technologie peuvent être très sollicités pour cela.", completed: false },
-                    { id: 10, text: "Faire passer les certifications avant le début du dernier trimestre.", note: "Les élèves peuvent passer la certification de chez eux si le protocole sanitaire l'exige.", completed: false },
+                    { id: 7, text: "Au début de la nouvelle année civile, on peut relancer d'autres campagnes pour habituer les élèves à cette routine.", note: "Dans un monde numérique en constante évolution, il est important que les élèves se familiarisent continuellement avec les outils.", completed: false },
+                    { id: 8, text: "Au printemps, l'enseignant référent Pix vérifie avec le professeur principal le niveau des compétences numériques des élèves.", note: "Il peut être utile de faire un point lors des conseils de classe pour motiver les élèves à finaliser leurs parcours.", completed: false },
                 ]
             },
             {
                 category: "Finalisation",
                 items: [
-                    { id: 11, text: "Récupérer les résultats et les diffuser aux élèves.", note: "Les résultats de certification sont transmis aux familles et aux élèves via l'ENT.", completed: false },
-                    { id: 12, text: "Récupérer les attestations et les communiquer aux familles.", note: "Il est possible de récupérer les attestations des élèves pour les communiquer via Pronote.", completed: false },
+                    { id: 9, text: "Organiser la certification pour les élèves de 3e.", note: "Réservez une date dès que possible, communiquez-la aux élèves et enseignants concernés.", completed: false },
+                    { id: 10, text: "Envoyer des rappels réguliers aux élèves pour qu'ils continuent à se préparer.", note: "L'acquisition de compétences numériques est un processus continu qui nécessite des rappels réguliers.", completed: false },
+                    { id: 11, text: "S'assurer que tout le matériel nécessaire est prêt pour le jour J.", note: "Les ordinateurs, les réseaux, et les logins doivent tous être en parfait état de marche pour éviter tout problème le jour de l'examen.", completed: false },
+                    { id: 12, text: "Vérifier que les élèves ont bien validé toutes les étapes de la certification.", note: "Cela inclut la validation de toutes les compétences nécessaires à l'obtention de leur certification.", completed: false },
+                    { id: 13, text: "Communiquer les résultats aux élèves et à leurs parents.", note: "Célébrez les réussites et proposez un plan de soutien pour ceux qui en ont besoin.", completed: false },
+                    { id: 14, text: "Faire un bilan post-certification avec les élèves.", note: "C'est l'occasion d'obtenir des retours sur leur expérience et de discuter des domaines d'amélioration.", completed: false },
                 ]
             },
-            {
-                category: "Clôture",
-                items: [
-                    { id: 13, text: "Archiver les campagnes de certification dans Pix Orga.", note: "Il est crucial de conserver une trace des certifications des élèves, surtout ceux de troisième.", completed: false },
-                    { id: 14, text: "Supprimer les campagnes de l'année précédente.", note: "Cela permet de préparer le terrain pour la nouvelle année scolaire.", completed: false }
-                ]
-            }
         ];
 
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
+        const taskListElement = document.getElementById('taskList');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const completedCountElement = document.getElementById('completedCount');
+        const totalCountElement = document.getElementById('totalCount');
+        const levelIcon = document.getElementById('levelIcon');
+        const progressIcons = document.getElementById('progressIcons');
+        const celebration = document.getElementById('celebration');
+        const statisticsElement = document.getElementById('statistics');
+
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || defaultTasks;
+        let completedTasks = getCompletedTasksCount();
+        let currentLevel = Math.floor((completedTasks / 15) * 5); // Calculer le niveau actuel en fonction des tâches terminées
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateTaskList();
+            updateProgress();
+            updateLevelIcon();
+        });
 
         function filterTasks(filter) {
-            const tasks = document.querySelectorAll('#taskList .task-item');
-            tasks.forEach(task => {
-                if (filter === 'all') {
-                    task.style.display = '';
-                } else if (filter === 'completed' && task.classList.contains('completed')) {
-                    task.style.display = '';
-                } else if (filter === 'pending' && !task.classList.contains('completed')) {
-                    task.style.display = 'none';
-                } else {
-                    task.style.display = 'none';
+            let filteredTasks = [];
+
+            tasks.forEach(category => {
+                const filteredItems = category.items.filter(task => {
+                    if (filter === 'completed') return task.completed;
+                    if (filter === 'pending') return !task.completed;
+                    return true;
+                });
+
+                if (filteredItems.length) {
+                    filteredTasks.push({
+                        category: category.category,
+                        items: filteredItems
+                    });
                 }
             });
+
+            taskListElement.innerHTML = ''; // Clear the list
+            filteredTasks.forEach(category => {
+                const categoryHeader = document.createElement('h3');
+                categoryHeader.textContent = category.category;
+                categoryHeader.classList.add('font-semibold', 'text-blue-600', 'mt-4', 'text-lg');
+                taskListElement.appendChild(categoryHeader);
+
+                category.items.forEach(task => {
+                    const li = document.createElement('li');
+                    li.classList.add('task-item');
+                    if (task.completed) li.classList.add('completed');
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = task.completed;
+                    checkbox.classList.add('form-checkbox', 'h-5', 'w-5');
+                    checkbox.addEventListener('change', () => toggleTaskCompletion(task.id));
+
+                    const taskContent = document.createElement('div');
+                    taskContent.classList.add('task-content');
+                    taskContent.innerHTML = `<p>${task.text}</p><p class="task-note">${task.note}</p>`;
+
+                    li.appendChild(checkbox);
+                    li.appendChild(taskContent);
+                    taskListElement.appendChild(li);
+                });
+            });
+        }
+
+        function updateTaskList() {
+            taskListElement.innerHTML = ''; // Clear the list
+            tasks.forEach(category => {
+                const categoryHeader = document.createElement('h3');
+                categoryHeader.textContent = category.category;
+                categoryHeader.classList.add('font-semibold', 'text-blue-600', 'mt-4', 'text-lg');
+                taskListElement.appendChild(categoryHeader);
+
+                category.items.forEach(task => {
+                    const li = document.createElement('li');
+                    li.classList.add('task-item');
+                    if (task.completed) li.classList.add('completed');
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = task.completed;
+                    checkbox.classList.add('form-checkbox', 'h-5', 'w-5');
+                    checkbox.addEventListener('change', () => toggleTaskCompletion(task.id));
+
+                    const taskContent = document.createElement('div');
+                    taskContent.classList.add('task-content');
+                    taskContent.innerHTML = `<p>${task.text}</p><p class="task-note">${task.note}</p>`;
+
+                    li.appendChild(checkbox);
+                    li.appendChild(taskContent);
+                    taskListElement.appendChild(li);
+                });
+            });
+        }
+
+        function updateProgress() {
+            const totalTasks = tasks.reduce((sum, category) => sum + category.items.length, 0);
+            const completedTasks = getCompletedTasksCount();
+
+            const progressPercentage = (completedTasks / totalTasks) * 100;
+            progressBar.style.width = progressPercentage + '%';
+            progressText.textContent = `Progression : ${completedTasks} / ${totalTasks}`;
+            completedCountElement.textContent = completedTasks;
+            totalCountElement.textContent = totalTasks;
+
+            if (completedTasks === totalTasks) {
+                celebration.classList.remove('hidden');
+                statisticsElement.classList.add('hidden');
+            } else {
+                celebration.classList.add('hidden');
+                statisticsElement.classList.remove('hidden');
+            }
+        }
+
+        function getCompletedTasksCount() {
+            return tasks.reduce((count, category) => count + category.items.filter(task => task.completed).length, 0);
+        }
+
+        function toggleTaskCompletion(taskId) {
+            tasks.forEach(category => {
+                category.items.forEach(task => {
+                    if (task.id === taskId) {
+                        task.completed = !task.completed;
+                    }
+                });
+            });
+            localStorage.setItem('tasks', JSON.stringify(tasks)); // Save tasks to localStorage
+            updateTaskList();
+            updateProgress();
+            updateLevelIcon();
         }
 
         function addTask() {
-            const newTaskText = prompt("Entrez la nouvelle tâche :");
-            const newTaskNote = prompt("Entrez la note associée à cette tâche :");
-            if (newTaskText && newTaskNote) {
-                const newTask = { id: defaultTasks.length, text: newTaskText, note: newTaskNote, completed: false };
-                defaultTasks.push({ category: "Nouveau", items: [newTask] });
-                renderTasks();
+            const taskText = prompt('Entrez la description de la tâche :');
+            const taskNote = prompt('Entrez une note pour la tâche (facultatif) :');
+
+            if (taskText) {
+                const newTask = {
+                    id: tasks.reduce((maxId, category) => Math.max(maxId, ...category.items.map(task => task.id)), 0) + 1,
+                    text: taskText,
+                    note: taskNote || '',
+                    completed: false,
+                };
+
+                tasks[0].items.push(newTask); // Ajoute la nouvelle tâche dans la première catégorie
+                localStorage.setItem('tasks', JSON.stringify(tasks)); // Save tasks to localStorage
+                updateTaskList();
+                updateProgress();
             }
         }
 
-        function renderTasks() {
-            const taskList = document.getElementById('taskList');
-            taskList.innerHTML = '';
-
-            let totalTasks = 0;
-            let completedTasks = 0;
-
-            defaultTasks.forEach(taskGroup => {
-                const categoryHeader = document.createElement('h3');
-                categoryHeader.className = 'text-xl font-semibold text-blue-600 mt-6';
-                categoryHeader.innerText = taskGroup.category;
-                taskList.appendChild(categoryHeader);
-
-                taskGroup.items.forEach(task => {
-                    totalTasks++;
-
-                    const taskItem = document.createElement('li');
-                    taskItem.className = 'task-item';
-                    if (task.completed) {
-                        taskItem.classList.add('completed');
-                        completedTasks++;
-                    }
-
-                    const checkBox = document.createElement('div');
-                    checkBox.className = 'w-6 h-6 bg-green-500 rounded-full flex items-center justify-center';
-                    if (task.completed) {
-                        checkBox.innerHTML = '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
-                    }
-
-                    const taskContent = document.createElement('div');
-                    taskContent.className = 'task-content';
-
-                    const taskText = document.createElement('span');
-                    taskText.className = 'task-text text-lg font-medium';
-                    taskText.innerText = task.text;
-
-                    const taskNote = document.createElement('p');
-                    taskNote.className = 'task-note text-gray-600';
-                    taskNote.innerText = task.note;
-
-                    const completeButton = document.createElement('button');
-                    completeButton.className = 'ml-4 px-3 py-1 bg-green-500 text-white rounded';
-                    completeButton.innerText = task.completed ? 'Annuler' : 'Vérifier';
-                    completeButton.addEventListener('click', () => {
-                        task.completed = !task.completed;
-                        renderTasks();
-                    });
-
-                    const actionButtons = document.createElement('div');
-                    actionButtons.className = 'action-buttons';
-                    actionButtons.appendChild(completeButton);
-
-                    taskContent.appendChild(taskText);
-                    taskContent.appendChild(taskNote);
-                    taskContent.appendChild(actionButtons);
-
-                    taskItem.appendChild(checkBox);
-                    taskItem.appendChild(taskContent);
-
-                    taskList.appendChild(taskItem);
-                });
-            });
-
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
-            const completedCount = document.getElementById('completedCount');
-            const totalCount = document.getElementById('totalCount');
-
-            const progress = (completedTasks / totalTasks) * 100;
-            progressBar.style.width = `${progress}%`;
-            progressText.innerText = `Progression : ${completedTasks} / ${totalTasks}`;
-            completedCount.innerText = completedTasks;
-            totalCount.innerText = totalTasks;
-
-            const celebration = document.getElementById('celebration');
-            if (completedTasks === totalTasks) {
-                celebration.classList.remove('hidden');
-            } else {
-                celebration.classList.add('hidden');
-            }
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const darkModeEnabled = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', darkModeEnabled);
         }
 
-        window.onload = function () {
-            renderTasks();
+        function updateLevelIcon() {
+            const newLevel = Math.floor((getCompletedTasksCount() / 15) * 5);
+
+            if (newLevel !== currentLevel) {
+                currentLevel = newLevel;
+                levelIcon.innerHTML = ''; // Clear previous icons
+                progressIcons.innerHTML = ''; // Clear previous level progress icons
+
+                for (let i = 0; i < newLevel; i++) {
+                    const icon = document.createElement('span');
+                    icon.textContent = '⭐';
+                    levelIcon.appendChild(icon);
+                }
+
+                const progressIcon = document.createElement('span');
+                progressIcon.textContent = `${newLevel} / 5`;
+                progressIcons.appendChild(progressIcon);
+            }
         }
     </script>
 </body>
