@@ -13,6 +13,9 @@
         .task-item {
             background-color: #e2e8f0;
         }
+        .task-item.completed {
+            background-color: #c6f6d5; /* Vert clair pour les tâches complètes */
+        }
         .task-note {
             background-color: #cbd5e1;
         }
@@ -26,9 +29,19 @@
             <h2 class="text-lg font-semibold">Voici une liste des opérations sur l'année à réaliser pour la certification Pix des élèves dans les lycées afin de vous aider dans votre travail de planification.</h2>
         </div>
 
-        <ul id="taskList" class="space-y-2">
-            <!-- Les tâches apparaîtront ici -->
-        </ul>
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-blue-700">En attente</h2>
+            <ul id="pendingTasks" class="space-y-2">
+                <!-- Les tâches en attente apparaîtront ici -->
+            </ul>
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-green-700">Complété</h2>
+            <ul id="completedTasks" class="space-y-2">
+                <!-- Les tâches complètes apparaîtront ici -->
+            </ul>
+        </div>
 
         <div class="mt-6">
             <div id="progressText" class="mb-2">Progression : 0 / 15</div>
@@ -40,6 +53,11 @@
         <div id="statistics" class="mt-6 bg-gray-200 p-4 rounded-lg shadow">
             <h3 class="text-lg font-semibold mb-2">Statistiques</h3>
             <p>Tâches complétées : <span id="completedCount">0</span> / <span id="totalCount">15</span></p>
+        </div>
+        
+        <!-- Ajout du logo de la DANE -->
+        <div class="mt-6 text-center">
+            <img src="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2023/12/cropped-dranea-150x150.png" alt="Logo DRANE" class="mx-auto">
         </div>
     </div>
 
@@ -72,21 +90,29 @@
         }
 
         function renderTasks() {
-            const taskList = document.getElementById('taskList');
-            taskList.innerHTML = '';
+            const pendingTasksList = document.getElementById('pendingTasks');
+            const completedTasksList = document.getElementById('completedTasks');
+            pendingTasksList.innerHTML = '';
+            completedTasksList.innerHTML = '';
+
             tasks.forEach(task => {
                 const li = document.createElement('li');
-                li.className = 'task-item p-4 mb-2 rounded';
+                li.className = `task-item p-4 mb-2 rounded ${task.completed ? 'completed' : ''}`;
                 li.innerHTML = `
                     <div class="flex justify-between items-center">
                         <span class="font-semibold">${task.text}</span>
-                        <button onclick="toggleCompletion(${task.id})" class="px-4 py-2 bg-green-600 text-white rounded">
+                        <button onclick="toggleCompletion(${task.id})" class="px-4 py-2 ${task.completed ? 'bg-red-600' : 'bg-green-600'} text-white rounded">
                             ${task.completed ? 'Décocher' : 'Cocher'}
                         </button>
                     </div>
                     <p class="task-note mt-2 p-2 rounded">${task.note}</p>
                 `;
-                taskList.appendChild(li);
+                
+                if (task.completed) {
+                    completedTasksList.appendChild(li);
+                } else {
+                    pendingTasksList.appendChild(li);
+                }
             });
             updateProgress();
         }
@@ -114,9 +140,6 @@
 
         // Initialiser l'affichage
         renderTasks();
-<div class="mt-6 text-center">
-    <img src="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2023/12/cropped-dranea-150x150.png" alt="Logo DRANE" class="mx-auto">
-</div>
     </script>
 </body>
 </html>
