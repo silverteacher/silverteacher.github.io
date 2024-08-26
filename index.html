@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check List Collège</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Check List Lycée</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
             background: linear-gradient(to right, #f0f4f8, #dbe4e5, #f6f9f9);
@@ -12,50 +12,18 @@
         }
         .task-item {
             background-color: #e2e8f0;
-            transition: background-color 0.3s ease;
-        }
-        .task-item.completed {
-            background-color: #4ade80;
         }
         .task-note {
             background-color: #cbd5e1;
         }
-        .dark {
-            background: #1a202c;
-            color: #e2e8f0;
-        }
-        .dark .task-item {
-            background-color: #2d3748;
-        }
-        .dark .task-item.completed {
-            background-color: #2f855a;
-        }
-        .dark .task-note {
-            background-color: #4a5568;
-        }
     </style>
 </head>
 <body class="p-4">
-    <div class="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6">
-        <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
-            <h1 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-2 sm:mb-0">Check List Collège</h1>
-            <div>
-                <button onclick="toggleDarkMode()" class="text-blue-500 dark:text-blue-300 mr-4">Mode Sombre</button>
-                <a href="mailto:contact@example.com" class="text-blue-500 dark:text-blue-300">Contact</a>
-            </div>
-        </div>
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-xl p-6">
+        <h1 class="text-2xl font-bold text-blue-700 mb-4">Check List Lycée</h1>
         
-        <div class="bg-blue-200 text-blue-800 dark:bg-blue-800 dark:text-blue-200 border border-blue-400 dark:border-blue-600 p-4 rounded mb-6">
-            <h2 class="text-lg font-semibold">Voici une liste des opérations sur l'année à réaliser pour la certification Pix des élèves afin de vous aider dans votre travail de planification à l'année</h2>
-        </div>
-
-        <div class="flex flex-col sm:flex-row justify-between items-center mb-4">
-            <div class="mb-2 sm:mb-0">
-                <button onclick="filterTasks('all')" class="px-4 py-2 bg-blue-600 text-white rounded mr-2 mb-2 sm:mb-0">Tout</button>
-                <button onclick="filterTasks('completed')" class="px-4 py-2 bg-green-600 text-white rounded mr-2 mb-2 sm:mb-0">Complété</button>
-                <button onclick="filterTasks('pending')" class="px-4 py-2 bg-yellow-600 text-white rounded mb-2 sm:mb-0">En attente</button>
-            </div>
-            <button onclick="addTask()" class="px-4 py-2 bg-blue-600 text-white rounded">Ajouter une tâche</button>
+        <div class="bg-blue-200 text-blue-800 border border-blue-400 p-4 rounded mb-6">
+            <h2 class="text-lg font-semibold">Voici une liste des opérations sur l'année à réaliser pour la certification Pix des élèves dans les lycées afin de vous aider dans votre travail de planification.</h2>
         </div>
 
         <ul id="taskList" class="space-y-2">
@@ -63,19 +31,15 @@
         </ul>
 
         <div class="mt-6">
-            <div id="progressText" class="mb-2">Progression : 0 / 0</div>
-            <div class="w-full bg-gray-300 dark:bg-gray-600 rounded-full h-2.5">
+            <div id="progressText" class="mb-2">Progression : 0 / 15</div>
+            <div class="w-full bg-gray-300 rounded-full h-2.5">
                 <div id="progressBar" class="h-2.5 rounded-full bg-green-600" style="width: 0%"></div>
             </div>
         </div>
 
-        <div id="statistics" class="mt-6 bg-gray-200 dark:bg-gray-700 p-4 rounded-lg shadow">
+        <div id="statistics" class="mt-6 bg-gray-200 p-4 rounded-lg shadow">
             <h3 class="text-lg font-semibold mb-2">Statistiques</h3>
-            <p>Tâches complétées : <span id="completedCount">0</span> / <span id="totalCount">0</span></p>
-        </div>
-
-        <div class="mt-6 text-center">
-            <img src="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2023/12/cropped-dranea-150x150.png" alt="Logo DRANE" class="mx-auto">
+            <p>Tâches complétées : <span id="completedCount">0</span> / <span id="totalCount">15</span></p>
         </div>
     </div>
 
@@ -84,18 +48,18 @@
             { id: 1, text: "Mettre à jour la liste des administrateurs dans Pix Orga.", note: "Chaque année, des enseignants changent de fonction ou d'établissement.", completed: false },
             { id: 2, text: "Archiver les certifications de l'année précédente et supprimer les campagnes.", note: "Gardez une sauvegarde des certifications passées. Cette année, il est possible de supprimer les campagnes.", completed: false },
             { id: 3, text: "Vérifier l'accès des élèves à Pix dans l'ENT via le Médiacentre.", note: "Demander au Référent ressources GAR de le faire si nécessaire.", completed: false },
-            { id: 4, text: "Vérifier les imports d'élèves et de classes dans Pix Orga.", note: "Contacter la DSI si nécessaire.", completed: false },
-            { id: 5, text: "Configurer les accès des enseignants dans Pix Orga.", note: "Attribuer les rôles appropriés.", completed: false },
-            { id: 6, text: "Planifier les dates des parcours de rentrée.", note: "Coordonner avec l'équipe pédagogique.", completed: false },
-            { id: 7, text: "Créer les campagnes de rentrée.", note: "Utiliser les parcours de rentrée appropriés.", completed: false },
-            { id: 8, text: "Lancer les campagnes de rentrée.", note: "S'assurer que tous les élèves ont accès.", completed: false },
-            { id: 9, text: "Suivre les résultats des campagnes de rentrée.", note: "Identifier les élèves en difficulté.", completed: false },
-            { id: 10, text: "Planifier les parcours ciblés.", note: "Basés sur les résultats des campagnes de rentrée.", completed: false },
-            { id: 11, text: "Créer et lancer les campagnes ciblées.", note: "Pour les compétences nécessitant un renforcement.", completed: false },
-            { id: 12, text: "Planifier la certification Pix.", note: "Définir les dates et les salles.", completed: false },
-            { id: 13, text: "Créer la campagne de collecte.", note: "Pour recueillir les profils des élèves.", completed: false },
-            { id: 14, text: "Lancer la campagne de collecte.", note: "S'assurer que tous les élèves y participent.", completed: false },
-            { id: 15, text: "Organiser les sessions de certification.", note: "Préparer le matériel et les surveillants.", completed: false }
+            { id: 4, text: "Créer les campagnes de rentrée pour les élèves.", note: "Les chefs d'établissement peuvent déléguer cette action.", completed: false },
+            { id: 5, text: "Mettre la base Siècle à jour et importer le fichier XML dans Pix Orga.", note: "Répétez cette action si la base est modifiée.", completed: false },
+            { id: 6, text: "Communiquer les codes de campagnes aux enseignants.", note: "Prévenir les familles et inviter les enseignants dans Pix Orga.", completed: false },
+            { id: 7, text: "Faire le bilan des campagnes de rentrée avant les vacances de Toussaint.", note: "Important pour les certifications de novembre à mars.", completed: false },
+            { id: 8, text: "Faire un bilan avec les équipes pour relancer les élèves non concernés.", note: "Vérifier les accès et remotiver les élèves.", completed: false },
+            { id: 9, text: "Recréer des campagnes thématiques avec les élèves à partir de novembre.", note: "Entraîner les élèves avec des campagnes thématiques.", completed: false },
+            { id: 10, text: "Préparer les certifications dès novembre si les élèves sont certifiables.", note: "Créer des sessions dans Pix Certif et assigner des surveillants.", completed: false },
+            { id: 11, text: "Faire la check-list des sites potentiellement bloqués.", note: "Vérifier le pare-feu et consulter les sites à vérifier.", completed: false },
+            { id: 12, text: "Réserver les salles pour les certifications.", note: "Utiliser un agenda partagé pour annoncer les sessions.", completed: false },
+            { id: 13, text: "Finaliser les passations pour les classes certifiables.", note: "Assurez-vous que toutes les démarches sont prêtes.", completed: false },
+            { id: 14, text: "Archivage des campagnes de certification.", note: "Cette année, il est possible de supprimer les campagnes de l'année précédente. Il est toujours utile cependant de garder une sauvegarde des certifications des classes de troisièmes.", completed: false },
+            { id: 15, text: "Réaliser les certifications des élèves.", note: "Organiser les sessions de certification selon le planning établi.", completed: false }
         ];
 
         function loadTasks() {
@@ -107,24 +71,22 @@
             localStorage.setItem('tasks', JSON.stringify(tasks));
         }
 
-        function renderTasks(filter = 'all') {
+        function renderTasks() {
             const taskList = document.getElementById('taskList');
             taskList.innerHTML = '';
             tasks.forEach(task => {
-                if (filter === 'all' || (filter === 'completed' && task.completed) || (filter === 'pending' && !task.completed)) {
-                    const li = document.createElement('li');
-                    li.className = `task-item p-4 mb-2 rounded ${task.completed ? 'completed' : ''}`;
-                    li.innerHTML = `
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                            <span class="font-semibold mb-2 sm:mb-0">${task.text}</span>
-                            <button onclick="toggleCompletion(${task.id})" class="px-4 py-2 bg-green-600 text-white rounded">
-                                ${task.completed ? 'Décocher' : 'Cocher'}
-                            </button>
-                        </div>
-                        <p class="task-note mt-2 p-2 rounded">${task.note}</p>
-                    `;
-                    taskList.appendChild(li);
-                }
+                const li = document.createElement('li');
+                li.className = 'task-item p-4 mb-2 rounded';
+                li.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-semibold">${task.text}</span>
+                        <button onclick="toggleCompletion(${task.id})" class="px-4 py-2 bg-green-600 text-white rounded">
+                            ${task.completed ? 'Décocher' : 'Cocher'}
+                        </button>
+                    </div>
+                    <p class="task-note mt-2 p-2 rounded">${task.note}</p>
+                `;
+                taskList.appendChild(li);
             });
             updateProgress();
         }
@@ -147,37 +109,14 @@
             document.getElementById('totalCount').textContent = totalTasks;
         }
 
-        function filterTasks(filter) {
-            renderTasks(filter);
-        }
-
-        function addTask() {
-            const text = prompt("Entrez le texte de la nouvelle tâche :");
-            const note = prompt("Entrez la note pour cette tâche :");
-            if (text) {
-                const newTask = {
-                    id: tasks.length + 1,
-                    text: text,
-                    note: note || "",
-                    completed: false
-                };
-                tasks.push(newTask);
-                saveTasks();
-                renderTasks();
-            }
-        }
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark');
-            document.querySelector('.max-w-3xl').classList.toggle('bg-white');
-            document.querySelector('.max-w-3xl').classList.toggle('bg-gray-800');
-        }
-
         // Charger les tâches depuis le localStorage ou utiliser les tâches par défaut
         tasks = loadTasks();
 
         // Initialiser l'affichage
         renderTasks();
+<div class="mt-6 text-center">
+    <img src="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2023/12/cropped-dranea-150x150.png" alt="Logo DRANE" class="mx-auto">
+</div>
     </script>
 </body>
 </html>
