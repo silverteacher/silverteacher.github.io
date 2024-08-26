@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check List Lycée</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+    <style>
+        body {
+            background: var(--bg-color, linear-gradient(to right, #f0f4f8, #dbe4e5, #f6f9f9));
+            min-height: 100vh;
+            color: var(--text-color, #000);
+        }
+
+        #progressBar {
+            background: var(--bg-color, linear-gradient(to right, #f0f4f8, #dbe4e5, #f6f9f9));
+        }
+
+        .task-item {
+            background-color: var(--task-bg-color, #e2e8f0);
+        }
+
+        .task-note {
+            background-color: var(--task-note-bg-color, #cbd5e1);
+        }
+
+        .dark-mode {
+            --bg-color: #333;
+            --text-color: #fff;
+            --task-bg-color: #444;
+            --task-note-bg-color: #555;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        #celebration {
+            font-size: 2rem;
+        }
+    </style>
+</head>
+
+<body class="p-4">
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-xl p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-bold text-blue-700">Check List Lycée</h1>
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleDarkMode()" class="text-blue-500">Mode Sombre</button>
+                <a href="mailto:ambassadeurspix@ac-lille.fr" class="text-blue-500 flex items-center">
+                    <i data-lucide="mail" class="icon"></i> Contact
+                </a>
+            </div>
+        </div>
+
+        <div class="bg-blue-200 text-blue-800 border border-blue-400 p-4 rounded mb-6">
+            <h2 class="text-lg font-semibold">Voici une liste des opérations sur l'année à réaliser pour la certification Pix des élèves dans les lycées afin de vous aider dans votre travail de planification.</h2>
+        </div>
+
+        <div class="flex justify-between items-center mb-4">
+            <div class="flex space-x-4">
+                <button onclick="filterTasks('all')" class="px-4 py-2 bg-blue-600 text-white rounded">Tout</button>
+                <button onclick="filterTasks('completed')" class="px-4 py-2 bg-green-600 text-white rounded">Complété</button>
+                <button onclick="filterTasks('pending')" class="px-4 py-2 bg-yellow-600 text-white rounded">En attente</button>
+            </div>
+            <button onclick="exportTasks()" class="px-4 py-2 bg-blue-600 text-white rounded">Exporter en CSV</button>
+        </div>
+
+        <ul id="taskList" class="space-y-2">
+            <!-- Les tâches apparaîtront ici -->
+        </ul>
+
+        <div class="mt-6">
+            <div class="flex justify-between items-center mb-2">
+                <span id="progressText">Progression : 0 / 15</span>
+                <div class="flex items-center space-x-2">
+                    <span id="levelIcon" class="icon"></span>
+                    <div id="progressIcons" class="flex space-x-1"></div>
+                </div>
+            </div>
+            <div class="w-full bg-gray-300 rounded-full h-2.5 relative">
+                <div id="progressBar" class="h-2.5 rounded-full bg-blue-600 absolute top-0 left-0 transition-all duration-500 ease-out" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div id="celebration" class="text-center mt-6 text-4xl hidden">🎉</div>
+
+        <!-- Section de statistiques -->
+        <div id="statistics" class="mt-6 bg-gray-200 p-4 rounded-lg shadow">
+            <h3 class="text-lg font-semibold mb-2">Statistiques</h3>
+            <p>Tâches complétées : <span id="completedCount">0</span> / <span id="totalCount">15</span></p>
+        </div>
+
+        <button onclick="addTask()" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded">Ajouter une tâche</button>
+    </div>
+
+    <script>
+        const defaultTasks = [
+            {
+                category: "Préparation",
+                items: [
+                    { id: 0, text: "Mettre à jour la liste des administrateurs dans Pix Orga.", note: "Chaque année, des enseignants changent de fonction ou d'établissement.", deadline: "2024-09-15", completed: false },
+                    { id: 1, text: "Archiver les certifications de l'année précédente et supprimer les campagnes.", note: "Gardez une sauvegarde des certifications passées. Cette année, il est possible de supprimer les campagnes.", deadline: "2024-09-15", completed: false },
+                    { id: 2, text: "Vérifier l'accès des élèves à Pix dans l'ENT via le Médiacentre.", note: "Demander au Référent ressources GAR de le faire si nécessaire.", deadline: "2024-09-15", completed: false },
+                    {
+                        id: 3,
+                        text: "Archivage des campagnes de certification.",
+                        note: "Cette année, il est possible de supprimer les campagnes de l'année précédente. Il est toujours utile cependant de garder une sauvegarde des certifications des classes de troisièmes.",
+                        deadline: "2024-09-20",
+                        completed: false
+                    },
+                ]
+            },
+            {
+                category: "Exécution",
+                items: [
+                    { id: 4, text: "Créer les campagnes de rentrée pour les élèves.", note: "Les chefs d'établissement peuvent déléguer cette action.", deadline: "2024-09-20", completed: false },
+                    { id: 5, text: "Mettre la base Siècle à jour et importer le fichier XML dans Pix Orga.", note: "Répétez cette action si la base est modifiée.", deadline: "2024-09-20", completed: false },
+                    { id: 6, text: "Communiquer les codes de campagnes aux enseignants.", note: "Prévenir les familles et inviter les enseignants dans Pix Orga.", deadline: "2024-09-30", completed: false },
+                ]
+            },
+            {
+                category: "Suivi",
+                items: [
+                    { id: 7, text: "Faire le bilan des campagnes de rentrée avant les vacances de Toussaint.", note: "Important pour les certifications de novembre à mars.", deadline: "2024-10-15", completed: false },
+                    { id: 8, text: "Faire un bilan avec les équipes pour relancer les élèves non concernés.", note: "Vérifier les accès et remotiver les élèves.", deadline: "2024-10-15", completed: false },
+                    { id: 9, text: "Recréer des campagnes thématiques avec les élèves à partir de novembre.", note: "Entraîner les élèves avec des campagnes thématiques.", deadline: "2024-11-30", completed: false },
+                    { id: 10, text: "Préparer les certifications dès novembre si les élèves sont certifiables.", note: "Créer des sessions dans Pix Certif et assigner des surveillants.", deadline: "2024-12-15", completed: false },
+                    { id: 11, text: "Faire la check-list des sites potentiellement bloqués.", note: "Vérifier le pare-feu et consulter les sites à vérifier.", deadline: "2024-11-01", completed: false },
+                    { id: 12, text: "Réserver les salles pour les certifications.", note: "Utiliser un agenda partagé pour annoncer les sessions.", deadline: "2024-11-01", completed: false },
+                    { id: 13, text: "Finaliser les passations pour les classes certifiables.", note: "Assurez-vous que toutes les démarches sont prêtes.", deadline: "2025-01-15", completed: false },
+                ]
+            }
+        ];
+
+        const taskList = document.getElementById('taskList');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const levelIcon = document.getElementById('levelIcon');
+        const progressIcons = document.getElementById('progressIcons');
+        const celebration = document.getElementById('celebration');
+        const statistics = document.getElementById('statistics');
+        const completedCount = document.getElementById('completedCount');
+        const totalCount = document.getElementById('totalCount');
+
+        let tasks = loadTasks();
+        let completedTasks = tasks.filter(task => task.completed).length;
+        let totalTasks = tasks.length;
+
+        function loadTasks() {
+            const savedTasks = localStorage.getItem('tasks');
+            return savedTasks ? JSON.parse(savedTasks) : [...defaultTasks[0].items, ...defaultTasks[1].items, ...defaultTasks[2].items];
+        }
+
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        function renderTasks() {
+            taskList.innerHTML = '';
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'task-item p-4 mb-2 rounded';
+                li.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-semibold">${task.text}</span>
+                        <span class="text-gray-500 text-sm">${task.deadline}</span>
+                    </div>
+                    <p class="task-note mt-2">${task.note}</p>
+                    <button onclick="toggleCompletion(${task.id})" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">
+                        ${task.completed ? 'Marquer comme non complété' : 'Marquer comme complété'}
+                    </button>
+                `;
+                taskList.appendChild(li);
+            });
+
+            updateProgress();
+        }
+
+        function toggleCompletion(id) {
+            const task = tasks.find(t => t.id === id);
+            task.completed = !task.completed;
+            completedTasks = tasks.filter(t => t.completed).length;
+            saveTasks();
+            renderTasks();
+        }
+
+        function updateProgress() {
+            const progress = (completedTasks / totalTasks) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `Progression : ${completedTasks} / ${totalTasks}`;
+            completedCount.textContent = completedTasks;
+            totalCount.textContent = totalTasks;
+
+            if (completedTasks === totalTasks) {
+                celebration.classList.remove('hidden');
+            }
+
+            // Update progress icons (for example, showing different levels)
+            progressIcons.innerHTML = '';
+            const levels = ['🌟', '⭐', '✨'];
+            for (let i = 0; i < Math.floor(progress / 33); i++) {
+                const span = document.createElement('span');
+                span.textContent = levels[i] || '🎖️';
+                progressIcons.appendChild(span);
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        function filterTasks(status) {
+            if (status === 'completed') {
+                tasks = [...defaultTasks[0].items, ...defaultTasks[1].items, ...defaultTasks[2].items].filter(task => task.completed);
+            } else if (status === 'pending') {
+                tasks = [...defaultTasks[0].items, ...defaultTasks[1].items, ...defaultTasks[2].items].filter(task => !task.completed);
+            } else {
+                tasks = [...defaultTasks[0].items, ...defaultTasks[1].items, ...defaultTasks[2].items];
+            }
+            saveTasks();
+            renderTasks();
+        }
+
+        function exportTasks() {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "ID,Description,Note,Deadline,Completed\n" +
+                tasks.map(task => `${task.id},${task.text},${task.note},${task.deadline},${task.completed}`).join("\n");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "tasks.csv");
+            document.body.appendChild(link);
+            link.click();
+        }
+
+        function addTask() {
+            const newTask = {
+                id: tasks.length,
+                text: prompt('Description de la tâche :'),
+                note: prompt('Note :'),
+                deadline: prompt('Date limite (YYYY-MM-DD) :'),
+                completed: false
+            };
+            tasks.push(newTask);
+            saveTasks();
+            renderTasks();
+        }
+
+        renderTasks();
+    </script>
+</body>
+
+</html>
