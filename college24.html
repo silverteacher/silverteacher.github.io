@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,11 +12,9 @@
             min-height: 100vh;
             color: var(--text-color, #000);
         }
-
         #progressBar {
             background: var(--bg-color, linear-gradient(to right, #a3d5f7, #f7e6a3, #d3f7a3));
         }
-
         .task-item {
             background-color: var(--task-bg-color, #f0f4f8);
             display: flex;
@@ -29,49 +26,41 @@
             flex-wrap: wrap;
             gap: 0.5rem;
         }
-
         .task-content {
             flex: 1;
             margin-left: 1rem;
         }
-
         .task-note {
             background-color: var(--task-note-bg-color, #e2e8f0);
             padding: 0.5rem;
             border-radius: 0.25rem;
             margin-top: 0.5rem;
-            font-size: 0.875rem; /* Taille de police réduite */
-            color: #4a5568; /* Gris plus foncé */
+            font-size: 0.875rem;
+            color: #4a5568;
         }
-
         .dark-mode {
             --bg-color: #333;
             --text-color: #fff;
             --task-bg-color: #444;
             --task-note-bg-color: #555;
         }
-
         .icon {
             width: 24px;
             height: 24px;
             display: inline-block;
             vertical-align: middle;
         }
-
         .completed {
-            background-color: #d1fad1; /* Background color for completed tasks */
+            background-color: #d1fad1;
         }
-
         .action-buttons {
-            margin-top: 0.5rem; /* Espacement entre la note et le bouton */
+            margin-top: 0.5rem;
         }
-
         .action-buttons button {
-            margin-right: 0.5rem; /* Espacement entre les boutons s'il y en a plusieurs */
+            margin-right: 0.5rem;
         }
     </style>
 </head>
-
 <body class="p-4">
     <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-xl p-6">
         <div class="flex flex-col md:flex-row justify-between items-center mb-4">
@@ -121,12 +110,13 @@
             <h3 class="text-lg font-semibold mb-2">Statistiques</h3>
             <p>Tâches complétées : <span id="completedCount">0</span> / <span id="totalCount">15</span></p>
         </div>
-    </div>
-<!-- Ajout du logo de la DANE -->
+        
+        <!-- Ajout du logo de la DANE -->
         <div class="mt-6 text-center">
             <img src="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2023/12/cropped-dranea-150x150.png" alt="Logo DRANE" class="mx-auto">
         </div>
     </div>
+
     <script>
         const defaultTasks = [
             {
@@ -287,5 +277,4 @@
         }
     </script>
 </body>
-
 </html>
