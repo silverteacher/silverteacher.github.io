@@ -20,10 +20,24 @@
 
         .task-item {
             background-color: var(--task-bg-color, #f0f4f8);
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0.5rem;
+        }
+
+        .task-content {
+            flex: 1;
+            margin-left: 1rem;
         }
 
         .task-note {
             background-color: var(--task-note-bg-color, #e2e8f0);
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            margin-top: 0.5rem;
         }
 
         .dark-mode {
@@ -38,6 +52,10 @@
             height: 24px;
             display: inline-block;
             vertical-align: middle;
+        }
+
+        .completed {
+            background-color: #d1fad1; /* Background color for completed tasks */
         }
     </style>
 </head>
@@ -118,140 +136,4 @@
                 items: [
                     { id: 6, text: "À la fin du premier trimestre, faire un point.", note: "Vérifier que toutes les classes ont bien complété les campagnes de rentrée. C'est le moment de faire un petit bilan en vie de classe.", deadline: "2023-12-15", completed: false },
                     { id: 7, text: "Au début de la nouvelle année civile, on peut relancer d'autres campagnes pour habituer les élèves à cette routine.", note: "Dans la nouvelle certification, les élèves peuvent développer leurs compétences numériques et faire monter leur score Pix.", deadline: "2024-01-10", completed: false },
-                    { id: 8, text: "Réserver les salles pupitres pour faire passer les élèves de troisième.", note: "Il faudra bloquer des créneaux de deux heures pour faire passer les certifications.", deadline: "2024-03-01", completed: false },
-                    { id: 9, text: "Faire la checklist pour les sites qui pourraient être bloqués pendant la certification.", note: "Les élèves ont besoin de se connecter à un certain nombre de sites, il est bon de vérifier en amont qu'ils pourront y avoir accès sans mal.", deadline: "2024-03-15", completed: false },
-                    { id: 10, text: "Vérifier la certificabilité des élèves.", note: "Soit en vérifiant dans leur profil Pix, soit en croisant les doigts, mais cela marche mieux en vérifiant. La certifiabilité est nécessaire pour valider une certification.", deadline: "2024-04-01", completed: false },
-                    { id: 11, text: "Passage de la certification Pix pour tous les élèves de 3e.", note: "Les codes seront donnés au moment de la certification pour éviter toute fraude.", deadline: "2024-04-15", completed: false },
-                    { id: 12, text: "Récupérer les attestations et les communiquer aux familles.", note: "Il est possible de récupérer les attestations des élèves pour les communiquer via Pronote.", deadline: "2024-05-01", completed: false },
-                ]
-            },
-            {
-                category: "Clôture",
-                items: [
-                    { id: 13, text: "Archiver les campagnes de certification dans Pix Orga.", note: "Il est crucial de conserver une trace des certifications des élèves, surtout ceux de troisième.", deadline: "2024-06-01", completed: false },
-                    { id: 14, text: "Supprimer les campagnes de l'année précédente.", note: "Cela permet de préparer le terrain pour la nouvelle année scolaire.", deadline: "2024-06-15", completed: false }
-                ]
-            }
-        ];
-
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
-
-        function filterTasks(filter) {
-            const tasks = document.querySelectorAll('#taskList li');
-            tasks.forEach(task => {
-                if (filter === 'all') {
-                    task.style.display = '';
-                } else if (filter === 'completed' && task.classList.contains('completed')) {
-                    task.style.display = '';
-                } else if (filter === 'pending' && !task.classList.contains('completed')) {
-                    task.style.display = '';
-                } else {
-                    task.style.display = 'none';
-                }
-            });
-        }
-
-        function exportTasks() {
-            const csvContent = "data:text/csv;charset=utf-8," + defaultTasks.map(task => task.category + '\n' + task.items.map(item => `${item.text.replace(/,/g, '')},${item.note.replace(/,/g, '')},${item.deadline},${item.completed}`).join('\n')).join('\n\n');
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-            link.setAttribute('download', 'tasks.csv');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function addTask() {
-            const newTaskText = prompt("Entrez la nouvelle tâche :");
-            const newTaskNote = prompt("Entrez la note associée à cette tâche :");
-            const newTaskDeadline = prompt("Entrez la date limite (AAAA-MM-JJ) :");
-            if (newTaskText && newTaskNote && newTaskDeadline) {
-                const newTask = { id: defaultTasks.length, text: newTaskText, note: newTaskNote, deadline: newTaskDeadline, completed: false };
-                defaultTasks.push(newTask);
-                renderTasks();
-            }
-        }
-
-        function renderTasks() {
-            const taskList = document.getElementById('taskList');
-            taskList.innerHTML = '';
-
-            let totalTasks = 0;
-            let completedTasks = 0;
-
-            defaultTasks.forEach(taskGroup => {
-                const categoryHeader = document.createElement('h3');
-                categoryHeader.className = 'text-xl font-semibold text-blue-600 mt-6';
-                categoryHeader.innerText = taskGroup.category;
-                taskList.appendChild(categoryHeader);
-
-                taskGroup.items.forEach(task => {
-                    totalTasks++;
-
-                    const taskItem = document.createElement('li');
-                    taskItem.className = 'task-item p-4 rounded-lg shadow-md flex justify-between items-start';
-                    if (task.completed) {
-                        taskItem.classList.add('completed', 'bg-green-100');
-                        completedTasks++;
-                    } else {
-                        taskItem.classList.add('bg-gray-100');
-                    }
-
-                    const taskText = document.createElement('span');
-                    taskText.className = 'task-text';
-                    taskText.innerText = task.text;
-
-                    const taskNote = document.createElement('p');
-                    taskNote.className = 'task-note text-gray-600 mt-2';
-                    taskNote.innerText = task.note;
-
-                    const taskDeadline = document.createElement('p');
-                    taskDeadline.className = 'task-deadline text-gray-600 mt-2';
-                    taskDeadline.innerText = `Date limite : ${task.deadline}`;
-
-                    const completeButton = document.createElement('button');
-                    completeButton.className = 'ml-4 px-3 py-1 bg-green-500 text-white rounded';
-                    completeButton.innerText = task.completed ? 'Recommencer' : 'Compléter';
-                    completeButton.addEventListener('click', () => {
-                        task.completed = !task.completed;
-                        renderTasks();
-                    });
-
-                    taskItem.appendChild(taskText);
-                    taskItem.appendChild(taskNote);
-                    taskItem.appendChild(taskDeadline);
-                    taskItem.appendChild(completeButton);
-
-                    taskList.appendChild(taskItem);
-                });
-            });
-
-            const progressBar = document.getElementById('progressBar');
-            const progressText = document.getElementById('progressText');
-            const completedCount = document.getElementById('completedCount');
-            const totalCount = document.getElementById('totalCount');
-
-            const progress = (completedTasks / totalTasks) * 100;
-            progressBar.style.width = `${progress}%`;
-            progressText.innerText = `Progression : ${completedTasks} / ${totalTasks}`;
-            completedCount.innerText = completedTasks;
-            totalCount.innerText = totalTasks;
-
-            const celebration = document.getElementById('celebration');
-            if (completedTasks === totalTasks) {
-                celebration.classList.remove('hidden');
-            } else {
-                celebration.classList.add('hidden');
-            }
-        }
-
-        window.onload = function () {
-            renderTasks();
-        }
-    </script>
-</body>
-
-</html>
+                    { id: 8, text: "Réserver les salles pupitres pour faire passer les élèves de troisième.", note: "Il faudra bloquer des créneaux de deux heures pour faire passer les certifications.", deadline: "2024-03-01", completed: false
