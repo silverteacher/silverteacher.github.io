@@ -21,11 +21,13 @@
         .task-item {
             background-color: var(--task-bg-color, #f0f4f8);
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             padding: 1rem;
             border-radius: 0.5rem;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
 
         .task-content {
@@ -62,9 +64,9 @@
 
 <body class="p-4">
     <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-xl p-6">
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-4">
             <h1 class="text-2xl font-bold text-blue-600">Check List Collège</h1>
-            <div class="flex items-center space-x-4">
+            <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
                 <button onclick="toggleDarkMode()" class="text-blue-500">Mode Sombre</button>
                 <a href="mailto:ambassadeurspix@ac-lille.fr" class="text-blue-500 flex items-center">
                     <i data-lucide="mail" class="icon"></i> Contact
@@ -76,13 +78,13 @@
             <h2 class="text-lg font-semibold">Voici une liste des opérations sur l'année à réaliser pour la certification Pix des élèves afin de vous aider dans votre travail de planification à l'année</h2>
         </div>
 
-        <div class="flex justify-between items-center mb-4">
-            <div class="flex space-x-4">
-                <button onclick="filterTasks('all')" class="px-4 py-2 bg-blue-500 text-white rounded">Tout</button>
-                <button onclick="filterTasks('completed')" class="px-4 py-2 bg-green-500 text-white rounded">Complété</button>
-                <button onclick="filterTasks('pending')" class="px-4 py-2 bg-yellow-500 text-white rounded">En attente</button>
+        <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+            <div class="flex flex-wrap space-x-4">
+                <button onclick="filterTasks('all')" class="px-4 py-2 bg-blue-500 text-white rounded mb-2 md:mb-0">Tout</button>
+                <button onclick="filterTasks('completed')" class="px-4 py-2 bg-green-500 text-white rounded mb-2 md:mb-0">Complété</button>
+                <button onclick="filterTasks('pending')" class="px-4 py-2 bg-yellow-500 text-white rounded mb-2 md:mb-0">En attente</button>
             </div>
-            <button onclick="exportTasks()" class="px-4 py-2 bg-blue-500 text-white rounded">Exporter en CSV</button>
+            <button onclick="addTask()" class="px-4 py-2 bg-blue-500 text-white rounded">Ajouter une tâche</button>
         </div>
 
         <ul id="taskList" class="space-y-2">
@@ -109,8 +111,6 @@
             <h3 class="text-lg font-semibold mb-2">Statistiques</h3>
             <p>Tâches complétées : <span id="completedCount">0</span> / <span id="totalCount">15</span></p>
         </div>
-
-        <button onclick="addTask()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Ajouter une tâche</button>
     </div>
 
     <script>
@@ -157,7 +157,7 @@
         }
 
         function filterTasks(filter) {
-            const tasks = document.querySelectorAll('#taskList li');
+            const tasks = document.querySelectorAll('#taskList .task-item');
             tasks.forEach(task => {
                 if (filter === 'all') {
                     task.style.display = '';
@@ -171,24 +171,13 @@
             });
         }
 
-        function exportTasks() {
-            const csvContent = "data:text/csv;charset=utf-8," + defaultTasks.map(task => task.category + '\n' + task.items.map(item => `${item.text.replace(/,/g, '')},${item.note.replace(/,/g, '')},${item.deadline},${item.completed}`).join('\n')).join('\n\n');
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement('a');
-            link.setAttribute('href', encodedUri);
-            link.setAttribute('download', 'tasks.csv');
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
         function addTask() {
             const newTaskText = prompt("Entrez la nouvelle tâche :");
             const newTaskNote = prompt("Entrez la note associée à cette tâche :");
             const newTaskDeadline = prompt("Entrez la date limite (AAAA-MM-JJ) :");
             if (newTaskText && newTaskNote && newTaskDeadline) {
                 const newTask = { id: defaultTasks.length, text: newTaskText, note: newTaskNote, deadline: newTaskDeadline, completed: false };
-                defaultTasks.push(newTask);
+                defaultTasks.push({ category: "Nouveau", items: [newTask] });
                 renderTasks();
             }
         }
@@ -210,7 +199,7 @@
                     totalTasks++;
 
                     const taskItem = document.createElement('li');
-                    taskItem.className = 'task-item flex items-start';
+                    taskItem.className = 'task-item';
                     if (task.completed) {
                         taskItem.classList.add('completed');
                         completedTasks++;
@@ -226,15 +215,15 @@
                     taskContent.className = 'task-content';
 
                     const taskText = document.createElement('span');
-                    taskText.className = 'task-text';
+                    taskText.className = 'task-text text-lg font-medium';
                     taskText.innerText = task.text;
 
                     const taskNote = document.createElement('p');
-                    taskNote.className = 'task-note text-gray-600 mt-2';
+                    taskNote.className = 'task-note text-gray-600';
                     taskNote.innerText = task.note;
 
                     const taskDeadline = document.createElement('p');
-                    taskDeadline.className = 'task-deadline text-gray-600 mt-2';
+                    taskDeadline.className = 'task-deadline text-gray-600';
                     taskDeadline.innerText = `Date limite : ${task.deadline}`;
 
                     const completeButton = document.createElement('button');
