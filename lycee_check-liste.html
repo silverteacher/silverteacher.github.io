@@ -55,13 +55,14 @@
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .filter-btn {
             background-color: #4CAF50;
             color: white;
             border: none;
             padding: 10px 20px;
-            margin: 0 5px;
+            margin: 5px;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -83,12 +84,14 @@
         .task-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 10px;
         }
         .task-title {
             font-weight: bold;
             color: #333;
+            flex-grow: 1;
+            margin-right: 10px;
         }
         .task-note {
             font-size: 0.9em;
@@ -103,6 +106,7 @@
             border-radius: 3px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            white-space: nowrap;
         }
         .toggle-btn:hover {
             background-color: #45a049;
@@ -143,16 +147,11 @@
             }
             .task-header {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: stretch;
             }
             .toggle-btn {
                 margin-top: 10px;
-            }
-            .filter-buttons {
-                flex-wrap: wrap;
-            }
-            .filter-btn {
-                margin-bottom: 5px;
+                width: 100%;
             }
         }
     </style>
@@ -180,8 +179,7 @@
     </div>
 
     <script>
-        // Le script JavaScript reste inchangé
-        const tasks = JSON.parse(localStorage.getItem('tasks')) || [
+        const defaultTasks = [
             { id: 1, text: "Mettre à jour la liste des administrateurs dans Pix Orga.", note: "Chaque année, des enseignants changent de fonction ou d'établissement.", completed: false },
             { id: 2, text: "Archiver les certifications de l'année précédente par sécurité.", note: "Gardez une sauvegarde des certifications passées. Cette année, il est possible de supprimer les campagnes.", completed: false },
             { id: 3, text: "Vérifier l'accès des élèves à Pix dans l'ENT via le Médiacentre.", note: "Demander au Référent ressources GAR de le faire si nécessaire. Normalement, la ressource Pix doit être active dans le Médiacentre.", completed: false },
@@ -190,12 +188,14 @@
             { id: 6, text: "Communiquer les codes de campagnes aux enseignants.", note: "Prévenir les familles et inviter les enseignants dans Pix Orga.", completed: false },
             { id: 7, text: "Faire le bilan des campagnes de rentrée avant les vacances de Toussaint.", note: "Important pour les certifications de novembre à mars. Pour retrouver les changements de la certification, lisez cet article : <a href='https://dane.site.ac-lille.fr/2024/08/27/la-certification-pix-des-nouvelles-modalites-pour-la-rentree-2024' target='_blank'>Article les nouveautés de la certification</a>", completed: false },
             { id: 8, text: "Faire un bilan avec les équipes pour relancer les élèves concernés.", note: "Vérifier les accès et remotiver les élèves.", completed: false },
-            { id: 9, text: "Recréer des campagnes thématiques avec les élèves à partir de novembre.", note: "Entraîner les élèves avec des campagnes thématiques.", completed: false
+            { id: 9, text: "Recréer des campagnes thématiques avec les élèves à partir de novembre.", note: "Entraîner les élèves avec des campagnes thématiques.", completed: false },
             { id: 10, text: "Préparer les certifications dès novembre si les élèves sont certifiables.", note: "Créer des sessions dans Pix Certif et assigner des surveillants.", completed: false },
             { id: 11, text: "Faire la check-list des sites potentiellement bloqués.", note: "Vérifier le pare-feu et consulter les sites à vérifier. A retrouver sur ce site : <a href='https://cloud.pix.fr/s/dnj5Baoabj5xm4P?path=%2FWhitelist%20enseignement%20scolaire' target='_blank'>Whitelist enseignement scolaire</a>", completed: false },
             { id: 12, text: "Vérifier la passation des données sur Parcours Sup.", note: "La transmission doit être automatique. Dans le cas contraire, les élèves pourront rajouter leur certification.", completed: false },
             { id: 13, text: "Vérifier que les élèves ont bien récupéré leur compte.", note: "En allant sur ce site : <a href='https://app.pix.fr/recuperer-mon-compte' target='_blank'>Récupérer mon compte</a>, les élèves récupèrent leur compte Pix.", completed: false }
         ];
+
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || defaultTasks;
 
         document.addEventListener('DOMContentLoaded', function() {
             const taskList = document.getElementById('taskList');
