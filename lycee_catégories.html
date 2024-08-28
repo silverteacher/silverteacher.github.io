@@ -15,23 +15,24 @@
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
             padding: 20px;
         }
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             width: 100%;
+            margin: 0 auto;
             padding: 20px;
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             box-sizing: border-box;
-            text-align: center; /* Centrer le contenu textuellement */
+            display: flex;
+            flex-direction: column;
         }
         h1 {
             color: #333;
             margin-bottom: 20px;
+            text-align: center;
         }
         .contact-info {
             display: flex;
@@ -70,18 +71,44 @@
         .filter-btn.active {
             background-color: #45a049;
         }
+        .content-wrapper {
+            display: flex;
+            flex-grow: 1;
+            min-height: 0;
+        }
+        .categories {
+            width: 200px;
+            padding-right: 20px;
+        }
+        .category {
+            margin-bottom: 20px;
+            cursor: pointer;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+        .category.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .tasks {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
         .task-item {
             background-color: #fff;
             border-radius: 8px;
             margin-bottom: 10px;
             padding: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .task-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+            align-items: flex-start;
+        }
+        .task-content {
+            flex-grow: 1;
+            text-align: left;
         }
         .task-title {
             font-weight: bold;
@@ -99,13 +126,13 @@
             padding: 5px 10px;
             border-radius: 3px;
             cursor: pointer;
+            white-space: nowrap;
         }
         .completed .toggle-btn {
             background-color: #f44336;
         }
         .completed .task-title {
             color: #4CAF50;
-            text-decoration: line-through;
         }
         .progress-container {
             background-color: #ddd;
@@ -127,36 +154,20 @@
             max-width: 150px;
             height: auto;
         }
-        .category {
-            margin-bottom: 40px;
-            text-align: center; /* Centrer les titres des catégories */
-        }
-        .category-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #4CAF50;
-            margin-bottom: 15px;
-        }
-        @media (max-width: 600px) {
-            .container {
-                padding: 10px;
-            }
-            .task-header {
+        @media (max-width: 768px) {
+            .content-wrapper {
                 flex-direction: column;
-                align-items: flex-start;
             }
-            .toggle-btn {
-                margin-top: 10px;
+            .categories {
+                width: 100%;
+                padding-right: 0;
+                margin-bottom: 20px;
             }
-            .filter-buttons {
-                flex-wrap: wrap;
+            .category {
+                margin-bottom: 10px;
             }
-            .filter-btn {
-                margin-bottom: 5px;
-            }
-            .contact-info {
-                justify-content: center;
-                text-align: center;
+            .tasks {
+                max-height: 400px;
             }
         }
     </style>
@@ -173,25 +184,15 @@
             <button class="filter-btn" data-filter="completed">Complétées</button>
             <button class="filter-btn" data-filter="uncompleted">À faire</button>
         </div>
-
-        <!-- Catégorie 1: Préparations Administratives -->
-        <div class="category">
-            <div class="category-title">Préparations Administratives</div>
-            <div id="category1"></div>
+        <div class="content-wrapper">
+            <div class="categories">
+                <div class="category active" data-category="all">Toutes les catégories</div>
+                <div class="category" data-category="category1">Préparations Administratives</div>
+                <div class="category" data-category="category2">Gestion des Campagnes</div>
+                <div class="category" data-category="category3">Suivi des Élèves</div>
+            </div>
+            <div class="tasks" id="tasksContainer"></div>
         </div>
-
-        <!-- Catégorie 2: Gestion des Campagnes -->
-        <div class="category">
-            <div class="category-title">Gestion des Campagnes</div>
-            <div id="category2"></div>
-        </div>
-
-        <!-- Catégorie 3: Suivi des Élèves -->
-        <div class="category">
-            <div class="category-title">Suivi des Élèves</div>
-            <div id="category3"></div>
-        </div>
-
         <div class="progress-container">
             <div id="progressBar" class="progress-bar"></div>
         </div>
@@ -219,31 +220,24 @@
             { id: 9, category: "category3", text: "Analyser les résultats et préparer le rapport pour la direction.", note: "Un rapport complet permettra de mieux organiser les campagnes futures.", completed: false }
         ];
 
-        const renderTasks = (filter = "all") => {
-            const categories = {
-                category1: document.getElementById("category1"),
-                category2: document.getElementById("category2"),
-                category3: document.getElementById("category3")
-            };
-
-            for (let key in categories) {
-                categories[key].innerHTML = '';
-            }
+        const renderTasks = (filter = "all", category = "all") => {
+            const tasksContainer = document.getElementById("tasksContainer");
+            tasksContainer.innerHTML = '';
 
             tasks.forEach(task => {
-                if (filter === "completed" && !task.completed) return;
-                if (filter === "uncompleted" && task.completed) return;
+                if ((filter === "completed" && !task.completed) || (filter === "uncompleted" && task.completed)) return;
+                if (category !== "all" && task.category !== category) return;
 
                 const taskItem = document.createElement("div");
                 taskItem.className = "task-item" + (task.completed ? " completed" : "");
                 taskItem.innerHTML = `
-                    <div class="task-header">
+                    <div class="task-content">
                         <div class="task-title">${task.text}</div>
-                        <button class="toggle-btn" onclick="toggleTask(${task.id})">${task.completed ? "Annuler" : "Compléter"}</button>
+                        <div class="task-note">${task.note}</div>
                     </div>
-                    <div class="task-note">${task.note}</div>
+                    <button class="toggle-btn" onclick="toggleTask(${task.id})">${task.completed ? "Annuler" : "Marquer comme fait"}</button>
                 `;
-                categories[task.category].appendChild(taskItem);
+                tasksContainer.appendChild(taskItem);
             });
             updateProgress();
         };
@@ -251,7 +245,11 @@
         const toggleTask = (id) => {
             const task = tasks.find(t => t.id === id);
             task.completed = !task.completed;
-            renderTasks(document.querySelector(".filter-btn.active").dataset.filter);
+            saveTasks();
+            renderTasks(
+                document.querySelector(".filter-btn.active").dataset.filter,
+                document.querySelector(".category.active").dataset.category
+            );
         };
 
         const updateProgress = () => {
@@ -266,14 +264,45 @@
             progressText.textContent = `Progression: ${Math.round(progress)}%`;
         };
 
+        const saveTasks = () => {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        };
+
+        const loadTasks = () => {
+            const savedTasks = localStorage.getItem('tasks');
+            if (savedTasks) {
+                const parsedTasks = JSON.parse(savedTasks);
+                tasks.forEach((task, index) => {
+                    if (parsedTasks[index]) {
+                        task.completed = parsedTasks[index].completed;
+                    }
+                });
+            }
+        };
+
         document.querySelectorAll(".filter-btn").forEach(btn => {
             btn.addEventListener("click", function() {
                 document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
                 this.classList.add("active");
-                renderTasks(this.dataset.filter);
+                renderTasks(
+                    this.dataset.filter,
+                    document.querySelector(".category.active").dataset.category
+                );
             });
         });
 
+        document.querySelectorAll(".category").forEach(cat => {
+            cat.addEventListener("click", function() {
+                document.querySelectorAll(".category").forEach(c => c.classList.remove("active"));
+                this.classList.add("active");
+                renderTasks(
+                    document.querySelector(".filter-btn.active").dataset.filter,
+                    this.dataset.category
+                );
+            });
+        });
+
+        loadTasks();
         renderTasks();
     </script>
 </body>
