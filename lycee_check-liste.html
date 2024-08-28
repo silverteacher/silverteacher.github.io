@@ -31,6 +31,10 @@
             color: #333;
             margin: 0 0 20px 0;
         }
+        h2 {
+            color: #4CAF50;
+            margin: 20px 0 10px 0;
+        }
         .contact-info {
             margin-bottom: 20px;
             display: flex;
@@ -180,19 +184,44 @@
 
     <script>
         const defaultTasks = [
-            { id: 1, text: "Mettre à jour la liste des administrateurs dans Pix Orga.", note: "Chaque année, des enseignants changent de fonction ou d'établissement.", completed: false },
-            { id: 2, text: "Archiver les certifications de l'année précédente par sécurité.", note: "Gardez une sauvegarde des certifications passées. Cette année, il est possible de supprimer les campagnes.", completed: false },
-            { id: 3, text: "Vérifier l'accès des élèves à Pix dans l'ENT via le Médiacentre.", note: "Demander au Référent ressources GAR de le faire si nécessaire. Normalement, la ressource Pix doit être active dans le Médiacentre.", completed: false },
-            { id: 4, text: "Créer les campagnes de rentrée pour les élèves.", note: "Il faut obligatoirement lancer une campagne de rentrée pour redémarrer une nouvelle session pour tous les élèves en début d'année scolaire. Les chefs d'établissement peuvent déléguer cette action.", completed: false },
-            { id: 5, text: "Mettre la base Siècle à jour et importer le fichier XML dans Pix Orga.", note: "Répétez cette action si la base est modifiée.", completed: false },
-            { id: 6, text: "Communiquer les codes de campagnes aux enseignants.", note: "Prévenir les familles et inviter les enseignants dans Pix Orga.", completed: false },
-            { id: 7, text: "Faire le bilan des campagnes de rentrée avant les vacances de Toussaint.", note: "Important pour les certifications de novembre à mars. Pour retrouver les changements de la certification, lisez cet article : <a href='https://dane.site.ac-lille.fr/2024/08/27/la-certification-pix-des-nouvelles-modalites-pour-la-rentree-2024' target='_blank'>Article les nouveautés de la certification</a>", completed: false },
-            { id: 8, text: "Faire un bilan avec les équipes pour relancer les élèves concernés.", note: "Vérifier les accès et remotiver les élèves.", completed: false },
-            { id: 9, text: "Recréer des campagnes thématiques avec les élèves à partir de novembre.", note: "Entraîner les élèves avec des campagnes thématiques.", completed: false },
-            { id: 10, text: "Préparer les certifications dès novembre si les élèves sont certifiables.", note: "Créer des sessions dans Pix Certif et assigner des surveillants.", completed: false },
-            { id: 11, text: "Faire la check-list des sites potentiellement bloqués.", note: "Vérifier le pare-feu et consulter les sites à vérifier. A retrouver sur ce site : <a href='https://cloud.pix.fr/s/dnj5Baoabj5xm4P?path=%2FWhitelist%20enseignement%20scolaire' target='_blank'>Whitelist enseignement scolaire</a>", completed: false },
-            { id: 12, text: "Vérifier la passation des données sur Parcours Sup.", note: "La transmission doit être automatique. Dans le cas contraire, les élèves pourront rajouter leur certification.", completed: false },
-            { id: 13, text: "Vérifier que les élèves ont bien récupéré leur compte.", note: "En allant sur ce site : <a href='https://app.pix.fr/recuperer-mon-compte' target='_blank'>Récupérer mon compte</a>, les élèves récupèrent leur compte Pix.", completed: false }
+            {
+                category: "Préparation",
+                items: [
+                    { id: 1, text: "Mettre à jour la liste des administrateurs dans Pix Orga.", note: "Chaque année, des enseignants changent de fonction ou d'établissement.", completed: false },
+                    { id: 2, text: "Archiver les certifications de l'année précédente par sécurité.", note: "Gardez une sauvegarde des certifications passées. Cette année, il est possible de supprimer les campagnes et non plus de seulement les archiver.", completed: false },
+                    { id: 3, text: "Vérifier l'accès des élèves à Pix dans l'ENT via le Médiacentre.", note: "Demander au Référent ressources GAR de le faire si nécessaire. Normalement, la ressource Pix doit être nativement active dans le Médiacentre.", completed: false },
+                    { id: 11, text: "Faire la check-list des sites potentiellement bloqués.", note: "Vérifier le pare-feu et consulter les sites à vérifier. A retrouver sur ce site : <a href='https://cloud.pix.fr/s/dnj5Baoabj5xm4P?path=%2FWhitelist%20enseignement%20scolaire' target='_blank'>Whitelist enseignement scolaire</a>", completed: false },
+                ]
+            },
+            {
+                category: "Exécution",
+                items: [
+                    { id: 4, text: "Créer les campagnes de rentrée pour les élèves.", note: "Il faut obligatoirement lancer une campagne de rentrée pour redémarrer une nouvelle session pour tous les élèves en début d'année scolaire. Les chefs d'établissement peuvent déléguer cette action.", completed: false },
+                    { id: 5, text: "Mettre la base Siècle à jour et importer le fichier XML dans Pix Orga.", note: "Répétez cette action si la base est modifiée, par exemple au départ d'un élève ou pour les nouveaux arrivés. Cela n'a pas d'incidence sur le contenu de la plateforme qui reste inchangé.", completed: false },
+                    { id: 6, text: "Communiquer les codes de campagnes aux enseignants.", note: "Prévenir les familles et inviter les enseignants responsables de classes dans Pix Orga.", completed: false },
+                    { id: 13, text: "Vérifier que les élèves ont bien récupéré leur compte.", note: "En allant sur ce site : <a href='https://app.pix.fr/recuperer-mon-compte' target='_blank'>Récupérer mon compte</a>, les élèves récupèrent leur compte Pix et continuent de l'utiliser dans le supérieur ou la vie active.", completed: false },
+                ]
+            },
+            {
+                category: "Suivi",
+                items: [
+                    { id: 7, text: "Faire le bilan des campagnes de rentrée avant les vacances de Toussaint.", note: "Important pour les certifications de novembre à mars. Pour retrouver les changements de la certification, lisez cet article : <a href='https://dane.site.ac-lille.fr/2024/08/27/la-certification-pix-des-nouvelles-modalites-pour-la-rentree-2024' target='_blank'>Article les nouveautés de la certification</a>", completed: false },
+                    { id: 8, text: "Faire un bilan avec les équipes pour relancer les élèves concernés.", note: "Vérifier les accès et remotiver les élèves, surtout ceux qui ont des difficultés en ciblant des thématiques qu'ils connaissent bien.", completed: false },
+                    { id: 9, text: "Recréer des campagnes thématiques avec les élèves à partir de novembre.", note: "Entraîner les élèves avec des campagnes thématiques. La certification étant décorrélée de leur profil, il est indispensable que les élèves soit familier avec les questions dans tous les domaines.", completed: false },
+                ]
+            },
+            {
+                category: "Finalisation",
+                items: [
+                    { id: 10, text: "Préparer les certifications dès novembre si les élèves sont certifiables.", note: "Créer des sessions dans Pix Certif (la plateforme de certification) et assigner des surveillants.", completed: false },
+                ]
+            },
+            {
+                category: "Clôture",
+                items: [
+                    { id: 12, text: "Vérifier la passation des données sur Parcours Sup.", note: "La transmission des données devrait être automatique à partir d'avcril 2025. Dans le cas contraire, les élèves pourront rajouter leur certification.", completed: false },
+                ]
+            }
         ];
 
         let tasks = JSON.parse(localStorage.getItem('tasks')) || defaultTasks;
@@ -209,53 +238,67 @@
 
             function renderTasks(filter = 'all') {
                 taskList.innerHTML = '';
-                let filteredTasks = tasks;
+                tasks.forEach(category => {
+                    const categoryElement = document.createElement('div');
+                    categoryElement.classList.add('category');
+                    
+                    const categoryTitle = document.createElement('h2');
+                    categoryTitle.textContent = category.category;
+                    categoryElement.appendChild(categoryTitle);
 
-                if (filter === 'completed') {
-                    filteredTasks = tasks.filter(task => task.completed);
-                } else if (filter === 'uncompleted') {
-                    filteredTasks = tasks.filter(task => !task.completed);
-                }
+                    category.items.forEach(task => {
+                        if ((filter === 'all') || 
+                            (filter === 'completed' && task.completed) || 
+                            (filter === 'uncompleted' && !task.completed)) {
+                            
+                            const taskItem = document.createElement('div');
+                            taskItem.classList.add('task-item');
+                            if (task.completed) {
+                                taskItem.classList.add('completed');
+                            }
 
-                filteredTasks.forEach(task => {
-                    const taskItem = document.createElement('div');
-                    taskItem.classList.add('task-item');
-                    if (task.completed) {
-                        taskItem.classList.add('completed');
-                    }
+                            const taskHeader = document.createElement('div');
+                            taskHeader.classList.add('task-header');
 
-                    const taskHeader = document.createElement('div');
-                    taskHeader.classList.add('task-header');
+                            const taskTitle = document.createElement('span');
+                            taskTitle.classList.add('task-title');
+                            taskTitle.textContent = task.text;
 
-                    const taskTitle = document.createElement('span');
-                    taskTitle.classList.add('task-title');
-                    taskTitle.textContent = task.text;
+                            const toggleButton = document.createElement('button');
+                            toggleButton.classList.add('toggle-btn');
+                            toggleButton.textContent = task.completed ? 'Marquer comme non fait' : 'Marquer comme fait';
+                            toggleButton.addEventListener('click', function() {
+                                task.completed = !task.completed;
+                                saveTasks();
+                                renderTasks(filter);
+                                updateProgress();
+                            });
 
-                    const toggleButton = document.createElement('button');
-                    toggleButton.classList.add('toggle-btn');
-                    toggleButton.textContent = task.completed ? 'Marquer comme non fait' : 'Marquer comme fait';
-                    toggleButton.addEventListener('click', function() {
-                        task.completed = !task.completed;
-                        saveTasks();
-                        renderTasks(filter);
-                        updateProgress();
+                            const taskNote = document.createElement('div');
+                            taskNote.classList.add('task-note');
+                            taskNote.innerHTML = task.note;
+
+                            taskHeader.appendChild(taskTitle);
+                            taskHeader.appendChild(toggleButton);
+                            taskItem.appendChild(taskHeader);
+                            taskItem.appendChild(taskNote);
+                            categoryElement.appendChild(taskItem);
+                        }
                     });
 
-                    const taskNote = document.createElement('div');
-                    taskNote.classList.add('task-note');
-                    taskNote.innerHTML = task.note;
-
-                    taskHeader.appendChild(taskTitle);
-                    taskHeader.appendChild(toggleButton);
-                    taskItem.appendChild(taskHeader);
-                    taskItem.appendChild(taskNote);
-                    taskList.appendChild(taskItem);
+                    taskList.appendChild(categoryElement);
                 });
             }
 
             function updateProgress() {
-                const completedTasks = tasks.filter(task => task.completed).length;
-                const totalTasks = tasks.length;
+                let completedTasks = 0;
+                let totalTasks = 0;
+                
+                tasks.forEach(category => {
+                    completedTasks += category.items.filter(task => task.completed).length;
+                    totalTasks += category.items.length;
+                });
+
                 const percentage = (completedTasks / totalTasks) * 100;
 
                 progressBar.style.width = `${percentage}%`;
