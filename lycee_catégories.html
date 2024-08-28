@@ -190,6 +190,8 @@
                 <div class="category" data-category="category1">Préparations Administratives</div>
                 <div class="category" data-category="category2">Gestion des Campagnes</div>
                 <div class="category" data-category="category3">Suivi des Élèves</div>
+                <div class="category" data-category="category4">Certifications</div>
+                <div class="category" data-category="category5">Technique et Accès</div>
             </div>
             <div class="tasks" id="tasksContainer"></div>
         </div>
@@ -207,17 +209,25 @@
             // Catégorie 1: Préparations Administratives
             { id: 1, category: "category1", text: "Mettre à jour la liste des administrateurs dans Pix Orga.", note: "Chaque année, des enseignants changent de fonction ou d'établissement.", completed: false },
             { id: 2, category: "category1", text: "Archiver les certifications de l'année précédente et supprimer les campagnes.", note: "Gardez une sauvegarde des certifications passées.", completed: false },
-            { id: 3, category: "category1", text: "Vérifier l'accès des élèves à Pix dans l'ENT via le Médiacentre.", note: "Demander au Référent ressources GAR de le faire si nécessaire.", completed: false },
 
             // Catégorie 2: Gestion des Campagnes
-            { id: 4, category: "category2", text: "Créer les campagnes de rentrée pour les élèves.", note: "Lancer une campagne de rentrée pour redémarrer une nouvelle session.", completed: false },
-            { id: 5, category: "category2", text: "Mettre la base Siècle à jour et importer le fichier XML dans Pix Orga.", note: "Répétez cette action si la base est modifiée.", completed: false },
-            { id: 6, category: "category2", text: "Communiquer les codes de campagnes aux enseignants.", note: "Prévenir les familles et inviter les enseignants.", completed: false },
+            { id: 3, category: "category2", text: "Créer les campagnes de rentrée pour les élèves.", note: "Lancer une campagne de rentrée pour redémarrer une nouvelle session.", completed: false },
+            { id: 4, category: "category2", text: "Mettre la base Siècle à jour et importer le fichier XML dans Pix Orga.", note: "Répétez cette action si la base est modifiée.", completed: false },
+            { id: 5, category: "category2", text: "Communiquer les codes de campagnes aux enseignants.", note: "Prévenir les familles et inviter les enseignants.", completed: false },
+            { id: 6, category: "category2", text: "Recréer des campagnes thématiques avec les élèves à partir de novembre.", note: "Entraîner les élèves avec des campagnes thématiques.", completed: false },
 
             // Catégorie 3: Suivi des Élèves
             { id: 7, category: "category3", text: "Faire le bilan des campagnes de rentrée avant les vacances de Toussaint.", note: "Important pour les certifications de novembre à mars.", completed: false },
-            { id: 8, category: "category3", text: "Vérifier l'inscription des élèves aux campagnes.", note: "Vérifier si tous les élèves sont bien inscrits et s'ils peuvent participer.", completed: false },
-            { id: 9, category: "category3", text: "Analyser les résultats et préparer le rapport pour la direction.", note: "Un rapport complet permettra de mieux organiser les campagnes futures.", completed: false }
+            { id: 8, category: "category3", text: "Faire un bilan avec les équipes pour relancer les élèves concernés.", note: "Vérifier les accès et remotiver les élèves.", completed: false },
+
+            // Catégorie 4: Certifications
+            { id: 9, category: "category4", text: "Préparer les certifications dès novembre si les élèves sont certifiables.", note: "Créer des sessions dans Pix Certif et assigner des surveillants.", completed: false },
+            { id: 10, category: "category4", text: "Vérifier la passation des données sur Parcours Sup.", note: "La transmission doit être automatique. Dans le cas contraire, les élèves pourront rajouter leur certification.", completed: false },
+
+            // Catégorie 5: Technique et Accès
+            { id: 11, category: "category5", text: "Vérifier l'accès des élèves à Pix dans l'ENT via le Médiacentre.", note: "Demander au Référent ressources GAR de le faire si nécessaire.", completed: false },
+            { id: 12, category: "category5", text: "Faire la check-list des sites potentiellement bloqués.", note: "Vérifier le pare-feu et consulter les sites à vérifier. <a href='https://cloud.pix.fr/s/dnj5Baoabj5xm4P?path=%2FWhitelist%20enseignement%20scolaire' target='_blank'>Cliquez ici pour voir la liste</a>", completed: false },
+            { id: 13, category: "category5", text: "Vérifier que les élèves ont bien récupéré leur compte.", note: "En allant sur ce site : <a href='https://app.pix.fr/recuperer-mon-compte' target='_blank'>https://app.pix.fr/recuperer-mon-compte</a>, les élèves récupèrent leur compte Pix.", completed: false }
         ];
 
         const renderTasks = (filter = "all", category = "all") => {
