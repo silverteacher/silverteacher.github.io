@@ -15,13 +15,13 @@
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             display: flex;
-            padding: 20px;
+            padding: 10px;
         }
         .container {
             max-width: 1200px;
             width: 100%;
             margin: 0 auto;
-            padding: 20px;
+            padding: 15px;
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -33,6 +33,7 @@
             color: #333;
             margin-bottom: 20px;
             text-align: center;
+            font-size: 24px;
         }
         .contact-info {
             display: flex;
@@ -41,6 +42,7 @@
             margin-bottom: 10px;
             font-size: 0.9em;
             color: #333;
+            flex-wrap: wrap;
         }
         .contact-info img {
             width: 20px;
@@ -58,15 +60,17 @@
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .filter-btn {
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 10px 20px;
-            margin: 0 5px;
+            padding: 8px 16px;
+            margin: 5px;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 14px;
         }
         .filter-btn.active {
             background-color: #45a049;
@@ -75,17 +79,22 @@
             display: flex;
             flex-grow: 1;
             min-height: 0;
+            flex-direction: column;
         }
         .categories {
-            width: 200px;
-            padding-right: 20px;
+            width: 100%;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
         .category {
-            margin-bottom: 20px;
+            margin: 5px;
             cursor: pointer;
-            padding: 10px;
+            padding: 8px 16px;
             background-color: #f0f0f0;
             border-radius: 5px;
+            font-size: 14px;
         }
         .category.active {
             background-color: #4CAF50;
@@ -94,7 +103,7 @@
         .tasks {
             flex-grow: 1;
             overflow-y: auto;
-            padding-right: 10px;
+            padding-right: 5px;
         }
         .task-item {
             background-color: #fff;
@@ -103,30 +112,32 @@
             padding: 15px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            flex-direction: column;
         }
         .task-content {
             flex-grow: 1;
             text-align: left;
+            margin-bottom: 10px;
         }
         .task-title {
             font-weight: bold;
             color: #333;
+            font-size: 16px;
+            margin-bottom: 5px;
         }
         .task-note {
-            font-size: 0.9em;
+            font-size: 14px;
             color: #666;
-            margin-top: 5px;
         }
         .toggle-btn {
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 8px 16px;
             border-radius: 3px;
             cursor: pointer;
-            white-space: nowrap;
+            font-size: 14px;
+            align-self: flex-end;
         }
         .completed .toggle-btn {
             background-color: #f44336;
@@ -151,23 +162,32 @@
             text-align: center;
         }
         .logo {
-            max-width: 150px;
+            max-width: 100px;
             height: auto;
         }
         @media (max-width: 768px) {
-            .content-wrapper {
-                flex-direction: column;
+            body {
+                padding: 5px;
             }
-            .categories {
-                width: 100%;
-                padding-right: 0;
-                margin-bottom: 20px;
+            .container {
+                padding: 10px;
             }
-            .category {
-                margin-bottom: 10px;
+            h1 {
+                font-size: 20px;
             }
-            .tasks {
-                max-height: 400px;
+            .filter-btn, .category {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+            .task-title {
+                font-size: 14px;
+            }
+            .task-note {
+                font-size: 12px;
+            }
+            .toggle-btn {
+                font-size: 12px;
+                padding: 6px 12px;
             }
         }
     </style>
@@ -186,12 +206,12 @@
         </div>
         <div class="content-wrapper">
             <div class="categories">
-                <div class="category active" data-category="all">Toutes les catégories</div>
-                <div class="category" data-category="category1">Préparations Administratives</div>
-                <div class="category" data-category="category2">Gestion des Campagnes</div>
-                <div class="category" data-category="category3">Suivi des Élèves</div>
+                <div class="category active" data-category="all">Toutes</div>
+                <div class="category" data-category="category1">Préparations</div>
+                <div class="category" data-category="category2">Campagnes</div>
+                <div class="category" data-category="category3">Suivi Élèves</div>
                 <div class="category" data-category="category4">Certifications</div>
-                <div class="category" data-category="category5">Technique et Accès</div>
+                <div class="category" data-category="category5">Technique</div>
             </div>
             <div class="tasks" id="tasksContainer"></div>
         </div>
@@ -206,25 +226,16 @@
 
     <script>
         const tasks = [
-            // Catégorie 1: Préparations Administratives
             { id: 1, category: "category1", text: "Mettre à jour la liste des administrateurs dans Pix Orga.", note: "Chaque année, des enseignants changent de fonction ou d'établissement.", completed: false },
             { id: 2, category: "category1", text: "Archiver les certifications de l'année précédente et supprimer les campagnes.", note: "Gardez une sauvegarde des certifications passées.", completed: false },
-
-            // Catégorie 2: Gestion des Campagnes
             { id: 3, category: "category2", text: "Créer les campagnes de rentrée pour les élèves.", note: "Lancer une campagne de rentrée pour redémarrer une nouvelle session.", completed: false },
             { id: 4, category: "category2", text: "Mettre la base Siècle à jour et importer le fichier XML dans Pix Orga.", note: "Répétez cette action si la base est modifiée.", completed: false },
             { id: 5, category: "category2", text: "Communiquer les codes de campagnes aux enseignants.", note: "Prévenir les familles et inviter les enseignants.", completed: false },
             { id: 6, category: "category2", text: "Recréer des campagnes thématiques avec les élèves à partir de novembre.", note: "Entraîner les élèves avec des campagnes thématiques.", completed: false },
-
-            // Catégorie 3: Suivi des Élèves
             { id: 7, category: "category3", text: "Faire le bilan des campagnes de rentrée avant les vacances de Toussaint.", note: "Important pour les certifications de novembre à mars.", completed: false },
             { id: 8, category: "category3", text: "Faire un bilan avec les équipes pour relancer les élèves concernés.", note: "Vérifier les accès et remotiver les élèves.", completed: false },
-
-            // Catégorie 4: Certifications
             { id: 9, category: "category4", text: "Préparer les certifications dès novembre si les élèves sont certifiables.", note: "Créer des sessions dans Pix Certif et assigner des surveillants.", completed: false },
             { id: 10, category: "category4", text: "Vérifier la passation des données sur Parcours Sup.", note: "La transmission doit être automatique. Dans le cas contraire, les élèves pourront rajouter leur certification.", completed: false },
-
-            // Catégorie 5: Technique et Accès
             { id: 11, category: "category5", text: "Vérifier l'accès des élèves à Pix dans l'ENT via le Médiacentre.", note: "Demander au Référent ressources GAR de le faire si nécessaire.", completed: false },
             { id: 12, category: "category5", text: "Faire la check-list des sites potentiellement bloqués.", note: "Vérifier le pare-feu et consulter les sites à vérifier. <a href='https://cloud.pix.fr/s/dnj5Baoabj5xm4P?path=%2FWhitelist%20enseignement%20scolaire' target='_blank'>Cliquez ici pour voir la liste</a>", completed: false },
             { id: 13, category: "category5", text: "Vérifier que les élèves ont bien récupéré leur compte.", note: "En allant sur ce site : <a href='https://app.pix.fr/recuperer-mon-compte' target='_blank'>https://app.pix.fr/recuperer-mon-compte</a>, les élèves récupèrent leur compte Pix.", completed: false }
@@ -245,7 +256,7 @@
                         <div class="task-title">${task.text}</div>
                         <div class="task-note">${task.note}</div>
                     </div>
-                    <button class="toggle-btn" onclick="toggleTask(${task.id})">${task.completed ? "Annuler" : "Marquer comme fait"}</button>
+                    <button class="toggle-btn" onclick="toggleTask(${task.id})">${task.completed ? "Annuler" : "Fait"}</button>
                 `;
                 tasksContainer.appendChild(taskItem);
             });
@@ -316,4 +327,3 @@
         renderTasks();
     </script>
 </body>
-</html>
