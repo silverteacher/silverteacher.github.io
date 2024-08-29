@@ -3,87 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qui est-ce des formateurs numériques - </title>
+    <title>Qui est-ce ? Brise-glace DRANE (Paysage avec Compétences)</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            font-family: 'Arial', sans-serif;
             background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        .container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        #cardContainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 20px;
         }
         .card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 10px;
-            text-align: center;
-            background-color: white;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+            padding: 15px;
+            width: calc(20% - 20px);
+            min-width: 200px;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .card:hover {
-            transform: scale(1.05);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.2em;
         }
-        .info {
+        .hidden {
             display: none;
         }
-        .visible .info {
-            display: block;
+        .info {
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        .competences {
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        .competences ul {
+            padding-left: 20px;
+            margin: 5px 0;
+        }
+        @media (max-width: 1200px) {
+            .card {
+                width: calc(25% - 20px);
+            }
+        }
+        @media (max-width: 900px) {
+            .card {
+                width: calc(33.33% - 20px);
+            }
+        }
+        @media (max-width: 600px) {
+            .card {
+                width: calc(50% - 20px);
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Qui est-ce des formateurs numériques - Version interactive</h1>
-    <p>Cliquez sur les cartes pour révéler les informations!</p>
-    <div class="grid" id="cardGrid"></div>
+    <div class="container">
+        <h1>Qui est-ce ? Brise-glace DRANE</h1>
+        <div id="cardContainer"></div>
+        <p class="info">Cliquez sur une carte pour révéler les informations</p>
+    </div>
 
     <script>
-        const formateurs = [
-            { name: "Delphine", info: "Experte en Histoire-Géographie, intéressée par l'utilisation pédagogique de l'ENT" },
-            { name: "Ugo L.", info: "Spécialiste en Sciences de l'Ingénieur, enthousiaste pour la conception de projets en FABLAB" },
-            { name: "Rémi", info: "Enseignant en Sciences de la Vie et de la Terre, curieux de la certification PIX" },
-            { name: "Mathieu", info: "Professeur de Maths-Sciences, passionné par les escape games pédagogiques" },
-            { name: "Farid", info: "Mathématicien, intéressé par l'intégration de la réalité virtuelle dans l'enseignement" },
-            { name: "Anthelme", info: "Expert en Gestion de l'Information Touristique, spécialisé dans la conception de sites web" },
-            { name: "Wilfrid", info: "Enseignant en Mathématiques et Sciences Numériques, intéressé par les drones et la programmation" },
-            { name: "Ugo B.", info: "Professeur de Droit & Économie, curieux d'explorer l'ENT et ses applications" },
-            { name: "Karine", info: "Documentaliste, intéressée par l'utilisation pédagogique de l'ENT et la certification PIX" },
-            { name: "Christine", info: "Enseignante de SVT, enthousiaste pour les escape games et la ludification des apprentissages" },
-            { name: "Stéphane", info: "Mathématicien, passionné par la création d'applications avec App Inventor" },
-            { name: "Christophe", info: "Professeur d'Économie-Gestion, intéressé par l'administration de sites web WordPress" },
-            { name: "Nathalie", info: "Enseignante de SVT, curieuse d'explorer la vidéo au service de la pédagogie" },
-            { name: "Jérôme", info: "Professeur de Lettres-Histoire-Géographie" },
-            { name: "Amandine", info: "Enseignante d'Italien, intéressée par la classe flexible avec les outils numériques" },
-            { name: "Valérie", info: "Professeure d'Éco-gestion, experte en ENT et escape games pédagogiques" }
+        const people = [
+            { name: "Delphine CHIOCCI", subject: "Histoire-Géographie", school: "Collège International Carnot- Lille", competences: ["ENT", "Utiliser les applications de l'ENT", "Classe inversée", "Escape game"] },
+            { name: "Ugo LEENHARDT", subject: "SII", school: "Lycée André Malraux", competences: ["ENT", "Conception de projets FABLAB", "Micro:bit", "Coder et programmer"] },
+            { name: "Rémi DEBROCK", subject: "Sciences de la Vie et de la Terre", school: "Collège René Cassin - Lillers", competences: ["Certification PIX", "Escape game", "Ludification des apprentissages"] },
+            { name: "Mathieu MALFOY", subject: "Maths sciences", school: "LP Professeur Clerc Outreau", competences: ["ENT", "Conception de projets FABLAB", "Micro:bit", "Escape game", "Ludification des apprentissages"] },
+            { name: "Farid HAMIDAT", subject: "Mathématiques", school: "Collège Franklin à Lille", competences: ["Certification PIX", "Escape game", "Développer l'aisance à l'oral avec le numérique", "Coder et programmer"] },
+            { name: "ANTHELME HAUCHECORNE", subject: "Gestion de l'Information Touristique en BTS Tourisme", school: "LYCÉE GASTON BERGER (LILLE)", competences: ["Vidéo pédagogique", "Développer l'aisance à l'oral avec le numérique", "IA dans l'enseignement"] },
+            { name: "Wilfrid FLEURY", subject: "Mathématiques, Sciences Numériques et Technologiques", school: "Lycée Guy Mollet Arras", competences: ["Conception de projets FABLAB", "Coder et programmer", "IA dans l'enseignement"] },
+            { name: "Ugo BARBAY", subject: "Droit & Économie", school: "Émile Zola Wattrelos", competences: ["ENT", "Certification PIX", "Vidéo pédagogique", "IA dans l'enseignement"] },
+            { name: "Karine POISSONNIER", subject: "Documentation", school: "Collège Boris Vian à Marck", competences: ["ENT", "Certification PIX", "Créer ses livres numériques"] },
+            { name: "Christine ROUBISCOUL", subject: "SVT", school: "College Simone Veil", competences: ["ENT", "Certification PIX", "Escape game", "Ludification des apprentissages"] },
+            { name: "Stéphane ROUBISCOUL", subject: "Mathématiques", school: "Collège Philippe de Commynes, Comines", competences: ["ENT", "Escape game", "Ludification des apprentissages", "Coder et programmer", "IA dans l'enseignement"] },
+            { name: "Christophe DUBOIS", subject: "Économie gestion option commerce et vente", school: "Lycée des 2 caps Marquise", competences: ["Escape game", "Vidéo pédagogique", "Créer des évaluations dynamiques"] },
+            { name: "Nathalie MILLET", subject: "SVT", school: "Lycée FENELON, LILLE", competences: ["Escape game", "Ludification des apprentissages", "IA dans l'enseignement"] },
+            { name: "JEROME CORNOLLE", subject: "Lettres-Histoire-Geographie", school: "LP LAVOISIER ROUBAIX", competences: ["ENT", "Utiliser les applications de l'ENT"] },
+            { name: "Amandine QUIEVRYN", subject: "Italien", school: "Lycée Maxence Van Der Meersch (ROUBAIX)", competences: ["ENT", "Certification PIX", "Escape game", "Développer l'aisance à l'oral avec le numérique"] }
         ];
 
-        const cardGrid = document.getElementById('cardGrid');
+        const cardContainer = document.getElementById('cardContainer');
 
-        formateurs.forEach((formateur, index) => {
+        people.forEach((person, index) => {
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
-                <img src="/api/placeholder/150/150" alt="${formateur.name}">
-                <h2>${formateur.name}</h2>
-                <div class="info">
-                    <p>${formateur.info}</p>
+                <h2>${person.name}</h2>
+                <div>
+                    <p class="hidden">Matière : ${person.subject}</p>
+                    <p class="hidden">Établissement : ${person.school}</p>
+                    <div class="competences hidden">
+                        <p>Compétences :</p>
+                        <ul>
+                            ${person.competences.map(comp => `<li>${comp}</li>`).join('')}
+                        </ul>
+                    </div>
                 </div>
             `;
             card.addEventListener('click', () => {
-                card.classList.toggle('visible');
+                card.querySelectorAll('.hidden').forEach(el => el.classList.toggle('hidden'));
             });
-            cardGrid.appendChild(card);
+            cardContainer.appendChild(card);
         });
     </script>
 </body>
