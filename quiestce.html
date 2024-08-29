@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qui est-ce des formateurs numériques - Version interactive</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            background-color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .info {
+            display: none;
+        }
+        .visible .info {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <h1>Qui est-ce des formateurs numériques - Version interactive</h1>
+    <p>Cliquez sur les cartes pour révéler les informations!</p>
+    <div class="grid" id="cardGrid"></div>
+
+    <script>
+        const formateurs = [
+            { name: "Delphine", info: "Experte en Histoire-Géographie, intéressée par l'utilisation pédagogique de l'ENT" },
+            { name: "Ugo L.", info: "Spécialiste en Sciences de l'Ingénieur, enthousiaste pour la conception de projets en FABLAB" },
+            { name: "Rémi", info: "Enseignant en Sciences de la Vie et de la Terre, curieux de la certification PIX" },
+            { name: "Mathieu", info: "Professeur de Maths-Sciences, passionné par les escape games pédagogiques" },
+            { name: "Farid", info: "Mathématicien, intéressé par l'intégration de la réalité virtuelle dans l'enseignement" },
+            { name: "Anthelme", info: "Expert en Gestion de l'Information Touristique, spécialisé dans la conception de sites web" },
+            { name: "Wilfrid", info: "Enseignant en Mathématiques et Sciences Numériques, intéressé par les drones et la programmation" },
+            { name: "Ugo B.", info: "Professeur de Droit & Économie, curieux d'explorer l'ENT et ses applications" },
+            { name: "Karine", info: "Documentaliste, intéressée par l'utilisation pédagogique de l'ENT et la certification PIX" },
+            { name: "Christine", info: "Enseignante de SVT, enthousiaste pour les escape games et la ludification des apprentissages" },
+            { name: "Stéphane", info: "Mathématicien, passionné par la création d'applications avec App Inventor" },
+            { name: "Christophe", info: "Professeur d'Économie-Gestion, intéressé par l'administration de sites web WordPress" },
+            { name: "Nathalie", info: "Enseignante de SVT, curieuse d'explorer la vidéo au service de la pédagogie" },
+            { name: "Jérôme", info: "Professeur de Lettres-Histoire-Géographie" },
+            { name: "Amandine", info: "Enseignante d'Italien, intéressée par la classe flexible avec les outils numériques" },
+            { name: "Valérie", info: "Professeure d'Éco-gestion, experte en ENT et escape games pédagogiques" }
+        ];
+
+        const cardGrid = document.getElementById('cardGrid');
+
+        formateurs.forEach((formateur, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <img src="/api/placeholder/150/150" alt="${formateur.name}">
+                <h2>${formateur.name}</h2>
+                <div class="info">
+                    <p>${formateur.info}</p>
+                </div>
+            `;
+            card.addEventListener('click', () => {
+                card.classList.toggle('visible');
+            });
+            cardGrid.appendChild(card);
+        });
+    </script>
+</body>
+</html>
