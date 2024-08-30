@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qui est-ce ?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f8ff;
+        }
+        h1 {
+            text-align: center;
+            color: #0066cc;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+        }
+        .names, .info {
+            flex: 1;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #e6f2ff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-align: left;
+        }
+        button:hover {
+            background-color: #cce5ff;
+        }
+        #personInfo {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Qui est-ce ?</h1>
+    <div class="container">
+        <div class="names">
+            <h2>Noms</h2>
+            <button onclick="showInfo('Delphine CHIOCCI', 'Collège International Carnot- Lille', ['Histoire-Géographie', 'ENT', 'Eléa'])">Delphine CHIOCCI</button>
+            <button onclick="showInfo('Ugo LEENHARDT', 'Lycée André Malraux', ['SII', 'ENT', 'FABLAB', 'Micro:bit', 'Yes We Code'])">Ugo LEENHARDT</button>
+            <button onclick="showInfo('Rémi DEBROCK', 'Collège René Cassin - Lillers', ['Sciences de la Vie et de la Terre', 'PIX', 'Eléa'])">Rémi DEBROCK</button>
+            <button onclick="showInfo('Mathieu MALFOY', 'LP Professeur Clerc Outreau', ['Maths sciences', 'FABLAB', 'Micro:bit', 'Yes We Code'])">Mathieu MALFOY</button>
+            <button onclick="showInfo('Farid HAMIDAT', 'Collège Franklin à Lille', ['Mathématiques', 'FABLAB', 'PIX'])">Farid HAMIDAT</button>
+            <button onclick="showInfo('ANTHELME HAUCHECORNE', 'LYCÉE GASTON BERGER (LILLE)', ['Gestion de l\'Information Touristique', 'PIX', 'Intelligence artificielle'])">ANTHELME HAUCHECORNE</button>
+            <button onclick="showInfo('Fleury WILFRID', 'Lycée Guy Mollet Arras', ['Mathématiques', 'Sciences Numériques et Technologiques', 'Drone', 'FABLAB'])">Fleury WILFRID</button>
+            <button onclick="showInfo('Ugo BARBAY', 'Émile Zola Wattrelos', ['Droit & Économie', 'ENT', 'PIX'])">Ugo BARBAY</button>
+            <button onclick="showInfo('Karine POISSONNIER', 'Collège Boris Vian à Marck', ['Documentation', 'ENT', 'PIX', 'BCDI'])">Karine POISSONNIER</button>
+            <button onclick="showInfo('Christine ROUBISCOUL', 'College Simone Veil', ['SVT', 'ENT', 'PIX', 'Classe inversée'])">Christine ROUBISCOUL</button>
+            <button onclick="showInfo('Stéphane ROUBISCOUL', 'Collège Philippe de Commynes, Comines', ['Mathématiques', 'ENT', 'Escape game', 'Ludification'])">Stéphane ROUBISCOUL</button>
+            <button onclick="showInfo('Christophe DUBOIS', 'Lycée des 2 caps Marquise', ['économie gestion option commerce et vente', 'ENT', 'Livres numériques'])">Christophe DUBOIS</button>
+            <button onclick="showInfo('Nathalie MILLET', 'Lycée FENELON, LILLE', ['SVT', 'Escape game', 'Réalité virtuelle', 'Intelligence artificielle'])">Nathalie MILLET</button>
+            <button onclick="showInfo('JEROME CORNOLLE', 'LP LAVOISIER ROUBAIX', ['Lettres-Histoire-Geographie'])">JEROME CORNOLLE</button>
+            <button onclick="showInfo('Amandine QUIEVRYN', 'Lycée Maxence Van Der Meersch (ROUBAIX)', ['italien', 'ENT', 'PIX', 'Classe flexible', 'e-twinning', 'Erasmus+'])">Amandine QUIEVRYN</button>
+            <button onclick="showInfo('VALERIE PETIT', 'LP beaupré HAUBOURDIN', ['Eco-gestion', 'ENT', 'PIX', 'Escape game', 'Ludification'])">VALERIE PETIT</button>
+        </div>
+        <div class="info">
+            <h2>Informations</h2>
+            <div id="personInfo">
+                <h3 id="personName"></h3>
+                <p><strong>Établissement :</strong> <span id="personEstablishment"></span></p>
+                <p><strong>Compétences :</strong></p>
+                <ul id="personSkills"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showInfo(name, establishment, skills) {
+            document.getElementById('personName').textContent = name;
+            document.getElementById('personEstablishment').textContent = establishment;
+            const skillsList = document.getElementById('personSkills');
+            skillsList.innerHTML = '';
+            skills.forEach(skill => {
+                const li = document.createElement('li');
+                li.textContent = skill;
+                skillsList.appendChild(li);
+            });
+            document.getElementById('personInfo').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
