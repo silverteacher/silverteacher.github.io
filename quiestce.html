@@ -3,136 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qui est-ce ? Brise-glace DRANE (Paysage avec Compétences)</title>
+    <title>Qui est-ce ?</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
             padding: 20px;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-        .container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: #e6f2ff;
+            color: #333;
         }
         h1 {
-            color: #2c3e50;
             text-align: center;
+            color: #005cb2;
+            font-size: 2.5em;
             margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
-        #cardContainer {
+        .container {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
+            gap: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
-        .card {
-            background-color: #3498db;
-            color: white;
-            border-radius: 5px;
-            padding: 15px;
-            width: calc(20% - 20px);
-            min-width: 200px;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+        .names, .info {
+            flex: 1;
+            padding: 20px;
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .names {
+            background-color: #f0f8ff;
+            max-height: 600px;
+            overflow-y: auto;
         }
-        .card h2 {
+        h2 {
+            color: #0066cc;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 10px;
             margin-top: 0;
-            font-size: 1.2em;
         }
-        .hidden {
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background-color: #ffffff;
+            border: 1px solid #b3d9ff;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+        button:hover {
+            background-color: #cce5ff;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #personInfo {
             display: none;
+            animation: fadeIn 0.5s;
         }
-        .info {
-            text-align: center;
-            margin-top: 20px;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        #personName {
+            color: #0066cc;
+            margin-top: 0;
+        }
+        #personEstablishment {
             font-style: italic;
+            color: #666;
         }
-        .competences {
-            margin-top: 10px;
-            font-size: 0.9em;
-        }
-        .competences ul {
+        #personSkills {
             padding-left: 20px;
-            margin: 5px 0;
         }
-        @media (max-width: 1200px) {
-            .card {
-                width: calc(25% - 20px);
+        #personSkills li {
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
             }
-        }
-        @media (max-width: 900px) {
-            .card {
-                width: calc(33.33% - 20px);
-            }
-        }
-        @media (max-width: 600px) {
-            .card {
-                width: calc(50% - 20px);
+            .names, .info {
+                max-height: none;
             }
         }
     </style>
 </head>
 <body>
+    <h1>Qui est-ce ?</h1>
     <div class="container">
-        <h1>Qui est-ce ? Brise-glace DRANE</h1>
-        <div id="cardContainer"></div>
-        <p class="info">Cliquez sur une carte pour révéler les informations</p>
+        <div class="names">
+            <h2>Noms</h2>
+            <button onclick="showInfo('Delphine CHIOCCI', 'Collège International Carnot- Lille', ['Histoire-Géographie', 'ENT', 'Eléa'])">Delphine CHIOCCI</button>
+            <button onclick="showInfo('Ugo LEENHARDT', 'Lycée André Malraux', ['SII', 'ENT', 'FABLAB', 'Micro:bit', 'Yes We Code'])">Ugo LEENHARDT</button>
+            <button onclick="showInfo('Rémi DEBROCK', 'Collège René Cassin - Lillers', ['Sciences de la Vie et de la Terre', 'PIX', 'Eléa'])">Rémi DEBROCK</button>
+            <button onclick="showInfo('Mathieu MALFOY', 'LP Professeur Clerc Outreau', ['Maths sciences', 'FABLAB', 'Micro:bit', 'Yes We Code'])">Mathieu MALFOY</button>
+            <button onclick="showInfo('Farid HAMIDAT', 'Collège Franklin à Lille', ['Mathématiques', 'FABLAB', 'PIX'])">Farid HAMIDAT</button>
+            <button onclick="showInfo('ANTHELME HAUCHECORNE', 'LYCÉE GASTON BERGER (LILLE)', ['Gestion de l\'Information Touristique', 'PIX', 'Intelligence artificielle'])">ANTHELME HAUCHECORNE</button>
+            <button onclick="showInfo('Fleury WILFRID', 'Lycée Guy Mollet Arras', ['Mathématiques', 'Sciences Numériques et Technologiques', 'Drone', 'FABLAB'])">Fleury WILFRID</button>
+            <button onclick="showInfo('Ugo BARBAY', 'Émile Zola Wattrelos', ['Droit & Économie', 'ENT', 'PIX'])">Ugo BARBAY</button>
+            <button onclick="showInfo('Karine POISSONNIER', 'Collège Boris Vian à Marck', ['Documentation', 'ENT', 'PIX', 'BCDI'])">Karine POISSONNIER</button>
+            <button onclick="showInfo('Christine ROUBISCOUL', 'College Simone Veil', ['SVT', 'ENT', 'PIX', 'Classe inversée'])">Christine ROUBISCOUL</button>
+            <button onclick="showInfo('Stéphane ROUBISCOUL', 'Collège Philippe de Commynes, Comines', ['Mathématiques', 'ENT', 'Escape game', 'Ludification'])">Stéphane ROUBISCOUL</button>
+            <button onclick="showInfo('Christophe DUBOIS', 'Lycée des 2 caps Marquise', ['économie gestion option commerce et vente', 'ENT', 'Livres numériques'])">Christophe DUBOIS</button>
+            <button onclick="showInfo('Nathalie MILLET', 'Lycée FENELON, LILLE', ['SVT', 'Escape game', 'Réalité virtuelle', 'Intelligence artificielle'])">Nathalie MILLET</button>
+            <button onclick="showInfo('JEROME CORNOLLE', 'LP LAVOISIER ROUBAIX', ['Lettres-Histoire-Geographie'])">JEROME CORNOLLE</button>
+            <button onclick="showInfo('Amandine QUIEVRYN', 'Lycée Maxence Van Der Meersch (ROUBAIX)', ['italien', 'ENT', 'PIX', 'Classe flexible', 'e-twinning', 'Erasmus+'])">Amandine QUIEVRYN</button>
+            <button onclick="showInfo('VALERIE PETIT', 'LP beaupré HAUBOURDIN', ['Eco-gestion', 'ENT', 'PIX', 'Escape game', 'Ludification'])">VALERIE PETIT</button>
+        </div>
+        <div class="info">
+            <h2>Informations</h2>
+            <div id="personInfo">
+                <h3 id="personName"></h3>
+                <p><strong>Établissement :</strong> <span id="personEstablishment"></span></p>
+                <p><strong>Compétences :</strong></p>
+                <ul id="personSkills"></ul>
+            </div>
+        </div>
     </div>
 
     <script>
-        const people = [
-            { name: "Delphine CHIOCCI", subject: "Histoire-Géographie", school: "Collège International Carnot- Lille", competences: ["ENT", "Utiliser les applications de l'ENT", "Classe inversée", "Escape game"] },
-            { name: "Ugo LEENHARDT", subject: "SII", school: "Lycée André Malraux", competences: ["ENT", "Conception de projets FABLAB", "Micro:bit", "Coder et programmer"] },
-            { name: "Rémi DEBROCK", subject: "Sciences de la Vie et de la Terre", school: "Collège René Cassin - Lillers", competences: ["Certification PIX", "Escape game", "Ludification des apprentissages"] },
-            { name: "Mathieu MALFOY", subject: "Maths sciences", school: "LP Professeur Clerc Outreau", competences: ["ENT", "Conception de projets FABLAB", "Micro:bit", "Escape game", "Ludification des apprentissages"] },
-            { name: "Farid HAMIDAT", subject: "Mathématiques", school: "Collège Franklin à Lille", competences: ["Certification PIX", "Escape game", "Développer l'aisance à l'oral avec le numérique", "Coder et programmer"] },
-            { name: "ANTHELME HAUCHECORNE", subject: "Gestion de l'Information Touristique en BTS Tourisme", school: "LYCÉE GASTON BERGER (LILLE)", competences: ["Vidéo pédagogique", "Développer l'aisance à l'oral avec le numérique", "IA dans l'enseignement"] },
-            { name: "Wilfrid FLEURY", subject: "Mathématiques, Sciences Numériques et Technologiques", school: "Lycée Guy Mollet Arras", competences: ["Conception de projets FABLAB", "Coder et programmer", "IA dans l'enseignement"] },
-            { name: "Ugo BARBAY", subject: "Droit & Économie", school: "Émile Zola Wattrelos", competences: ["ENT", "Certification PIX", "Vidéo pédagogique", "IA dans l'enseignement"] },
-            { name: "Karine POISSONNIER", subject: "Documentation", school: "Collège Boris Vian à Marck", competences: ["ENT", "Certification PIX", "Créer ses livres numériques"] },
-            { name: "Christine ROUBISCOUL", subject: "SVT", school: "College Simone Veil", competences: ["ENT", "Certification PIX", "Escape game", "Ludification des apprentissages"] },
-            { name: "Stéphane ROUBISCOUL", subject: "Mathématiques", school: "Collège Philippe de Commynes, Comines", competences: ["ENT", "Escape game", "Ludification des apprentissages", "Coder et programmer", "IA dans l'enseignement"] },
-            { name: "Christophe DUBOIS", subject: "Économie gestion option commerce et vente", school: "Lycée des 2 caps Marquise", competences: ["Escape game", "Vidéo pédagogique", "Créer des évaluations dynamiques"] },
-            { name: "Nathalie MILLET", subject: "SVT", school: "Lycée FENELON, LILLE", competences: ["Escape game", "Ludification des apprentissages", "IA dans l'enseignement"] },
-            { name: "JEROME CORNOLLE", subject: "Lettres-Histoire-Geographie", school: "LP LAVOISIER ROUBAIX", competences: ["ENT", "Utiliser les applications de l'ENT"] },
-            { name: "Amandine QUIEVRYN", subject: "Italien", school: "Lycée Maxence Van Der Meersch (ROUBAIX)", competences: ["ENT", "Certification PIX", "Escape game", "Développer l'aisance à l'oral avec le numérique"] }
-        ];
-
-        const cardContainer = document.getElementById('cardContainer');
-
-        people.forEach((person, index) => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <h2>${person.name}</h2>
-                <div>
-                    <p class="hidden">Matière : ${person.subject}</p>
-                    <p class="hidden">Établissement : ${person.school}</p>
-                    <div class="competences hidden">
-                        <p>Compétences :</p>
-                        <ul>
-                            ${person.competences.map(comp => `<li>${comp}</li>`).join('')}
-                        </ul>
-                    </div>
-                </div>
-            `;
-            card.addEventListener('click', () => {
-                card.querySelectorAll('.hidden').forEach(el => el.classList.toggle('hidden'));
+        function showInfo(name, establishment, skills) {
+            document.getElementById('personName').textContent = name;
+            document.getElementById('personEstablishment').textContent = establishment;
+            const skillsList = document.getElementById('personSkills');
+            skillsList.innerHTML = '';
+            skills.forEach(skill => {
+                const li = document.createElement('li');
+                li.textContent = skill;
+                skillsList.appendChild(li);
             });
-            cardContainer.appendChild(card);
-        });
+            document.getElementById('personInfo').style.display = 'block';
+        }
     </script>
 </body>
 </html>
