@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbre de Décision - Résistance aux IA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: auto;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-yes { background-color: #4CAF50; color: white; }
+        .btn-no { background-color: #f44336; color: white; }
+        #resultat {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #restart {
+            display: none;
+            background-color: #2196F3;
+            color: white;
+            margin-top: 20px;
+        }
+        #critere {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        .summary {
+            text-align: left;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Arbre de Décision : Résistance aux IA</h1>
+        <p id="question">La tâche nécessite-t-elle une expérience personnelle ou subjective ?</p>
+        <p id="critere">Critère : Expérience unique qui ne peut pas être générée par une IA</p>
+        <button class="btn-yes" onclick="repondre(true)">Oui</button>
+        <button class="btn-no" onclick="repondre(false)">Non</button>
+        <p id="resultat"></p>
+        <div id="summary" class="summary"></div>
+        <button id="restart" onclick="recommencer()">Recommencer</button>
+    </div>
+    <script>
+        const questionData = [
+            {
+                question: "La tâche nécessite-t-elle une expérience personnelle ou subjective ?",
+                critere: "Critère : Expérience unique qui ne peut pas être générée par une IA",
+                explication: "Les tâches basées sur des expériences personnelles sont difficiles à reproduire par IA."
+            },
+            {
+                question: "Intègre-t-elle une phase en présentiel supervisée ?",
+                critere: "Critère : Contrôle direct et supervision en temps réel",
+                explication: "La présence physique limite l'utilisation des IA et garantit l'authenticité du travail."
+            },
+            {
+                question: "Évalue-t-elle le processus (brouillons, étapes intermédiaires) ?",
+                critere: "Critère : Suivi de la progression et de la démarche",
+                explication: "Suivre l'évolution du travail permet de vérifier l'implication personnelle."
+            },
+            {
+                question: "Implique-t-elle un travail collaboratif en classe ?",
+                critere: "Critère : Interaction et dynamique de groupe",
+                explication: "Le travail collaboratif nécessite des interactions en temps réel difficiles à simuler."
+            },
+            {
+                question: "Mobilise-t-elle plusieurs compétences (écrit + oral/artistique) ?",
+                critere: "Critère : Compétences multidimensionnelles",
+                explication: "Les tâches complexes qui combinent différentes compétences sont plus difficiles à réaliser par IA."
+            },
+            {
+                question: "Est-elle ancrée dans l'environnement local ou l'actualité récente ?",
+                critere: "Critère : Contextualisation locale et actualité",
+                explication: "Les sujets très récents ou locaux nécessitent une connaissance immédiate du contexte."
+            },
+            {
+                question: "Limitez-vous explicitement les ressources autorisées ?",
+                critere: "Critère : Restriction des sources et des outils",
+                explication: "Limiter les ressources réduit les possibilités de contournement par IA."
+            },
+            {
+                question: "Demandez-vous une restitution manuscrite ou orale improvisée ?",
+                critere: "Critère : Production originale et spontanée",
+                explication: "Les productions manuscrites ou orales improvisées sont uniques et non reproductibles."
+            },
+            {
+                question: "Inclut-elle une réflexion critique sur l'usage des IA ?",
+                critere: "Critère : Méta-réflexion sur la technologie",
+                explication: "Intégrer une analyse critique de l'IA incite à une approche réflexive et personnelle."
+            },
+            {
+                question: "Prévoit-vous des feedbacks intermédiaires personnalisés ?",
+                critere: "Critère : Accompagnement et suivi personnalisé",
+                explication: "Des retours personnalisés encouragent une démarche individuelle et adaptative."
+            }
+        ];
+        
+        let index = 0;
+        let score = 0;
+        let criteresSatisfaits = [];
+        let criteresNonSatisfaits = [];
+
+        function repondre(oui) {
+            if (oui) {
+                score++;
+                criteresSatisfaits.push(questionData[index].explication);
+            } else {
+                criteresNonSatisfaits.push(questionData[index].explication);
+            }
+
+            index++;
+            if (index < questionData.length) {
+                document.getElementById("question").innerText = questionData[index].question;
+                document.getElementById("critere").innerText = questionData[index].critere;
+            } else {
+                afficherResultat();
+            }
+        }
+
+        function afficherResultat() {
+            let resultat = document.getElementById("resultat");
+            let summary = document.getElementById("summary");
+            let boutonOui = document.querySelector(".btn-yes");
+            let boutonNon = document.querySelector(".btn-no");
+            let boutonRecommencer = document.getElementById("restart");
+
+            if (score >= 3) {
+                resultat.innerHTML = "✅ La tâche est robuste contre les IA !";
+                resultat.style.color = "green";
+            } else {
+                resultat.innerHTML = "⚠️ Intégrez au moins 3 critères supplémentaires !";
+                resultat.style.color = "red";
+            }
+
+            // Création du résumé détaillé
+            summary.innerHTML = `
+                <h3>Détail de l'analyse :</h3>
+                <p><strong>Score : ${score} / ${questionData.length}</strong></p>
+                
+                <h4>Critères satisfaits :</h4>
+                <ul>${criteresSatisfaits.map(c => `<li>${c}</li>`).join('')}</ul>
+                
+                <h4>Critères à améliorer :</h4>
+                <ul>${criteresNonSatisfaits.map(c => `<li>${c}</li>`).join('')}</ul>
+            `;
+
+            document.getElementById("question").innerText = "Fin du questionnaire.";
+            document.getElementById("critere").innerText = "Découvrez les détails de votre analyse !";
+            
+            boutonOui.style.display = "none";
+            boutonNon.style.display = "none";
+            boutonRecommencer.style.display = "block";
+        }
+
+        function recommencer() {
+            index = 0;
+            score = 0;
+            criteresSatisfaits = [];
+            criteresNonSatisfaits = [];
+
+            document.getElementById("question").innerText = questionData[0].question;
+            document.getElementById("critere").innerText = questionData[0].critere;
+            document.getElementById("resultat").innerText = "";
+            document.getElementById("summary").innerHTML = "";
+            
+            let boutonOui = document.querySelector(".btn-yes");
+            let boutonNon = document.querySelector(".btn-no");
+            let boutonRecommencer = document.getElementById("restart");
+
+            boutonOui.style.display = "block";
+            boutonNon.style.display = "block";
+            boutonRecommencer.style.display = "none";
+        }
+    </script>
+</body>
+</html>
