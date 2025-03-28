@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Arbre de décision - Résistance des devoirs aux IA</title>
+    <title>Arbre de Décision - Résistance aux IA</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -83,9 +83,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Résistance à l'IA : Évaluez votre tâche. 
-            <h3>10 critères vous sont proposés pour vous aider à déterminer si les tâches ou travaux que vous demandez aux élèves résisteront à l'intelligence artificielle générative.</h3>
-        <p>La tâche nécessite-t-elle que l'élève s'appuie sur une expérience personnelle ou subjective ?</p>
+        <h1>Résistance à l'IA : Évaluez votre tâche</h1>
+        <p id="question">La tâche nécessite-t-elle une expérience personnelle ou subjective ?</p>
         <p id="critere">Critère : Expérience unique qui ne peut pas être générée par une IA</p>
         <div class="btn-container">
             <button class="btn-yes" onclick="repondre(true)">Oui</button>
@@ -124,12 +123,12 @@
                 explication: "Les tâches complexes qui combinent différentes compétences sont plus difficiles à réaliser par IA."
             },
             {
-                question: "Est-elle ancrée dans l'environnement de la classe et à sa spécificité ou à l'actualité récente ?",
+                question: "Est-elle ancrée dans l'environnement local ou l'actualité récente ?",
                 critere: "Critère : Contextualisation locale et actualité",
                 explication: "Les sujets très récents ou locaux nécessitent une connaissance immédiate du contexte."
             },
             {
-                question: "Limitez-vous explicitement les ressources autorisées dans et hors la classe ?",
+                question: "Limitez-vous explicitement les ressources autorisées ?",
                 critere: "Critère : Restriction des sources et des outils",
                 explication: "Limiter les ressources réduit les possibilités de contournement par IA."
             },
