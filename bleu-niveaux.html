@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbre de décision - Résistance aux IA génératives</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f4fc; /* Nouvel arrière-plan pour toute la page */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            border: 3px solid #3498db; /* Ajout d'un cadre bleu */
+        }
+        h1 {
+            color: #3498db;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #2980b9;
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+        .dane-link {
+            font-size: 12px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .dane-link a {
+            color: #7f8c8d;
+            text-decoration: none;
+        }
+        .dane-link a:hover {
+            text-decoration: underline;
+            color: #3498db;
+        }
+        #question {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            background-color: #f8f9fa; /* Légère couleur d'arrière-plan pour la question */
+            padding: 10px;
+            border-radius: 8px;
+        }
+        #critere {
+            font-size: 14px;
+            color: #7f8c8d;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+        .btn-container {
+            display: flex;
+            gap: 15px;
+        }
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        .btn-yes {
+            background-color: #2ecc71;
+            color: white;
+            border: 2px solid #27ae60; /* Bordure pour le bouton Oui */
+        }
+        .btn-no {
+            background-color: #e74c3c;
+            color: white;
+            border: 2px solid #c0392b; /* Bordure pour le bouton Non */
+        }
+        #resultat {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .niveau-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: white;
+        }
+        .niveau-faible {
+            background-color: #e74c3c;
+        }
+        .niveau-moyen {
+            background-color: #f39c12;
+        }
+        .niveau-eleve {
+            background-color: #2ecc71;
+        }
+        #summary {
+            background-color: #f1f3f4;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+            display: none;
+            border: 1px solid #d5d9d9; /* Légère bordure pour le résumé */
+        }
+        #restart {
+            display: none;
+            background-color: #3498db;
+            color: white;
+            margin-top: 20px;
+            border: 2px solid #2980b9; /* Bordure pour le bouton recommencer */
+        }
+        .progression-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        .progression-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Résistance à l'IA : évaluez la tâche donnée aux élèves.</h1>
+        <h2>Vérifiez en dix questions si la tâche donnée aux élèves résistera à l'IA</h2>
+        
+        <!-- Lien DANE sous le titre -->
+        <div class="dane-link">
+            <a href="http://dane.site.ac-lille.fr" target="_blank">Ressource DANE Académie de Lille</a>
+        </div>
+        
+        <p id="question">La tâche nécessite-t-elle une expérience personnelle ou subjective ?</p>
+        <p id="critere">Critère : expérience unique qui ne peut pas être générée par une IA</p>
+        <div class="btn-container">
+            <button class="btn-yes" onclick="repondre(true)">Oui</button>
+            <button class="btn-no" onclick="repondre(false)">Non</button>
+        </div>
+        <p id="resultat"></p>
+        <div id="summary"></div>
+        <button id="restart" onclick="recommencer()">Recommencer</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "La tâche nécessite-t-elle une expérience personnelle unique ou subjective ?",
+                critere: "Critère : expérience unique qui ne peut pas être générée par une IA",
+                explication: "Les tâches basées sur des expériences personnelles sont difficiles à reproduire par les IA."
+            },
+            {
+                question: "Intègre-t-elle une phase en présentiel supervisée ?",
+                critere: "Critère : contrôle direct et supervision en temps réel par l'enseignant",
+                explication: "La présence physique limite l'utilisation des IA et garantit l'authenticité du travail."
+            },
+            {
+                question: "Évalue-t-elle le processus (brouillons, étapes intermédiaires) ?",
+                critere: "Critère : suivi de la progression et de la démarche",
+                explication: "Suivre l'évolution du travail des élèves permet de vérifier l'implication personnelle."
+            },
+            {
+                question: "Implique-t-elle un travail collaboratif en classe ?",
+                critere: "Critère : interactions et dynamique de groupe",
+                explication: "Le travail collaboratif nécessite des interactions en temps réel difficiles à simuler."
+            },
+            {
+                question: "Mobilise-t-elle plusieurs compétences (écrit + oral/expression artistique) ?",
+                critere: "Critère : compétences multidimensionnelles",
+                explication: "Les tâches complexes qui combinent différentes compétences sont plus difficiles à réaliser par l' IA."
+            },
+            {
+                question: "Est-elle ancrée dans l'environnement local ou l'actualité récente ?",
+                critere: "Critère : contextualisation locale et actualité",
+                explication: "Les sujets très récents ou spécifiques nécessitent une connaissance immédiate du contexte à laquelle les IA n'accèdent pas."
+            },
+            {
+                question: "Limitez-vous explicitement les ressources autorisées ?",
+                critere: "Critère : restriction des sources et des outils",
+                explication: "Limiter les ressources réduit les possibilités de contournement par IA."
+            },
+            {
+                question: "Demandez-vous une restitution manuscrite ou orale improvisée ?",
+                critere: "Critère : production originale et spontanée",
+                explication: "Les productions manuscrites ou orales improvisées sont uniques et non reproductibles."
+            },
+            {
+                question: "Inclut-elle une réflexion critique sur l'usage des IA ?",
+                critere:"Critère : méta-réflexion sur la technologie",
+                explication: "Intégrer une analyse critique de l'IA incite à une approche réflexive et personnelle."
+            },
+            {
+                question: "Prévoyez-vous des feedbacks intermédiaires personnalisés ?",
+                critere: "Critère : acccompagnement et suivi personnalisé",
+                explication: "Des retours personnalisés en utilisant des capsules sonores (via le dictaphone de l'ENT par exemple) encouragent une démarche individuelle et adaptative."
+            }
+        ];
+
+        let index = 0;
+        let score = 0;
+        let criteresSatisfaits = [];
+        let criteresNonSatisfaits = [];
+
+        function repondre(oui) {
+            if (oui) {
+                score++;
+                criteresSatisfaits.push(questions[index].explication);
+            } else {
+                criteresNonSatisfaits.push(questions[index].explication);
+            }
+
+            index++;
+            if (index < questions.length) {
+                document.getElementById("question").textContent = questions[index].question;
+                document.getElementById("critere").textContent = questions[index].critere;
+            } else {
+                afficherResultat();
+            }
+        }
+
+        function afficherResultat() {
+            const resultat = document.getElementById("resultat");
+            const summary = document.getElementById("summary");
+            const boutonOui = document.querySelector(".btn-yes");
+            const boutonNon = document.querySelector(".btn-no");
+            const boutonRecommencer = document.getElementById("restart");
+            
+            let niveauTexte = "";
+            let niveauClass = "";
+            let backgroundColor = "";
+            let recommendations = "";
+            
+            // Déterminer le niveau de résistance en fonction du score
+            if (score <= 4) {
+                niveauTexte = "Niveau 1 : Non résistante à l'IA";
+                niveauClass = "niveau-faible";
+                backgroundColor = "#ffeded"; // Rouge pâle
+                recommendations = "Cette tâche est facilement réalisable par l'IA. Ajoutez des éléments personnels, collaboratifs et contextuels pour la renforcer.";
+            } else if (score <= 7) {
+                niveauTexte = "Niveau 2 : Plutôt résistante à l'IA";
+                niveauClass = "niveau-moyen";
+                backgroundColor = "#fff5e6"; // Orange pâle
+                recommendations = "Cette tâche présente une résistance modérée à l'IA. Renforcez-la avec quelques critères supplémentaires pour la rendre plus robuste.";
+            } else {
+                niveauTexte = "Niveau 3 : Très résistante à l'IA";
+                niveauClass = "niveau-eleve";
+                backgroundColor = "#e6f7e6"; // Vert pâle
+                recommendations = "Excellente conception ! Cette tâche est très résistante à l'IA grâce à sa combinaison de critères robustes.";
+            }
+            
+            // Affichage du résultat
+            resultat.innerHTML = `<div>${score} / ${questions.length} critères satisfaits</div>
+                                <div class="niveau-badge ${niveauClass}">${niveauTexte}</div>`;
+            resultat.style.backgroundColor = backgroundColor;
+            resultat.style.padding = "15px";
+            resultat.style.borderRadius = "8px";
+            
+            // Ajouter une barre de progression
+            const progressionPercentage = (score / questions.length) * 100;
+            const progressColor = score <= 4 ? "#e74c3c" : (score <= 7 ? "#f39c12" : "#2ecc71");
+            
+            resultat.innerHTML += `
+                <div class="progression-bar">
+                    <div class="progression-fill" style="width: ${progressionPercentage}%; background-color: ${progressColor};"></div>
+                </div>
+            `;
+
+            summary.innerHTML = `
+                <h3>Détail de l'analyse :</h3>
+                <p><strong>Évaluation : </strong>${recommendations}</p>
+                
+                <h4>Critères satisfaits :</h4>
+                <ul>${criteresSatisfaits.map(c => `<li>${c}</li>`).join('')}</ul>
+                
+                <h4>Critères à améliorer :</h4>
+                <ul>${criteresNonSatisfaits.map(c => `<li>${c}</li>`).join('')}</ul>
+                
+                <div class="dane-link" style="margin-top: 20px; text-align: center;">
+                    <a href="http://dane.site.ac-lille.fr" target="_blank">Ressource DANE Académie de Lille</a>
+                </div>
+            `;
+
+            document.getElementById("question").textContent = "Fin du questionnaire.";
+            document.getElementById("critere").textContent = "Découvrez les détails de votre analyse !";
+            
+            boutonOui.style.display = "none";
+            boutonNon.style.display = "none";
+            summary.style.display = "block";
+            boutonRecommencer.style.display = "block";
+        }
+
+        function recommencer() {
+            index = 0;
+            score = 0;
+            criteresSatisfaits = [];
+            criteresNonSatisfaits = [];
+
+            document.getElementById("question").textContent = questions[0].question;
+            document.getElementById("critere").textContent = questions[0].critere;
+            document.getElementById("resultat").textContent = "";
+            document.getElementById("resultat").style.backgroundColor = "transparent"; // Réinitialiser le fond
+            document.getElementById("summary").innerHTML = "";
+            document.getElementById("summary").style.display = "none";
+            
+            const boutonOui = document.querySelector(".btn-yes");
+            const boutonNon = document.querySelector(".btn-no");
+            const boutonRecommencer = document.getElementById("restart");
+
+            boutonOui.style.display = "block";
+            boutonNon.style.display = "block";
+            boutonRecommencer.style.display = "none";
+        }
+    </script>
+</body>
+</html>
