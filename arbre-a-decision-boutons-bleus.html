@@ -165,8 +165,8 @@
             <a href="http://dane.site.ac-lille.fr" target="_blank">Ressource DRANE Académie de Lille</a>
         </div>
         
-        <p id="question">La tâche nécessite-t-elle une expérience personnelle ou subjective ?</p>
-        <p id="critere">Critère : expérience unique qui ne peut pas être générée par une IA</p>
+        <p id="question">La tâche nécessite-t-elle d'en appeler à une expérience personnelle, pratique ou subjective ?</p>
+        <p id="critere">Critère : expérience unique propre à l'humain qui ne peut pas être générée par une IA</p>
         <div class="btn-container">
             <button class="btn-yes" onclick="repondre(true)">Oui</button>
             <button class="btn-no" onclick="repondre(false)">Non</button>
@@ -179,49 +179,51 @@
     <script>
         const questions = [
             {
-                question: "La tâche nécessite-t-elle une expérience personnelle unique ou subjective ?",
-                critere: "Critère : expérience unique qui ne peut pas être générée par une IA",
+                question: "La tâche nécessite-t-elle d'en appeler à une expérience personnelle pratique ou subjective ?",
+                critere: "Critère : expérience unique propre à l'humain qui ne peut pas être générée par une IA",
                 explication: "Les tâches basées sur des expériences personnelles sont difficiles à reproduire par les IA."
             },
             {
-                question: "Intègre-t-elle une phase en présentiel supervisée ?",
-                critere: "Critère : contrôle direct et supervision en temps réel par l'enseignant",
+                question: "Intègre-t-elle des temps où les enseignants contrôlent le travail des élèves en classe ?",
+                critere: "Critère : contrôle direct et supervision en temps réel par l'enseignant. La vérification des sources et de outils de recherches est effectuée en direct",
                 explication: "La présence physique limite l'utilisation des IA et garantit l'authenticité du travail."
             },
             {
-                question: "Évalue-t-elle le processus (brouillons, étapes intermédiaires) ?",
-                critere: "Critère : suivi de la progression et de la démarche",
-                explication: "Suivre l'évolution du travail des élèves permet de vérifier l'implication personnelle."
+                question: "Évalue-t-elle le processus d'apprentissages (brouillons, étapes intermédiaires, sources) ?",
+                critere: "Critère : suivi de la progression et de la démarche intellectuelle des élèves",
+                explication: "Suivre l'évolution du travail des élèves permet de vérifier l'implication personnelle et de pouvoir l'évaluer."
             },
             {
-                question: "Implique-t-elle un travail collaboratif en classe ?",
-                critere: "Critère : interactions et dynamique de groupe",
+                question: "Implique-t-elle un travail collaboratif en classe qui sera évalué dans la tâche finale et qui prend en compte l'implication de chacun ?",
+                critere: "Critère : interactions et dynamique de groupe, pédagogie de projet type webradio, réalisation de chef d'oeuvre...",
                 explication: "Le travail collaboratif nécessite des interactions en temps réel difficiles à simuler."
             },
             {
                 question: "Mobilise-t-elle plusieurs compétences (écrit + oral/expression artistique) ?",
-                critere: "Critère : compétences multidimensionnelles",
+                critere: "Critère : compétences multidimensionnelles qui correspondent aux talents multiples des élèves. (modèle CUA) <div class="dane-link" style="margin-top: 20px; text-align: center;">
+                    <a href="https://chatgpt.com/g/g-67c20443c4508191955b99a7f38e9410-eurekacua" target="_blank">GPT CUA</a>
+                </div> ",
                 explication: "Les tâches complexes qui combinent différentes compétences sont plus difficiles à réaliser par l' IA."
             },
             {
-                question: "Est-elle ancrée dans l'environnement local ou l'actualité récente ?",
+                question: "Est-elle ancrée dans l'identité de l'établissement, du quartier ou dans l'actualité récente ?",
                 critere: "Critère : contextualisation locale et actualité",
                 explication: "Les sujets très récents ou spécifiques nécessitent une connaissance immédiate du contexte à laquelle les IA n'accèdent pas."
             },
             {
                 question: "Limitez-vous explicitement les ressources autorisées ?",
                 critere: "Critère : restriction des sources et des outils",
-                explication: "Limiter les ressources réduit les possibilités de contournement par IA."
+                explication: "Limiter les ressources réduit les possibilités de contournement par IA. L'enseignant indique quels outils sont à la disposition des élèves et contrôle les méthodes de travail"
             },
             {
                 question: "Demandez-vous une restitution manuscrite ou orale improvisée ?",
                 critere: "Critère : production originale et spontanée",
-                explication: "Les productions manuscrites ou orales improvisées sont uniques et non reproductibles."
+                explication: "Pour l'instant, la restitution orale resque unique et personnelle à l'élève et ne peut être imitée. La réalisation d'une carte mentale en appui complète la personnalisation de cette restitution."
             },
             {
                 question: "Inclut-elle une réflexion critique sur l'usage des IA ?",
                 critere:"Critère : méta-réflexion sur la technologie",
-                explication: "Intégrer une analyse critique de l'IA incite à une approche réflexive et personnelle."
+                explication: "Intégrer une analyse critique de l'IA incite à une approche réflexive et personnelle. Les élèves en comprennent les atouts mais surtout les limites."
             },
             {
                 question: "Prévoyez-vous des feedbacks intermédiaires personnalisés ?",
