@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord - Analyse Webinaires</title>
+    <title>Tableau de bord visuel - Analyse Webinaires</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
 
     <style>
         body {
@@ -70,8 +71,9 @@
             padding-bottom: 8px;
         }
 
-        .dashboard-section h3 {
+         .dashboard-section h3 {
              margin-top: 15px;
+             margin-bottom: 10px;
              color: #555;
         }
 
@@ -88,6 +90,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
+            margin-bottom: 20px; /* Espace avant le graphique */
         }
 
         th, td {
@@ -104,6 +107,21 @@
         tbody tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+
+        /* Style pour les conteneurs de graphiques */
+        .chart-container {
+            position: relative;
+            margin: 20px auto; /* Centre le graphique */
+            /* Ajustez la hauteur et largeur max selon vos préférences */
+            max-height: 400px;
+            max-width: 90%;
+        }
+        .chart-container.pie-chart {
+             max-width: 450px; /* Limite la largeur pour les donuts */
+             max-height: 350px;
+        }
+
+
          /* Style pour masquer le bouton pendant la capture PDF */
         .pdf-generating #downloadPdfBtn {
             display: none;
@@ -115,7 +133,7 @@
 
     <div id="dashboardContent" class="dashboard-container">
         <header>
-            <h1>Analyse des Webinaires</h1>
+            <h1>Analyse Visuelle des Webinaires</h1>
             <button id="downloadPdfBtn">Télécharger en PDF</button>
         </header>
 
@@ -123,278 +141,303 @@
             <section class="dashboard-section" id="synthese">
                 <h2>1. Synthèse des principaux constats</h2>
                 <p><strong>Volume :</strong> Sur 26 entrées, 15 webinaires réalisés sont à conserver (≈ 58 %), 7 doivent être déplacés vers des tutoriels (≈ 27 %), 2 vers la culture numérique (≈ 8 %), et 1 est à venir (≈ 4 %).</p>
-
                 <h3>Thématiques dominantes :</h3>
                 <ul>
-                    <li>Évaluation & certification : 5 sessions (Sacoche/ENT, Pix, Pix+EDU)</li>
-                    <li>Usages pédagogiques généraux : 8 sessions (classe inversée, TBI, oral, différenciation, gamification…)</li>
-                    <li>Outils ENT & plateformes : 5 sessions (cahier multimédia, visio-conf, carte mentale, Sacoche admin…)</li>
-                    <li>Programmation / codage : 2 sessions (Capytale)</li>
+                    <li>Évaluation & certification : 5 sessions</li>
+                    <li>Usages pédagogiques généraux : 8 sessions</li>
+                    <li>Outils ENT & plateformes : 5 sessions</li>
+                    <li>Programmation / codage : 2 sessions</li>
                 </ul>
-
                 <h3>Localisation :</h3>
-                <p>Parmi les webinaires réalisés, Lille arrive en tête (3 sessions), suivi d’Amiens (1), 10 autres sans localisation précisée.</p>
-
+                <p>Parmi les webinaires réalisés (conservés), Lille arrive en tête (3 sessions), suivi d’Amiens (1), 10 autres sans localisation précisée.</p>
                  <h3>Compétences professionnelles (Gestes pro) :</h3>
-                 <p>Le domaine 2 (enseignement à distance, production vidéo, codage) est le plus représenté (3 webinaires), le domaine 4 (mémorisation) plus raritaire (1).</p>
-
+                 <p>Le domaine 2 est le plus représenté (3 webinaires), le domaine 4 plus raritaire (1).</p>
                 <h3>Points d’attention :</h3>
                 <ul>
-                    <li>Deux doublons identifiés à fusionner :</li>
-                    <ul>
-                         <li>Capytale Python vs codage (Lille)</li>
-                         <li>Préparation certification Pix+EDU vs Pix+EDU Lille</li>
-                    </ul>
+                    <li>Deux doublons identifiés à fusionner (Capytale Python/codage Lille; Prépa Pix+EDU/Pix+EDU Lille)</li>
                 </ul>
             </section>
 
             <section class="dashboard-section" id="repartition-actions">
-                <h2>2. Répartition des actions</h2>
-                <table>
+                <h2>2. Répartition des actions (sur 26 entrées)</h2>
+                 <table>
                     <thead>
-                        <tr>
-                            <th>Action</th>
-                            <th>Nombre</th>
-                            <th>%</th>
-                        </tr>
+                        <tr><th>Action</th><th>Nombre</th><th>%</th></tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Conserver (webinaires réalisés)</td>
-                            <td>15</td>
-                            <td>58 %</td>
-                        </tr>
-                        <tr>
-                            <td>Déplacer vers Tuto</td>
-                            <td>7</td>
-                            <td>27 %</td>
-                        </tr>
-                        <tr>
-                            <td>Déplacer vers Culture numérique</td>
-                            <td>2</td>
-                            <td>8 %</td>
-                        </tr>
-                        <tr>
-                            <td>Webinaire à venir</td>
-                            <td>1</td>
-                            <td>4 %</td>
-                        </tr>
-                         <tr>
-                            <td>Doublons à fusionner</td>
-                            <td>2</td>
-                            <td>8 %</td>
-                        </tr>
+                        <tr><td>Conserver (webinaires réalisés)</td><td>15</td><td>58 %</td></tr>
+                        <tr><td>Déplacer vers Tuto</td><td>7</td><td>27 %</td></tr>
+                        <tr><td>Déplacer vers Culture numérique</td><td>2</td><td>8 %</td></tr>
+                        <tr><td>Webinaire à venir</td><td>1</td><td>4 %</td></tr>
+                         <tr><td>Doublons à fusionner</td><td>2</td><td>8 %</td></tr>
                     </tbody>
                 </table>
+                 <h3>Visualisation de la répartition</h3>
+                 <div class="chart-container pie-chart">
+                    <canvas id="actionsChart"></canvas>
+                 </div>
             </section>
 
             <section class="dashboard-section" id="repartition-thematique">
-                <h2>3. Répartition par thématique</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Thème</th>
-                            <th>Réalisés à conserver</th>
-                            <th>Déplacés vers Tuto</th>
-                            <th>À venir</th>
-                            <th>Total</th>
-                        </tr>
+                <h2>3. Répartition par thématique (Total sessions)</h2>
+                 <table>
+                     <thead>
+                        <tr><th>Thème</th><th>Réalisés à conserver</th><th>Déplacés Tuto</th><th>Déplacés Cult. Num.</th><th>À venir</th><th>Total</th></tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Évaluation & certification</td>
-                            <td>5</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>5</td>
-                        </tr>
-                        <tr>
-                            <td>Usages pédagogiques généraux</td>
-                            <td>8</td>
-                            <td>0</td>
-                            <td>1</td>
-                            <td>9</td>
-                        </tr>
-                        <tr>
-                            <td>Outils ENT & plateformes</td>
-                            <td>3</td>
-                            <td>4</td>
-                            <td>0</td>
-                            <td>7</td>
-                        </tr>
-                        <tr>
-                            <td>Programmation / codage</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>0</td>
-                            <td>2</td>
-                        </tr>
-                        <tr>
-                            <td>Vidéo / audio</td>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>0</td>
-                            <td>2</td>
-                        </tr>
-                         <tr>
-                            <td>Recherche d’orientation</td>
-                            <td>1</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>1</td>
-                        </tr>
-                         <tr>
-                            <td>Cyberharcèlement / culture numérique</td>
-                            <td>0</td>
-                             <td>2</td>
-                            <td>0</td>
-                            <td>2</td>
-                        </tr>
+                        <tr><td>Évaluation & certification</td><td>5</td><td>0</td><td>0</td><td>0</td><td>5</td></tr>
+                        <tr><td>Usages pédagogiques généraux</td><td>8</td><td>0</td><td>0</td><td>1</td><td>9</td></tr>
+                        <tr><td>Outils ENT & plateformes</td><td>3</td><td>4</td><td>0</td><td>0</td><td>7</td></tr>
+                        <tr><td>Programmation / codage</td><td>1</td><td>1</td><td>0</td><td>0</td><td>2</td></tr>
+                        <tr><td>Vidéo / audio</td><td>1</td><td>1</td><td>0</td><td>0</td><td>2</td></tr>
+                         <tr><td>Recherche d’orientation</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+                         <tr><td>Cyberharcèlement / culture numérique</td><td>0</td><td>0</td><td>2</td><td>0</td><td>2</td></tr>
                     </tbody>
-                     </table>
-                 <p><em>Note: Les 2 webinaires déplacés vers "Culture Numérique" concernent potentiellement "Cyberharcèlement / culture numérique". Le tableau détaille où les 7 "Déplacés vers Tuto" se répartissent.</em></p>
+                     <tfoot>
+                        <tr><td><strong>Total Entrées</strong></td><td><strong>19*</strong></td><td><strong>6*</strong></td><td><strong>2</strong></td><td><strong>1</strong></td><td><strong>28*?</strong></td></tr>
+                     </tfoot>
+                </table>
+                <p><em>*Note : Les totaux du tableau (19 réalisés+6 Tuto+2 CultNum+1 Avenir = 28) semblent différer légèrement du volume initial de 26 entrées mentionné en synthèse (15+7+2+1 = 25 + 2 doublons = 27 ?). Le graphique utilise les totaux par thème du tableau ci-dessus.</em></p>
+                <h3>Visualisation par Thème (Total)</h3>
+                 <div class="chart-container">
+                     <canvas id="themeChart"></canvas>
+                 </div>
             </section>
 
             <section class="dashboard-section" id="localisation">
                 <h2>4. Localisation des webinaires réalisés (conservés)</h2>
-                 <p><em>Basé sur les 15 webinaires conservés après analyse.</em></p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Ville</th>
-                            <th>Nombre de webinaires</th>
-                        </tr>
-                    </thead>
+                 <p><em>Basé sur les 15 webinaires conservés.</em></p>
+                  <table>
+                    <thead><tr><th>Ville</th><th>Nombre</th></tr></thead>
                     <tbody>
-                        <tr>
-                            <td>Lille</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td>Amiens</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>Non spécifié</td>
-                            <td>11</td>
-                        </tr>
-                         <tr>
-                            <td><strong>Total Réalisés Conservés</strong></td>
-                            <td><strong>15</strong></td>
-                        </tr>
+                        <tr><td>Lille</td><td>3</td></tr>
+                        <tr><td>Amiens</td><td>1</td></tr>
+                        <tr><td>Non spécifié</td><td>11</td></tr>
+                         <tr><td><strong>Total</strong></td><td><strong>15</strong></td></tr>
                     </tbody>
                 </table>
+                 <h3>Visualisation par Localisation</h3>
+                <div class="chart-container">
+                     <canvas id="locationChart"></canvas>
+                 </div>
             </section>
 
              <section class="dashboard-section" id="competences">
-                <h2>5. Domaines de compétences professionnelles</h2>
+                <h2>5. Domaines de compétences professionnelles (webinaires conservés)</h2>
                  <p><em>Basé sur les 15 webinaires conservés.</em></p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Domaine pro</th>
-                            <th>Nombre de webinaires</th>
-                        </tr>
-                    </thead>
+                  <table>
+                    <thead><tr><th>Domaine pro</th><th>Nombre</th></tr></thead>
                     <tbody>
-                        <tr>
-                            <td>Domaine 2 (Ens. à distance, vidéo, codage)</td>
-                            <td>3</td>
-                        </tr>
-                        <tr>
-                            <td>Domaine 4 (Mémorisation)</td>
-                            <td>1</td>
-                        </tr>
-                         <tr>
-                            <td>Non étiqueté / Autre</td>
-                            <td>11</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Total Réalisés Conservés</strong></td>
-                            <td><strong>15</strong></td>
-                        </tr>
+                        <tr><td>Domaine 2 (Ens. à distance, vidéo, codage)</td><td>3</td></tr>
+                        <tr><td>Domaine 4 (Mémorisation)</td><td>1</td></tr>
+                         <tr><td>Non étiqueté / Autre</td><td>11</td></tr>
+                        <tr><td><strong>Total</strong></td><td><strong>15</strong></td></tr>
                     </tbody>
                 </table>
+                <h3>Visualisation par Domaine de Compétence</h3>
+                <div class="chart-container pie-chart">
+                    <canvas id="skillsChart"></canvas>
+                </div>
             </section>
 
             <section class="dashboard-section" id="tendances">
-                <h2>6. Tendances clés</h2>
+                <h2>6. Tendances clés & Projets à venir</h2>
                 <ul>
-                    <li><strong>Fort développement de l’évaluation numérique :</strong> Les modules autour de Sacoche et de Pix (évaluation, certification, préparation Pix+EDU) constituent près de 20 % des webinaires réalisés, traduisant un besoin croissant de valorisation des compétences numériques des élèves.</li>
-                    <li><strong>Large palette d’usages pédagogiques :</strong> 8 sessions (≈ 30 % des réalisés conservés) sont consacrées aux méthodes d’enseignement (classe inversée, TBI, différenciation, gamification…), signe d’un intérêt marqué pour l’innovation didactique.</li>
-                    <li><strong>Basculement vers des tutoriels pour les outils ENT :</strong> 7 contenus sont redirigés vers des supports plus statiques (tutos), ce qui permet de libérer des créneaux webinaire pour des formats plus interactifs et conceptuels.</li>
-                    <li><strong>Émergence limitée du codage :</strong> Seuls 2 webinaires portent sur la programmation (Capytale), suggérant un potentiel de renforcement des compétences numériques de création.</li>
+                    <li><strong>Évaluation numérique :</strong> Forte présence (Sacoche, Pix).</li>
+                    <li><strong>Usages pédagogiques variés :</strong> Intérêt marqué pour l'innovation didactique.</li>
+                    <li><strong>Outils ENT vers Tutos :</strong> Rationalisation des formats.</li>
+                    <li><strong>Codage :</strong> Émergence limitée, potentiel de développement.</li>
                 </ul>
                  <h3>Projets à venir</h3>
-                <p>Le prochain webinaire « Animer sa classe avec les applications de La Digitale » conforte la tendance à l’appropriation des apps pédagogiques.</p>
+                <p>Webinaire « Animer sa classe avec les applications de La Digitale ».</p>
             </section>
 
         </main>
     </div>
 
     <script>
-        // Fonctionnalité du bouton Télécharger PDF
+        // --- Fonctionnalité du bouton Télécharger PDF (inchangée) ---
         const downloadBtn = document.getElementById('downloadPdfBtn');
         const dashboardContent = document.getElementById('dashboardContent');
-        const { jsPDF } = window.jspdf; // Récupère jsPDF depuis l'objet global window
+        const { jsPDF } = window.jspdf;
 
         downloadBtn.addEventListener('click', () => {
             console.log("Tentative de génération PDF...");
-            // Ajouter une classe pour masquer le bouton pendant la capture
             document.body.classList.add('pdf-generating');
 
             html2canvas(dashboardContent, {
-                 scale: 2, // Augmenter l'échelle pour une meilleure résolution
-                 useCORS: true, // Si des images externes sont utilisées
-                 logging: true, // Activer les logs de html2canvas pour le débogage
-                 onclone: (document) => {
-                    // Optionnel : ajustements sur le clone du DOM avant la capture
-                 }
+                 scale: 2,
+                 useCORS: true,
+                 logging: true,
+                  // Assurez-vous que le fond est capturé si nécessaire
+                 backgroundColor: '#ffffff', // Fond blanc pour la capture
+                  // Ignorer le bouton lui-même dans la capture
+                 ignoreElements: (element) => element.id === 'downloadPdfBtn'
             }).then(canvas => {
                 console.log("Canvas généré par html2canvas.");
+                document.body.classList.remove('pdf-generating'); // Enlever la classe avant de générer le PDF pour éviter les délais
                 const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF({
-                    orientation: 'p', // portrait
-                    unit: 'mm', // millimètres
-                    format: 'a4' // format A4
-                });
-
+                const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
                 const imgProps= pdf.getImageProperties(imgData);
                 const pdfWidth = pdf.internal.pageSize.getWidth();
                 const pdfHeight = pdf.internal.pageSize.getHeight();
-
-                // Calculer le ratio pour ajuster l'image à la largeur du PDF
-                const imgWidth = pdfWidth - 20; // Largeur de l'image avec marges de 10mm
+                const margin = 10; // Marge de 10mm
+                const effectiveWidth = pdfWidth - 2 * margin;
+                const effectiveHeight = pdfHeight - 2* margin;
+                const imgWidth = effectiveWidth;
                 const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
                 let heightLeft = imgHeight;
+                let position = margin;
 
-                let position = 10; // Marge supérieure initiale de 10mm
+                pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+                heightLeft -= effectiveHeight;
 
-                // Ajouter l'image (potentiellement sur plusieurs pages)
-                 pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                 heightLeft -= (pdfHeight - 20); // 20 pour marges haut/bas
-
-                while (heightLeft > 0) {
-                    position = heightLeft - imgHeight + 10; // Nouvelle position Y (négative)
+                while (heightLeft > margin) { // Ajouter une marge de sécurité
+                    position = heightLeft - imgHeight + margin; // Nouvelle position Y (négative relative à l'image totale)
                     pdf.addPage();
-                    pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                    heightLeft -= (pdfHeight - 20);
+                    pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+                    heightLeft -= effectiveHeight;
                 }
 
-
                 console.log("PDF généré, sauvegarde en cours...");
-                pdf.save('tableau_de_bord_webinaires.pdf');
-
-                 // Retirer la classe après la génération
-                 document.body.classList.remove('pdf-generating');
+                pdf.save('tableau_de_bord_webinaires_visuel.pdf');
 
             }).catch(error => {
                  console.error("Erreur lors de la génération du PDF:", error);
-                 // Retirer la classe en cas d'erreur aussi
                  document.body.classList.remove('pdf-generating');
                  alert("Une erreur est survenue lors de la création du PDF.");
             });
         });
+
+         // --- Configuration des Graphiques Chart.js ---
+         document.addEventListener('DOMContentLoaded', () => {
+            const CHART_COLORS = { // Quelques couleurs sympas
+                red: 'rgb(255, 99, 132)',
+                orange: 'rgb(255, 159, 64)',
+                yellow: 'rgb(255, 205, 86)',
+                green: 'rgb(75, 192, 192)',
+                blue: 'rgb(54, 162, 235)',
+                purple: 'rgb(153, 102, 255)',
+                grey: 'rgb(201, 203, 207)',
+                lightblue: 'rgb(173, 216, 230)',
+                lightgreen: 'rgb(144, 238, 144)'
+             };
+
+             const CHART_COLORS_ARRAY = Object.values(CHART_COLORS);
+
+            // 1. Graphique Répartition Actions (Donut)
+            const actionsCtx = document.getElementById('actionsChart')?.getContext('2d');
+            if (actionsCtx) {
+                new Chart(actionsCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Conserver', 'Déplacer Tuto', 'Déplacer Culture Num', 'À venir', 'Doublons'],
+                        datasets: [{
+                            label: 'Répartition des Actions',
+                            data: [15, 7, 2, 1, 2],
+                            backgroundColor: [
+                                CHART_COLORS.green,
+                                CHART_COLORS.orange,
+                                CHART_COLORS.yellow,
+                                CHART_COLORS.purple,
+                                CHART_COLORS.grey
+                            ],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: { display: true, text: 'Répartition des Actions Initiales (sur 26 entrées)' }
+                        }
+                    }
+                });
+            }
+
+            // 2. Graphique Répartition Thématique (Barres Verticales - Total)
+            const themeCtx = document.getElementById('themeChart')?.getContext('2d');
+            if (themeCtx) {
+                new Chart(themeCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Éval & Certif.', 'Usages Pédago.', 'Outils ENT', 'Programmation', 'Vidéo/Audio', 'Orientation', 'Cyberharc./Cult.Num'],
+                        datasets: [{
+                            label: 'Nombre Total de Sessions par Thème',
+                            data: [5, 9, 7, 2, 2, 1, 2], // Totaux du tableau 3
+                            backgroundColor: CHART_COLORS_ARRAY, // Une couleur par barre
+                            borderColor: CHART_COLORS_ARRAY.map(color => color.replace('rgb', 'rgba').replace(')', ', 0.8)')), // Bordure légèrement plus foncée
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'x', // Barres verticales par défaut
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false }, // Masquer la légende (une seule série)
+                            title: { display: true, text: 'Total Sessions par Thématique' }
+                        },
+                         scales: {
+                            y: { beginAtZero: true }
+                         }
+                    }
+                });
+            }
+
+             // 3. Graphique Localisation (Barres Horizontales)
+            const locationCtx = document.getElementById('locationChart')?.getContext('2d');
+             if (locationCtx) {
+                 new Chart(locationCtx, {
+                    type: 'bar', // Type bar
+                    data: {
+                        labels: ['Lille', 'Amiens', 'Non spécifié'],
+                        datasets: [{
+                            label: 'Nombre de Webinaires Réalisés (conservés)',
+                            data: [3, 1, 11],
+                            backgroundColor: [CHART_COLORS.blue, CHART_COLORS.lightblue, CHART_COLORS.grey],
+                            borderColor: [CHART_COLORS.blue, CHART_COLORS.lightblue, CHART_COLORS.grey],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y', // <-- Axe Y pour les labels (barres horizontales)
+                        responsive: true,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: true, text: 'Localisation des Webinaires Conservés (n=15)' }
+                        },
+                         scales: {
+                            x: { beginAtZero: true } // L'axe des valeurs est maintenant X
+                         }
+                    }
+                });
+             }
+
+             // 4. Graphique Domaines de Compétences (Donut)
+             const skillsCtx = document.getElementById('skillsChart')?.getContext('2d');
+             if (skillsCtx) {
+                 new Chart(skillsCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Domaine 2', 'Domaine 4', 'Non étiqueté'],
+                        datasets: [{
+                            label: 'Domaines de Compétences',
+                            data: [3, 1, 11],
+                            backgroundColor: [ CHART_COLORS.purple, CHART_COLORS.yellow, CHART_COLORS.lightgreen ],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: { display: true, text: 'Domaines de Compétences (Webinaires Conservés, n=15)' }
+                        }
+                    }
+                });
+             }
+        }); // Fin de DOMContentLoaded
+
     </script>
 
 </body>
