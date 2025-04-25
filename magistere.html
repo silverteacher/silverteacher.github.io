@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord webinaires</title>
+    <title>Tableau de bord des webinaires</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -42,7 +42,7 @@
         <h1 class="text-2xl font-semibold text-blue-600 text-center mb-6 heading-section">Tableau de bord dynamique des webinaires et analyse des tendances</h1>
 
         <div class="dashboard-section">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4 heading-section">1. thématiques des webinaires</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 heading-section">1. Thématiques des webinaires</h2>
             <div class="chart-container">
                 <canvas id="themesChart"></canvas>
             </div>
@@ -52,69 +52,71 @@
         </div>
 
         <div class="dashboard-section">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4 heading-section">2. tendances des offres de formation</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 heading-section">2. Tendances des offres de formation</h2>
             <div class="chart-container">
                 <canvas id="trendsChart"></canvas>
             </div>
             <p class="mt-4 text-gray-700 analysis-section">
-                Ce diagramme illustre l'évolution des thématiques de webinaires proposées.
+                Ce diagramme illustre l'évolution des thématiques de webinaires qui sont proposées.
             </p>
             <div class="mt-6">
                 <h3 class="text-lg font-semibold text-gray-800 mb-2 heading-section">Analyse :</h3>
                 <ul class="list-disc list-inside space-y-2 text-gray-700 analysis-section">
                     <li>
-                        <span class="font-semibold">Maintien des thématiques centrées sur les usages pédagogiques :</span> plusieurs thématiques sont à conserver, ce qui indique un intérêt constant pour l'intégration du numérique dans les pratiques d'enseignement.
+                        <span class="font-semibold">Maintien des thématiques centrées sur les usages pédagogiques :</span> Plusieurs thématiques sont à conserver, ce qui indique un intérêt constant pour l'intégration du numérique dans les pratiques d'enseignement.
                     </li>
                     <li>
-                        <span class="font-semibold">Nécessité de clarification et de réorganisation :</span> un nombre important de webinaires doit être déplacé vers des catégories plus appropriées ("Tuto", "Culture numérique"), ce qui suggère un besoin de mieux structurer l'offre de formation.
+                        <span class="font-semibold">Nécessité de clarification et de réorganisation :</span> Un nombre important de webinaires sont à déplacer vers des catégories plus appropriées ("tuto", "culture numérique"), ce qui suggère un besoin de mieux structurer l'offre de formation.
                     </li>
                     <li>
-                        <span class="font-semibold">Regroupement potentiel de thématiques :</span> des suggestions de fusion de webinaires (par ex. « montée en compétence numérique des élèves et des enseignants jusqu’à la certification avec Pix ») indiquent une opportunité d'optimiser le contenu et de réduire la redondance.
+                        <span class="font-semibold">Regroupement potentiel de thématiques :</span> Des suggestions de fusion de webinaires (e.g., "montée en compétence numérique des élèves et des enseignants jusqu’à la certification avec pix") indiquent une opportunité d'optimiser le contenu et de réduire la redondance.
                     </li>
                 </ul>
             </div>
         </div>
 
         <div class="dashboard-section">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4 heading-section">3. plan d'action pour le travail d'équipe région académique</h2>
-            <ul class="list-disc list-inside space-y-4 text-gray-700 analysis-section">
-                <li>
-                    <span class="font-semibold">Clarification des catégories :</span> définir précisément le contenu de chaque catégorie ("Tuto", "Culture numérique", "Usages pédagogiques") pour faciliter l'orientation des enseignants.
-                </li>
-                <li>
-                    <span class="font-semibold">Mise à jour des contenus :</span> solliciter les formateurs identifiés (par ex. Bertrand Marcaille, Stéphane Cliquennois, Bruno Abed Méraim) pour actualiser les webinaires existants et créer de nouveaux contenus pertinents.
-                </li>
-                <li>
-                    <span class="font-semibold">Optimisation de l'offre :</span> fusionner les webinaires redondants et créer des parcours de formation cohérents pour accompagner la montée en compétence des enseignants.
-                </li>
-                <li>
-                    <span class="font-semibold">Création de supports de communication :</span> élaborer des supports visuels attractifs pour promouvoir les webinaires et faciliter l'inscription des participants.
-                </li>
-                <li>
-                    <span class="font-semibold">Évaluation et suivi :</span> mettre en place un système d'évaluation pour recueillir les retours des participants et ajuster l'offre de formation en conséquence.
-                </li>
-            </ul>
-        </div>
-
-        <div class="dashboard-section">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4 heading-section">4. plan pour la réunion d'aujourd'hui</h2>
-            <ul class="list-disc list-inside space-y-4 text-gray-700 analysis-section">
-                <li><span class="font-semibold">Présentation du tableau de bord :</span> exposer les principaux résultats de l'analyse des données et les tendances observées.</li>
-                <li><span class="font-semibold">Discussion des propositions :</span> examiner les suggestions de regroupement et de déplacement de webinaires, et valider les catégories proposées.</li>
-                <li><span class="font-semibold">Validation du plan d'action :</span> définir les responsabilités de chaque membre de l'équipe, établir un calendrier de mise en œuvre et fixer des objectifs concrets.</li>
-                <li><span class="font-semibold">Brainstorming sur les supports de communication :</span> discuter des stratégies de communication pour promouvoir les webinaires auprès des enseignants.</li>
-                <li><span class="font-semibold">Décision sur les outils de suivi :</span> choisir les outils qui permettront de suivre l'évolution de l'offre de formation et d'évaluer l'impact des webinaires.</li>
-            </ul>
-        </div>
-
-        <div class="dashboard-section">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4 heading-section">diagramme 3 : catégorisation cible des webinaires</h2>
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 heading-section">5. Bilan chiffré des webinaires</h2>
             <div class="chart-container">
-                <canvas id="targetCategoriesChart"></canvas>
+                <canvas id="webinarSummaryChart"></canvas>
             </div>
             <p class="mt-4 text-gray-700 analysis-section">
-                ce diagramme illustrera la nouvelle répartition des webinaires après la réorganisation proposée.
+                Ce diagramme illustre le bilan chiffré des webinaires recensés.
             </p>
+            <ul class="list-disc list-inside space-y-2 text-gray-700 analysis-section">
+                <li>Nombre total de webinaires recensés : 36</li>
+                <li>Webinaires à conserver : 20</li>
+                <li>Webinaires à déplacer vers tuto : 9</li>
+                <li>Webinaires à déplacer vers culture numérique : 3</li>
+                <li>Doublons à fusionner : 2</li>
+                <li>Webinaires à supprimer/archiver : 2</li>
+                <li>Sections cachées à trier : 4</li>
+            </ul>
+        </div>
+
+        <div class="dashboard-section">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4 heading-section">6. Tendances proposées pour l'année prochaine (Projection)</h2>
+            <div class="chart-container">
+                <canvas id="nextYearTrendsChart"></canvas>
+            </div>
+            <p class="mt-4 text-gray-700 analysis-section">
+                Ce diagramme illustre les tendances proposées pour l'année prochaine.
+            </p>
+            <ul class="list-disc list-inside space-y-2 text-gray-700 analysis-section">
+                <li>Intelligence artificielle (au moins 5 webinaires) :
+                    <ul>
+                        <li>IA génératives pour préparer sa classe</li>
+                        <li>IA pour personnaliser les apprentissages des élèves</li>
+                        <li>IA et esprit critique</li>
+                        <li>Sensibiliser les élèves aux usages responsables de l’IA</li>
+                        <li>Création de chatbot (en lien avec Canopé Amiens)</li>
+                    </ul>
+                </li>
+                <li>Réalité virtuelle et augmentée : 3 webinaires</li>
+                <li>Utilisation avancée des outils ENT : 5 webinaires</li>
+                <li>Accessibilité numérique : 3 webinaires</li>
+                <li>Webinaires thématiques : 12</li>
+            </ul>
         </div>
 
         <div class="mt-8 text-center">
@@ -126,54 +128,54 @@
     <script>
         const data = {
             themes: [
-                "Produire et partager des activités pédagogiques en Python au lycée avec Capytale",
+                "Produire et partager des activités pédagogiques en python au lycée avec capytale",
                 "Produire et monter une vidéo pour ou avec la classe",
-                "Mémoriser avec la carte mentale de l'ENT",
-                "Enseigner à distance avec l'outil visio-conférence de l'ENT",
+                "Mémoriser avec la carte mentale de l'ent",
+                "Enseigner à distance avec l'outil visio-conférence de l'ent",
                 "Agir face au cyberharcèlement",
-                "Le montage audio numérique avec Audacity",
+                "Le montage audio numérique avec audacity",
                 "Les outils institutionnels au service des apprentissages",
-                "Partager ses recherches d’orientation avec le cahier multimédia de l’ENT",
-                "Evaluer avec le numérique (Sacoche et Exercice ENT)",
-                "Animer la classe : l’impact du TBI sur la motivation et la réussite des élèves",
+                "Partager ses recherches d’orientation avec le cahier multimédia de l’ent",
+                "Evaluer avec le numérique(sacoche et exercice ent)",
+                "Animer la classe : l’impact du tbi sur la motivation et la réussite des élèves",
                 "Découvrir les usages pédagogiques de l'application éléa",
                 "Faire travailler hors la classe : qu'est-ce que la classe inversée ?",
-                "Préparer la classe (administrer sacoche)",
+                "Préparer la classe(administrer sacoche)",
                 "Développer les compétences orales de l'élève",
-                "Quel geste d'enseignement pour quel outil de l'ENT",
+                "Quel geste d'enseignement pour quel outil de l'ent",
                 "S'outiller pour agir contre le harcèlement en ligne",
                 "Différencier avec éléa",
-                "Animer sa classe avec les applications de La Digitale",
+                "Animer sa classe avec les applications de la digitale",
                 "Ludifier les apprentissages avec le numérique",
                 "Faire jouer pour faire apprendre",
                 "Les outils numériques de l'insertion en milieu scolaire",
-                "Evaluer les compétences numériques des élèves avec Pix",
+                 "Evaluer les compétences numériques des élèves avec pix",
                 "Certifier les compétences numériques des élèves",
-                "Préparer la certification Pix+EDU",
-                "Préparer la certification Pix+EDU dans l'académie de Lille"
+                "Préparer la certification pix+edu",
+                "Préparer la certification pix+edu dans l'académie de lille"
             ],
             categories: [
-                "A conserver", "A conserver", "Déplacer vers Tuto", "Déplacer vers Tuto", "Déplacer vers culture numérique",
-                "Déplacer vers Tuto", "Déplacer vers Tuto", "A garder", "A garder", "A garder",
-                "A garder", "A garder", "Déplacer vers Tuto", "A garder", "Déplacer vers Tuto",
-                "Déplacer vers culture numérique", "A garder", "A garder", "Déplacer vers Tuto", "A garder",
-                "A garder","A garder", "A garder", "A garder", "A garder"
+                "a conserver", "a conserver", "déplacer vers tuto", "déplacer vers tuto", "déplacer vers culture numérique",
+                "déplacer vers tuto", "déplacer vers tuto", "a garder", "a garder", "a garder",
+                "a garder", "a garder", "déplacer vers tuto", "a garder", "déplacer vers tuto",
+                "déplacer vers culture numérique", "a garder", "a garder", "déplacer vers tuto", "a garder",
+                "a garder","a garder", "a garder", "a garder", "a garder"
             ],
             targetCategories: [
-                "Usages pédagogiques", "Usages pédagogiques", "Tuto", "Tuto", "Culture numérique",
-                "Tuto", "Tuto", "Usages pédagogiques", "Usages pédagogiques", "Usages pédagogiques",
-                "Usages pédagogiques", "Usages pédagogiques", "Tuto", "Usages pédagogiques", "Tuto",
-                "Culture numérique", "Usages pédagogiques", "Usages pédagogiques", "Tuto", "Usages pédagogiques",
-                "Usages pédagogiques","Usages pédagogiques","Usages pédagogiques","Usages pédagogiques","Usages pédagogiques"
+                "usages pédagogiques", "usages pédagogiques", "tuto", "tuto", "culture numérique",
+                "tuto", "tuto", "usages pédagogiques", "usages pédagogiques", "usages pédagogiques",
+                "usages pédagogiques", "usages pédagogiques", "tuto", "usages pédagogiques", "tuto",
+                "culture numérique", "usages pédagogiques", "usages pédagogiques", "tuto", "usages pédagogiques",
+                "usages pédagogiques","usages pédagogiques","usages pédagogiques","usages pédagogiques","usages pédagogiques"
             ]
         };
 
         function countCategories(categories) {
-            const counts = {};
-            categories.forEach(cat => {
-                counts[cat] = (counts[cat] || 0) + 1;
+            const categoryCounts = {};
+            categories.forEach(category => {
+                categoryCounts[category] = (categoryCounts[category] || 0) + 1;
             });
-            return counts;
+            return categoryCounts;
         }
 
         function createBarChart(canvasId, title, data, colors) {
@@ -193,22 +195,89 @@
                     responsive: true,
                     maintainAspectRatio: true,
                     scales: {
-                        y: { beginAtZero: true }
+                        y: {
+                            beginAtZero: true
+                        }
                     },
                     plugins: {
-                        legend: { position: 'top' },
-                        title: { display: true, text: title, font: { size: 16 } }
+                        legend: {
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: title,
+                            font: {
+                                size: 16
+                            }
+                        }
                     }
                 }
             });
         }
 
-        const themesChart = createBarChart('themesChart', 'Répartition des thématiques actuelles', countCategories(data.categories), ['#4F46E5', '#6366F1', '#8B5CF6', '#A855F7', '#D946EF']);
-        const trendsChart = createBarChart('trendsChart', 'Évolution des thématiques (avec projection)', {"Usages pédagogiques":10,"Tuto":7,"Culture numérique":2}, ['#10B981','#059669','#047857']);
-        const targetCategoriesChart = createBarChart('targetCategoriesChart', 'Catégorisation cible des webinaires', countCategories(data.targetCategories), ['#F97316','#FD8A5D','#FFD166']);
+        const themesChart = createBarChart('themesChart', 'Répartition des thématiques actuelles', countCategories(data.categories), [
+            '#4F46E5', '#6366F1', '#8B5CF6', '#A855F7', '#D946EF'
+        ]);
+
+        const trendsChartData = {
+            "usages pédagogiques": 10,
+            "tuto": 7,
+            "culture numérique": 2,
+            "2024 (projection)": 15
+        };
+        const trendsChart = createBarChart('trendsChart', 'Évolution des thématiques (avec projection)', trendsChartData, [
+            '#10B981', '#059669', '#047857', '#2563eb'
+        ]);
+
+        const webinarSummaryData = {
+            "Total": 36,
+            "À conserver": 20,
+            "À déplacer vers tuto": 9,
+            "À déplacer vers culture numérique": 3,
+            "Doublons à fusionner": 2,
+            "À supprimer/archiver": 2,
+            "Sections cachées à trier": 4
+        };
+        const webinarSummaryChart = createBarChart('webinarSummaryChart', 'Bilan chiffré des webinaires', webinarSummaryData, [
+            '#1F2937', '#10B981', '#3B82F6', '#8B5CF6', '#F43F5E', '#A855F7', '#D97706'
+        ]);
+
+        const nextYearTrendsData = {
+            "Intelligence artificielle": 5,
+            "Réalité virtuelle et augmentée": 3,
+            "Utilisation avancée des outils ENT": 5,
+            "Accessibilité numérique": 3,
+            "Webinaires thématiques": 12
+        };
+        const nextYearTrendsChart = createBarChart('nextYearTrendsChart', 'Tendances proposées pour l\'année prochaine', nextYearTrendsData, [
+            '#2563eb', '#10b981', '#f59e0b', '#ec4899', '#6b7280'
+        ]);
+
 
         document.getElementById('downloadPdf').addEventListener('click', function() {
-            html2pdf().from(document.querySelector('.container')).set({ margin: 10, filename: 'tableau-de-bord-webinaires.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } }).save();
+            const element = document.querySelector('.container');
+            const opt = {
+                margin: 10,
+                filename: 'tableau-de-bord-webinaires.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().from(element).set(opt).outputPdf().then(function (pdf) {
+                const blob = new Blob([pdf], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'tableau-de-bord-webinaires.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }).catch(error => {
+                console.error('Erreur lors de la génération du PDF :', error);
+                alert('Une erreur s\'est produite lors de la génération du PDF. Veuillez réessayer.');
+            });
         });
     </script>
 </body>
