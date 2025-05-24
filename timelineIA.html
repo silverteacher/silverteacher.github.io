@@ -3,630 +3,642 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timeline de l'Intelligence Artificielle</title>
+    <title>Timeline IA - Jeu Numérique</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #333;
+            position: relative;
+            overflow-x: hidden;
         }
-
-        .container {
+        
+        .game-container {
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 15px 20px;
+            border-radius: 15px;
+            color: white;
+        }
+        
+        .timeline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            min-height: 120px;
+            padding: 20px;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            width: 280px;
+            height: 180px;
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: relative;
             overflow: hidden;
         }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-            position: relative;
-        }
-
-        .header::before {
-            content: '🤖';
-            font-size: 4em;
-            position: absolute;
-            top: 20px;
-            right: 40px;
-            opacity: 0.3;
-        }
-
-        .header h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .mode-toggle {
-            display: flex;
-            justify-content: center;
-            padding: 30px;
-            background: #f8f9fa;
-        }
-
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 220px;
-            height: 50px;
-            background: #e0e0e0;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 3px solid #ddd;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: 25px;
-            transition: .4s;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            font-weight: bold;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 40px;
-            width: 100px;
-            left: 4px;
-            bottom: 4px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 20px;
-            transition: .4s;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        input:checked + .slider {
-            background: linear-gradient(45deg, #f093fb, #f5576c);
-            color: white;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(106px);
-            background: linear-gradient(45deg, #f5576c, #f093fb);
-        }
-
-        .timeline {
-            padding: 40px;
-            position: relative;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(to bottom, #667eea, #764ba2, #f093fb, #f5576c);
-            transform: translateX(-50%);
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 50px;
-            width: 50%;
-            opacity: 0;
-            transform: translateY(50px);
-            animation: fadeInUp 0.8s ease forwards;
-        }
-
-        .timeline-item:nth-child(odd) {
-            left: 0;
-            padding-right: 40px;
-            text-align: right;
-        }
-
-        .timeline-item:nth-child(even) {
-            left: 50%;
-            padding-left: 40px;
-            text-align: left;
-        }
-
-        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
-        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
-        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
-        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
-        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
-        .timeline-item:nth-child(6) { animation-delay: 0.6s; }
-        .timeline-item:nth-child(7) { animation-delay: 0.7s; }
-        .timeline-item:nth-child(8) { animation-delay: 0.8s; }
-
-        .timeline-marker {
-            position: absolute;
-            top: 20px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border: 4px solid white;
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
-            z-index: 10;
-        }
-
-        .timeline-item:nth-child(odd) .timeline-marker {
-            right: -50px;
-        }
-
-        .timeline-item:nth-child(even) .timeline-marker {
-            left: -50px;
-        }
-
-        .timeline-content {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid #667eea;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .timeline-content:hover {
+        
+        .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
-
-        .timeline-item:nth-child(even) .timeline-content {
-            border-left: none;
-            border-right: 5px solid #764ba2;
+        
+        .card.selected {
+            border-color: #ff6b6b;
+            transform: scale(1.05);
         }
-
-        .year {
-            font-size: 2em;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
+        
+        .card.placed {
+            border-color: #51cf66;
+            cursor: default;
         }
-
-        .year-icon {
-            margin-left: 10px;
-            font-size: 0.8em;
+        
+        .card.correct-placement {
+            animation: correctPlacement 0.8s ease-in-out;
         }
-
-        .timeline-item:nth-child(odd) .year {
-            justify-content: flex-end;
+        
+        .card.error {
+            border-color: #ff6b6b;
+            animation: shake 0.5s ease-in-out;
         }
-
-        .timeline-item:nth-child(odd) .year-icon {
-            margin-left: 0;
-            margin-right: 10px;
-            order: -1;
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
-
-        .event-title {
-            font-size: 1.4em;
+        
+        @keyframes correctPlacement {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); border-color: #ffd700; }
+            100% { transform: scale(1); border-color: #51cf66; }
+        }
+        
+        .card-date {
+            font-size: 1.2em;
             font-weight: bold;
             color: #333;
-            margin-bottom: 15px;
-            line-height: 1.3;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
-
-        .event-description {
+        
+        .card-hidden-date {
+            background: #ccc;
             color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            text-align: center;
         }
-
-        .reveal-btn {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+        
+        .card-event {
+            font-size: 1.1em;
+            color: #333;
+            line-height: 1.3;
+            font-weight: 600;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .card-detail {
+            font-size: 0.85em;
+            color: #777;
+            font-style: italic;
+            text-align: center;
+            margin-top: 8px;
+        }
+        
+        .player-hand {
+            margin-bottom: 30px;
+        }
+        
+        .player-hand h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 1.3em;
+        }
+        
+        .hand-cards {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
             border-radius: 25px;
-            padding: 12px 25px;
-            font-size: 0.9em;
             cursor: pointer;
+            font-size: 1em;
             transition: all 0.3s ease;
-            font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-
-        .reveal-btn:hover {
+        
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
         }
-
-        .reveal-btn:disabled {
-            background: #ccc;
+        
+        .btn:disabled {
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
-            box-shadow: none;
         }
-
-        .details {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 15px;
-            border-left: 4px solid #17a2b8;
+        
+        .btn.reveal-btn {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b6b 100%);
+        }
+        
+        .placement-buttons {
             display: none;
-            animation: slideDown 0.5s ease;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
-
-        .details.show {
-            display: block;
+        
+        .placement-btn {
+            padding: 8px 16px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
         }
-
-        .details.prof-mode {
-            background: #fff8e1;
-            border-left-color: #ff9800;
+        
+        .placement-btn:hover {
+            background: #ff5252;
+            transform: scale(1.05);
         }
-
-        .details h4 {
-            color: #17a2b8;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            font-size: 1.1em;
-        }
-
-        .details.prof-mode h4 {
-            color: #f57c00;
-        }
-
-        .details h4:before {
-            content: "💡";
-            margin-right: 8px;
-            font-size: 1.2em;
-        }
-
-        .details.prof-mode h4:before {
-            content: "👨‍🏫";
-        }
-
-        .impact-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .impact-list li {
-            padding: 8px 0;
-            padding-left: 25px;
-            position: relative;
-        }
-
-        .impact-list li:before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: #667eea;
+        
+        .game-message {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
             font-weight: bold;
+            display: none;
+            white-space: pre-line;
+            max-height: 300px;
+            overflow-y: auto;
         }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error-msg {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            animation: confetti-fall 3s linear forwards;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
                 opacity: 1;
-                transform: translateY(0);
             }
-        }
-
-        @keyframes slideDown {
-            from {
+            100% {
+                transform: translateY(100vh) rotate(720deg);
                 opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
             }
         }
-
+        
         @media (max-width: 768px) {
-            .timeline::before {
-                left: 30px;
+            .card {
+                width: 260px;
+                height: 160px;
+                padding: 15px;
             }
-
-            .timeline-item {
-                width: 100%;
-                left: 0 !important;
-                padding-left: 70px !important;
-                padding-right: 20px !important;
-                text-align: left !important;
+            
+            .title {
+                font-size: 2em;
             }
-
-            .timeline-marker {
-                left: 20px !important;
-                right: auto !important;
+            
+            .game-info {
+                flex-direction: column;
+                gap: 10px;
             }
-
-            .timeline-content {
-                border-left: 5px solid #667eea !important;
-                border-right: none !important;
-            }
-
-            .year {
-                justify-content: flex-start !important;
-            }
-
-            .year-icon {
-                margin-left: 10px !important;
-                margin-right: 0 !important;
-                order: 0 !important;
-            }
-
-            .header h1 {
-                font-size: 2.2em;
-            }
-
-            .toggle-switch {
-                width: 200px;
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="game-container">
         <div class="header">
-            <h1>Timeline de l'IA</h1>
-            <p>L'évolution de l'Intelligence Artificielle à travers les âges</p>
+            <h1 class="title">Timeline IA</h1>
+            <p class="subtitle">Histoire de l'Intelligence Artificielle</p>
         </div>
-
-        <div class="mode-toggle">
-            <label class="toggle-switch">
-                <input type="checkbox" id="profMode">
-                <span class="slider">
-                    <span>🎓 Étudiant</span>
-                    <span>👨‍🏫 Professeur</span>
-                </span>
-            </label>
+        
+        <div class="game-info">
+            <div>Cartes restantes: <span id="cards-remaining">4</span></div>
+            <div>Score: <span id="score">0</span>/4</div>
+            <div>Précision: <span id="accuracy">0%</span></div>
         </div>
-
+        
+        <div class="game-message" id="game-message"></div>
+        
         <div class="timeline" id="timeline">
-            <!-- Les événements seront générés ici -->
+            <p style="color: #666; text-align: center; width: 100%;">La timeline apparaîtra ici</p>
+        </div>
+        
+        <div class="placement-buttons" id="placement-buttons">
+        </div>
+        
+        <div class="player-hand">
+            <h3>Vos cartes</h3>
+            <div class="hand-cards" id="hand-cards">
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" id="new-game-btn">Nouvelle Partie</button>
+            <button class="btn" id="rules-btn">Règles</button>
+            <button class="btn reveal-btn" id="reveal-btn" disabled>Révéler Solution</button>
         </div>
     </div>
 
     <script>
-        // Données de la timeline IA
-        const aiEvents = [
-            {
-                year: "1943",
-                icon: "⚡",
-                title: "Neurones Artificiels",
-                description: "McCulloch et Pitts créent le premier modèle mathématique de neurone artificiel.",
-                studentDetails: "Ils ont montré qu'on pouvait simuler le fonctionnement d'un neurone avec des mathématiques simples. C'est le début de tout !",
-                profDetails: "Warren McCulloch et Walter Pitts publient 'A Logical Calculus of Ideas Immanent in Nervous Activity', établissant les bases théoriques des réseaux de neurones artificiels avec leur modèle binaire du neurone.",
-                impacts: [
-                    "Première formalisation mathématique du neurone",
-                    "Base théorique des réseaux de neurones modernes",
-                    "Inspiration pour les futurs perceptrons"
-                ]
-            },
-            {
-                year: "1950",
-                icon: "🧠",
-                title: "Test de Turing",
-                description: "Alan Turing propose son célèbre test pour mesurer l'intelligence d'une machine.",
-                studentDetails: "Si vous ne pouvez pas faire la différence entre une conversation avec un humain et une machine, alors la machine est intelligente !",
-                profDetails: "Dans 'Computing Machinery and Intelligence', Turing introduit le 'jeu de l'imitation' comme critère opérationnel de l'intelligence artificielle, révolutionnant notre approche de la cognition machine.",
-                impacts: [
-                    "Premier critère objectif d'intelligence artificielle",
-                    "Influence majeure sur la philosophie de l'IA",
-                    "Référence encore utilisée aujourd'hui"
-                ]
-            },
-            {
-                year: "1956",
-                icon: "🏛️",
-                title: "Conférence de Dartmouth",
-                description: "Naissance officielle du terme 'Intelligence Artificielle' lors de cette conférence historique.",
-                studentDetails: "Des scientifiques se réunissent et décident d'appeler ça 'Intelligence Artificielle'. Le nom est né !",
-                profDetails: "John McCarthy organise la conférence de Dartmouth avec Marvin Minsky, Nathaniel Rochester et Claude Shannon, établissant l'IA comme discipline académique à part entière.",
-                impacts: [
-                    "Création du terme 'Intelligence Artificielle'",
-                    "Établissement de l'IA comme discipline",
-                    "Première communauté de recherche organisée"
-                ]
-            },
-            {
-                year: "1997",
-                icon: "♟️",
-                title: "Deep Blue bat Kasparov",
-                description: "L'ordinateur Deep Blue d'IBM devient le premier à battre un champion du monde d'échecs.",
-                studentDetails: "Un ordinateur a battu le meilleur joueur d'échecs du monde ! C'était incroyable à l'époque.",
-                profDetails: "Deep Blue utilise la recherche arborescente avec élagage alpha-bêta et des fonctions d'évaluation sophistiquées, marquant une victoire symbolique de l'IA sur l'intelligence humaine dans un domaine complexe.",
-                impacts: [
-                    "Premier succès médiatique majeur de l'IA",
-                    "Démonstration de la puissance du calcul",
-                    "Changement de perception publique de l'IA"
-                ]
-            },
-            {
-                year: "2012",
-                icon: "👁️",
-                title: "AlexNet révolutionne la vision",
-                description: "Le réseau AlexNet remporte le concours ImageNet, relançant l'intérêt pour le deep learning.",
-                studentDetails: "Un réseau de neurones profond devient soudain super bon pour reconnaître les images. Le deep learning explose !",
-                profDetails: "Alex Krizhevsky, Ilya Sutskever et Geoffrey Hinton développent AlexNet, un CNN à 8 couches qui réduit l'erreur top-5 de 26% à 15.3% sur ImageNet, déclenchant la révolution du deep learning.",
-                impacts: [
-                    "Renaissance du deep learning",
-                    "Amélioration drastique de la vision par ordinateur",
-                    "Adoption massive des GPUs pour l'IA"
-                ]
-            },
-            {
-                year: "2016",
-                icon: "🎯",
-                title: "AlphaGo bat Lee Sedol",
-                description: "DeepMind's AlphaGo devient le premier programme à battre un champion de Go professionnel.",
-                studentDetails: "Le Go est un jeu tellement complexe qu'on pensait qu'aucune machine ne pourrait battre un humain. AlphaGo l'a fait !",
-                profDetails: "AlphaGo combine Monte Carlo Tree Search avec des réseaux de neurones profonds, maîtrisant un jeu avec 10^170 positions possibles, démontrant la puissance de l'apprentissage par renforcement.",
-                impacts: [
-                    "Maîtrise d'un jeu d'une complexité extrême",
-                    "Avancée majeure en apprentissage par renforcement",
-                    "Impact culturel énorme en Asie"
-                ]
-            },
-            {
-                year: "2017",
-                icon: "🔄",
-                title: "Architecture Transformer",
-                description: "Google présente l'architecture Transformer qui révolutionnera le traitement du langage naturel.",
-                studentDetails: "Une nouvelle façon de faire comprendre le langage aux machines. C'est la base de ChatGPT et de tous les grands modèles !",
-                profDetails: "L'article 'Attention Is All You Need' introduit le mécanisme d'attention et l'architecture Transformer, remplaçant les RNN/LSTM et établissant les fondations des modèles de langage modernes.",
-                impacts: [
-                    "Révolution du traitement du langage naturel",
-                    "Base de GPT, BERT et modèles modernes",
-                    "Parallélisation efficace de l'entraînement"
-                ]
-            },
-            {
-                year: "2022",
-                icon: "💬",
-                title: "ChatGPT démocratise l'IA",
-                description: "OpenAI lance ChatGPT, rendant l'IA conversationnelle accessible au grand public.",
-                studentDetails: "Tout le monde peut maintenant parler avec une IA intelligente ! C'est devenu viral instantanément.",
-                profDetails: "ChatGPT, basé sur GPT-3.5 avec fine-tuning RLHF, atteint 100 millions d'utilisateurs en 2 mois, démocratisant l'accès aux modèles de langage large et transformant la perception publique de l'IA.",
-                impacts: [
-                    "Démocratisation de l'IA générative",
-                    "100M d'utilisateurs en 2 mois",
-                    "Transformation de nombreux secteurs"
-                ]
-            }
+        var cards = [
+            { id: 1, year: 1842, event: "Premier algorithme", detail: "Ada Lovelace - Machine analytique" },
+            { id: 2, year: 1920, event: "Terme 'Robot'", detail: "Karel Capek dans R.U.R." },
+            { id: 3, year: 1943, event: "Premiers neurones artificiels", detail: "McCulloch et Pitts" },
+            { id: 4, year: 1950, event: "Test de Turing", detail: "Alan Turing - Intelligence machine" },
+            { id: 5, year: 1956, event: "Naissance de l'IA", detail: "Conférence de Dartmouth" },
+            { id: 6, year: 1958, event: "Perceptron", detail: "Frank Rosenblatt - Premier réseau" },
+            { id: 7, year: 1961, event: "Premier robot industriel", detail: "Unimate - General Motors" },
+            { id: 8, year: 1966, event: "ELIZA", detail: "Joseph Weizenbaum - Premier chatbot" },
+            { id: 9, year: 1969, event: "Shakey le robot", detail: "Premier robot mobile intelligent" },
+            { id: 10, year: 1972, event: "MYCIN", detail: "Système expert médical" },
+            { id: 11, year: 1979, event: "Premier véhicule autonome", detail: "Stanford Cart" },
+            { id: 12, year: 1986, event: "Rétropropagation", detail: "Rumelhart - Apprentissage profond" },
+            { id: 13, year: 1988, event: "Reconnaissance vocale", detail: "Dragon NaturallySpeaking" },
+            { id: 14, year: 1997, event: "Deep Blue bat Kasparov", detail: "IBM - Échecs" },
+            { id: 15, year: 2002, event: "Roomba", detail: "iRobot - Robot aspirateur" },
+            { id: 16, year: 2005, event: "Stanley DARPA", detail: "Voiture autonome dans le désert" },
+            { id: 17, year: 2011, event: "Watson gagne Jeopardy", detail: "IBM bat les champions" },
+            { id: 18, year: 2011, event: "Siri", detail: "Apple - Assistant vocal" },
+            { id: 19, year: 2012, event: "AlexNet", detail: "CNN révolutionne vision" },
+            { id: 20, year: 2014, event: "Alexa", detail: "Amazon Echo" },
+            { id: 21, year: 2016, event: "AlphaGo bat le champion", detail: "DeepMind - Jeu de Go" },
+            { id: 22, year: 2017, event: "Transformers", detail: "Attention is All You Need" },
+            { id: 23, year: 2018, event: "GPT-1", detail: "OpenAI - Génération de texte" },
+            { id: 24, year: 2020, event: "GPT-3", detail: "175 milliards de paramètres" },
+            { id: 25, year: 2022, event: "ChatGPT", detail: "IA conversationnelle grand public" },
+            { id: 26, year: 2023, event: "GPT-4", detail: "IA multimodale" }
         ];
 
-        let isProfMode = false;
-        let revealedEvents = {};
+        var gameState = {
+            timeline: [],
+            playerHand: [],
+            selectedCard: null,
+            score: 0,
+            totalAttempts: 0,
+            gameStarted: false,
+            allCards: []
+        };
 
-        // Initialisation
-        function init() {
-            const profModeToggle = document.getElementById('profMode');
-            profModeToggle.addEventListener('change', toggleProfMode);
-            
-            generateTimeline();
+        function shuffleArray(array) {
+            var newArray = array.slice();
+            for (var i = newArray.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = newArray[i];
+                newArray[i] = newArray[j];
+                newArray[j] = temp;
+            }
+            return newArray;
         }
 
-        // Générer la timeline
-        function generateTimeline() {
-            const timeline = document.getElementById('timeline');
-            timeline.innerHTML = '';
-
-            aiEvents.forEach((event, index) => {
-                const timelineItem = document.createElement('div');
-                timelineItem.className = 'timeline-item';
-                timelineItem.innerHTML = `
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content">
-                        <div class="year">
-                            ${event.year}
-                            <span class="year-icon">${event.icon}</span>
-                        </div>
-                        <div class="event-title">${event.title}</div>
-                        <div class="event-description">${event.description}</div>
-                        <button class="reveal-btn" onclick="revealDetails(${index})" id="reveal-${index}">
-                            <span>🔍</span> Révéler les détails
-                        </button>
-                        <div class="details" id="details-${index}">
-                            <h4>Détails et Impact</h4>
-                            <p id="details-text-${index}"></p>
-                            <h4 style="margin-top: 20px;">Impact sur l'IA :</h4>
-                            <ul class="impact-list" id="impact-${index}"></ul>
-                        </div>
-                    </div>
-                `;
-                timeline.appendChild(timelineItem);
-            });
+        function startGame() {
+            var shuffledCards = shuffleArray(cards);
+            
+            gameState.timeline = [shuffledCards[0]];
+            gameState.playerHand = shuffledCards.slice(1, 5);
+            gameState.allCards = gameState.timeline.concat(gameState.playerHand);
+            gameState.selectedCard = null;
+            gameState.score = 0;
+            gameState.totalAttempts = 0;
+            gameState.gameStarted = true;
+            
+            document.getElementById('reveal-btn').disabled = false;
+            updateDisplay();
+            showMessage("Partie commencée ! Sélectionnez une carte et choisissez où la placer.", "info");
         }
 
-        // Révéler les détails
-        function revealDetails(eventIndex) {
-            if (revealedEvents[eventIndex]) return;
-
-            revealedEvents[eventIndex] = true;
-            const event = aiEvents[eventIndex];
+        function createCardElement(card, showDate, isSelectable) {
+            var cardEl = document.createElement('div');
+            cardEl.className = 'card';
+            cardEl.setAttribute('data-card-id', card.id);
             
-            const details = document.getElementById(`details-${eventIndex}`);
-            const detailsText = document.getElementById(`details-text-${eventIndex}`);
-            const impactList = document.getElementById(`impact-${eventIndex}`);
-            
-            // Choisir le bon niveau de détail
-            const text = isProfMode ? event.profDetails : event.studentDetails;
-            detailsText.textContent = text;
-            
-            // Ajouter la classe prof si nécessaire
-            if (isProfMode) {
-                details.classList.add('prof-mode');
+            if (isSelectable) {
+                cardEl.onclick = function() { selectCard(card); };
             }
             
-            // Ajouter les impacts
-            impactList.innerHTML = event.impacts.map(impact => `<li>${impact}</li>`).join('');
+            var dateClass = showDate ? '' : 'card-hidden-date';
+            var dateText = showDate ? card.year : '????';
             
-            // Afficher les détails
-            details.classList.add('show');
-
-            // Désactiver le bouton
-            const revealBtn = document.getElementById(`reveal-${eventIndex}`);
-            revealBtn.disabled = true;
-            revealBtn.innerHTML = '<span>✅</span> Détails révélés';
+            cardEl.innerHTML = 
+                '<div class="card-date ' + dateClass + '">' + dateText + '</div>' +
+                '<div class="card-event">' + card.event + '</div>' +
+                '<div class="card-detail">' + card.detail + '</div>';
+            
+            return cardEl;
         }
 
-        // Basculer le mode professeur
-        function toggleProfMode() {
-            isProfMode = !isProfMode;
+        function selectCard(card) {
+            if (!gameState.gameStarted) return;
             
-            // Mettre à jour les détails déjà révélés
-            Object.keys(revealedEvents).forEach(eventIndex => {
-                const details = document.getElementById(`details-${eventIndex}`);
-                const detailsText = document.getElementById(`details-text-${eventIndex}`);
-                const event = aiEvents[eventIndex];
+            gameState.selectedCard = card;
+            updateHandDisplay();
+            showPlacementButtons();
+            showMessage("Carte sélectionnée ! Choisissez où la placer dans la timeline.", "info");
+        }
+
+        function showPlacementButtons() {
+            var buttonsContainer = document.getElementById('placement-buttons');
+            buttonsContainer.innerHTML = '';
+            buttonsContainer.style.display = 'flex';
+            
+            var beforeBtn = document.createElement('button');
+            beforeBtn.className = 'placement-btn';
+            beforeBtn.textContent = 'Placer au début';
+            beforeBtn.onclick = function() { placeCard(0); };
+            buttonsContainer.appendChild(beforeBtn);
+            
+            for (var i = 0; i < gameState.timeline.length; i++) {
+                var afterBtn = document.createElement('button');
+                afterBtn.className = 'placement-btn';
+                afterBtn.textContent = 'Placer après ' + gameState.timeline[i].year;
+                afterBtn.onclick = (function(pos) {
+                    return function() { placeCard(pos); };
+                })(i + 1);
+                buttonsContainer.appendChild(afterBtn);
+            }
+        }
+
+        function createConfetti() {
+            var colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd', '#98fb98'];
+            var confettiCount = 100;
+            
+            for (var i = 0; i < confettiCount; i++) {
+                var confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 3 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                document.body.appendChild(confetti);
                 
-                const text = isProfMode ? event.profDetails : event.studentDetails;
-                detailsText.textContent = text;
+                setTimeout(function(conf) {
+                    return function() {
+                        if (conf.parentNode) {
+                            conf.parentNode.removeChild(conf);
+                        }
+                    };
+                }(confetti), 5000);
+            }
+        }
+
+        function placeCard(position) {
+            if (!gameState.selectedCard) return;
+            
+            var card = gameState.selectedCard;
+            var correctPosition = findCorrectPosition(card);
+            gameState.totalAttempts++;
+            
+            if (position === correctPosition) {
+                gameState.timeline.splice(position, 0, card);
+                gameState.playerHand = gameState.playerHand.filter(function(c) { return c.id !== card.id; });
+                gameState.score++;
                 
-                if (isProfMode) {
-                    details.classList.add('prof-mode');
-                } else {
-                    details.classList.remove('prof-mode');
+                setTimeout(function() {
+                    var placedCard = document.querySelector('[data-card-id="' + card.id + '"]');
+                    if (placedCard) {
+                        placedCard.classList.add('correct-placement');
+                    }
+                }, 100);
+                
+                showMessage("Bravo ! Carte bien placée !", "success");
+                
+                if (gameState.playerHand.length === 0) {
+                    var accuracy = Math.round((gameState.score / gameState.totalAttempts) * 100);
+                    showMessage("🏆 Félicitations ! Vous avez gagné !\nScore: " + gameState.score + "/4\nPrécision: " + accuracy + "%", "success");
+                    gameState.gameStarted = false;
+                    document.getElementById('reveal-btn').disabled = true;
+                    createConfetti();
                 }
-            });
+            } else {
+                showMessage("Incorrect ! Cette invention date de " + card.year + ".\nEssayez de la replacer.", "error-msg");
+                
+                var cardEl = document.querySelector('[data-card-id="' + card.id + '"]');
+                if (cardEl) {
+                    cardEl.classList.add('error');
+                    setTimeout(function() { cardEl.classList.remove('error'); }, 500);
+                }
+            }
+            
+            gameState.selectedCard = null;
+            document.getElementById('placement-buttons').style.display = 'none';
+            updateDisplay();
         }
 
-        // Démarrer l'application
-        document.addEventListener('DOMContentLoaded', init);
+        function findCorrectPosition(card) {
+            for (var i = 0; i <= gameState.timeline.length; i++) {
+                if (i === 0 && card.year <= gameState.timeline[0].year) {
+                    return 0;
+                } else if (i === gameState.timeline.length && card.year >= gameState.timeline[i-1].year) {
+                    return i;
+                } else if (i > 0 && i < gameState.timeline.length && 
+                          card.year >= gameState.timeline[i-1].year && 
+                          card.year <= gameState.timeline[i].year) {
+                    return i;
+                }
+            }
+            return gameState.timeline.length;
+        }
+
+        function revealSolution() {
+            if (!gameState.gameStarted || gameState.playerHand.length === 0) return;
+            
+            var allCardsSorted = gameState.allCards.slice().sort(function(a, b) { return a.year - b.year; });
+            
+            var solutionText = "SOLUTION COMPLÈTE :\n\n";
+            for (var i = 0; i < allCardsSorted.length; i++) {
+                var card = allCardsSorted[i];
+                var isPlaced = gameState.timeline.some(function(c) { return c.id === card.id; });
+                var isInHand = gameState.playerHand.some(function(c) { return c.id === card.id; });
+                var status = isPlaced ? "✅" : (isInHand ? "🔄" : "");
+                solutionText += (i + 1) + ". " + card.year + " - " + card.event + " " + status + "\n";
+            }
+            
+            solutionText += "\n✅ = Déjà placé\n🔄 = Dans votre main";
+            
+            showMessage(solutionText, "info");
+        }
+
+        function updateDisplay() {
+            updateTimelineDisplay();
+            updateHandDisplay();
+            updateGameInfo();
+        }
+
+        function updateTimelineDisplay() {
+            var timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            if (gameState.timeline.length === 0) {
+                timeline.innerHTML = '<p style="color: #666; text-align: center; width: 100%;">La timeline apparaîtra ici</p>';
+                return;
+            }
+            
+            for (var i = 0; i < gameState.timeline.length; i++) {
+                var card = gameState.timeline[i];
+                var cardEl = createCardElement(card, true, false);
+                cardEl.classList.add('placed');
+                timeline.appendChild(cardEl);
+            }
+        }
+
+        function updateHandDisplay() {
+            var handCards = document.getElementById('hand-cards');
+            handCards.innerHTML = '';
+            
+            for (var i = 0; i < gameState.playerHand.length; i++) {
+                var card = gameState.playerHand[i];
+                var cardEl = createCardElement(card, false, true);
+                if (gameState.selectedCard && gameState.selectedCard.id === card.id) {
+                    cardEl.classList.add('selected');
+                }
+                handCards.appendChild(cardEl);
+            }
+        }
+
+        function updateGameInfo() {
+            document.getElementById('cards-remaining').textContent = gameState.playerHand.length;
+            document.getElementById('score').textContent = gameState.score + "/4";
+            var accuracy = gameState.totalAttempts > 0 ? Math.round((gameState.score / gameState.totalAttempts) * 100) : 0;
+            document.getElementById('accuracy').textContent = accuracy + "%";
+        }
+
+        function showMessage(message, type) {
+            var messageEl = document.getElementById('game-message');
+            messageEl.textContent = message;
+            messageEl.className = 'game-message ' + type;
+            messageEl.style.display = 'block';
+            
+            var timeout = (type === 'info' && (message.indexOf('RÈGLES') !== -1 || message.indexOf('SOLUTION') !== -1)) ? 10000 : 4000;
+            
+            setTimeout(function() {
+                messageEl.style.display = 'none';
+            }, timeout);
+        }
+
+        function showRules() {
+            var rulesText = "🎯 RÈGLES DU JEU TIMELINE IA\n\n" +
+                "OBJECTIF : Placer vos 4 cartes dans l'ordre chronologique correct\n\n" +
+                "DÉROULEMENT :\n" +
+                "1. Une carte repère est placée au centre avec sa date visible\n" +
+                "2. Vous avez 4 cartes en main (dates cachées)\n" +
+                "3. Sélectionnez une carte et choisissez où la placer\n" +
+                "4. Si c'est correct : la carte reste placée\n" +
+                "5. Si c'est incorrect : réessayez de placer la même carte\n\n" +
+                "FONCTIONNALITÉS :\n" +
+                "• Bouton \"Révéler Solution\" pour voir toutes les dates\n" +
+                "• Score de précision calculé\n\n" +
+                "VICTOIRE : Placez toutes vos cartes correctement !";
+            
+            showMessage(rulesText, "info");
+        }
+
+        // Event listeners
+        document.getElementById('new-game-btn').addEventListener('click', startGame);
+        document.getElementById('rules-btn').addEventListener('click', showRules);
+        document.getElementById('reveal-btn').addEventListener('click', revealSolution);
+
+        // Initialiser l'affichage
+        updateDisplay();
     </script>
 </body>
 </html>
