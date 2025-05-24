@@ -1,0 +1,746 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="fr"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Timeline IA - Jeu Numérique&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>* {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>min-height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #333;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.game-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>max-width: 1200px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 255, 0.95);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(10px);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.header {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>h1 {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #4a5568;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2.5em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.subtitle {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #718096;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.1em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.controls {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.btn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #4299e1, #3182ce);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 12px 24px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.btn:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-2px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 6px 20px rgba(66, 153, 225, 0.4);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.btn:disabled {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #a0aec0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: not-allowed;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.btn-secondary {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #38b2ac, #319795);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 15px rgba(56, 178, 172, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.btn-secondary:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 6px 20px rgba(56, 178, 172, 0.4);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.game-info {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.info-card {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 255, 0.8);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid rgba(79, 172, 254, 0.2);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.info-label {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.9em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #718096;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.info-value {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.8em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #4a5568;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.timeline-section {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 40px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.section-title {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.4em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #4a5568;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(79, 172, 254, 0.1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.timeline {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>min-height: 120px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(247, 250, 252, 0.8);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 2px dashed rgba(79, 172, 254, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.hand-cards {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>min-height: 120px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(145deg, #ffffff, #f7fafc);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid rgba(79, 172, 254, 0.2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 280px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-5px) scale(1.02);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-color: rgba(79, 172, 254, 0.5);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card.selected {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-color: #4299e1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(145deg, #ebf8ff, #bee3f8);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-3px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 8px 25px rgba(66, 153, 225, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card.placed {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: default;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(145deg, #f0fff4, #c6f6d5);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-color: #48bb78;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card.placed:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-date {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.3em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #4299e1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-hidden-date {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #a0aec0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-style: italic;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-event {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.1em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #2d3748;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.3;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-detail {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.9em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #718096;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.4;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.placement-buttons {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 20px 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.placement-btn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #ed8936, #dd6b20);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.9em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 3px 10px rgba(237, 137, 54, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.placement-btn:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-2px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 5px 15px rgba(237, 137, 54, 0.4);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.game-message {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #4299e1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px 25px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 20px 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 5px 15px rgba(66, 153, 225, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.game-message.success {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #48bb78, #38a169);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.game-message.error-msg {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #f56565, #e53e3e);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 5px 15px rgba(245, 101, 101, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.game-message.info {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #4299e1, #3182ce);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>white-space: pre-line;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>max-height: 400px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow-y: auto;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.star-animation {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #ffd700;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: starPop 0.6s ease-out;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: -10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>right: -10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 10;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes starPop {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: scale(0) rotate(0deg); opacity: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>50% { transform: scale(1.5) rotate(180deg); opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: scale(1) rotate(360deg); opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.correct-placement {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.confetti {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: fixed;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: #ff6b6b;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: confetti-fall 5s linear infinite;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1000;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes confetti-fall {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0% {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>transform: translateY(-100vh) rotate(0deg);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>opacity: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>100% {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>transform: translateY(100vh) rotate(720deg);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.error {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: shake 0.5s ease-in-out;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes shake {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0%, 100% { transform: translateX(0); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>25% { transform: translateX(-5px); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>75% { transform: translateX(5px); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.stars-display {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 10px 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Responsive Design */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@media (max-width: 768px) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.game-container {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>margin: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>h1 {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>font-size: 2em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>.card {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>max-width: 280px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>.controls {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>.btn {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>width: 200px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>.game-info {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>grid-template-columns: 1fr;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>gap: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@media (max-width: 480px) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>.game-container {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>margin: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>padding: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>h1 {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>font-size: 1.8em;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>.card {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>padding: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="game-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;header class="header"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1&gt;🤖 Timeline IA&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;p class="subtitle"&gt;Découvrez l'histoire de l'Intelligence Artificielle&lt;/p&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="controls"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="new-game-btn" class="btn"&gt;🎮 Nouvelle Partie&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="rules-btn" class="btn btn-secondary"&gt;📖 Règles&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="reveal-btn" class="btn btn-secondary" disabled&gt;🔍 Révéler Solution&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/header&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="game-info"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="info-card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="info-label"&gt;Cartes restantes&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="info-value" id="cards-remaining"&gt;4&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="info-card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="info-label"&gt;Score&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="info-value" id="score"&gt;0/4&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="stars-display" id="stars"&gt;☆☆☆☆&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="info-card"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="info-label"&gt;Précision&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="info-value" id="accuracy"&gt;0%&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="game-message" class="game-message"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="timeline-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="section-title"&gt;📅 Timeline - Chronologie de l'IA&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="timeline" class="timeline"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p style="color: #666; text-align: center; width: 100%;"&gt;La timeline apparaîtra ici&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="placement-buttons" class="placement-buttons"&gt;&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="timeline-section"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="section-title"&gt;🎴 Vos cartes (dates cachées)&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="hand-cards" class="hand-cards"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const cards = [</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 1, year: 1842, event: "Premier algorithme", detail: "Ada Lovelace - Machine analytique" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 2, year: 1920, event: "Terme 'Robot'", detail: "Karel Capek dans R.U.R." },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 3, year: 1943, event: "Premiers neurones artificiels", detail: "McCulloch et Pitts" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 4, year: 1950, event: "Test de Turing", detail: "Alan Turing - Intelligence machine" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 5, year: 1956, event: "Naissance de l'IA", detail: "Conférence de Dartmouth" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 6, year: 1958, event: "Perceptron", detail: "Frank Rosenblatt - Premier réseau" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 7, year: 1961, event: "Premier robot industriel", detail: "Unimate - General Motors" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 8, year: 1966, event: "ELIZA", detail: "Joseph Weizenbaum - Premier chatbot" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 9, year: 1969, event: "Shakey le robot", detail: "Premier robot mobile intelligent" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 10, year: 1972, event: "MYCIN", detail: "Système expert médical" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 11, year: 1979, event: "Premier véhicule autonome", detail: "Stanford Cart" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 12, year: 1986, event: "Rétropropagation", detail: "Rumelhart - Apprentissage profond" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 13, year: 1988, event: "Reconnaissance vocale", detail: "Dragon NaturallySpeaking" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 14, year: 1997, event: "Deep Blue bat Kasparov", detail: "IBM - Échecs" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 15, year: 2002, event: "Roomba", detail: "iRobot - Robot aspirateur" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 16, year: 2005, event: "Stanley DARPA", detail: "Voiture autonome dans le désert" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 17, year: 2011, event: "Watson gagne Jeopardy", detail: "IBM bat les champions" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 18, year: 2011, event: "Siri", detail: "Apple - Assistant vocal" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 19, year: 2012, event: "AlexNet", detail: "CNN révolutionne vision" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 20, year: 2014, event: "Alexa", detail: "Amazon Echo" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 21, year: 2016, event: "AlphaGo bat le champion", detail: "DeepMind - Jeu de Go" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 22, year: 2017, event: "Transformers", detail: "Attention is All You Need" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 23, year: 2018, event: "GPT-1", detail: "OpenAI - Génération de texte" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 24, year: 2020, event: "GPT-3", detail: "175 milliards de paramètres" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 25, year: 2022, event: "ChatGPT", detail: "IA conversationnelle grand public" },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 26, year: 2023, event: "GPT-4", detail: "IA multimodale" }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const gameState = {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>timeline: [],</p>
+<p class="p1"><span class="Apple-converted-space">            </span>playerHand: [],</p>
+<p class="p1"><span class="Apple-converted-space">            </span>selectedCard: null,</p>
+<p class="p1"><span class="Apple-converted-space">            </span>score: 0,</p>
+<p class="p1"><span class="Apple-converted-space">            </span>totalAttempts: 0,</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameStarted: false,</p>
+<p class="p1"><span class="Apple-converted-space">            </span>allCards: []</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function shuffleArray(array) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = array.length - 1; i &gt; 0; i--) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const j = Math.floor(Math.random() * (i + 1));</p>
+<p class="p1"><span class="Apple-converted-space">                </span>[array[i], array[j]] = [array[j], array[i]];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return array;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function startGame() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const shuffledCards = shuffleArray([...cards]);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.timeline = [shuffledCards[0]];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.playerHand = shuffledCards.slice(1, 5);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.allCards = [...gameState.timeline, ...gameState.playerHand];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.selectedCard = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.totalAttempts = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.gameStarted = true;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('reveal-btn').disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showMessage("Partie commencée ! Sélectionnez une carte et choisissez où la placer.", "info");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function createCardElement(card, showDate, isSelectable) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cardEl = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cardEl.className = 'card';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cardEl.dataset.cardId = card.id;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (isSelectable) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>cardEl.onclick = () =&gt; selectCard(card);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const dateText = showDate ? card.year : '????';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const dateClass = showDate ? '' : 'card-hidden-date';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>cardEl.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card-date ${dateClass}"&gt;${dateText}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card-event"&gt;${card.event}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card-detail"&gt;${card.detail}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>return cardEl;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function selectCard(card) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!gameState.gameStarted) return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.selectedCard = card;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateHandDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showPlacementButtons();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showMessage("Carte sélectionnée ! Choisissez où la placer dans la timeline.", "info");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showPlacementButtons() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const buttonsContainer = document.getElementById('placement-buttons');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>buttonsContainer.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>buttonsContainer.style.display = 'flex';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const beforeBtn = document.createElement('button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>beforeBtn.className = 'placement-btn';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>beforeBtn.textContent = 'Placer au début';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>beforeBtn.onclick = () =&gt; placeCard(0);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>buttonsContainer.appendChild(beforeBtn);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.timeline.forEach((card, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const afterBtn = document.createElement('button');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>afterBtn.className = 'placement-btn';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>afterBtn.textContent = `Placer après ${card.year}`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>afterBtn.onclick = () =&gt; placeCard(index + 1);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>buttonsContainer.appendChild(afterBtn);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function createStar(cardElement) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const star = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>star.className = 'star-animation';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>star.textContent = '⭐';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cardElement.style.position = 'relative';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cardElement.appendChild(star);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (star.parentNode) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>star.remove();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}, 600);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function createConfetti() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd', '#98fb98'];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const confettiCount = 100;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 0; i &lt; confettiCount; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const confetti = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>confetti.className = 'confetti';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>confetti.style.left = Math.random() * 100 + 'vw';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>confetti.style.animationDelay = Math.random() * 3 + 's';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.body.appendChild(confetti);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; confetti.remove(), 8000);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateStarsDisplay() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const starsEl = document.getElementById('stars');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const filledStars = '★'.repeat(gameState.score);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const emptyStars = '☆'.repeat(4 - gameState.score);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>starsEl.textContent = filledStars + emptyStars;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function placeCard(position) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!gameState.selectedCard) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const card = gameState.selectedCard;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const correctPosition = findCorrectPosition(card);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.totalAttempts++;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (position === correctPosition) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>gameState.timeline.splice(position, 0, card);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>gameState.playerHand = gameState.playerHand.filter(c =&gt; c.id !== card.id);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>gameState.score++;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>showMessage("Excellent ! Carte bien placée ! ⭐", "success");</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const placedCard = document.querySelector(`[data-card-id="${card.id}"]`);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (placedCard) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>placedCard.classList.add('correct-placement');</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>createStar(placedCard);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}, 100);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (gameState.playerHand.length === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const accuracy = Math.round((gameState.score / gameState.totalAttempts) * 100);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showMessage(`🏆 Félicitations ! Vous avez terminé !\nScore: ${gameState.score}/4\nPrécision: ${accuracy}%\n\n🎉 Bravo pour votre connaissance de l'IA !`, "success");</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>gameState.gameStarted = false;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('reveal-btn').disabled = true;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Confetti seulement à la fin</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>createConfetti();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}, 500);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showMessage(`❌ Incorrect ! Cette invention date de ${card.year}.\nEssayez de la replacer !`, "error-msg");</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const cardEl = document.querySelector(`[data-card-id="${card.id}"]`);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (cardEl) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>cardEl.classList.add('error');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>setTimeout(() =&gt; cardEl.classList.remove('error'), 500);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.selectedCard = null;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('placement-buttons').style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function findCorrectPosition(card) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 0; i &lt;= gameState.timeline.length; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (i === 0 &amp;&amp; card.year &lt;= gameState.timeline[0].year) return 0;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (i === gameState.timeline.length &amp;&amp; card.year &gt;= gameState.timeline[i-1].year) return i;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (i &gt; 0 &amp;&amp; card.year &gt;= gameState.timeline[i-1].year &amp;&amp; card.year &lt;= gameState.timeline[i].year) return i;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return gameState.timeline.length;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateDisplay() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateTimelineDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateHandDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateGameInfo();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateTimelineDisplay() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const timeline = document.getElementById('timeline');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>timeline.innerHTML = gameState.timeline.length === 0<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>? '&lt;p style="color: #666; text-align: center; width: 100%;"&gt;La timeline apparaîtra ici&lt;/p&gt;'</p>
+<p class="p1"><span class="Apple-converted-space">                </span>: gameState.timeline.map(card =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const cardEl = createCardElement(card, true, false);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>cardEl.classList.add('placed');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>return cardEl.outerHTML;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}).join('');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateHandDisplay() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const handCards = document.getElementById('hand-cards');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>handCards.innerHTML = '';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameState.playerHand.forEach(card =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const cardEl = createCardElement(card, false, true);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (gameState.selectedCard?.id === card.id) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>cardEl.classList.add('selected');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>handCards.appendChild(cardEl);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateGameInfo() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('cards-remaining').textContent = gameState.playerHand.length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('score').textContent = `${gameState.score}/4`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateStarsDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const accuracy = gameState.totalAttempts &gt; 0<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>? Math.round((gameState.score / gameState.totalAttempts) * 100)<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('accuracy').textContent = `${accuracy}%`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showMessage(message, type) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const messageEl = document.getElementById('game-message');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>messageEl.textContent = message;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>messageEl.className = `game-message ${type}`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>messageEl.style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; messageEl.style.display = 'none', type === 'info' ? 12000 : 5000);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showRules() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const rulesText = `🎯 RÈGLES DU JEU TIMELINE IA</p>
+<p class="p2"><br></p>
+<p class="p1">🎮 OBJECTIF</p>
+<p class="p1">Placer vos 4 cartes dans l'ordre chronologique correct sur la timeline de l'Intelligence Artificielle</p>
+<p class="p2"><br></p>
+<p class="p1">📝 DÉROULEMENT</p>
+<p class="p1">1. Une carte repère est placée au centre avec sa date visible</p>
+<p class="p1">2. Vous avez 4 cartes en main (dates cachées)</p>
+<p class="p1">3. Sélectionnez une carte et choisissez où la placer</p>
+<p class="p1">4. Si c'est correct : une étoile apparaît ! ⭐</p>
+<p class="p1">5. Si c'est incorrect : réessayez de placer la même carte</p>
+<p class="p2"><br></p>
+<p class="p1">🌟 SYSTÈME DE SCORE</p>
+<p class="p1">• Une étoile par bonne réponse</p>
+<p class="p1">• Score de précision calculé</p>
+<p class="p1">• Confetti final si vous réussissez tout ! 🎉</p>
+<p class="p2"><br></p>
+<p class="p1">🔧 FONCTIONNALITÉS</p>
+<p class="p1">• Bouton "Révéler Solution" pour voir toutes les dates</p>
+<p class="p1">• Interface responsive (mobile/desktop)</p>
+<p class="p1">• Animations et effets visuels</p>
+<p class="p2"><br></p>
+<p class="p1">🏆 VICTOIRE</p>
+<p class="p1">Placez toutes vos cartes correctement pour déclencher la célébration finale !</p>
+<p class="p2"><br></p>
+<p class="p1">💡 ASTUCE</p>
+<p class="p1">Utilisez vos connaissances en histoire de l'IA et de l'informatique !</p>
+<p class="p1">De Ada Lovelace (1842) à GPT-4 (2023), chaque innovation a sa place...`;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>showMessage(rulesText, "info");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Event Listeners</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('new-game-btn').addEventListener('click', startGame);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('rules-btn').addEventListener('click', showRules);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('reveal-btn').addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sortedCards = [...gameState.allCards].sort((a, b) =&gt; a.year - b.year);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const solutionText = sortedCards.map((card, i) =&gt;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>`${i+1}. ${card.year} - ${card.event} ${</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>gameState.timeline.some(c =&gt; c.id === card.id) ? '✅' :<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>gameState.playerHand.some(c =&gt; c.id === card.id) ? '🔄' : ''</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}`</p>
+<p class="p1"><span class="Apple-converted-space">            </span>).join('\n') + '\n\n✅ = Déjà placé correctement\n🔄 = Dans votre main';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>showMessage(`🔍 SOLUTION COMPLÈTE :\n\n${solutionText}`, "info");</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Initialisation</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.addEventListener('DOMContentLoaded', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>startGame();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
