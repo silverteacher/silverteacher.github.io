@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="fr"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"/&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Timeline IA - Mode Prof&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-family: 'Poppins', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: linear-gradient(135deg, #7e90f4 0%, #c18af0 100%);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>h1 {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-shadow: 1px 1px 2px #000;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.instructions {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>max-width: 700px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.buttons {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gap: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>flex-wrap: wrap;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card-container, .timeline {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>flex-wrap: wrap;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gap: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 30px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #333;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px 14px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: 0 4px 6px rgba(0,0,0,0.2);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: grab;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 160px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.9rem;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>transition: transform 0.2s;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card.dragging {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>opacity: 0.5;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>transform: scale(1.05);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card.placed {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #d0f5e6;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #2b7a4b;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: default;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.card.error {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>animation: shake 0.3s;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@keyframes shake {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>0% { transform: translateX(0); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>25% { transform: translateX(-5px); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>50% { transform: translateX(5px); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>75% { transform: translateX(-3px); }</p>
+<p class="p1"><span class="Apple-converted-space">      </span>100% { transform: translateX(0); }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.timeline {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>min-height: 150px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: 2px dashed #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: rgba(255,255,255,0.1);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 90%;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>max-width: 800px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.message {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.prof-form {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>gap: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: rgba(255, 255, 255, 0.15);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 12px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>max-width: 500px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.prof-form input, .prof-form button {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1rem;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.prof-form input {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #333;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.prof-form button {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background-color: #2e7d32;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.prof-toggle, .solution-btn {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #333;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>padding: 10px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1rem;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>color: #fff;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.solution-btn {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>background: #f39c12;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>@media (max-width: 600px) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>.card { width: 90%; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;Jeu Timeline : Histoire de l'IA&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="instructions"&gt;Replace les événements dans l’ordre chronologique. Tu peux ajouter des événements ou afficher la solution.&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="buttons"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="prof-toggle" onclick="toggleProf()"&gt;Mode Prof&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button class="solution-btn" onclick="showSolution()"&gt;Donner la solution&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="prof-form" id="profForm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="number" id="newYear" placeholder="Année (ex: 2001)"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;input type="text" id="newText" placeholder="Description de l’événement"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button onclick="addEvent()"&gt;Ajouter à la timeline&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="card-container" id="cardContainer"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="timeline" id="timeline"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;p class="message" id="message"&gt;&lt;/p&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const allEvents = [</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ year: 1950, text: "Turing publie son article sur l’intelligence des machines" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ year: 1956, text: "Conférence de Dartmouth : naissance officielle de l’IA" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ year: 1966, text: "Le chatbot ELIZA simule un psy" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ year: 1980, text: "Les systèmes experts gagnent du terrain en entreprise" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ year: 1997, text: "Deep Blue bat Kasparov aux échecs" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ year: 2006, text: "Naissance du deep learning moderne (Geoffrey Hinton)" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ year: 2012, text: "AlexNet pulvérise ImageNet avec un réseau de neurones profonds" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ year: 2016, text: "AlphaGo bat Lee Sedol au jeu de Go" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ year: 2022, text: "Lancement public de ChatGPT" },</p>
+<p class="p1"><span class="Apple-converted-space">      </span>{ year: 2023, text: "Explosion des générateurs d'images IA comme Midjourney" }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>const cardContainer = document.getElementById('cardContainer');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const timeline = document.getElementById('timeline');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const message = document.getElementById('message');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>const profForm = document.getElementById('profForm');</p>
+<p class="p1"><span class="Apple-converted-space">    </span>let placedEvents = [];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function createCard(event) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const card = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>card.className = 'card';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>card.draggable = true;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>card.textContent = event.text;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>card.dataset.year = event.year;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>card.addEventListener('dragstart', () =&gt; card.classList.add('dragging'));</p>
+<p class="p1"><span class="Apple-converted-space">      </span>card.addEventListener('dragend', () =&gt; card.classList.remove('dragging'));</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">      </span>cardContainer.appendChild(card);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function shuffleAndDisplay(events) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const shuffled = [...events].sort(() =&gt; Math.random() - 0.5);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>cardContainer.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>shuffled.forEach(createCard);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function toggleProf() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>profForm.style.display = profForm.style.display === 'none' ? 'flex' : 'none';</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function addEvent() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const year = parseInt(document.getElementById('newYear').value, 10);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const text = document.getElementById('newText').value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!year || !text) return alert("Merci de remplir les deux champs.");</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const event = { year, text };</p>
+<p class="p1"><span class="Apple-converted-space">      </span>allEvents.push(event);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>shuffleAndDisplay(allEvents);</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>function showSolution() {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const sorted = [...allEvents].sort((a, b) =&gt; a.year - b.year);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>timeline.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>sorted.forEach(evt =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const card = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>card.className = 'card placed';</p>
+<p class="p1"><span class="Apple-converted-space">        </span>card.textContent = `${evt.year} — ${evt.text}`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>timeline.appendChild(card);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>});</p>
+<p class="p1"><span class="Apple-converted-space">      </span>message.textContent = "Voici la solution.";</p>
+<p class="p1"><span class="Apple-converted-space">    </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>timeline.addEventListener('dragover', e =&gt; e.preventDefault());</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>timeline.addEventListener('drop', e =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const draggingCard = document.querySelector('.dragging');</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (!draggingCard) return;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const year = parseInt(draggingCard.dataset.year, 10);</p>
+<p class="p1"><span class="Apple-converted-space">      </span>const lastYear = placedEvents.length ? placedEvents[placedEvents.length - 1].year : -Infinity;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>if (year &gt;= lastYear) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>draggingCard.classList.add('placed');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>draggingCard.draggable = false;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>timeline.appendChild(draggingCard);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>placedEvents.push({ year, text: draggingCard.textContent });</p>
+<p class="p1"><span class="Apple-converted-space">        </span>message.textContent = '';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>draggingCard.classList.add('error');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>setTimeout(() =&gt; draggingCard.classList.remove('error'), 500);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>message.textContent = "Mauvais ordre ! Essaie encore.";</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>// Initial display</p>
+<p class="p1"><span class="Apple-converted-space">    </span>shuffleAndDisplay(allEvents);</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
