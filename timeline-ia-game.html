@@ -665,13 +665,31 @@
             document.getElementById('accuracy').textContent = `${accuracy}%`;
         }
 
-        function showMessage(message, type) {
+       function showMessage(message, type) {
             const messageEl = document.getElementById('game-message');
             messageEl.textContent = message;
             messageEl.className = `game-message ${type}`;
             messageEl.style.display = 'block';
-            setTimeout(() => messageEl.style.display = 'none', type === 'info' ? 12000 : 5000);
+            
+            // Durées différentes selon le type de message
+            let duration;
+            switch(type) {
+                case 'info':
+                    duration = 12000; // 12 secondes pour les infos
+                    break;
+                case 'error-msg':
+                    duration = 8000;  // 8 secondes pour les erreurs (au lieu de 5)
+                    break;
+                case 'success':
+                    duration = 4000;  // 4 secondes pour les succès
+                    break;
+                default:
+                    duration = 5000;  // 5 secondes par défaut
+            }
+            
+            setTimeout(() => messageEl.style.display = 'none', duration);
         }
+    
 
         function showRules() {
             const rulesText = `🎯 RÈGLES DU JEU TIMELINE IA
