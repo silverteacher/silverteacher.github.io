@@ -308,71 +308,71 @@ const questions = [
 question: "Quel est l'objectif principal du diagnostic de maturité numérique dans le pilotage de l'IA ?",
 answers: [
 "Identifier les ressources financières nécessaires",
+"Mesurer l'impact des formations IA sur les élèves",
 "Connaître le niveau de compétence en IA des enseignants",
-"Déterminer le point de départ pour élaborer une stratégie",
-"Mesurer l'impact des formations IA sur les élèves"
+"Déterminer le point de départ pour élaborer une stratégie"
 ],
-correct: 2
+correct: 3
 },
 {
 question: "Pourquoi est-il essentiel d'accompagner les équipes dans l'intégration de l'IA ?",
 answers: [
-"Pour imposer des pratiques uniformes",
 "Pour former les équipes et réduire les résistances",
+"Pour imposer des pratiques uniformes",
 "Pour limiter les expérimentations individuelles",
 "Pour assurer un contrôle direct des usages"
 ],
-correct: 1
+correct: 0
 },
 {
 question: "Quelle est l'approche recommandée pour gérer les résistances au changement lors de l'intégration de l'IA ?",
 answers: [
 "Forcer l'adoption immédiate",
-"Identifier les freins et les transformer en opportunités",
 "Ignorer les résistances pour ne pas ralentir le processus",
-"Sanctionner les personnes réticentes"
+"Sanctionner les personnes réticentes",
+"Identifier les freins et les transformer en opportunités"
 ],
-correct: 1
+correct: 3
 },
 {
 question: "Quel est le rôle des indicateurs de suivi dans le pilotage de l'IA ?",
 answers: [
 "Vérifier la conformité aux normes européennes",
-"Piloter par les données pour ajuster les actions",
 "Evaluer uniquement les résultats des élèves",
+"Piloter par les données pour ajuster les actions",
 "Classer les établissements par performance"
 ],
-correct: 1
+correct: 2
 },
 {
 question: "Que permet la cartographie des positionnements dans le cadre de l'accompagnement IA ?",
 answers: [
+"Comprendre la diversité des attitudes face à l'IA",
 "Identifier les réticences pour les éliminer",
 "Repérer les leaders et les soutenir en priorité",
-"Comprendre la diversité des attitudes face à l'IA",
 "Définir un cadre uniforme de compétences"
 ],
-correct: 2
+correct: 0
 },
 {
 question: "Quelle compétence est essentielle pour un cadre éducatif face à l'IA ?",
 answers: [
 "Maitriser les algorithmes de machine learning",
-"Développer un esprit critique face aux outils d'IA",
 "Former les élèves à la programmation",
+"Développer un esprit critique face aux outils d'IA",
 "Utiliser exclusivement les outils validés par le ministère"
 ],
-correct: 1
+correct: 2
 },
 {
 question: "Quel est l'un des principes fondamentaux de la posture du cadre face à l'IA ?",
 answers: [
 "L'innovation à tout prix",
-"L'exemplarité dans les usages personnels et professionnels",
 "La standardisation des pratiques numériques",
-"La réduction du nombre d'outils numériques"
+"La réduction du nombre d'outils numériques",
+"L'exemplarité dans les usages personnels et professionnels"
 ],
-correct: 1
+correct: 3
 },
 {
 question: "Quelle compétence est importante pour contextualiser les enjeux liés à l'IA ?",
@@ -388,31 +388,31 @@ correct: 0
 question: "Quel est le rôle du devoir de veille pour un cadre éducatif ?",
 answers: [
 "Garantir la maintenance des outils numériques",
-"Informer sur les évolutions réglementaires et éthiques",
 "Sanctionner les usages abusifs de l'IA",
-"Elaborer des cours d'intelligence artificielle"
+"Elaborer des cours d'intelligence artificielle",
+"Informer sur les évolutions réglementaires et éthiques"
 ],
-correct: 1
+correct: 3
 },
 {
 question: "Quelle méthode est conseillée pour une adoption progressive de l'IA ?",
 answers: [
 "Une mise en place rapide et uniforme",
-"Un parcours progressif par étapes",
 "Un seul module de formation obligatoire",
-"Un accompagnement individualisé uniquement"
+"Un accompagnement individualisé uniquement",
+"Un parcours progressif par étapes"
 ],
-correct: 1
+correct: 3
 },
 {
 question: "Quelle est la séquence logique du pilotage du changement lié à l'IA ?",
 answers: [
-"Diagnostic - Planification - Mise en œuvre - Évaluation - Ajustement",
 "Planification - Diagnostic - Mise en œuvre - Ajustement - Évaluation",
+"Diagnostic - Planification - Mise en œuvre - Évaluation - Ajustement",
 "Mise en œuvre - Planification - Diagnostic - Ajustement - Évaluation",
 "Diagnostic - Mise en œuvre - Planification - Évaluation - Ajustement"
 ],
-correct: 0
+correct: 1
 },
 {
 question: "Quelle est la meilleure pratique pour encourager l'appropriation des outils d'IA par les équipes éducatives ?",
@@ -461,6 +461,9 @@ Précédent
 <div class="score-display">
 Score: ${score}/${currentQuestion}
 </div>
+                <button class="btn btn-secondary" onclick="skipQuestion()" style="margin-right: 10px;">
+Passer
+</button>
 <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>
 ${currentQuestion === questions.length - 1 ? 'Terminer' : 'Suivant'}
 </button>
@@ -476,6 +479,23 @@ const selectedOption = document.querySelector(`[data-index="${answerIndex}"]`);
 selectedOption.classList.add('selected');
 selectedAnswers[currentQuestion] = answerIndex;
 document.getElementById('nextBtn').disabled = false;
+}
+
+function skipQuestion() {
+selectedAnswers[currentQuestion] = -1; // Marquer comme "passé"
+const correct = questions[currentQuestion].correct;
+
+// Afficher la correction
+const options = document.querySelectorAll('.answer-option');
+options[correct].classList.add('correct');
+
+// Pas d'augmentation du score pour une question passée
+
+setTimeout(() => {
+currentQuestion++;
+displayQuestion();
+updateProgress();
+}, 1500);
 }
 
 function nextQuestion() {
