@@ -17,7 +17,7 @@ min-height: 100vh;
 padding: 20px;
 }
 .quiz-container {
-max-width: 900px;
+max-width: 800px;
 margin: 0 auto;
 background: rgba(255, 255, 255, 0.95);
 border-radius: 20px;
@@ -97,11 +97,6 @@ opacity: 1;
 transform: translateY(0);
 }
 }
-@keyframes pulse {
-0% { transform: scale(1); }
-50% { transform: scale(1.05); }
-100% { transform: scale(1); }
-}
 .question-number {
 display: inline-block;
 background: linear-gradient(135deg, #4f46e5, #7c3aed);
@@ -145,13 +140,11 @@ background: #eef2ff;
 border-color: #4f46e5;
 color: #4f46e5;
 font-weight: 600;
-animation: pulse 0.3s ease-out;
 }
 .answer-option.correct {
 background: #ecfdf5;
 border-color: #10b981;
 color: #065f46;
-animation: pulse 0.5s ease-out;
 }
 .answer-option.incorrect {
 background: #fef2f2;
@@ -180,49 +173,6 @@ background: #10b981;
 .answer-option.incorrect::before {
 background: #ef4444;
 }
-.feedback-container {
-background: #f8fafc;
-border-radius: 12px;
-padding: 20px;
-margin-top: 20px;
-border-left: 4px solid #4f46e5;
-display: none;
-animation: slideIn 0.5s ease-out;
-}
-.feedback-container.show {
-display: block;
-}
-.feedback-title {
-font-size: 1.1em;
-font-weight: 600;
-color: #1f2937;
-margin-bottom: 10px;
-display: flex;
-align-items: center;
-gap: 8px;
-}
-.feedback-icon {
-width: 20px;
-height: 20px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 12px;
-font-weight: bold;
-}
-.feedback-icon.correct {
-background: #10b981;
-color: white;
-}
-.feedback-icon.incorrect {
-background: #ef4444;
-color: white;
-}
-.feedback-text {
-color: #6b7280;
-line-height: 1.5;
-}
 .controls {
 display: flex;
 justify-content: space-between;
@@ -246,7 +196,7 @@ letter-spacing: 0.5px;
 background: linear-gradient(135deg, #4f46e5, #7c3aed);
 color: white;
 }
-.btn-primary:hover:not(:disabled) {
+.btn-primary:hover {
 transform: translateY(-2px);
 box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
 }
@@ -254,7 +204,7 @@ box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
 background: #f3f4f6;
 color: #6b7280;
 }
-.btn-secondary:hover:not(:disabled) {
+.btn-secondary:hover {
 background: #e5e7eb;
 color: #374151;
 }
@@ -268,9 +218,6 @@ box-shadow: none !important;
 text-align: center;
 font-size: 1.1em;
 color: #6b7280;
-background: #f8fafc;
-padding: 8px 16px;
-border-radius: 8px;
 }
 .results-card {
 text-align: center;
@@ -293,22 +240,15 @@ font-size: 2em;
 font-weight: 700;
 color: white;
 position: relative;
-animation: pulse 1s ease-out;
 }
-.score-debutant {
-background: linear-gradient(135deg, #ef4444, #f87171);
-}
-.score-base {
-background: linear-gradient(135deg, #f59e0b, #fbbf24);
-}
-.score-alaise {
-background: linear-gradient(135deg, #3b82f6, #60a5fa);
-}
-.score-avance {
+.score-excellent {
 background: linear-gradient(135deg, #10b981, #34d399);
 }
-.score-expert {
-background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+.score-good {
+background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+.score-average {
+background: linear-gradient(135deg, #ef4444, #f87171);
 }
 .results-title {
 font-size: 2em;
@@ -320,24 +260,6 @@ color: #1f2937;
 font-size: 1.2em;
 color: #6b7280;
 margin-bottom: 30px;
-line-height: 1.5;
-}
-.recommendation-box {
-background: linear-gradient(135deg, #eef2ff, #f3f4f6);
-border-radius: 15px;
-padding: 25px;
-margin: 20px 0;
-border-left: 4px solid #4f46e5;
-}
-.recommendation-title {
-font-size: 1.3em;
-font-weight: 600;
-color: #1f2937;
-margin-bottom: 10px;
-}
-.recommendation-text {
-color: #4b5563;
-line-height: 1.6;
 }
 @media (max-width: 768px) {
 .quiz-container {
@@ -355,13 +277,6 @@ font-size: 1.8em;
 }
 .question-text {
 font-size: 1.1em;
-}
-.controls {
-flex-direction: column;
-gap: 15px;
-}
-.btn {
-width: 100%;
 }
 }
 </style>
@@ -383,15 +298,10 @@ width: 100%;
 </div>
 <h2 class="results-title" id="resultsTitle">Félicitations !</h2>
 <p class="results-subtitle" id="resultsSubtitle">Vous avez terminé le quiz</p>
-<div class="recommendation-box" id="recommendationBox">
-<div class="recommendation-title" id="recommendationTitle">Recommandation</div>
-<div class="recommendation-text" id="recommendationText"></div>
-</div>
 <button class="btn btn-primary" onclick="restartQuiz()">Recommencer</button>
 </div>
 </div>
 </div>
-
 <script>
 const questions = [
 {
@@ -402,11 +312,7 @@ answers: [
 "Déterminer le point de départ pour élaborer une stratégie",
 "Mesurer l'impact des formations IA sur les élèves"
 ],
-correct: 2,
-feedback: {
-correct: "Excellent ! Le diagnostic de maturité numérique permet effectivement d'établir un état des lieux précis pour définir une stratégie d'intégration de l'IA adaptée aux besoins spécifiques de l'établissement.",
-incorrect: "Le diagnostic de maturité numérique va au-delà des aspects financiers ou de mesure d'impact. Son objectif principal est de dresser un état des lieux complet pour définir une stratégie d'intégration personnalisée."
-}
+correct: 2
 },
 {
 question: "Pourquoi est-il essentiel d'accompagner les équipes dans l'intégration de l'IA ?",
@@ -416,11 +322,7 @@ answers: [
 "Pour limiter les expérimentations individuelles",
 "Pour assurer un contrôle direct des usages"
 ],
-correct: 1,
-feedback: {
-correct: "Parfait ! L'accompagnement des équipes est crucial pour développer leurs compétences et créer un climat de confiance, réduisant ainsi les appréhensions naturelles face aux nouvelles technologies.",
-incorrect: "L'accompagnement ne vise pas le contrôle ou l'uniformisation, mais plutôt la formation et la réduction des résistances naturelles au changement technologique."
-}
+correct: 1
 },
 {
 question: "Quelle est l'approche recommandée pour gérer les résistances au changement lors de l'intégration de l'IA ?",
@@ -430,11 +332,7 @@ answers: [
 "Ignorer les résistances pour ne pas ralentir le processus",
 "Sanctionner les personnes réticentes"
 ],
-correct: 1,
-feedback: {
-correct: "Très bien ! Transformer les freins en opportunités est une approche constructive qui permet de comprendre les inquiétudes légitimes et d'y apporter des réponses adaptées.",
-incorrect: "Une approche coercitive ou d'évitement des résistances est contre-productive. Il est plus efficace d'analyser les freins pour les transformer en leviers d'amélioration."
-}
+correct: 1
 },
 {
 question: "Quel est le rôle des indicateurs de suivi dans le pilotage de l'IA ?",
@@ -444,11 +342,7 @@ answers: [
 "Evaluer uniquement les résultats des élèves",
 "Classer les établissements par performance"
 ],
-correct: 1,
-feedback: {
-correct: "Excellent ! Les indicateurs de suivi permettent un pilotage data-driven, essentiel pour adapter continuellement la stratégie en fonction des résultats observés.",
-incorrect: "Les indicateurs de suivi ont une fonction plus large que la simple conformité ou évaluation. Ils permettent un pilotage dynamique et adaptatif des actions menées."
-}
+correct: 1
 },
 {
 question: "Que permet la cartographie des positionnements dans le cadre de l'accompagnement IA ?",
@@ -458,11 +352,7 @@ answers: [
 "Comprendre la diversité des attitudes face à l'IA",
 "Définir un cadre uniforme de compétences"
 ],
-correct: 2,
-feedback: {
-correct: "Parfait ! La cartographie des positionnements révèle la richesse des perspectives et permet d'adapter l'accompagnement aux différents profils d'utilisateurs.",
-incorrect: "La cartographie ne vise pas l'uniformisation ou l'élimination des différences, mais plutôt la compréhension de la diversité des attitudes pour mieux personnaliser l'accompagnement."
-}
+correct: 2
 },
 {
 question: "Quelle compétence est essentielle pour un cadre éducatif face à l'IA ?",
@@ -472,11 +362,7 @@ answers: [
 "Former les élèves à la programmation",
 "Utiliser exclusivement les outils validés par le ministère"
 ],
-correct: 1,
-feedback: {
-correct: "Très bien ! L'esprit critique est fondamental pour évaluer la pertinence et les limites des outils d'IA, garantissant un usage éclairé et responsable.",
-incorrect: "Un cadre éducatif n'a pas besoin de maîtriser les aspects techniques de l'IA, mais plutôt de développer un regard critique et éthique sur ces technologies."
-}
+correct: 1
 },
 {
 question: "Quel est l'un des principes fondamentaux de la posture du cadre face à l'IA ?",
@@ -486,11 +372,7 @@ answers: [
 "La standardisation des pratiques numériques",
 "La réduction du nombre d'outils numériques"
 ],
-correct: 1,
-feedback: {
-correct: "Excellent ! L'exemplarité est cruciale car elle inspire confiance et crédibilité auprès des équipes et des élèves dans l'adoption de ces nouvelles technologies.",
-incorrect: "La posture du cadre doit être équilibrée et exemplaire, ni dans l'innovation aveugle ni dans la restriction excessive, mais dans la démonstration de bonnes pratiques."
-}
+correct: 1
 },
 {
 question: "Quelle compétence est importante pour contextualiser les enjeux liés à l'IA ?",
@@ -500,11 +382,7 @@ answers: [
 "L'analyse statistique",
 "La rédaction de protocoles disciplinaires"
 ],
-correct: 0,
-feedback: {
-correct: "Parfait ! La littératie numérique avancée permet de comprendre les enjeux sociétaux, éthiques et pédagogiques de l'IA dans le contexte éducatif.",
-incorrect: "Pour contextualiser les enjeux de l'IA, il faut une compréhension approfondie du numérique et de ses implications, ce que procure la littératie numérique avancée."
-}
+correct: 0
 },
 {
 question: "Quel est le rôle du devoir de veille pour un cadre éducatif ?",
@@ -514,11 +392,7 @@ answers: [
 "Sanctionner les usages abusifs de l'IA",
 "Elaborer des cours d'intelligence artificielle"
 ],
-correct: 1,
-feedback: {
-correct: "Très bien ! Le devoir de veille permet de rester informé des évolutions rapides du domaine, essentielles pour guider les équipes dans un environnement en constante mutation.",
-incorrect: "Le devoir de veille du cadre éducatif concerne l'information et l'anticipation des évolutions plutôt que les aspects techniques ou disciplinaires."
-}
+correct: 1
 },
 {
 question: "Quelle méthode est conseillée pour une adoption progressive de l'IA ?",
@@ -528,25 +402,17 @@ answers: [
 "Un seul module de formation obligatoire",
 "Un accompagnement individualisé uniquement"
 ],
-correct: 1,
-feedback: {
-correct: "Excellent ! Un parcours progressif par étapes permet une appropriation en douceur, respectant les rythmes d'apprentissage et réduisant les résistances.",
-incorrect: "L'adoption de l'IA nécessite une approche progressive et structurée, ni trop rapide ni trop rigide, pour permettre une appropriation durable."
-}
+correct: 1
 },
 {
-question: "Parmi les étapes suivantes du pilotage du changement lié à l'IA, quelle est la séquence correcte ?",
+question: "Quelle est la séquence logique du pilotage du changement lié à l'IA ?",
 answers: [
-"2 - 1 - 3 - 4 - 5",
-"1 - 2 - 3 - 5 - 4",
-"3 - 2 - 1 - 5 - 4",
-"2 - 3 - 1 - 4 - 5"
+"Diagnostic - Planification - Mise en œuvre - Évaluation - Ajustement",
+"Planification - Diagnostic - Mise en œuvre - Ajustement - Évaluation",
+"Mise en œuvre - Planification - Diagnostic - Ajustement - Évaluation",
+"Diagnostic - Mise en œuvre - Planification - Évaluation - Ajustement"
 ],
-correct: 0,
-feedback: {
-correct: "Parfait ! Cette séquence respecte la logique du changement : diagnostic, planification, mise en œuvre, suivi et ajustement.",
-incorrect: "Le pilotage du changement suit une logique précise : il faut d'abord diagnostiquer, puis planifier, mettre en œuvre, suivre et ajuster."
-}
+correct: 0
 },
 {
 question: "Quelle est la meilleure pratique pour encourager l'appropriation des outils d'IA par les équipes éducatives ?",
@@ -556,18 +422,13 @@ answers: [
 "Mettre en place un contrôle strict des usages dès le début",
 "Limiter les expérimentations individuelles pour éviter les erreurs"
 ],
-correct: 1,
-feedback: {
-correct: "Excellent ! Un accompagnement différencié respecte la diversité des profils et favorise une appropriation authentique et durable des outils d'IA.",
-incorrect: "L'appropriation des outils d'IA ne peut être forcée. Elle nécessite un accompagnement personnalisé qui respecte les besoins et rythmes de chacun."
-}
+correct: 1
 }
 ];
 
 let currentQuestion = 0;
 let score = 0;
 let selectedAnswers = [];
-let showingFeedback = false;
 
 function initQuiz() {
 displayQuestion();
@@ -593,10 +454,6 @@ ${answer}
 </div>
 `).join('')}
 </div>
-<div class="feedback-container" id="feedbackContainer">
-<div class="feedback-title" id="feedbackTitle"></div>
-<div class="feedback-text" id="feedbackText"></div>
-</div>
 <div class="controls">
 <button class="btn btn-secondary" onclick="previousQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>
 Précédent
@@ -610,12 +467,9 @@ ${currentQuestion === questions.length - 1 ? 'Terminer' : 'Suivant'}
 </div>
 </div>
 `;
-showingFeedback = false;
 }
 
 function selectAnswer(answerIndex) {
-if (showingFeedback) return;
-
 const options = document.querySelectorAll('.answer-option');
 options.forEach(option => option.classList.remove('selected'));
 const selectedOption = document.querySelector(`[data-index="${answerIndex}"]`);
@@ -625,60 +479,27 @@ document.getElementById('nextBtn').disabled = false;
 }
 
 function nextQuestion() {
-if (!showingFeedback && selectedAnswers[currentQuestion] !== undefined) {
-// Première fois : afficher le feedback
-showFeedback();
-} else if (showingFeedback) {
-// Deuxième fois : passer à la question suivante
-currentQuestion++;
-displayQuestion();
-updateProgress();
-}
-}
-
-function showFeedback() {
+if (selectedAnswers[currentQuestion] !== undefined) {
 const correct = questions[currentQuestion].correct;
 const selected = selectedAnswers[currentQuestion];
-const options = document.querySelectorAll('.answer-option');
-const feedbackContainer = document.getElementById('feedbackContainer');
-const feedbackTitle = document.getElementById('feedbackTitle');
-const feedbackText = document.getElementById('feedbackText');
-const nextBtn = document.getElementById('nextBtn');
 
-// Marquer les réponses
+// Afficher la correction
+const options = document.querySelectorAll('.answer-option');
 options[correct].classList.add('correct');
 if (selected !== correct) {
 options[selected].classList.add('incorrect');
 }
 
-// Mettre à jour le score
 if (selected === correct) {
 score++;
 }
 
-// Afficher le feedback
-const isCorrect = selected === correct;
-const feedback = questions[currentQuestion].feedback;
-
-feedbackTitle.innerHTML = `
-<div class="feedback-icon ${isCorrect ? 'correct' : 'incorrect'}">
-${isCorrect ? '✓' : '✗'}
-</div>
-${isCorrect ? 'Bonne réponse !' : 'Réponse incorrecte'}
-`;
-
-feedbackText.textContent = isCorrect ? feedback.correct : feedback.incorrect;
-feedbackContainer.classList.add('show');
-
-// Changer le texte du bouton
-nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Voir les résultats' : 'Question suivante';
-
-showingFeedback = true;
-
-// Désactiver la sélection des réponses
-options.forEach(option => {
-option.style.pointerEvents = 'none';
-});
+setTimeout(() => {
+currentQuestion++;
+displayQuestion();
+updateProgress();
+}, 1500);
+}
 }
 
 function previousQuestion() {
@@ -701,43 +522,22 @@ const scoreCircle = document.getElementById('scoreCircle');
 const finalScore = document.getElementById('finalScore');
 const resultsTitle = document.getElementById('resultsTitle');
 const resultsSubtitle = document.getElementById('resultsSubtitle');
-const recommendationTitle = document.getElementById('recommendationTitle');
-const recommendationText = document.getElementById('recommendationText');
 
 finalScore.textContent = `${score}/${questions.length}`;
 const percentage = (score / questions.length) * 100;
 
-// Système d'évaluation à 4 échelles
-if (percentage <= 20) {
-scoreCircle.className = 'score-circle score-debutant';
-resultsTitle.textContent = 'Débutant';
-resultsSubtitle.textContent = 'Il est temps de vous former sur l\'IA en éducation.';
-recommendationTitle.textContent = 'Votre parcours recommandé';
-recommendationText.textContent = 'Vous gagneriez à suivre un maximum de modules dans ce parcours pour développer une compréhension solide de l\'IA en éducation.';
-} else if (percentage <= 30) {
-scoreCircle.className = 'score-circle score-base';
-resultsTitle.textContent = 'Bonnes bases';
-resultsSubtitle.textContent = 'Vous avez quelques notions, continuez à vous former.';
-recommendationTitle.textContent = 'Votre parcours recommandé';
-recommendationText.textContent = 'Vous avez de bonnes bases, choisissez au moins 5 modules dans ce parcours pour approfondir vos connaissances.';
-} else if (percentage <= 50) {
-scoreCircle.className = 'score-circle score-alaise';
-resultsTitle.textContent = 'Plutôt à l\'aise';
-resultsSubtitle.textContent = 'Vous maîtrisez les bases, perfectionnez-vous.';
-recommendationTitle.textContent = 'Votre parcours recommandé';
-recommendationText.textContent = 'Vous êtes plutôt à l\'aise, choisissez au moins 4 modules de votre choix pour vous perfectionner.';
-} else if (percentage <= 80) {
-scoreCircle.className = 'score-circle score-avance';
-resultsTitle.textContent = 'Très bien !';
-resultsSubtitle.textContent = 'Vous êtes à l\'aise sur le sujet de l\'IA.';
-recommendationTitle.textContent = 'Votre parcours recommandé';
-recommendationText.textContent = 'Vous êtes à l\'aise sur le sujet de l\'IA, choisissez deux modules pour aller plus loin.';
-} else {
-scoreCircle.className = 'score-circle score-expert';
+if (percentage >= 80) {
+scoreCircle.className = 'score-circle score-excellent';
 resultsTitle.textContent = 'Excellent !';
-resultsSubtitle.textContent = 'Vous maîtrisez parfaitement les enjeux de l\'IA.';
-recommendationTitle.textContent = 'Votre parcours recommandé';
-recommendationText.textContent = 'Vous êtes très à l\'aise sur le sujet de l\'IA. Choisissez les modules que vous voulez selon vos intérêts spécifiques.';
+resultsSubtitle.textContent = 'Vous maîtrisez parfaitement les enjeux de l\'IA en éducation.';
+} else if (percentage >= 60) {
+scoreCircle.className = 'score-circle score-good';
+resultsTitle.textContent = 'Bien joué !';
+resultsSubtitle.textContent = 'Vous avez une bonne compréhension des défis de l\'IA.';
+} else {
+scoreCircle.className = 'score-circle score-average';
+resultsTitle.textContent = 'Continuez vos efforts !';
+resultsSubtitle.textContent = 'Il serait bénéfique d\'approfondir vos connaissances.';
 }
 
 resultsCard.classList.add('show');
@@ -748,7 +548,6 @@ function restartQuiz() {
 currentQuestion = 0;
 score = 0;
 selectedAnswers = [];
-showingFeedback = false;
 document.getElementById('questionsContainer').style.display = 'block';
 document.getElementById('resultsCard').classList.remove('show');
 initQuiz();
