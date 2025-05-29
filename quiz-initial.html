@@ -17,7 +17,7 @@ min-height: 100vh;
 padding: 20px;
 }
 .quiz-container {
-max-width: 800px;
+max-width: 900px;
 margin: 0 auto;
 background: rgba(255, 255, 255, 0.95);
 border-radius: 20px;
@@ -43,22 +43,23 @@ background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" view
 opacity: 0.3;
 }
 .quiz-title {
-font-size: 2.2em;
+font-size: 2.5em;
 font-weight: 700;
 margin-bottom: 10px;
 position: relative;
 z-index: 1;
+text-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 .quiz-subtitle {
-font-size: 1.1em;
+font-size: 1.2em;
 opacity: 0.9;
 position: relative;
 z-index: 1;
 }
 .progress-container {
-background: rgba(255, 255, 255, 0.1);
-height: 6px;
-border-radius: 3px;
+background: rgba(255, 255, 255, 0.2);
+height: 8px;
+border-radius: 4px;
 margin-top: 20px;
 overflow: hidden;
 position: relative;
@@ -67,22 +68,48 @@ z-index: 1;
 .progress-bar {
 height: 100%;
 background: linear-gradient(90deg, #10b981, #34d399);
-border-radius: 3px;
-transition: width 0.5s ease;
+border-radius: 4px;
+transition: width 0.8s ease;
 width: 0%;
+position: relative;
+}
+.progress-bar::after {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+0% { transform: translateX(-100%); }
+100% { transform: translateX(100%); }
 }
 .quiz-content {
 padding: 40px;
 }
 .question-card {
 background: white;
-border-radius: 15px;
-padding: 30px;
+border-radius: 20px;
+padding: 35px;
 margin-bottom: 20px;
-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 border: 1px solid rgba(79, 70, 229, 0.1);
 display: none;
-animation: slideIn 0.5s ease-out;
+animation: slideIn 0.6s ease-out;
+position: relative;
+overflow: hidden;
+}
+.question-card::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+height: 4px;
+background: linear-gradient(90deg, #4f46e5, #7c3aed, #10b981);
 }
 .question-card.active {
 display: block;
@@ -90,7 +117,7 @@ display: block;
 @keyframes slideIn {
 from {
 opacity: 0;
-transform: translateY(20px);
+transform: translateY(30px);
 }
 to {
 opacity: 1;
@@ -101,39 +128,42 @@ transform: translateY(0);
 display: inline-block;
 background: linear-gradient(135deg, #4f46e5, #7c3aed);
 color: white;
-padding: 8px 16px;
-border-radius: 20px;
-font-size: 0.9em;
+padding: 10px 20px;
+border-radius: 25px;
+font-size: 0.95em;
 font-weight: 600;
-margin-bottom: 20px;
+margin-bottom: 25px;
+box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
 }
 .question-text {
-font-size: 1.3em;
+font-size: 1.4em;
 font-weight: 600;
 color: #1f2937;
-margin-bottom: 25px;
-line-height: 1.4;
+margin-bottom: 30px;
+line-height: 1.5;
 }
 .answers-container {
 display: flex;
 flex-direction: column;
-gap: 12px;
+gap: 15px;
+margin-bottom: 25px;
 }
 .answer-option {
 background: #f8fafc;
 border: 2px solid #e2e8f0;
-border-radius: 12px;
-padding: 18px 20px;
+border-radius: 15px;
+padding: 20px 25px;
 cursor: pointer;
-transition: all 0.3s ease;
+transition: all 0.4s ease;
 position: relative;
 overflow: hidden;
+font-size: 1.05em;
 }
 .answer-option:hover {
 background: #f1f5f9;
 border-color: #4f46e5;
-transform: translateY(-2px);
-box-shadow: 0 5px 15px rgba(79, 70, 229, 0.15);
+transform: translateY(-3px);
+box-shadow: 0 8px 25px rgba(79, 70, 229, 0.2);
 }
 .answer-option.selected {
 background: #eef2ff;
@@ -157,7 +187,7 @@ position: absolute;
 left: 0;
 top: 0;
 bottom: 0;
-width: 4px;
+width: 5px;
 background: transparent;
 transition: background 0.3s ease;
 }
@@ -173,32 +203,76 @@ background: #10b981;
 .answer-option.incorrect::before {
 background: #ef4444;
 }
+.feedback-section {
+background: #f8fafc;
+border: 1px solid #e2e8f0;
+border-radius: 12px;
+padding: 20px;
+margin: 20px 0;
+display: none;
+animation: fadeIn 0.5s ease-out;
+}
+.feedback-section.show {
+display: block;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.feedback-title {
+font-weight: 600;
+font-size: 1.1em;
+margin-bottom: 10px;
+color: #374151;
+}
+.feedback-text {
+color: #6b7280;
+line-height: 1.6;
+}
 .controls {
 display: flex;
 justify-content: space-between;
 align-items: center;
 margin-top: 30px;
-padding-top: 20px;
+padding-top: 25px;
 border-top: 1px solid #e5e7eb;
+flex-wrap: wrap;
+gap: 15px;
 }
 .btn {
-padding: 12px 24px;
+padding: 14px 28px;
 border: none;
-border-radius: 10px;
+border-radius: 12px;
 font-size: 1em;
 font-weight: 600;
 cursor: pointer;
 transition: all 0.3s ease;
 text-transform: uppercase;
 letter-spacing: 0.5px;
+position: relative;
+overflow: hidden;
+}
+.btn::before {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+transition: left 0.5s;
+}
+.btn:hover::before {
+left: 100%;
 }
 .btn-primary {
 background: linear-gradient(135deg, #4f46e5, #7c3aed);
 color: white;
+box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
 }
 .btn-primary:hover {
 transform: translateY(-2px);
-box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4);
+box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
 }
 .btn-secondary {
 background: #f3f4f6;
@@ -207,9 +281,10 @@ color: #6b7280;
 .btn-secondary:hover {
 background: #e5e7eb;
 color: #374151;
+transform: translateY(-1px);
 }
 .btn:disabled {
-opacity: 0.5;
+opacity: 0.6;
 cursor: not-allowed;
 transform: none !important;
 box-shadow: none !important;
@@ -218,48 +293,73 @@ box-shadow: none !important;
 text-align: center;
 font-size: 1.1em;
 color: #6b7280;
+font-weight: 500;
 }
 .results-card {
 text-align: center;
-padding: 40px;
+padding: 50px;
 display: none;
 }
 .results-card.show {
 display: block;
-animation: slideIn 0.5s ease-out;
+animation: slideIn 0.6s ease-out;
 }
 .score-circle {
-width: 120px;
-height: 120px;
+width: 140px;
+height: 140px;
 border-radius: 50%;
-margin: 0 auto 20px;
+margin: 0 auto 30px;
 display: flex;
 align-items: center;
 justify-content: center;
-font-size: 2em;
+font-size: 2.2em;
 font-weight: 700;
 color: white;
 position: relative;
+box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 .score-excellent {
 background: linear-gradient(135deg, #10b981, #34d399);
 }
 .score-good {
-background: linear-gradient(135deg, #f59e0b, #fbbf24);
+background: linear-gradient(135deg, #3b82f6, #60a5fa);
 }
 .score-average {
+background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+.score-poor {
 background: linear-gradient(135deg, #ef4444, #f87171);
 }
 .results-title {
-font-size: 2em;
+font-size: 2.2em;
 font-weight: 700;
 margin-bottom: 15px;
 color: #1f2937;
 }
 .results-subtitle {
-font-size: 1.2em;
+font-size: 1.3em;
 color: #6b7280;
-margin-bottom: 30px;
+margin-bottom: 25px;
+line-height: 1.5;
+}
+.recommendation-box {
+background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+border: 2px solid #0ea5e9;
+border-radius: 15px;
+padding: 25px;
+margin: 25px 0;
+text-align: left;
+}
+.recommendation-title {
+font-size: 1.2em;
+font-weight: 600;
+color: #0c4a6e;
+margin-bottom: 10px;
+}
+.recommendation-text {
+color: #075985;
+line-height: 1.6;
+font-size: 1.05em;
 }
 @media (max-width: 768px) {
 .quiz-container {
@@ -267,16 +367,23 @@ margin: 10px;
 border-radius: 15px;
 }
 .quiz-content {
-padding: 20px;
+padding: 25px;
 }
 .question-card {
-padding: 20px;
+padding: 25px;
 }
 .quiz-title {
-font-size: 1.8em;
+font-size: 2em;
 }
 .question-text {
-font-size: 1.1em;
+font-size: 1.2em;
+}
+.controls {
+flex-direction: column;
+gap: 15px;
+}
+.btn {
+width: 100%;
 }
 }
 </style>
@@ -298,6 +405,10 @@ font-size: 1.1em;
 </div>
 <h2 class="results-title" id="resultsTitle">Félicitations !</h2>
 <p class="results-subtitle" id="resultsSubtitle">Vous avez terminé le quiz</p>
+<div class="recommendation-box" id="recommendationBox">
+<div class="recommendation-title" id="recommendationTitle">Recommandations</div>
+<div class="recommendation-text" id="recommendationText"></div>
+</div>
 <button class="btn btn-primary" onclick="restartQuiz()">Recommencer</button>
 </div>
 </div>
@@ -312,7 +423,11 @@ answers: [
 "Connaître le niveau de compétence en IA des enseignants",
 "Déterminer le point de départ pour élaborer une stratégie"
 ],
-correct: 3
+correct: 3,
+feedback: {
+title: "💡 Explication :",
+text: "Le diagnostic de maturité numérique est essentiel pour établir un état des lieux précis avant toute mise en œuvre. Il permet d'identifier les forces, les faiblesses et les besoins spécifiques de l'établissement, constituant ainsi la base d'une stratégie d'intégration de l'IA adaptée et réaliste."
+}
 },
 {
 question: "Pourquoi est-il essentiel d'accompagner les équipes dans l'intégration de l'IA ?",
@@ -322,7 +437,11 @@ answers: [
 "Pour limiter les expérimentations individuelles",
 "Pour assurer un contrôle direct des usages"
 ],
-correct: 0
+correct: 0,
+feedback: {
+title: "💡 Explication :",
+text: "L'accompagnement est crucial car il permet de créer un climat de confiance, de développer les compétences nécessaires et de transformer les appréhensions en opportunités d'apprentissage. Cette approche bienveillante favorise une adoption plus sereine et durable de l'IA."
+}
 },
 {
 question: "Quelle est l'approche recommandée pour gérer les résistances au changement lors de l'intégration de l'IA ?",
@@ -332,7 +451,11 @@ answers: [
 "Sanctionner les personnes réticentes",
 "Identifier les freins et les transformer en opportunités"
 ],
-correct: 3
+correct: 3,
+feedback: {
+title: "💡 Explication :",
+text: "Les résistances sont naturelles et révèlent souvent des préoccupations légitimes. En les identifiant et en les analysant, on peut comprendre les besoins sous-jacents et développer des solutions qui transforment ces obstacles en leviers d'amélioration et d'adhésion."
+}
 },
 {
 question: "Quel est le rôle des indicateurs de suivi dans le pilotage de l'IA ?",
@@ -342,7 +465,11 @@ answers: [
 "Piloter par les données pour ajuster les actions",
 "Classer les établissements par performance"
 ],
-correct: 2
+correct: 2,
+feedback: {
+title: "💡 Explication :",
+text: "Les indicateurs de suivi constituent le tableau de bord du pilotage. Ils permettent une approche data-driven, offrant une vision objective de l'évolution du projet et facilitant les ajustements nécessaires en temps réel pour optimiser l'efficacité des actions menées."
+}
 },
 {
 question: "Que permet la cartographie des positionnements dans le cadre de l'accompagnement IA ?",
@@ -352,7 +479,11 @@ answers: [
 "Repérer les leaders et les soutenir en priorité",
 "Définir un cadre uniforme de compétences"
 ],
-correct: 0
+correct: 0,
+feedback: {
+title: "💡 Explication :",
+text: "La cartographie des positionnements révèle la richesse et la complexité des perceptions au sein de l'équipe. Cette compréhension fine permet d'adapter l'accompagnement à chaque profil, respectant les différences individuelles tout en construisant une vision collective cohérente."
+}
 },
 {
 question: "Quelle compétence est essentielle pour un cadre éducatif face à l'IA ?",
@@ -362,7 +493,11 @@ answers: [
 "Développer un esprit critique face aux outils d'IA",
 "Utiliser exclusivement les outils validés par le ministère"
 ],
-correct: 2
+correct: 2,
+feedback: {
+title: "💡 Explication :",
+text: "L'esprit critique est fondamental car il permet d'évaluer la pertinence, les limites et les enjeux éthiques des outils d'IA. Cette compétence transversale permet au cadre de prendre des décisions éclairées et de guider ses équipes vers un usage responsable et réfléchi de ces technologies."
+}
 },
 {
 question: "Quel est l'un des principes fondamentaux de la posture du cadre face à l'IA ?",
@@ -372,7 +507,11 @@ answers: [
 "La réduction du nombre d'outils numériques",
 "L'exemplarité dans les usages personnels et professionnels"
 ],
-correct: 3
+correct: 3,
+feedback: {
+title: "💡 Explication :",
+text: "L'exemplarité est essentielle car le cadre éducatif est un modèle pour ses équipes. En démontrant des usages réfléchis et éthiques de l'IA dans sa propre pratique, il inspire confiance et crédibilise son discours d'accompagnement auprès des personnels."
+}
 },
 {
 question: "Quelle compétence est importante pour contextualiser les enjeux liés à l'IA ?",
@@ -382,7 +521,11 @@ answers: [
 "L'analyse statistique",
 "La rédaction de protocoles disciplinaires"
 ],
-correct: 0
+correct: 0,
+feedback: {
+title: "💡 Explication :",
+text: "La littératie numérique avancée permet de comprendre les enjeux techniques, sociétaux et éthiques de l'IA dans leur globalité. Cette compétence permet au cadre de situer l'IA dans le contexte éducatif plus large et d'anticiper ses implications pour l'établissement."
+}
 },
 {
 question: "Quel est le rôle du devoir de veille pour un cadre éducatif ?",
@@ -392,7 +535,11 @@ answers: [
 "Elaborer des cours d'intelligence artificielle",
 "Informer sur les évolutions réglementaires et éthiques"
 ],
-correct: 3
+correct: 3,
+feedback: {
+title: "💡 Explication :",
+text: "Le devoir de veille est crucial dans un domaine en évolution rapide comme l'IA. Il permet au cadre de rester informé des évolutions législatives, des bonnes pratiques émergentes et des enjeux éthiques, garantissant ainsi une intégration responsable et conforme aux attentes sociétales."
+}
 },
 {
 question: "Quelle méthode est conseillée pour une adoption progressive de l'IA ?",
@@ -402,7 +549,11 @@ answers: [
 "Un accompagnement individualisé uniquement",
 "Un parcours progressif par étapes"
 ],
-correct: 3
+correct: 3,
+feedback: {
+title: "💡 Explication :",
+text: "Le parcours progressif par étapes respecte le rythme d'apprentissage et d'adaptation de chacun. Cette approche structurée permet de construire solidement les compétences, de gérer les appréhensions et d'assurer une montée en compétence durable et maîtrisée."
+}
 },
 {
 question: "Quelle est la séquence logique du pilotage du changement lié à l'IA ?",
@@ -412,7 +563,11 @@ answers: [
 "Mise en œuvre - Planification - Diagnostic - Ajustement - Évaluation",
 "Diagnostic - Mise en œuvre - Planification - Évaluation - Ajustement"
 ],
-correct: 1
+correct: 1,
+feedback: {
+title: "💡 Explication :",
+text: "Cette séquence logique respecte les principes du management de projet : d'abord comprendre la situation actuelle (diagnostic), puis définir la stratégie (planification), mettre en œuvre les actions, mesurer les résultats (évaluation) et enfin adapter la stratégie (ajustement) selon les enseignements tirés."
+}
 },
 {
 question: "Quelle est la meilleure pratique pour encourager l'appropriation des outils d'IA par les équipes éducatives ?",
@@ -422,13 +577,18 @@ answers: [
 "Mettre en place un contrôle strict des usages dès le début",
 "Limiter les expérimentations individuelles pour éviter les erreurs"
 ],
-correct: 1
+correct: 1,
+feedback: {
+title: "💡 Explication :",
+text: "L'accompagnement différencié reconnaît que chaque professionnel a des besoins, des compétences et un rythme d'apprentissage spécifiques. Cette approche personnalisée favorise l'engagement, respecte les particularités individuelles et maximise les chances de réussite de l'intégration de l'IA."
+}
 }
 ];
 
 let currentQuestion = 0;
 let score = 0;
 let selectedAnswers = [];
+let showingFeedback = false;
 
 function initQuiz() {
 displayQuestion();
@@ -454,6 +614,10 @@ ${answer}
 </div>
 `).join('')}
 </div>
+<div class="feedback-section" id="feedbackSection">
+<div class="feedback-title" id="feedbackTitle"></div>
+<div class="feedback-text" id="feedbackText"></div>
+</div>
 <div class="controls">
 <button class="btn btn-secondary" onclick="previousQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>
 Précédent
@@ -461,7 +625,7 @@ Précédent
 <div class="score-display">
 Score: ${score}/${currentQuestion}
 </div>
-                <button class="btn btn-secondary" onclick="skipQuestion()" style="margin-right: 10px;">
+<button class="btn btn-secondary" onclick="skipQuestion()" ${showingFeedback ? 'style="display:none;"' : ''}>
 Passer
 </button>
 <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>
@@ -473,6 +637,8 @@ ${currentQuestion === questions.length - 1 ? 'Terminer' : 'Suivant'}
 }
 
 function selectAnswer(answerIndex) {
+if (showingFeedback) return;
+
 const options = document.querySelectorAll('.answer-option');
 options.forEach(option => option.classList.remove('selected'));
 const selectedOption = document.querySelector(`[data-index="${answerIndex}"]`);
@@ -482,49 +648,69 @@ document.getElementById('nextBtn').disabled = false;
 }
 
 function skipQuestion() {
-selectedAnswers[currentQuestion] = -1; // Marquer comme "passé"
-const correct = questions[currentQuestion].correct;
-
-// Afficher la correction
-const options = document.querySelectorAll('.answer-option');
-options[correct].classList.add('correct');
-
-// Pas d'augmentation du score pour une question passée
-
-setTimeout(() => {
-currentQuestion++;
-displayQuestion();
-updateProgress();
-}, 1500);
+selectedAnswers[currentQuestion] = -1;
+showQuestionFeedback();
 }
 
 function nextQuestion() {
-if (selectedAnswers[currentQuestion] !== undefined) {
+if (!showingFeedback) {
+showQuestionFeedback();
+} else {
+currentQuestion++;
+showingFeedback = false;
+displayQuestion();
+updateProgress();
+}
+}
+
+function showQuestionFeedback() {
 const correct = questions[currentQuestion].correct;
 const selected = selectedAnswers[currentQuestion];
-
-// Afficher la correction
 const options = document.querySelectorAll('.answer-option');
+const feedback = questions[currentQuestion].feedback;
+
+// Marquer les réponses
 options[correct].classList.add('correct');
-if (selected !== correct) {
+if (selected !== -1 && selected !== correct) {
 options[selected].classList.add('incorrect');
 }
 
+// Afficher le feedback
+const feedbackSection = document.getElementById('feedbackSection');
+const feedbackTitle = document.getElementById('feedbackTitle');
+const feedbackText = document.getElementById('feedbackText');
+
+feedbackTitle.textContent = feedback.title;
+feedbackText.textContent = feedback.text;
+feedbackSection.classList.add('show');
+
+// Compter les points
 if (selected === correct) {
 score++;
 }
 
-setTimeout(() => {
-currentQuestion++;
-displayQuestion();
-updateProgress();
-}, 1500);
-}
+// Changer le bouton
+const nextBtn = document.getElementById('nextBtn');
+nextBtn.textContent = currentQuestion === questions.length - 1 ? 'Voir les résultats' : 'Question suivante';
+nextBtn.disabled = false;
+
+// Masquer le bouton "Passer"
+const skipBtn = document.querySelector('[onclick="skipQuestion()"]');
+if (skipBtn) skipBtn.style.display = 'none';
+
+// Désactiver les clics sur les réponses
+const answerOptions = document.querySelectorAll('.answer-option');
+answerOptions.forEach(option => {
+option.style.pointerEvents = 'none';
+});
+
+showingFeedback = true;
 }
 
 function previousQuestion() {
 if (currentQuestion > 0) {
 currentQuestion--;
+showingFeedback = false;
 displayQuestion();
 updateProgress();
 }
@@ -542,22 +728,36 @@ const scoreCircle = document.getElementById('scoreCircle');
 const finalScore = document.getElementById('finalScore');
 const resultsTitle = document.getElementById('resultsTitle');
 const resultsSubtitle = document.getElementById('resultsSubtitle');
+const recommendationTitle = document.getElementById('recommendationTitle');
+const recommendationText = document.getElementById('recommendationText');
 
 finalScore.textContent = `${score}/${questions.length}`;
 const percentage = (score / questions.length) * 100;
 
-if (percentage >= 80) {
+if (percentage < 20) {
+scoreCircle.className = 'score-circle score-poor';
+resultsTitle.textContent = 'Un bon point de départ !';
+resultsSubtitle.textContent = 'Vous découvrez le monde de l\'IA en éducation.';
+recommendationTitle.textContent = '📚 Recommandation de parcours :';
+recommendationText.textContent = 'Vous gagneriez à suivre un maximum de modules dans ce parcours pour développer une solide compréhension des enjeux de l\'IA en éducation.';
+} else if (percentage < 50) {
+scoreCircle.className = 'score-circle score-average';
+resultsTitle.textContent = 'De bonnes bases !';
+resultsSubtitle.textContent = 'Vous avez des connaissances de base sur l\'IA.';
+recommendationTitle.textContent = '📚 Recommandation de parcours :';
+recommendationText.textContent = 'Vous avez de bonnes bases, choisissez au moins 5 modules dans ce parcours pour approfondir vos connaissances et développer votre expertise.';
+} else if (percentage < 80) {
+scoreCircle.className = 'score-circle score-good';
+resultsTitle.textContent = 'Très bien !';
+resultsSubtitle.textContent = 'Vous êtes plutôt à l\'aise avec l\'IA en éducation.';
+recommendationTitle.textContent = '📚 Recommandation de parcours :';
+recommendationText.textContent = 'Vous êtes plutôt à l\'aise, choisissez au moins 4 modules de votre choix pour perfectionner vos compétences dans les domaines qui vous intéressent le plus.';
+} else {
 scoreCircle.className = 'score-circle score-excellent';
 resultsTitle.textContent = 'Excellent !';
 resultsSubtitle.textContent = 'Vous maîtrisez parfaitement les enjeux de l\'IA en éducation.';
-} else if (percentage >= 60) {
-scoreCircle.className = 'score-circle score-good';
-resultsTitle.textContent = 'Bien joué !';
-resultsSubtitle.textContent = 'Vous avez une bonne compréhension des défis de l\'IA.';
-} else {
-scoreCircle.className = 'score-circle score-average';
-resultsTitle.textContent = 'Continuez vos efforts !';
-resultsSubtitle.textContent = 'Il serait bénéfique d\'approfondir vos connaissances.';
+recommendationTitle.textContent = '🎯 Recommandation de parcours :';
+recommendationText.textContent = 'Vous êtes très à l\'aise sur le sujet de l\'IA. Choisissez les modules que vous voulez pour explorer des aspects spécifiques ou rester à la pointe des innovations.';
 }
 
 resultsCard.classList.add('show');
@@ -568,6 +768,7 @@ function restartQuiz() {
 currentQuestion = 0;
 score = 0;
 selectedAnswers = [];
+showingFeedback = false;
 document.getElementById('questionsContainer').style.display = 'block';
 document.getElementById('resultsCard').classList.remove('show');
 initQuiz();
@@ -577,4 +778,3 @@ initQuiz();
 initQuiz();
 </script>
 </body>
-</html>
