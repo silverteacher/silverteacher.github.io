@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Méthodologies face à l'IA - Suivi des Activités</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .intro {
+            background: #f8f9fa;
+            padding: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .intro h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .intro p {
+            margin-bottom: 15px;
+            color: #555;
+            text-align: justify;
+        }
+
+        .score-section {
+            background: #e8f4fd;
+            padding: 25px;
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .score {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: #ddd;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .congratulations {
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        .activities-container {
+            padding: 30px;
+        }
+
+        .activity {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .activity.completed {
+            background: #f0f8ff;
+            border-color: #4CAF50;
+            transform: scale(1.02);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .activity-title {
+            font-size: 1.3em;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .activity-number {
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .activity.completed .activity-number {
+            background: #4CAF50;
+        }
+
+        .activity-content {
+            margin-bottom: 20px;
+        }
+
+        .objective {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .objective strong {
+            color: #856404;
+        }
+
+        .activity-description {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .tools {
+            background: #d1ecf1;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .competence {
+            background: #d4edda;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-validate {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-validate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-skip {
+            background: linear-gradient(135deg, #ff7043, #f4511e);
+            color: white;
+        }
+
+        .btn-skip:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 112, 67, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .reset-section {
+            background: #f8f9fa;
+            padding: 25px;
+            text-align: center;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
+        .status-pending {
+            background: #ffc107;
+        }
+
+        .status-completed {
+            background: #4CAF50;
+        }
+
+        .status-skipped {
+            background: #ff7043;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 25px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .activities-container {
+                padding: 20px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Méthodologies face à l'IA</h1>
+            <p>Outil de suivi pour développer l'esprit critique des élèves</p>
+        </div>
+
+        <div class="intro">
+            <h2>📚 Pour les enseignants : Cultiver l'esprit critique face à l'Intelligence Artificielle</h2>
+            <p>Cette application vous accompagne dans la mise en œuvre d'une méthodologie progressive pour aider vos élèves à développer un regard critique et éclairé sur l'Intelligence Artificielle Générative (IAG).</p>
+            <p><strong>Objectifs pédagogiques :</strong> À travers 10 activités pratiques et concrètes, vos élèves apprendront à décrypter l'information numérique, identifier les biais algorithmiques, comprendre les enjeux éthiques et sociaux de l'IA, et développer une approche réflexive de ces technologies.</p>
+            <p><strong>Progression :</strong> Du collège au lycée, ces activités mêlent pédagogie active, analyse de sources et mises en situation pour une appropriation progressive et durable des compétences numériques critiques.</p>
+        </div>
+
+        <div class="score-section">
+            <div class="score"><span id="score">0</span>/10</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="congratulations" id="congratulations">Commencez votre parcours méthodologique !</div>
+        </div>
+
+        <div class="activities-container">
+            <div class="activity" data-activity="1">
+                <div class="activity-header">
+                    <div class="activity-title">Décryptage de l'information numérique</div>
+                    <div class="activity-number">1</div>
+                </div>
+                <div class="activity-content">
+                    <div class="objective">
+                        <strong>Objectif :</strong> Apprendre à repérer les biais, l'origine des contenus, les intentions et les manipulations potentielles.
+                    </div>
+                    <div class="activity-description">
+                        <strong>Activité :</strong> Présenter deux réponses à une même question : l'une générée par une IA, l'autre par un humain. Les élèves doivent deviner qui a écrit quoi, justifier leur hypothèse, puis vérifier les sources. Cette activité développe l'esprit critique et la capacité d'analyse comparative.
+                    </div>
+                    <div class="tools">
+                        <strong>Outils :</strong> ChatGPT, Perplexity, moteurs de recherche classiques
+                    </div>
+                    <div class="competence">
+                        <strong>Compétence visée :</strong> Évaluation de la fiabilité d'une source
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-validate" onclick="validateActivity(1)">Activité Réalisée</button>
+                    <button class="btn btn-skip" onclick="skipActivity(1)">Passer</button>
+                </div>
+            </div>
+
+            <div class="activity" data-activity="2">
+                <div class="activity-header">
+                    <div class="activity-title">Journal de bord de l'intelligence artificielle</div>
+                    <div class="activity-number">2</div>
+                </div>
+                <div class="activity-content">
+                    <div class="objective">
+                        <strong>Objectif :</strong> Faire réfléchir les élèves à l'impact quotidien de l'IA dans leur vie personnelle.
+                    </div>
+                    <div class="activity-description">
+                        <strong>Activité :</strong> Pendant une semaine, les élèves tiennent un journal où ils notent chaque interaction avec une IA (recommandation YouTube, filtre photo, GPS, suggestions d'achat...). En classe, mise en commun et discussion sur les choix induits par les algorithmes et leur influence sur nos comportements.
+                    </div>
+                    <div class="competence">
+                        <strong>Compétence visée :</strong> Prise de conscience des usages invisibles de l'IA
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-validate" onclick="validateActivity(2)">Activité Réalisée</button>
+                    <button class="btn btn-skip" onclick="skipActivity(2)">Passer</button>
+                </div>
+            </div>
+
+            <div class="activity" data-activity="3">
+                <div class="activity-header">
+                    <div class="activity-title">Simulations éthiques</div>
+                    <div class="activity-number">3</div>
+                </div>
+                <div class="activity-content">
+                    <div class="objective">
+                        <strong>Objectif :</strong> Aborder les dilemmes moraux posés par l'IA dans différents contextes sociaux.
+                    </div>
+                    <div class="activity-description">
+                        <strong>Activité :</strong> Études de cas inspirées de scénarios réels : une IA de recrutement exclut certains candidats selon des critères biaisés, une IA de vidéosurveillance classe mal les visages selon l'origine ethnique... Les élèves débattent en groupe en incarnant différents rôles (développeur, usager, juriste, citoyen) pour explorer toutes les perspectives.
+                    </div>
+                    <div class="competence">
+                        <strong>Compétence visée :</strong> Argumentation, pensée complexe, empathie
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-validate" onclick="validateActivity(3)">Activité Réalisée</button>
+                    <button class="btn btn-skip" onclick="skipActivity(3)">Passer</button>
+                </div>
+            </div>
+
+            <div class="activity" data-activity="4">
+                <div class="activity-header">
+                    <div class="activity-title">Atelier "IA menteuse"</div>
+                    <div class="activity-number">4</div>
+                </div>
+                <div class="activity-content">
+                    <div class="objective">
+                        <strong>Objectif :</strong> Tester la véracité des réponses générées et développer l'esprit de vérification.
+                    </div>
+                    <div class="activity-description">
+                        <strong>Activité :</strong> L'enseignant demande à une IA de rédiger volontairement un texte avec des erreurs factuelles. Les élèves doivent les traquer et proposer une version corrigée. On les incite à croiser les informations avec d'autres sources pour valider leurs corrections.
+                        <br><strong>Variante lycée :</strong> Laisser les élèves demander à l'IA un devoir sur leur programme... puis le déconstruire point par point pour identifier erreurs, approximations et manques.
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-validate" onclick="validateActivity(4)">Activité Réalisée</button>
+                    <button class="btn btn-skip" onclick="skipActivity(4)">Passer</button>
+                </div>
+            </div>
+
+            <div class="activity" data-activity="5">
+                <div class="activity-header">
+                    <div class="activity-title">Analyse d'image et deepfakes</div>
+                    <div class="activity-number">5</div>
+                </div>
+                <div class="activity-content">
+                    <div class="objective">
+                        <strong>Objectif :</strong> Comprendre comment l'IA modifie notre rapport au vrai et développer l'œil critique face aux images.
+                    </div>
+                    <div class="activity-description">
+                        <strong>Activité :</strong> Présenter un mélange d'images truquées (deepfakes, IA génératives) et d'images authentiques, en demandant aux élèves de deviner lesquelles sont authentiques. Discussion approfondie sur les usages positifs (art, cinéma) et les dérives (désinformation, manipulation).
+                    </div>
+                    <div class="tools">
+                        <strong>Outils :</strong> Hugging Face, ThisPersonDoesNotExist, outils de détection de deepfake
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-validate" onclick="validateActivity(5)">Activité Réalisée</button>
+                    <button class="btn btn-skip" onclick="skipActivity(5)">Passer</button>
+                </div>
+            </div>
+
+            <div class="activity" data-activity="6">
+                <div class="activity-header">
+                    <div class="activity-title">Micro-projets "IA dans le monde réel"</div>
+                    <div class="activity-number">6</div>
+                </div>
+                <div class="activity-content">
+                    <div class="objective">
+                        <strong>Objectif :</strong> Relier l'IA aux enjeux sociaux concrets et développer l'esprit de recherche.
+                    </div>
+                    <div class="activity-description">
+                        <strong>Activité :</strong> Les élèves enquêtent sur une IA dans un secteur donné (santé, éducation, transport, commerce), puis présentent en binôme une courte capsule vidéo ou un exposé critique analysant les bénéfices et risques.
+                        <br><strong>Exemples originaux :</strong> IA pour détecter les fraudes dans les examens, IA dans les supermarchés sans caisse, IA et prévisions météo, IA dans les réseaux sociaux.
+                    </div>
+                    <div class="competence">
+                        <strong>Compétence visée :</strong> Esprit de synthèse, vulgarisation, recherche documentaire
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-validate" onclick="validateActivity(6)">Activité Réalisée</button>
+                    <button class="btn btn-skip" onclick="skipActivity(6)">Passer</button>
+                </div>
+            </div>
+
+            <div class="activity" data-activity="7">
+                <div class="activity-header">
+                    <div class="activity-title">Fiction spéculative</div>
+                    <div class="activity-number">7</div>
+                </div>
+                <div class="activity-content">
+                    <div class="objective">
+                        <strong>Objectif :</strong> Libérer la créativité pour penser l'avenir et explorer les implications futures de l'IA.
+                    </div>
+                    <div class="activity-description">
+                        <strong>Activité :</strong> Rédiger une nouvelle ou écrire une saynète de théâtre où l'IA bouleverse un quotidien ordinaire (famille, école, travail). Le récit doit soulever un enjeu éthique, social ou politique de manière créative et réfléchie.
+                        <br><strong>Intérêt :</strong> Un contrepoint original pour explorer les imaginaires autour de l'IA et stimuler la réflexion prospective.
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-validate" onclick="validateActivity(7)">Activité Réalisée</button>
+                    <button class="btn btn-skip" onclick="skipActivity(7)">Passer</button>
+                </div>
+            </div>
+
+            <div class="activity" data-activity="8">
+                <div class="activity-header">
+                    <div class="activity-title">Cartographie des biais algorithmiques</div>
+                    <div class="activity-number">8</div>
+                </div>
+                <div class="activity-content">
+                    <div class="objective">
+                        <strong>Objectif :</strong> Visualiser les mécanismes d'injustice intégrés aux IA et comprendre leurs origines.
+                    </div>
+                    <div class="activity-description">
+                        <strong>Activité :</strong> À partir de données réelles (ex. : algorithmes de crédit, de justice prédictive, de recrutement), les élèves réalisent une carte mentale ou une infographie des biais repérés et de leurs conséquences sur différents groupes sociaux.
+                    </div>
+                    <div class="tools">
+                        <strong>Outils :</strong> Canva, Mindomo, ou supports papier traditionnels
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-validate" onclick="validateActivity(8)">Activité Réalisée</button>
+                    <button class="btn btn-skip" onclick="skipActivity(8)">Passer</button>
+                </div>
+            </div>
+
+            <div class="activity" data-activity="9">
+                <div class="activity-header">
+                    <div class="activity-title">Débat mouvant : "Faut-il interdire l'IA dans l'éducation ?"</div>
+                    <div class="activity-number">9</div>
+                </div>
+                <div class="activity-content">
+                    <div class="objective">
+                        <strong>Objectif :</strong> Explorer plusieurs points de vue sans tomber dans les jugements binaires.
+                    </div>
+                    <div class="activity-description">
+                        <strong>Activité :</strong> Chaque élève se place physiquement dans l'espace selon son degré d'accord avec une affirmation controversée. Puis, en se déplaçant, ils argumentent leur position et peuvent changer d'avis. On complexifie avec des rebondissements ou contre-arguments pour nuancer les positions.
+                        <br><strong>Résultat :</strong> Un débat vivant qui oblige à nuancer ses idées et à écouter les autres perspectives.
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-validate" onclick="validateActivity(9)">Activité Réalisée</button>
+                    <button class="btn btn-skip" onclick="skipActivity(9)">Passer</button>
+                </div>
+            </div>
+
+            <div class="activity" data-activity="10">
+                <div class="activity-header">
+                    <div class="activity-title">Écriture collaborative avec et sans IA</div>
+                    <div class="activity-number">10</div>
+                </div>
+                <div class="activity-content">
+                    <div class="objective">
+                        <strong>Objectif :</strong> Expérimenter les différences entre création humaine et génération artificielle.
+                    </div>
+                    <div class="activity-description">
+                        <strong>Activité :</strong> Par petits groupes, écrire un texte (poème, article, dialogue) avec ou sans l'aide d'une IA. Comparer les processus créatifs : qu'est-ce que l'IA leur a "volé" ou "offert" ? Quelles sont les différences dans le processus de création ?
+                        <br><strong>Piste réflexive :</strong> Qu'est-ce qu'une idée originale ? Qu'est-ce qui définit un auteur ? Comment l'IA modifie-t-elle notre rapport à la créativité ?
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="btn btn-validate" onclick="validateActivity(10)">Activité Réalisée</button>
+                    <button class="btn btn-skip" onclick="skipActivity(10)">Passer</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="reset-section">
+            <button class="btn-reset" onclick="resetProgress()">🔄 Recommencer le parcours</button>
+        </div>
+    </div>
+
+    <script>
+        let completedActivities = 0;
+        let activityStates = {};
+
+        const congratulationsMessages = [
+            "Commencez votre parcours méthodologique !",
+            "Premier pas vers l'esprit critique ! 🌟",
+            "Excellent début, continuez sur cette lancée ! 👍",
+            "Vous progressez bien dans la méthodologie ! 📈",
+            "Bravo, vos élèves développent leur regard critique ! 🎯",
+            "Très bon travail, la moitié du parcours est accomplie ! 🏃‍♂️",
+            "Félicitations, vous maîtrisez la pédagogie critique ! 🎓",
+            "Remarquable progression, presque au bout ! ⭐",
+            "Excellent travail, une dernière étape ! 🏆",
+            "Bravo, vous avez accompli un parcours pédagogique exemplaire ! 🎖️",
+            "Parfait ! Vos élèves ont toutes les clés pour un esprit critique face à l'IA ! 🥇"
+        ];
+
+        function updateProgress() {
+            const scoreElement = document.getElementById('score');
+            const progressBar = document.getElementById('progressBar');
+            const congratulations = document.getElementById('congratulations');
+
+            scoreElement.textContent = completedActivities;
+            const percentage = (completedActivities / 10) * 100;
+            progressBar.style.width = percentage + '%';
+            congratulations.textContent = congratulationsMessages[completedActivities];
+        }
+
+        function validateActivity(activityNumber) {
+            if (activityStates[activityNumber] !== 'completed') {
+                if (activityStates[activityNumber] === 'skipped') {
+                    // Si l'activité était passée, on ajuste le score
+                    completedActivities++;
+                }
+                activityStates[activityNumber] = 'completed';
+                if (!document.querySelector(`[data-activity="${activityNumber}"]`).classList.contains('completed')) {
+                    completedActivities++;
+                }
+                
+                const activity = document.querySelector(`[data-activity="${activityNumber}"]`);
+                activity.classList.add('completed');
+                
+                const buttons = activity.querySelectorAll('.btn');
+                buttons.forEach(btn => btn.disabled = true);
+                
+                updateProgress();
+            }
+        }
+
+        function skipActivity(activityNumber) {
+            if (activityStates[activityNumber] !== 'completed' && activityStates[activityNumber] !== 'skipped') {
+                activityStates[activityNumber] = 'skipped';
+                
+                const activity = document.querySelector(`[data-activity="${activityNumber}"]`);
+                const buttons = activity.querySelectorAll('.btn');
+                buttons.forEach(btn => btn.disabled = true);
+                
+                // Visual feedback for skipped activity
+                activity.style.opacity = '0.6';
+                activity.style.borderColor = '#ff7043';
+            }
+        }
+
+        function resetProgress() {
+            if (confirm('Êtes-vous sûr de vouloir recommencer le parcours ?')) {
+                completedActivities = 0;
+                activityStates = {};
+                
+                const activities = document.querySelectorAll('.activity');
+                activities.forEach(activity => {
+                    activity.classList.remove('completed');
+                    activity.style.opacity = '1';
+                    activity.style.borderColor = '#e0e0e0';
+                    
+                    const buttons = activity.querySelectorAll('.btn');
+                    buttons.forEach(btn => btn.disabled = false);
+                });
+                
+                updateProgress();
+            }
+        }
+
+        // Initialize the application
+        updateProgress();
+    </script>
+</body>
+</html>
