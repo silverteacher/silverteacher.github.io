@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz : L'IA dans l'Éducation</title>
+    <title>Quiz : L'IA dans l'éducation</title>
     <style>
         * {
             margin: 0;
@@ -550,10 +550,7 @@
                 // Activer le bouton suivant
                 updateNavigation();
                 
-                // Animation de célébration pour une bonne réponse
-                if (selectedValue === correctAnswer) {
-                    confetti();
-                }
+
             }
         });
 
@@ -563,7 +560,9 @@
             const resultTitle = document.getElementById('resultTitle');
             const resultMessage = document.getElementById('resultMessage');
             
-            document.querySelector('.quiz-content').style.display = 'none';
+            // Cacher le contenu du quiz et afficher les résultats
+            document.querySelectorAll('.question-card').forEach(card => card.style.display = 'none');
+            document.querySelector('.navigation').style.display = 'none';
             finalScore.style.display = 'block';
             
             const percentage = Math.round((score / totalQuestions) * 100);
@@ -591,8 +590,10 @@
             score = 0;
             answers = {};
             
-            // Réinitialiser l'affichage
-            document.querySelector('.quiz-content').style.display = 'block';
+            // Réafficher le contenu du quiz
+            document.querySelectorAll('.question-card').forEach(card => card.style.display = 'none');
+            document.querySelector(`[data-question="1"]`).style.display = 'block';
+            document.querySelector('.navigation').style.display = 'block';
             document.getElementById('finalScore').style.display = 'none';
             
             // Réinitialiser les questions
@@ -620,40 +621,7 @@
             updateProgress();
         }
 
-        function confetti() {
-            // Simple animation de célébration
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57'];
-            for (let i = 0; i < 30; i++) {
-                setTimeout(() => {
-                    createConfettiPiece(colors[Math.floor(Math.random() * colors.length)]);
-                }, i * 50);
-            }
-        }
 
-        function createConfettiPiece(color) {
-            const confetti = document.createElement('div');
-            confetti.style.cssText = `
-                position: fixed;
-                top: -10px;
-                left: ${Math.random() * 100}vw;
-                width: 10px;
-                height: 10px;
-                background: ${color};
-                z-index: 1000;
-                pointer-events: none;
-                border-radius: 50%;
-            `;
-            
-            document.body.appendChild(confetti);
-            
-            confetti.animate([
-                { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-                { transform: 'translateY(100vh) rotate(360deg)', opacity: 0 }
-            ], {
-                duration: 3000,
-                easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-            }).onfinish = () => confetti.remove();
-        }
 
         // Initialisation
         updateNavigation();
