@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les mille et unes astuces de l'ENT</title>
+    <title>Quiz : L'IA dans l'éducation</title>
     <style>
         * {
             margin: 0;
@@ -12,686 +12,703 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
-            color: #333;
+            padding: 20px;
+            color: #1e293b;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 650px;
             margin: 0 auto;
-            padding: 20px;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #f1f5f9;
         }
 
         .header {
-            text-align: center;
-            margin-bottom: 40px;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: fadeInDown 1s ease-out;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto;
-            line-height: 1.6;
-            animation: fadeInUp 1s ease-out 0.3s both;
-        }
-
-        .section {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .section h2 {
-            color: #667eea;
-            font-size: 2.2rem;
-            margin-bottom: 30px;
             text-align: center;
+            padding: 30px 25px;
             position: relative;
         }
 
-        .section h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 2px;
-        }
-
-        .quiz-container {
-            display: grid;
-            gap: 20px;
-        }
-
-        .quiz-item {
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
-            border-radius: 15px;
-            padding: 25px;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .quiz-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
-            border-color: #667eea;
-        }
-
-        .quiz-question {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-        }
-
-        .quiz-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .option {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .option:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
-            transform: scale(1.02);
-        }
-
-        .option.correct {
-            border-color: #4CAF50;
-            background: #e8f5e8;
-            animation: pulse 0.6s ease-in-out;
-        }
-
-        .option.incorrect {
-            border-color: #f44336;
-            background: #ffeaea;
-            animation: shake 0.6s ease-in-out;
-        }
-
-        .feedback {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 10px;
-            display: none;
-        }
-
-        .feedback.show {
-            display: block;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        .feedback.correct {
-            background: #e8f5e8;
-            color: #2e7d32;
-            border-left: 4px solid #4CAF50;
-        }
-
-        .feedback.incorrect {
-            background: #ffeaea;
-            color: #c62828;
-            border-left: 4px solid #f44336;
-        }
-
-        .resources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .resource-card {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            transition: all 0.4s ease;
-            border: 2px solid transparent;
-            cursor: pointer;
-        }
-
-        .resource-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
-            border-color: #667eea;
-        }
-
-        .resource-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-        }
-
-        .resource-card h3 {
-            color: #333;
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-        }
-
-        .resource-card p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .resource-link {
-            display: inline-block;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 25px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .resource-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .special-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin: 10px 5px;
-        }
-
-        .special-link:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .usage-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .usage-card {
-            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
-            border-radius: 20px;
-            padding: 25px;
-            border: 2px solid transparent;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .usage-card::before {
+        .header::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><circle cx="36" cy="5" r="3"/><circle cx="47" cy="19" r="2"/><circle cx="15" cy="28" r="2"/><circle cx="8" cy="8" r="1.5"/><circle cx="52" cy="45" r="1.5"/></g></svg>') repeat;
+            opacity: 0.1;
         }
 
-        .usage-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
-            border-color: #667eea;
-        }
-
-        .usage-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 20px;
-            background: linear-gradient(45deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
-        }
-
-        .usage-card h4 {
-            text-align: center;
-            color: #333;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+        .header h1 {
+            font-size: 2.2rem;
             font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
 
-        .usage-examples {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
         }
 
-        .usage-item {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            border-left: 4px solid #667eea;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-            line-height: 1.4;
+        .quiz-content {
+            padding: 40px;
         }
 
-        .usage-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        .score-display {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 30px;
+            border: 1px solid #e2e8f0;
         }
 
         .progress-bar {
-            background: #e0e0e0;
-            height: 8px;
-            border-radius: 4px;
-            margin: 30px 0;
+            background: #f1f5f9;
+            height: 6px;
+            border-radius: 3px;
+            margin: 25px 0 35px 0;
             overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         .progress-fill {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
             height: 100%;
-            width: 0%;
-            transition: width 0.8s ease;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 3px;
         }
 
-        .score {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #667eea;
+        .question-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+            display: none;
+            animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        .question-card.active {
+            display: block;
+        }
+
+        .question-title {
+            font-size: 1.4rem;
+            color: #1e293b;
+            margin-bottom: 30px;
             font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .options {
+            list-style: none;
+            display: grid;
+            gap: 12px;
+        }
+
+        .option {
+            background: #ffffff;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:hover {
+            border-color: #cbd5e1;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.08);
+        }
+
+        .option input[type="radio"] {
+            display: none;
+        }
+
+        .option label {
+            display: block;
+            padding: 18px 24px;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #475569;
+            font-weight: 500;
+            line-height: 1.5;
+            transition: color 0.2s ease;
+        }
+
+        .option.correct {
+            background: #f0fdf4;
+            border-color: #22c55e;
+            color: #15803d;
+        }
+
+        .option.correct label {
+            color: #15803d;
+        }
+
+        .option.incorrect {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #dc2626;
+        }
+
+        .option.incorrect label {
+            color: #dc2626;
+        }
+
+        .option.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .option.selected label {
+            color: #1d4ed8;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .feedback.correct {
+            background: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+
+        .feedback.incorrect {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .navigation {
+            text-align: center;
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px -6px rgba(30, 41, 59, 0.4);
+            min-width: 140px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -6px rgba(30, 41, 59, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .final-score {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            border-radius: 20px;
+            margin-top: 30px;
+        }
+
+        .final-score.excellent {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 2px solid #22c55e;
+            color: #15803d;
+        }
+
+        .final-score.good {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 2px solid #f59e0b;
+            color: #d97706;
+        }
+
+        .final-score.needs-improvement {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 2px solid #ef4444;
+            color: #dc2626;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .emoji {
+            font-size: 2.5rem;
             margin-bottom: 20px;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+            display: block;
         }
 
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2rem;
             }
-            
-            .quiz-options {
-                grid-template-columns: 1fr;
+            .container {
+                margin: 10px;
+                border-radius: 20px;
             }
-            
-            .usage-grid {
-                grid-template-columns: 1fr;
+            .quiz-content {
+                padding: 25px;
             }
-            
-            .resources-grid {
-                grid-template-columns: 1fr;
+            .question-card {
+                padding: 25px;
             }
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        /* Ajout d'une animation subtile au survol des cartes */
+        .question-card:hover {
+            box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Style amélioré pour les boutons de résultat */
+        .final-score .btn {
+            background: linear-gradient(135deg, #475569 0%, #64748b 100%);
+            margin-top: 25px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎯 Les mille et unes astuces de l'ENT</h1>
-            <p>L'ENT est un espace numérique de travail sécurisé permettant un travail collaboratif au niveau de toute la communauté scolaire. Il met l'accent sur l'aspect collaboratif en limitant les barrières techniques. Il propose aussi des ressources et des applications de qualité que vous allez découvrir de façon interactive.</p>
+            <h1>🤖 Quiz de vérification</h1>
+            <p>Testez vos connaissances sur les perspectives terrain</p>
         </div>
 
-        <div class="section">
-            <h2>🚀 Applications de l'ENT Néo</h2>
-            <div style="text-align: center; margin-bottom: 25px;">
-                <a href="https://neointhepocket.glideapp.io/" target="_blank" class="special-link" style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);">
-                    <span style="font-size: 1.5rem;">📱</span>
-                    Découvrir l'app Neo in the Pocket
-                </a>
+        <div class="quiz-content">
+            <div class="score-display">
+                Score: <span id="score">0</span>/<span id="total">7</span>
             </div>
-
-            <h3 style="color: #667eea; font-size: 1.8rem; margin-bottom: 25px; text-align: center;">💡 Découvrez les usages pédagogiques</h3>
             
-            <div class="usage-grid">
-                <div class="usage-card">
-                    <div class="usage-icon">🎙️</div>
-                    <h4>Dictaphone</h4>
-                    <div class="usage-examples">
-                        <div class="usage-item">📝 <strong>Oral de langues :</strong> Enregistrer les productions orales des élèves pour les évaluer</div>
-                        <div class="usage-item">🎭 <strong>Théâtre :</strong> Capturer les répétitions et analyser la diction</div>
-                        <div class="usage-item">📚 <strong>Lecture :</strong> Créer des livres audio collaboratifs</div>
-                        <div class="usage-item">🔬 <strong>Sciences :</strong> Enregistrer les hypothèses avant l'expérience</div>
-                    </div>
-                </div>
-
-                <div class="usage-card">
-                    <div class="usage-icon">📌</div>
-                    <h4>Mur collaboratif</h4>
-                    <div class="usage-examples">
-                        <div class="usage-item">🧠 <strong>Brainstorming :</strong> Collecter toutes les idées de la classe sur un thème</div>
-                        <div class="usage-item">📊 <strong>Enquêtes :</strong> Partager les résultats de recherches individuelles</div>
-                        <div class="usage-item">🎨 <strong>Galerie :</strong> Exposer les créations artistiques des élèves</div>
-                        <div class="usage-item">❓ <strong>Questions :</strong> Mur de questions anonymes avant un contrôle</div>
-                    </div>
-                </div>
-
-                <div class="usage-card">
-                    <div class="usage-icon">✈️</div>
-                    <h4>Blog</h4>
-                    <div class="usage-examples">
-                        <div class="usage-item">🌍 <strong>Voyages scolaires :</strong> Carnet de bord avec photos et récits</div>
-                        <div class="usage-item">📰 <strong>Journal de classe :</strong> Chronique des activités et projets</div>
-                        <div class="usage-item">🔬 <strong>Expériences :</strong> Documenter les protocoles et résultats</div>
-                        <div class="usage-item">📖 <strong>Portfolio :</strong> Présenter les travaux et progressions</div>
-                    </div>
-                </div>
-
-                <div class="usage-card">
-                    <div class="usage-icon">📝</div>
-                    <h4>Exercices multimédia</h4>
-                    <div class="usage-examples">
-                        <div class="usage-item">📅 <strong>Planification :</strong> Programmer la remise des devoirs automatiquement</div>
-                        <div class="usage-item">🎵 <strong>Audio :</strong> Rendre des enregistrements vocaux directement en ligne</div>
-                        <div class="usage-item">🔄 <strong>Relance classe :</strong> Notifier tous les élèves en un seul clic</div>
-                        <div class="usage-item">🏠 <strong>Travail à distance :</strong> Parfait pour l'enseignement hybride, plus besoin de ramasser des copies</div>
-                        <div class="usage-item">⏰ <strong>Rythme personnel :</strong> Enseignants et élèves travaillent à leur propre tempo</div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin: 40px 0 30px; text-align: center;">
-                <h3 style="color: #667eea; font-size: 1.8rem; margin-bottom: 15px;">🎯 Testez vos connaissances !</h3>
-                <p style="color: #666; font-size: 1.1rem;">Maintenant que vous avez découvert les usages, pouvez-vous associer chaque application à sa fonction principale ?</p>
-            </div>
-
-            <div class="score">Score: <span id="score">0</span>/4</div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progress"></div>
             </div>
-            
-            <div class="quiz-container">
-                <div class="quiz-item" data-question="1">
-                    <div class="quiz-question">
-                        <div class="icon">🎙️</div>
-                        Quelle application permet d'enregistrer des messages vocaux ?
-                    </div>
-                    <div class="quiz-options">
-                        <div class="option" data-answer="correct">Dictaphone</div>
-                        <div class="option" data-answer="incorrect">Blog</div>
-                        <div class="option" data-answer="incorrect">Mur collaboratif</div>
-                    </div>
-                    <div class="feedback correct-feedback">
-                        <strong>Correct !</strong> Le dictaphone permet d'enregistrer facilement des messages vocaux pour enrichir vos contenus pédagogiques.
-                    </div>
-                    <div class="feedback incorrect-feedback">
-                        <strong>Incorrect !</strong> La bonne réponse est le Dictaphone. Cette application permet d'enregistrer facilement des messages vocaux.
-                    </div>
-                </div>
 
-                <div class="quiz-item" data-question="2">
-                    <div class="quiz-question">
-                        <div class="icon">📌</div>
-                        Quelle application ressemble à un Padlet pour la collaboration ?
-                    </div>
-                    <div class="quiz-options">
-                        <div class="option" data-answer="incorrect">Dictaphone</div>
-                        <div class="option" data-answer="correct">Mur collaboratif</div>
-                        <div class="option" data-answer="incorrect">Blog</div>
-                    </div>
-                    <div class="feedback correct-feedback">
-                        <strong>Excellent !</strong> Le mur collaboratif fonctionne comme un Padlet et permet à tous de contribuer facilement à un projet commun.
-                    </div>
-                    <div class="feedback incorrect-feedback">
-                        <strong>Incorrect !</strong> La bonne réponse est le Mur collaboratif. Cette application ressemble à un Padlet pour la collaboration.
-                    </div>
+            <!-- Question 1 -->
+            <div class="question-card active" data-question="1">
+                <div class="question-title">
+                    <span class="emoji">⚖️</span>
+                    Dans le premier témoignage, de quel usage de l'IA le chef d'établissement témoigne-t-il ?
                 </div>
-
-                <div class="quiz-item" data-question="3">
-                    <div class="quiz-question">
-                        <div class="icon">✈️</div>
-                        Quelle application est idéale pour documenter les voyages scolaires avec likes et commentaires ?
-                    </div>
-                    <div class="quiz-options">
-                        <div class="option" data-answer="incorrect">Mur collaboratif</div>
-                        <div class="option" data-answer="incorrect">Dictaphone</div>
-                        <div class="option" data-answer="correct">Blog</div>
-                    </div>
-                    <div class="feedback correct-feedback">
-                        <strong>Parfait !</strong> Le blog est l'outil idéal pour raconter vos voyages scolaires avec la possibilité pour les lecteurs de liker et commenter.
-                    </div>
-                    <div class="feedback incorrect-feedback">
-                        <strong>Incorrect !</strong> La bonne réponse est le Blog. Cette application permet de documenter les voyages avec likes et commentaires.
-                    </div>
-                </div>
-
-                <div class="quiz-item" data-question="4">
-                    <div class="quiz-question">
-                        <div class="icon">📝</div>
-                        Quelle application permet de planifier la remise des devoirs et de relancer la classe en un clic ?
-                    </div>
-                    <div class="quiz-options">
-                        <div class="option" data-answer="correct">Exercices multimédia</div>
-                        <div class="option" data-answer="incorrect">Blog</div>
-                        <div class="option" data-answer="incorrect">Mur collaboratif</div>
-                    </div>
-                    <div class="feedback correct-feedback">
-                        <strong>Excellent !</strong> Les exercices multimédia permettent de planifier les devoirs, gérer les rendus audio et relancer toute la classe automatiquement.
-                    </div>
-                    <div class="feedback incorrect-feedback">
-                        <strong>Incorrect !</strong> La bonne réponse est Exercices multimédia. Cette application permet la planification et la gestion automatisée des devoirs.
-                    </div>
+                <ul class="options">
+                    <li class="option">
+                        <input type="radio" name="q1" value="a" id="q1a">
+                        <label for="q1a">Créer des contenus pédagogiques</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q1" value="b" id="q1b">
+                        <label for="q1b">Assistance juridique pour obtenir des réponses précises</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q1" value="c" id="q1c">
+                        <label for="q1c">Corriger les copies des élèves</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q1" value="d" id="q1d">
+                        <label for="q1d">Gérer l'emploi du temps</label>
+                    </li>
+                </ul>
+                <div class="feedback" data-correct="b">
+                    Le chef d'établissement utilise principalement l'IA comme assistant juridique face à un cadre complexe, ce qui lui permet d'anticiper les réponses à apporter lors de réunions ou d'assemblées générales.
                 </div>
             </div>
-        </div>
 
-        <div class="section">
-            <h2>📚 Ressources de la région</h2>
-            <div class="resources-grid">
-                <div class="resource-card">
-                    <div class="resource-icon">📖</div>
-                    <h3>Magazine Focus Ressources</h3>
-                    <p>Le magazine de la DANE de Lille qui présente toutes les ressources numériques disponibles dans l'académie. Guide complet pour découvrir les outils pédagogiques.</p>
-                    <a href="https://dane.site.ac-lille.fr/2024/10/18/le-magazine-focus-ressources/" target="_blank" class="resource-link">Consulter</a>
+           <!-- Question 2 -->
+            <div class="question-card" data-question="2">
+                <div class="question-title">
+                    <span class="emoji">🧠</span>
+                    Dans le deuxième témoignage, le chef d'établissement considère que l'IA est intelligente par nature.
                 </div>
-                <div class="resource-card">
-                    <div class="resource-icon">📚</div>
-                    <h3>Capeezy</h3>
-                    <p>Plateforme de soutien scolaire en ligne des éditions Bordas. Exercices interactifs, cours et révisions pour tous les niveaux.</p>
-                    <a href="https://www.editions-bordas.fr/capeezy-soutien-scolaire-en-ligne.html" target="_blank" class="resource-link">Découvrir</a>
+                <ul class="options">
+                    <li class="option">
+                        <input type="radio" name="q2" value="true" id="q2t">
+                        <label for="q2t">Vrai</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q2" value="false" id="q2f">
+                        <label for="q2f">Faux</label>
+                    </li>
+                </ul>
+                <div class="feedback" data-correct="false">
+                    Le chef d'établissement retient explicitement que "l'IA n'est pas intelligente" et qu'elle nécessite l'intelligence et l'esprit critique humain.
                 </div>
+            </div>
 
-                <div class="resource-card">
-                    <div class="resource-icon">🔬</div>
-                    <h3>EduMedia</h3>
-                    <p>Ressources pédagogiques interactives en sciences. Animations, simulations et exercices pour comprendre les phénomènes scientifiques.</p>
-                    <a href="https://www.edumedia.com/" target="_blank" class="resource-link">Explorer</a>
+            <!-- Question 3 -->
+            <div class="question-card" data-question="3">
+                <div class="question-title">
+                    <span class="emoji">🚫</span>
+                    Quelle est la "ligne rouge" à ne pas franchir selon l'inspecteur ?
                 </div>
-
-                <div class="resource-card">
-                    <div class="resource-icon">🌍</div>
-                    <h3>GlobalExam</h3>
-                    <p>Préparation aux tests de langues internationaux. Entraînements et certifications pour TOEIC, TOEFL, IELTS et bien d'autres.</p>
-                    <a href="https://global-exam.com/en" target="_blank" class="resource-link">S'entraîner</a>
+                <ul class="options">
+                    <li class="option">
+                        <input type="radio" name="q3" value="a" id="q3a">
+                        <label for="q3a">Utiliser l'IA pour détecter la triche pour le travail à la maison</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q3" value="b" id="q3b">
+                        <label for="q3b">Confier sa réflexion à l'IA et laisser la machine décider</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q3" value="c" id="q3c">
+                        <label for="q3c">Demander des références précises à l'IA</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q3" value="d" id="q3d">
+                        <label for="q3d">Utiliser l'IA pour gagner du temps</label>
+                    </li>
+                </ul>
+                <div class="feedback" data-correct="b">
+                    Confier sa réflexion à l'IA est la ligne rouge car cela risque de remplacer la pensée personnelle et mener à une forme de délestage cognitif.
                 </div>
+            </div>
 
-                <div class="resource-card">
-                    <div class="resource-icon">📚</div>
-                    <h3>Encyclopædia Universalis</h3>
-                    <p>Encyclopédie de référence avec des articles de qualité rédigés par des experts dans tous les domaines de la connaissance.</p>
-                    <a href="https://www.universalis.fr/" target="_blank" class="resource-link">Consulter</a>
+            <!-- Question 4 -->
+            <div class="question-card" data-question="4">
+                <div class="question-title">
+                    <span class="emoji">⏰</span>
+                    Quel avantage de l'IA est souligné dans le second témoignage ?
                 </div>
-
-                <div class="resource-card">
-                    <div class="resource-icon">📖</div>
-                    <h3>Esidoc</h3>
-                    <p>Portail documentaire du CDI. Recherche dans le catalogue, ressources numériques et actualités de la documentation.</p>
-                    <a href="http://0595400z.esidoc.fr" target="_blank" class="resource-link">Accéder</a>
+                <ul class="options">
+                    <li class="option">
+                        <input type="radio" name="q4" value="a" id="q4a">
+                        <label for="q4a">Le gain de temps</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q4" value="b" id="q4b">
+                        <label for="q4b">La précision juridique</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q4" value="c" id="q4c">
+                        <label for="q4c">La détection de plagiat</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q4" value="d" id="q4d">
+                        <label for="q4d">La création automatique</label>
+                    </li>
+                </ul>
+                <div class="feedback" data-correct="a">
+                    Le chef d'établissement a découvert l'IA par la pratique et y a vu un gain de temps immédiat selon lui; il considère cela comme une révolution technologique accessible quelle que soit sa culture numérique.
                 </div>
+            </div>
 
-                <div class="resource-card">
-                    <div class="resource-icon">🛡️</div>
-                    <h3>Internet Sans Crainte</h3>
-                    <p>Sensibilisation aux usages responsables d'Internet. Conseils, ressources et outils pour une navigation sécurisée.</p>
-                    <a href="https://www.internetsanscrainte.fr/" target="_blank" class="resource-link">Apprendre</a>
+            <!-- Question 5 -->
+            <div class="question-card" data-question="5">
+                <div class="question-title">
+                    <span class="emoji">🤝</span>
+                    Selon l'inspecteur, quelle est la meilleure attitude à adopter en ce qui concerne l'IA ?
                 </div>
-
-               
-
-                <div class="resource-card">
-                    <div class="resource-icon">📰</div>
-                    <h3>Madmagz</h3>
-                    <p>Création de magazines numériques. Outil collaboratif pour réaliser des journaux scolaires et des projets éditoriaux.</p>
-                    <a href="https://madmagz.com/fr/" target="_blank" class="resource-link">Créer</a>
+                <ul class="options">
+                    <li class="option">
+                        <input type="radio" name="q5" value="a" id="q5a">
+                        <label for="q5a">L'interdire complètement afin de garder le contrôle</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q5" value="b" id="q5b">
+                        <label for="q5b">Travailler AVEC l'IA</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q5" value="c" id="q5c">
+                        <label for="q5c">Sanctionner son usage dans tous les travaux</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q5" value="d" id="q5d">
+                        <label for="q5d">La laisser décider à notre place</label>
+                    </li>
+                </ul>
+                <div class="feedback" data-correct="b">
+                    L'inspecteur insiste sur une collaboration avec l'IA plutôt que sur une utilisation répressive pour détecter une potentielle fraude et chercher à la sanctionner.
                 </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-card" data-question="6">
+                <div class="question-title">
+                    <span class="emoji">📚</span>
+                    Pourquoi le chef d'établissement insiste-t-il sur l'importance des références dans le premier témoignage ?
+                </div>
+                <ul class="options">
+                    <li class="option">
+                        <input type="radio" name="q6" value="a" id="q6a">
+                        <label for="q6a">Pour éviter les imprécisions et éventuellement hallucinations de l'IA</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q6" value="b" id="q6b">
+                        <label for="q6b">Pour impressionner ses collègues avec des usages bluffants</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q6" value="c" id="q6c">
+                        <label for="q6c">Pour remplir ses rapports de manière automatique</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q6" value="d" id="q6d">
+                        <label for="q6d">Pour tester l'IA et pousser la machine dans ses retranchements</label>
+                    </li>
+                </ul>
+                <div class="feedback" data-correct="a">
+                    Le chef d'établissement souligne qu'il est essentiel de demander les références pour éviter les imprécisions (les potentielles hallucinations) et s'assurer de la qualité des réponses proposées.
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-card" data-question="7">
+                <div class="question-title">
+                    <span class="emoji">🎯</span>
+                    Quel point commun partagent les trois intervenants ?
+                </div>
+                <ul class="options">
+                    <li class="option">
+                        <input type="radio" name="q7" value="a" id="q7a">
+                        <label for="q7a">L'IA peut remplacer l'humain</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q7" value="b" id="q7b">
+                        <label for="q7b">L'IA nécessite l'esprit critique humain</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q7" value="c" id="q7c">
+                        <label for="q7c">L'IA est parfaitement fiable</label>
+                    </li>
+                    <li class="option">
+                        <input type="radio" name="q7" value="d" id="q7d">
+                        <label for="q7d">L'IA doit être interdite à l'école</label>
+                    </li>
+                </ul>
+                <div class="feedback" data-correct="b">
+                    Les trois intervenants s'accordent sur le fait que l'IA est un outil qui nécessite l'intelligence et l'esprit critique humain pour être utilisée efficacement.
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn" id="prevBtn" onclick="changeQuestion(-1)" disabled>← Précédent</button>
+                <button class="btn" id="nextBtn" onclick="changeQuestion(1)" disabled>Suivant →</button>
+                <button class="btn" id="finishBtn" onclick="showResults()" style="display: none;">🏆 Voir les résultats</button>
+            </div>
+
+            <div class="final-score" id="finalScore">
+                <div class="emoji" id="resultEmoji"></div>
+                <h2 id="resultTitle"></h2>
+                <p id="resultMessage"></p>
+                <button class="btn" onclick="restartQuiz()">🔄 Recommencer</button>
             </div>
         </div>
     </div>
 
     <script>
+        let currentQuestion = 1;
+        let totalQuestions = 7;
         let score = 0;
-        let questionsAnswered = 0;
-        const totalQuestions = 4;
+        let answers = {};
 
-        document.querySelectorAll('.option').forEach(option => {
-            option.addEventListener('click', function() {
-                const quizItem = this.closest('.quiz-item');
-                const allOptions = quizItem.querySelectorAll('.option');
-                const isCorrect = this.dataset.answer === 'correct';
+        function changeQuestion(direction) {
+            document.querySelector(`[data-question="${currentQuestion}"]`).classList.remove('active');
+            currentQuestion += direction;
+            document.querySelector(`[data-question="${currentQuestion}"]`).classList.add('active');
+            
+            updateNavigation();
+            updateProgress();
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const finishBtn = document.getElementById('finishBtn');
+            
+            prevBtn.disabled = currentQuestion === 1;
+            
+            if (currentQuestion === totalQuestions) {
+                nextBtn.style.display = 'none';
+                finishBtn.style.display = 'inline-block';
+            } else {
+                nextBtn.style.display = 'inline-block';
+                finishBtn.style.display = 'none';
+                nextBtn.disabled = !answers[currentQuestion];
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentQuestion - 1) / totalQuestions * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = score;
+        }
+
+        // Gestion des réponses
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'radio') {
+                const questionNum = parseInt(e.target.name.substring(1));
+                const selectedValue = e.target.value;
+                const questionCard = document.querySelector(`[data-question="${questionNum}"]`);
+                const feedback = questionCard.querySelector('.feedback');
+                const correctAnswer = feedback.dataset.correct;
                 
-                // Vérifier si la question a déjà été répondue
-                if (quizItem.classList.contains('answered')) {
-                    return;
-                }
+                // Marquer la réponse
+                answers[questionNum] = selectedValue;
                 
-                // Marquer la question comme répondue
-                quizItem.classList.add('answered');
-                
-                // Désactiver tous les options
-                allOptions.forEach(opt => {
-                    opt.style.pointerEvents = 'none';
-                    if (opt.dataset.answer === 'correct') {
-                        opt.classList.add('correct');
-                    } else if (opt === this && !isCorrect) {
-                        opt.classList.add('incorrect');
+                // Styliser les options
+                const options = questionCard.querySelectorAll('.option');
+                options.forEach(option => {
+                    option.classList.remove('selected', 'correct', 'incorrect');
+                    const input = option.querySelector('input');
+                    
+                    if (input.checked) {
+                        option.classList.add('selected');
+                        if (input.value === correctAnswer) {
+                            option.classList.add('correct');
+                            if (!questionCard.dataset.answered) {
+                                score++;
+                                updateScore();
+                            }
+                        } else {
+                            option.classList.add('incorrect');
+                        }
+                    } else if (input.value === correctAnswer) {
+                        option.classList.add('correct');
                     }
                 });
-
-                // Sélectionner le bon feedback
-                const correctFeedback = quizItem.querySelector('.correct-feedback');
-                const incorrectFeedback = quizItem.querySelector('.incorrect-feedback');
                 
-                // Mettre à jour le score
-                if (isCorrect) {
-                    score++;
-                    correctFeedback.classList.add('show', 'correct');
-                } else {
-                    incorrectFeedback.classList.add('show', 'incorrect');
-                }
-
-                questionsAnswered++;
+                // Afficher le feedback
+                feedback.style.display = 'block';
+                feedback.className = 'feedback ' + (selectedValue === correctAnswer ? 'correct' : 'incorrect');
                 
-                // Mettre à jour le score et la barre de progression
-                document.getElementById('score').textContent = score;
-                const progress = (questionsAnswered / totalQuestions) * 100;
-                document.getElementById('progress').style.width = progress + '%';
+                // Marquer comme répondu
+                questionCard.dataset.answered = 'true';
+                
+                // Activer le bouton suivant
+                updateNavigation();
+                
 
-                // Animation de célébration si toutes les questions sont bonnes
-                if (questionsAnswered === totalQuestions && score === totalQuestions) {
-                    setTimeout(() => {
-                        alert('🎉 Félicitations ! Vous avez obtenu un score parfait ! Vous maîtrisez parfaitement les applications de l\'ENT Néo !');
-                    }, 1000);
-                }
-            });
+            }
         });
 
-        // Animation des cartes de ressources
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        function showResults() {
+            const finalScore = document.getElementById('finalScore');
+            const resultEmoji = document.getElementById('resultEmoji');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+            
+            // Cacher le contenu du quiz et afficher les résultats
+            document.querySelectorAll('.question-card').forEach(card => card.style.display = 'none');
+            document.querySelector('.navigation').style.display = 'none';
+            finalScore.style.display = 'block';
+            
+            const percentage = Math.round((score / totalQuestions) * 100);
+            
+            if (percentage >= 85) {
+                finalScore.className = 'final-score excellent';
+                resultEmoji.textContent = '🎉';
+                resultTitle.textContent = 'Excellent !';
+                resultMessage.textContent = `Bravo ! Vous maîtrisez parfaitement les enjeux de l'IA en éducation (${score}/${totalQuestions} - ${percentage}%)`;
+            } else if (percentage >= 60) {
+                finalScore.className = 'final-score good';
+                resultEmoji.textContent = '👍';
+                resultTitle.textContent = 'Bien joué !';
+                resultMessage.textContent = `Bon travail ! Vous avez une bonne compréhension du sujet (${score}/${totalQuestions} - ${percentage}%)`;
+            } else {
+                finalScore.className = 'final-score needs-improvement';
+                resultEmoji.textContent = '📚';
+                resultTitle.textContent = 'À retravailler';
+                resultMessage.textContent = `Il serait bon de revoir les concepts clés (${score}/${totalQuestions} - ${percentage}%)`;
+            }
+        }
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
+        function restartQuiz() {
+            currentQuestion = 1;
+            score = 0;
+            answers = {};
+            
+            // Réafficher le contenu du quiz
+            document.querySelectorAll('.question-card').forEach(card => card.style.display = 'none');
+            document.querySelector(`[data-question="1"]`).style.display = 'block';
+            document.querySelector('.navigation').style.display = 'block';
+            document.getElementById('finalScore').style.display = 'none';
+            
+            // Réinitialiser les questions
+            document.querySelectorAll('.question-card').forEach((card, index) => {
+                card.classList.remove('active');
+                card.removeAttribute('data-answered');
+                if (index === 0) card.classList.add('active');
+                
+                // Réinitialiser les options
+                card.querySelectorAll('.option').forEach(option => {
+                    option.classList.remove('selected', 'correct', 'incorrect');
+                });
+                
+                // Cacher le feedback
+                card.querySelector('.feedback').style.display = 'none';
             });
-        }, observerOptions);
+            
+            // Réinitialiser les inputs
+            document.querySelectorAll('input[type="radio"]').forEach(input => {
+                input.checked = false;
+            });
+            
+            updateScore();
+            updateNavigation();
+            updateProgress();
+        }
 
-        document.querySelectorAll('.resource-card').forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(50px)';
-            card.style.transition = `all 0.6s ease ${index * 0.1}s`;
-            observer.observe(card);
-        });
+        // Initialisation
+        updateNavigation();
+        updateProgress();
     </script>
 </body>
 </html>
