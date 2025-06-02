@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title></title>
+	<meta name="generator" content="LibreOffice 24.8.3.2 (Linux)"/>
+	<meta name="created" content="00:00:00"/>
+	<meta name="changed" content="00:00:00"/>
+	<style type="text/css">
+		@page { size: 8.5in 11in; margin: 0.79in }
+		p { line-height: 115%; margin-bottom: 0.1in; background: transparent }
+		pre { background: transparent }
+		pre.western { font-family: "Liberation Mono", monospace; font-size: 10pt }
+		pre.cjk { font-family: "Noto Sans Mono CJK SC", monospace; font-size: 10pt }
+		pre.ctl { font-family: "Liberation Mono", monospace; font-size: 10pt }
+	</style>
+</head>
+<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre class="western">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;fr&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Les mille et unes astuces de l'ENT&lt;/title&gt;
+    &lt;style&gt;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .quiz-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .quiz-item {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .quiz-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .quiz-question {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: scale(1.02);
+        }
+
+        .option.correct {
+            border-color: #4CAF50;
+            background: #e8f5e8;
+            animation: pulse 0.6s ease-in-out;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #ffeaea;
+            animation: shake 0.6s ease-in-out;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .feedback.correct {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .feedback.incorrect {
+            background: #ffeaea;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .resource-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
+            border-color: #667eea;
+        }
+
+        .resource-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .resource-card h3 {
+            color: #333;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+        }
+
+        .resource-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .resource-link {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .resource-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .special-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .special-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .usage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .usage-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .usage-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .usage-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
+            border-color: #667eea;
+        }
+
+        .usage-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .usage-card h4 {
+            text-align: center;
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .usage-examples {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .usage-item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .usage-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            height: 100%;
+            width: 0%;
+            transition: width 0.8s ease;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .usage-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;header&quot;&gt;
+            &lt;h1&gt;🎯 Les mille et unes astuces de l'ENT&lt;/h1&gt;
+            &lt;p&gt;L'ENT est un espace numérique de travail sécurisé permettant un travail collaboratif au niveau de toute la communauté scolaire. Il met l'accent sur l'aspect collaboratif en limitant les barrières techniques. Il propose aussi des ressources et des applications de qualité que vous allez découvrir de façon interactive.&lt;/p&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;section&quot;&gt;
+            &lt;h2&gt;🚀 Applications de l'ENT Néo&lt;/h2&gt;
+            &lt;div style=&quot;text-align: center; margin-bottom: 25px;&quot;&gt;
+                &lt;a href=&quot;https://neointhepocket.glideapp.io/&quot; target=&quot;_blank&quot; class=&quot;special-link&quot; style=&quot;background: linear-gradient(45deg, #667eea, #764ba2); color: white; box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);&quot;&gt;
+                    &lt;span style=&quot;font-size: 1.5rem;&quot;&gt;📱&lt;/span&gt;
+                    Découvrir l'app Neo in the Pocket
+                &lt;/a&gt;
+            &lt;/div&gt;
+
+            &lt;h3 style=&quot;color: #667eea; font-size: 1.8rem; margin-bottom: 25px; text-align: center;&quot;&gt;💡 Découvrez les usages pédagogiques&lt;/h3&gt;
+            
+            &lt;div class=&quot;usage-grid&quot;&gt;
+                &lt;div class=&quot;usage-card&quot;&gt;
+                    &lt;div class=&quot;usage-icon&quot;&gt;🎙️&lt;/div&gt;
+                    &lt;h4&gt;Dictaphone&lt;/h4&gt;
+                    &lt;div class=&quot;usage-examples&quot;&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;📝 &lt;strong&gt;Oral de langues :&lt;/strong&gt; Enregistrer les productions orales des élèves pour les évaluer&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;🎭 &lt;strong&gt;Théâtre :&lt;/strong&gt; Capturer les répétitions et analyser la diction&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;📚 &lt;strong&gt;Lecture :&lt;/strong&gt; Créer des livres audio collaboratifs&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;🔬 &lt;strong&gt;Sciences :&lt;/strong&gt; Enregistrer les hypothèses avant l'expérience&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;usage-card&quot;&gt;
+                    &lt;div class=&quot;usage-icon&quot;&gt;📌&lt;/div&gt;
+                    &lt;h4&gt;Mur collaboratif&lt;/h4&gt;
+                    &lt;div class=&quot;usage-examples&quot;&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;🧠 &lt;strong&gt;Brainstorming :&lt;/strong&gt; Collecter toutes les idées de la classe sur un thème&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;📊 &lt;strong&gt;Enquêtes :&lt;/strong&gt; Partager les résultats de recherches individuelles&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;🎨 &lt;strong&gt;Galerie :&lt;/strong&gt; Exposer les créations artistiques des élèves&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;❓ &lt;strong&gt;Questions :&lt;/strong&gt; Mur de questions anonymes avant un contrôle&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;usage-card&quot;&gt;
+                    &lt;div class=&quot;usage-icon&quot;&gt;✈️&lt;/div&gt;
+                    &lt;h4&gt;Blog&lt;/h4&gt;
+                    &lt;div class=&quot;usage-examples&quot;&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;🌍 &lt;strong&gt;Voyages scolaires :&lt;/strong&gt; Carnet de bord avec photos et récits&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;📰 &lt;strong&gt;Journal de classe :&lt;/strong&gt; Chronique des activités et projets&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;🔬 &lt;strong&gt;Expériences :&lt;/strong&gt; Documenter les protocoles et résultats&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;📖 &lt;strong&gt;Portfolio :&lt;/strong&gt; Présenter les travaux et progressions&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;usage-card&quot;&gt;
+                    &lt;div class=&quot;usage-icon&quot;&gt;📝&lt;/div&gt;
+                    &lt;h4&gt;Exercices multimédia&lt;/h4&gt;
+                    &lt;div class=&quot;usage-examples&quot;&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;📅 &lt;strong&gt;Planification :&lt;/strong&gt; Programmer la remise des devoirs automatiquement&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;🎵 &lt;strong&gt;Audio :&lt;/strong&gt; Rendre des enregistrements vocaux directement en ligne&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;🔄 &lt;strong&gt;Relance classe :&lt;/strong&gt; Notifier tous les élèves en un seul clic&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;🏠 &lt;strong&gt;Travail à distance :&lt;/strong&gt; Parfait pour l'enseignement hybride, plus besoin de ramasser des copies&lt;/div&gt;
+                        &lt;div class=&quot;usage-item&quot;&gt;⏰ &lt;strong&gt;Rythme personnel :&lt;/strong&gt; Enseignants et élèves travaillent à leur propre tempo&lt;/div&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;div style=&quot;margin: 40px 0 30px; text-align: center;&quot;&gt;
+                &lt;h3 style=&quot;color: #667eea; font-size: 1.8rem; margin-bottom: 15px;&quot;&gt;🎯 Testez vos connaissances !&lt;/h3&gt;
+                &lt;p style=&quot;color: #666; font-size: 1.1rem;&quot;&gt;Maintenant que vous avez découvert les usages, pouvez-vous associer chaque application à sa fonction principale ?&lt;/p&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;score&quot;&gt;Score: &lt;span id=&quot;score&quot;&gt;0&lt;/span&gt;/4&lt;/div&gt;
+            &lt;div class=&quot;progress-bar&quot;&gt;
+                &lt;div class=&quot;progress-fill&quot; id=&quot;progress&quot;&gt;&lt;/div&gt;
+            &lt;/div&gt;
+            
+            &lt;div class=&quot;quiz-container&quot;&gt;
+                &lt;div class=&quot;quiz-item&quot; data-question=&quot;1&quot;&gt;
+                    &lt;div class=&quot;quiz-question&quot;&gt;
+                        &lt;div class=&quot;icon&quot;&gt;🎙️&lt;/div&gt;
+                        Quelle application permet d'enregistrer des messages vocaux ?
+                    &lt;/div&gt;
+                    &lt;div class=&quot;quiz-options&quot;&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;correct&quot;&gt;Dictaphone&lt;/div&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Blog&lt;/div&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Mur collaboratif&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;feedback correct-feedback&quot;&gt;
+                        &lt;strong&gt;Correct !&lt;/strong&gt; Le dictaphone permet d'enregistrer facilement des messages vocaux pour enrichir vos contenus pédagogiques.
+                    &lt;/div&gt;
+                    &lt;div class=&quot;feedback incorrect-feedback&quot;&gt;
+                        &lt;strong&gt;Incorrect !&lt;/strong&gt; La bonne réponse est le Dictaphone. Cette application permet d'enregistrer facilement des messages vocaux.
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;quiz-item&quot; data-question=&quot;2&quot;&gt;
+                    &lt;div class=&quot;quiz-question&quot;&gt;
+                        &lt;div class=&quot;icon&quot;&gt;📌&lt;/div&gt;
+                        Quelle application ressemble à un Padlet pour la collaboration ?
+                    &lt;/div&gt;
+                    &lt;div class=&quot;quiz-options&quot;&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Dictaphone&lt;/div&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;correct&quot;&gt;Mur collaboratif&lt;/div&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Blog&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;feedback correct-feedback&quot;&gt;
+                        &lt;strong&gt;Excellent !&lt;/strong&gt; Le mur collaboratif fonctionne comme un Padlet et permet à tous de contribuer facilement à un projet commun.
+                    &lt;/div&gt;
+                    &lt;div class=&quot;feedback incorrect-feedback&quot;&gt;
+                        &lt;strong&gt;Incorrect !&lt;/strong&gt; La bonne réponse est le Mur collaboratif. Cette application ressemble à un Padlet pour la collaboration.
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;quiz-item&quot; data-question=&quot;3&quot;&gt;
+                    &lt;div class=&quot;quiz-question&quot;&gt;
+                        &lt;div class=&quot;icon&quot;&gt;✈️&lt;/div&gt;
+                        Quelle application est idéale pour documenter les voyages scolaires avec likes et commentaires ?
+                    &lt;/div&gt;
+                    &lt;div class=&quot;quiz-options&quot;&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Mur collaboratif&lt;/div&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Dictaphone&lt;/div&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;correct&quot;&gt;Blog&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;feedback correct-feedback&quot;&gt;
+                        &lt;strong&gt;Parfait !&lt;/strong&gt; Le blog est l'outil idéal pour raconter vos voyages scolaires avec la possibilité pour les lecteurs de liker et commenter.
+                    &lt;/div&gt;
+                    &lt;div class=&quot;feedback incorrect-feedback&quot;&gt;
+                        &lt;strong&gt;Incorrect !&lt;/strong&gt; La bonne réponse est le Blog. Cette application permet de documenter les voyages avec likes et commentaires.
+                    &lt;/div&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;quiz-item&quot; data-question=&quot;4&quot;&gt;
+                    &lt;div class=&quot;quiz-question&quot;&gt;
+                        &lt;div class=&quot;icon&quot;&gt;📝&lt;/div&gt;
+                        Quelle application permet de planifier la remise des devoirs et de relancer la classe en un clic ?
+                    &lt;/div&gt;
+                    &lt;div class=&quot;quiz-options&quot;&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;correct&quot;&gt;Exercices multimédia&lt;/div&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Blog&lt;/div&gt;
+                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Mur collaboratif&lt;/div&gt;
+                    &lt;/div&gt;
+                    &lt;div class=&quot;feedback correct-feedback&quot;&gt;
+                        &lt;strong&gt;Excellent !&lt;/strong&gt; Les exercices multimédia permettent de planifier les devoirs, gérer les rendus audio et relancer toute la classe automatiquement.
+                    &lt;/div&gt;
+                    &lt;div class=&quot;feedback incorrect-feedback&quot;&gt;
+                        &lt;strong&gt;Incorrect !&lt;/strong&gt; La bonne réponse est Exercices multimédia. Cette application permet la planification et la gestion automatisée des devoirs.
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;section&quot;&gt;
+            &lt;h2&gt;📚 Ressources de la région&lt;/h2&gt;
+            &lt;div class=&quot;resources-grid&quot;&gt;
+                &lt;div class=&quot;resource-card&quot;&gt;
+                    &lt;div class=&quot;resource-icon&quot;&gt;📖&lt;/div&gt;
+                    &lt;h3&gt;Magazine Focus Ressources&lt;/h3&gt;
+                    &lt;p&gt;Le magazine de la DANE de Lille qui présente toutes les ressources numériques disponibles dans l'académie. Guide complet pour découvrir les outils pédagogiques.&lt;/p&gt;
+                    &lt;a href=&quot;https://dane.site.ac-lille.fr/2024/10/18/le-magazine-focus-ressources/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Consulter&lt;/a&gt;
+                &lt;/div&gt;
+                &lt;div class=&quot;resource-card&quot;&gt;
+                    &lt;div class=&quot;resource-icon&quot;&gt;📚&lt;/div&gt;
+                    &lt;h3&gt;Capeezy&lt;/h3&gt;
+                    &lt;p&gt;Plateforme de soutien scolaire en ligne des éditions Bordas. Exercices interactifs, cours et révisions pour tous les niveaux.&lt;/p&gt;
+                    &lt;a href=&quot;https://www.editions-bordas.fr/capeezy-soutien-scolaire-en-ligne.html&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Découvrir&lt;/a&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;resource-card&quot;&gt;
+                    &lt;div class=&quot;resource-icon&quot;&gt;🔬&lt;/div&gt;
+                    &lt;h3&gt;EduMedia&lt;/h3&gt;
+                    &lt;p&gt;Ressources pédagogiques interactives en sciences. Animations, simulations et exercices pour comprendre les phénomènes scientifiques.&lt;/p&gt;
+                    &lt;a href=&quot;https://www.edumedia.com/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Explorer&lt;/a&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;resource-card&quot;&gt;
+                    &lt;div class=&quot;resource-icon&quot;&gt;🌍&lt;/div&gt;
+                    &lt;h3&gt;GlobalExam&lt;/h3&gt;
+                    &lt;p&gt;Préparation aux tests de langues internationaux. Entraînements et certifications pour TOEIC, TOEFL, IELTS et bien d'autres.&lt;/p&gt;
+                    &lt;a href=&quot;https://global-exam.com/en&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;S'entraîner&lt;/a&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;resource-card&quot;&gt;
+                    &lt;div class=&quot;resource-icon&quot;&gt;📚&lt;/div&gt;
+                    &lt;h3&gt;Encyclopædia Universalis&lt;/h3&gt;
+                    &lt;p&gt;Encyclopédie de référence avec des articles de qualité rédigés par des experts dans tous les domaines de la connaissance.&lt;/p&gt;
+                    &lt;a href=&quot;https://www.universalis.fr/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Consulter&lt;/a&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;resource-card&quot;&gt;
+                    &lt;div class=&quot;resource-icon&quot;&gt;📖&lt;/div&gt;
+                    &lt;h3&gt;Esidoc&lt;/h3&gt;
+                    &lt;p&gt;Portail documentaire du CDI. Recherche dans le catalogue, ressources numériques et actualités de la documentation.&lt;/p&gt;
+                    &lt;a href=&quot;http://0595400z.esidoc.fr&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Accéder&lt;/a&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;resource-card&quot;&gt;
+                    &lt;div class=&quot;resource-icon&quot;&gt;🛡️&lt;/div&gt;
+                    &lt;h3&gt;Internet Sans Crainte&lt;/h3&gt;
+                    &lt;p&gt;Sensibilisation aux usages responsables d'Internet. Conseils, ressources et outils pour une navigation sécurisée.&lt;/p&gt;
+                    &lt;a href=&quot;https://www.internetsanscrainte.fr/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Apprendre&lt;/a&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;resource-card&quot;&gt;
+                    &lt;div class=&quot;resource-icon&quot;&gt;📝&lt;/div&gt;
+                    &lt;h3&gt;Exercices multimédia Néo&lt;/h3&gt;
+                    &lt;p&gt;Application complète pour créer et gérer des exercices interactifs. Planification automatique, rendu audio, relance de classe et suivi personnalisé pour le travail à distance.&lt;/p&gt;
+                    &lt;a href=&quot;https://edifice.io/application/exercices-neo/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Découvrir&lt;/a&gt;
+                &lt;/div&gt;
+
+                &lt;div class=&quot;resource-card&quot;&gt;
+                    &lt;div class=&quot;resource-icon&quot;&gt;📰&lt;/div&gt;
+                    &lt;h3&gt;Madmagz&lt;/h3&gt;
+                    &lt;p&gt;Création de magazines numériques. Outil collaboratif pour réaliser des journaux scolaires et des projets éditoriaux.&lt;/p&gt;
+                    &lt;a href=&quot;https://madmagz.com/fr/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Créer&lt;/a&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        let score = 0;
+        let questionsAnswered = 0;
+        const totalQuestions = 4;
+
+        document.querySelectorAll('.option').forEach(option =&gt; {
+            option.addEventListener('click', function() {
+                const quizItem = this.closest('.quiz-item');
+                const allOptions = quizItem.querySelectorAll('.option');
+                const isCorrect = this.dataset.answer === 'correct';
+                
+                // Vérifier si la question a déjà été répondue
+                if (quizItem.classList.contains('answered')) {
+                    return;
+                }
+                
+                // Marquer la question comme répondue
+                quizItem.classList.add('answered');
+                
+                // Désactiver tous les options
+                allOptions.forEach(opt =&gt; {
+                    opt.style.pointerEvents = 'none';
+                    if (opt.dataset.answer === 'correct') {
+                        opt.classList.add('correct');
+                    } else if (opt === this &amp;&amp; !isCorrect) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+
+                // Sélectionner le bon feedback
+                const correctFeedback = quizItem.querySelector('.correct-feedback');
+                const incorrectFeedback = quizItem.querySelector('.incorrect-feedback');
+                
+                // Mettre à jour le score
+                if (isCorrect) {
+                    score++;
+                    correctFeedback.classList.add('show', 'correct');
+                } else {
+                    incorrectFeedback.classList.add('show', 'incorrect');
+                }
+
+                questionsAnswered++;
+                
+                // Mettre à jour le score et la barre de progression
+                document.getElementById('score').textContent = score;
+                const progress = (questionsAnswered / totalQuestions) * 100;
+                document.getElementById('progress').style.width = progress + '%';
+
+                // Animation de célébration si toutes les questions sont bonnes
+                if (questionsAnswered === totalQuestions &amp;&amp; score === totalQuestions) {
+                    setTimeout(() =&gt; {
+                        alert('🎉 Félicitations ! Vous avez obtenu un score parfait ! Vous maîtrisez parfaitement les applications de l\'ENT Néo !');
+                    }, 1000);
+                }
+            });
+        });
+
+        // Animation des cartes de ressources
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) =&gt; {
+            entries.forEach(entry =&gt; {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.resource-card').forEach((card, index) =&gt; {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            card.style.transition = `all 0.6s ease ${index * 0.1}s`;
+            observer.observe(card);
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+</body>
+</html>
