@@ -1,27 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	<title></title>
-	<meta name="generator" content="LibreOffice 24.8.3.2 (Linux)"/>
-	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="00:00:00"/>
-	<style type="text/css">
-		@page { size: 8.5in 11in; margin: 0.79in }
-		p { line-height: 115%; margin-bottom: 0.1in; background: transparent }
-		pre { background: transparent }
-		pre.western { font-family: "Liberation Mono", monospace; font-size: 10pt }
-		pre.cjk { font-family: "Noto Sans Mono CJK SC", monospace; font-size: 10pt }
-		pre.ctl { font-family: "Liberation Mono", monospace; font-size: 10pt }
-	</style>
-</head>
-<body lang="en-US" link="#000080" vlink="#800000" dir="ltr"><pre class="western">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;fr&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;title&gt;Les mille et unes astuces de l'ENT&lt;/title&gt;
-    &lt;style&gt;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les mille et unes astuces de l'ENT</title>
+    <style>
         * {
             margin: 0;
             padding: 0;
@@ -373,6 +356,27 @@
             margin-bottom: 20px;
         }
 
+        .celebration {
+            display: none;
+            text-align: center;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            animation: slideInFromTop 0.8s ease-out;
+        }
+
+        .celebration.show {
+            display: block;
+        }
+
+        .celebration-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: bounce 1s infinite;
+        }
+
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-50px); }
             to { opacity: 1; transform: translateY(0); }
@@ -399,6 +403,17 @@
             75% { transform: translateX(5px); }
         }
 
+        @keyframes slideInFromTop {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2rem;
@@ -416,232 +431,230 @@
                 grid-template-columns: 1fr;
             }
         }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class=&quot;container&quot;&gt;
-        &lt;div class=&quot;header&quot;&gt;
-            &lt;h1&gt;🎯 Les mille et unes astuces de l'ENT&lt;/h1&gt;
-            &lt;p&gt;L'ENT est un espace numérique de travail sécurisé permettant un travail collaboratif au niveau de toute la communauté scolaire. Il met l'accent sur l'aspect collaboratif en limitant les barrières techniques. Il propose aussi des ressources et des applications de qualité que vous allez découvrir de façon interactive.&lt;/p&gt;
-        &lt;/div&gt;
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Les mille et unes astuces de l'ENT</h1>
+            <p>L'ENT est un espace numérique de travail sécurisé permettant un travail collaboratif au niveau de toute la communauté scolaire. Il met l'accent sur l'aspect collaboratif en limitant les barrières techniques. Il propose aussi des ressources et des applications de qualité que vous allez découvrir de façon interactive.</p>
+        </div>
 
-        &lt;div class=&quot;section&quot;&gt;
-            &lt;h2&gt;🚀 Applications de l'ENT Néo&lt;/h2&gt;
-            &lt;div style=&quot;text-align: center; margin-bottom: 25px;&quot;&gt;
-                &lt;a href=&quot;https://neointhepocket.glideapp.io/&quot; target=&quot;_blank&quot; class=&quot;special-link&quot; style=&quot;background: linear-gradient(45deg, #667eea, #764ba2); color: white; box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);&quot;&gt;
-                    &lt;span style=&quot;font-size: 1.5rem;&quot;&gt;📱&lt;/span&gt;
+        <div class="section">
+            <h2>🚀 Applications de l'ENT Néo</h2>
+            <div style="text-align: center; margin-bottom: 25px;">
+                <a href="https://neointhepocket.glideapp.io/" target="_blank" rel="noopener noreferrer" class="special-link" style="background: linear-gradient(45deg, #667eea, #764ba2); color: white; box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);">
+                    <span style="font-size: 1.5rem;">📱</span>
                     Découvrir l'app Neo in the Pocket
-                &lt;/a&gt;
-            &lt;/div&gt;
+                </a>
+            </div>
 
-            &lt;h3 style=&quot;color: #667eea; font-size: 1.8rem; margin-bottom: 25px; text-align: center;&quot;&gt;💡 Découvrez les usages pédagogiques&lt;/h3&gt;
+            <h3 style="color: #667eea; font-size: 1.8rem; margin-bottom: 25px; text-align: center;">💡 Découvrez les usages pédagogiques</h3>
             
-            &lt;div class=&quot;usage-grid&quot;&gt;
-                &lt;div class=&quot;usage-card&quot;&gt;
-                    &lt;div class=&quot;usage-icon&quot;&gt;🎙️&lt;/div&gt;
-                    &lt;h4&gt;Dictaphone&lt;/h4&gt;
-                    &lt;div class=&quot;usage-examples&quot;&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;📝 &lt;strong&gt;Oral de langues :&lt;/strong&gt; Enregistrer les productions orales des élèves pour les évaluer&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;🎭 &lt;strong&gt;Théâtre :&lt;/strong&gt; Capturer les répétitions et analyser la diction&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;📚 &lt;strong&gt;Lecture :&lt;/strong&gt; Créer des livres audio collaboratifs&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;🔬 &lt;strong&gt;Sciences :&lt;/strong&gt; Enregistrer les hypothèses avant l'expérience&lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
+            <div class="usage-grid">
+                <div class="usage-card">
+                    <div class="usage-icon">🎙️</div>
+                    <h4>Dictaphone</h4>
+                    <div class="usage-examples">
+                        <div class="usage-item">📝 <strong>Oral de langues :</strong> Enregistrer les productions orales des élèves pour les évaluer</div>
+                        <div class="usage-item">🎭 <strong>Théâtre :</strong> Capturer les répétitions et analyser la diction</div>
+                        <div class="usage-item">📚 <strong>Lecture :</strong> Créer des livres audio collaboratifs</div>
+                        <div class="usage-item">🔬 <strong>Sciences :</strong> Enregistrer les hypothèses avant l'expérience</div>
+                    </div>
+                </div>
 
-                &lt;div class=&quot;usage-card&quot;&gt;
-                    &lt;div class=&quot;usage-icon&quot;&gt;📌&lt;/div&gt;
-                    &lt;h4&gt;Mur collaboratif&lt;/h4&gt;
-                    &lt;div class=&quot;usage-examples&quot;&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;🧠 &lt;strong&gt;Brainstorming :&lt;/strong&gt; Collecter toutes les idées de la classe sur un thème&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;📊 &lt;strong&gt;Enquêtes :&lt;/strong&gt; Partager les résultats de recherches individuelles&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;🎨 &lt;strong&gt;Galerie :&lt;/strong&gt; Exposer les créations artistiques des élèves&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;❓ &lt;strong&gt;Questions :&lt;/strong&gt; Mur de questions anonymes avant un contrôle&lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
+                <div class="usage-card">
+                    <div class="usage-icon">📌</div>
+                    <h4>Mur collaboratif</h4>
+                    <div class="usage-examples">
+                        <div class="usage-item">🧠 <strong>Brainstorming :</strong> Collecter toutes les idées de la classe sur un thème</div>
+                        <div class="usage-item">📊 <strong>Enquêtes :</strong> Partager les résultats de recherches individuelles</div>
+                        <div class="usage-item">🎨 <strong>Galerie :</strong> Exposer les créations artistiques des élèves</div>
+                        <div class="usage-item">❓ <strong>Questions :</strong> Mur de questions anonymes avant un contrôle</div>
+                    </div>
+                </div>
 
-                &lt;div class=&quot;usage-card&quot;&gt;
-                    &lt;div class=&quot;usage-icon&quot;&gt;✈️&lt;/div&gt;
-                    &lt;h4&gt;Blog&lt;/h4&gt;
-                    &lt;div class=&quot;usage-examples&quot;&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;🌍 &lt;strong&gt;Voyages scolaires :&lt;/strong&gt; Carnet de bord avec photos et récits&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;📰 &lt;strong&gt;Journal de classe :&lt;/strong&gt; Chronique des activités et projets&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;🔬 &lt;strong&gt;Expériences :&lt;/strong&gt; Documenter les protocoles et résultats&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;📖 &lt;strong&gt;Portfolio :&lt;/strong&gt; Présenter les travaux et progressions&lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
+                <div class="usage-card">
+                    <div class="usage-icon">✈️</div>
+                    <h4>Blog</h4>
+                    <div class="usage-examples">
+                        <div class="usage-item">🌍 <strong>Voyages scolaires :</strong> Carnet de bord avec photos et récits</div>
+                        <div class="usage-item">📰 <strong>Journal de classe :</strong> Chronique des activités et projets</div>
+                        <div class="usage-item">🔬 <strong>Expériences :</strong> Documenter les protocoles et résultats</div>
+                        <div class="usage-item">📖 <strong>Portfolio :</strong> Présenter les travaux et progressions</div>
+                    </div>
+                </div>
 
-                &lt;div class=&quot;usage-card&quot;&gt;
-                    &lt;div class=&quot;usage-icon&quot;&gt;📝&lt;/div&gt;
-                    &lt;h4&gt;Exercices multimédia&lt;/h4&gt;
-                    &lt;div class=&quot;usage-examples&quot;&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;📅 &lt;strong&gt;Planification :&lt;/strong&gt; Programmer la remise des devoirs automatiquement&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;🎵 &lt;strong&gt;Audio :&lt;/strong&gt; Rendre des enregistrements vocaux directement en ligne&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;🔄 &lt;strong&gt;Relance classe :&lt;/strong&gt; Notifier tous les élèves en un seul clic&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;🏠 &lt;strong&gt;Travail à distance :&lt;/strong&gt; Parfait pour l'enseignement hybride, plus besoin de ramasser des copies&lt;/div&gt;
-                        &lt;div class=&quot;usage-item&quot;&gt;⏰ &lt;strong&gt;Rythme personnel :&lt;/strong&gt; Enseignants et élèves travaillent à leur propre tempo&lt;/div&gt;
-                    &lt;/div&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
+                <div class="usage-card">
+                    <div class="usage-icon">🎯</div>
+                    <h4>Exercices multimédia</h4>
+                    <div class="usage-examples">
+                        <div class="usage-item">📝 <strong>Quiz interactifs :</strong> Créer des questionnaires avec feedback immédiat</div>
+                        <div class="usage-item">🔤 <strong>Textes à trous :</strong> Exercices de complétion pour réviser le vocabulaire</div>
+                        <div class="usage-item">🎮 <strong>Glisser-déposer :</strong> Associer des éléments de manière ludique</div>
+                        <div class="usage-item">📊 <strong>Évaluations :</strong> Noter automatiquement les réponses des élèves</div>
+                    </div>
+                </div>
+            </div>
 
-            &lt;div style=&quot;margin: 40px 0 30px; text-align: center;&quot;&gt;
-                &lt;h3 style=&quot;color: #667eea; font-size: 1.8rem; margin-bottom: 15px;&quot;&gt;🎯 Testez vos connaissances !&lt;/h3&gt;
-                &lt;p style=&quot;color: #666; font-size: 1.1rem;&quot;&gt;Maintenant que vous avez découvert les usages, pouvez-vous associer chaque application à sa fonction principale ?&lt;/p&gt;
-            &lt;/div&gt;
+            <div style="margin: 40px 0 30px; text-align: center;">
+                <h3 style="color: #667eea; font-size: 1.8rem; margin-bottom: 15px;">🎯 Testez vos connaissances !</h3>
+                <p style="color: #666; font-size: 1.1rem;">Maintenant que vous avez découvert les usages, pouvez-vous associer chaque application à sa fonction principale ?</p>
+            </div>
 
-            &lt;div class=&quot;score&quot;&gt;Score: &lt;span id=&quot;score&quot;&gt;0&lt;/span&gt;/4&lt;/div&gt;
-            &lt;div class=&quot;progress-bar&quot;&gt;
-                &lt;div class=&quot;progress-fill&quot; id=&quot;progress&quot;&gt;&lt;/div&gt;
-            &lt;/div&gt;
+            <div class="score">Score: <span id="score">0</span>/4</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+
+            <div class="celebration" id="celebration">
+                <div class="celebration-icon">🎉</div>
+                <h3>Félicitations !</h3>
+                <p>Vous avez obtenu un score parfait ! Vous maîtrisez parfaitement les applications de l'ENT Néo !</p>
+            </div>
             
-            &lt;div class=&quot;quiz-container&quot;&gt;
-                &lt;div class=&quot;quiz-item&quot; data-question=&quot;1&quot;&gt;
-                    &lt;div class=&quot;quiz-question&quot;&gt;
-                        &lt;div class=&quot;icon&quot;&gt;🎙️&lt;/div&gt;
+            <div class="quiz-container">
+                <div class="quiz-item" data-question="1">
+                    <div class="quiz-question">
+                        <div class="icon">🎙️</div>
                         Quelle application permet d'enregistrer des messages vocaux ?
-                    &lt;/div&gt;
-                    &lt;div class=&quot;quiz-options&quot;&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;correct&quot;&gt;Dictaphone&lt;/div&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Blog&lt;/div&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Mur collaboratif&lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div class=&quot;feedback correct-feedback&quot;&gt;
-                        &lt;strong&gt;Correct !&lt;/strong&gt; Le dictaphone permet d'enregistrer facilement des messages vocaux pour enrichir vos contenus pédagogiques.
-                    &lt;/div&gt;
-                    &lt;div class=&quot;feedback incorrect-feedback&quot;&gt;
-                        &lt;strong&gt;Incorrect !&lt;/strong&gt; La bonne réponse est le Dictaphone. Cette application permet d'enregistrer facilement des messages vocaux.
-                    &lt;/div&gt;
-                &lt;/div&gt;
+                    </div>
+                    <div class="quiz-options">
+                        <div class="option" data-answer="correct">Dictaphone</div>
+                        <div class="option" data-answer="incorrect">Blog</div>
+                        <div class="option" data-answer="incorrect">Mur collaboratif</div>
+                    </div>
+                    <div class="feedback correct-feedback">
+                        <strong>Correct !</strong> Le dictaphone permet d'enregistrer facilement des messages vocaux pour enrichir vos contenus pédagogiques.
+                    </div>
+                    <div class="feedback incorrect-feedback">
+                        <strong>Incorrect !</strong> La bonne réponse est le Dictaphone. Cette application permet d'enregistrer facilement des messages vocaux.
+                    </div>
+                </div>
 
-                &lt;div class=&quot;quiz-item&quot; data-question=&quot;2&quot;&gt;
-                    &lt;div class=&quot;quiz-question&quot;&gt;
-                        &lt;div class=&quot;icon&quot;&gt;📌&lt;/div&gt;
+                <div class="quiz-item" data-question="2">
+                    <div class="quiz-question">
+                        <div class="icon">📌</div>
                         Quelle application ressemble à un Padlet pour la collaboration ?
-                    &lt;/div&gt;
-                    &lt;div class=&quot;quiz-options&quot;&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Dictaphone&lt;/div&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;correct&quot;&gt;Mur collaboratif&lt;/div&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Blog&lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div class=&quot;feedback correct-feedback&quot;&gt;
-                        &lt;strong&gt;Excellent !&lt;/strong&gt; Le mur collaboratif fonctionne comme un Padlet et permet à tous de contribuer facilement à un projet commun.
-                    &lt;/div&gt;
-                    &lt;div class=&quot;feedback incorrect-feedback&quot;&gt;
-                        &lt;strong&gt;Incorrect !&lt;/strong&gt; La bonne réponse est le Mur collaboratif. Cette application ressemble à un Padlet pour la collaboration.
-                    &lt;/div&gt;
-                &lt;/div&gt;
+                    </div>
+                    <div class="quiz-options">
+                        <div class="option" data-answer="incorrect">Dictaphone</div>
+                        <div class="option" data-answer="correct">Mur collaboratif</div>
+                        <div class="option" data-answer="incorrect">Blog</div>
+                    </div>
+                    <div class="feedback correct-feedback">
+                        <strong>Excellent !</strong> Le mur collaboratif fonctionne comme un Padlet et permet à tous de contribuer facilement à un projet commun.
+                    </div>
+                    <div class="feedback incorrect-feedback">
+                        <strong>Incorrect !</strong> La bonne réponse est le Mur collaboratif. Cette application ressemble à un Padlet pour la collaboration.
+                    </div>
+                </div>
 
-                &lt;div class=&quot;quiz-item&quot; data-question=&quot;3&quot;&gt;
-                    &lt;div class=&quot;quiz-question&quot;&gt;
-                        &lt;div class=&quot;icon&quot;&gt;✈️&lt;/div&gt;
+                <div class="quiz-item" data-question="3">
+                    <div class="quiz-question">
+                        <div class="icon">✈️</div>
                         Quelle application est idéale pour documenter les voyages scolaires avec likes et commentaires ?
-                    &lt;/div&gt;
-                    &lt;div class=&quot;quiz-options&quot;&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Mur collaboratif&lt;/div&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Dictaphone&lt;/div&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;correct&quot;&gt;Blog&lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div class=&quot;feedback correct-feedback&quot;&gt;
-                        &lt;strong&gt;Parfait !&lt;/strong&gt; Le blog est l'outil idéal pour raconter vos voyages scolaires avec la possibilité pour les lecteurs de liker et commenter.
-                    &lt;/div&gt;
-                    &lt;div class=&quot;feedback incorrect-feedback&quot;&gt;
-                        &lt;strong&gt;Incorrect !&lt;/strong&gt; La bonne réponse est le Blog. Cette application permet de documenter les voyages avec likes et commentaires.
-                    &lt;/div&gt;
-                &lt;/div&gt;
+                    </div>
+                    <div class="quiz-options">
+                        <div class="option" data-answer="incorrect">Mur collaboratif</div>
+                        <div class="option" data-answer="incorrect">Dictaphone</div>
+                        <div class="option" data-answer="correct">Blog</div>
+                    </div>
+                    <div class="feedback correct-feedback">
+                        <strong>Parfait !</strong> Le blog est l'outil idéal pour raconter vos voyages scolaires avec la possibilité pour les lecteurs de liker et commenter.
+                    </div>
+                    <div class="feedback incorrect-feedback">
+                        <strong>Incorrect !</strong> La bonne réponse est le Blog. Cette application permet de documenter les voyages avec likes et commentaires.
+                    </div>
+                </div>
 
-                &lt;div class=&quot;quiz-item&quot; data-question=&quot;4&quot;&gt;
-                    &lt;div class=&quot;quiz-question&quot;&gt;
-                        &lt;div class=&quot;icon&quot;&gt;📝&lt;/div&gt;
-                        Quelle application permet de planifier la remise des devoirs et de relancer la classe en un clic ?
-                    &lt;/div&gt;
-                    &lt;div class=&quot;quiz-options&quot;&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;correct&quot;&gt;Exercices multimédia&lt;/div&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Blog&lt;/div&gt;
-                        &lt;div class=&quot;option&quot; data-answer=&quot;incorrect&quot;&gt;Mur collaboratif&lt;/div&gt;
-                    &lt;/div&gt;
-                    &lt;div class=&quot;feedback correct-feedback&quot;&gt;
-                        &lt;strong&gt;Excellent !&lt;/strong&gt; Les exercices multimédia permettent de planifier les devoirs, gérer les rendus audio et relancer toute la classe automatiquement.
-                    &lt;/div&gt;
-                    &lt;div class=&quot;feedback incorrect-feedback&quot;&gt;
-                        &lt;strong&gt;Incorrect !&lt;/strong&gt; La bonne réponse est Exercices multimédia. Cette application permet la planification et la gestion automatisée des devoirs.
-                    &lt;/div&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
+                <div class="quiz-item" data-question="4">
+                    <div class="quiz-question">
+                        <div class="icon">🎯</div>
+                        Quelle application permet de créer des quiz avec notation automatique ?
+                    </div>
+                    <div class="quiz-options">
+                        <div class="option" data-answer="correct">Exercices multimédia</div>
+                        <div class="option" data-answer="incorrect">Blog</div>
+                        <div class="option" data-answer="incorrect">Mur collaboratif</div>
+                    </div>
+                    <div class="feedback correct-feedback">
+                        <strong>Bravo !</strong> Les exercices multimédia permettent de créer des quiz interactifs avec correction et notation automatiques.
+                    </div>
+                    <div class="feedback incorrect-feedback">
+                        <strong>Incorrect !</strong> La bonne réponse est Exercices multimédia. Cette application permet de créer des quiz avec notation automatique.
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        &lt;div class=&quot;section&quot;&gt;
-            &lt;h2&gt;📚 Ressources de la région&lt;/h2&gt;
-            &lt;div class=&quot;resources-grid&quot;&gt;
-                &lt;div class=&quot;resource-card&quot;&gt;
-                    &lt;div class=&quot;resource-icon&quot;&gt;📖&lt;/div&gt;
-                    &lt;h3&gt;Magazine Focus Ressources&lt;/h3&gt;
-                    &lt;p&gt;Le magazine de la DANE de Lille qui présente toutes les ressources numériques disponibles dans l'académie. Guide complet pour découvrir les outils pédagogiques.&lt;/p&gt;
-                    &lt;a href=&quot;https://dane.site.ac-lille.fr/2024/10/18/le-magazine-focus-ressources/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Consulter&lt;/a&gt;
-                &lt;/div&gt;
-                &lt;div class=&quot;resource-card&quot;&gt;
-                    &lt;div class=&quot;resource-icon&quot;&gt;📚&lt;/div&gt;
-                    &lt;h3&gt;Capeezy&lt;/h3&gt;
-                    &lt;p&gt;Plateforme de soutien scolaire en ligne des éditions Bordas. Exercices interactifs, cours et révisions pour tous les niveaux.&lt;/p&gt;
-                    &lt;a href=&quot;https://www.editions-bordas.fr/capeezy-soutien-scolaire-en-ligne.html&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Découvrir&lt;/a&gt;
-                &lt;/div&gt;
+        <div class="section">
+            <h2>📚 Ressources de la région</h2>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon">📖</div>
+                    <h3>Magazine Focus Ressources</h3>
+                    <p>Le magazine de la DANE de Lille qui présente toutes les ressources numériques disponibles dans l'académie. Guide complet pour découvrir les outils pédagogiques.</p>
+                    <a href="https://dane.site.ac-lille.fr/2024/10/18/le-magazine-focus-ressources/" target="_blank" rel="noopener noreferrer" class="resource-link">Consulter</a>
+                </div>
+                <div class="resource-card">
+                    <div class="resource-icon">📚</div>
+                    <h3>Capeezy</h3>
+                    <p>Plateforme de soutien scolaire en ligne des éditions Bordas. Exercices interactifs, cours et révisions pour tous les niveaux.</p>
+                    <a href="https://www.editions-bordas.fr/capeezy-soutien-scolaire-en-ligne.html" target="_blank" rel="noopener noreferrer" class="resource-link">Découvrir</a>
+                </div>
 
-                &lt;div class=&quot;resource-card&quot;&gt;
-                    &lt;div class=&quot;resource-icon&quot;&gt;🔬&lt;/div&gt;
-                    &lt;h3&gt;EduMedia&lt;/h3&gt;
-                    &lt;p&gt;Ressources pédagogiques interactives en sciences. Animations, simulations et exercices pour comprendre les phénomènes scientifiques.&lt;/p&gt;
-                    &lt;a href=&quot;https://www.edumedia.com/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Explorer&lt;/a&gt;
-                &lt;/div&gt;
+                <div class="resource-card">
+                    <div class="resource-icon">🎯</div>
+                    <h3>Exercices multimédia</h3>
+                    <p>Application pour créer des exercices interactifs : quiz, textes à trous, glisser-déposer. Correction automatique et suivi des résultats des élèves.</p>
+                    <a href="https://edifice.io/application/exercices-one/" target="_blank" rel="noopener noreferrer" class="resource-link">Découvrir</a>
+                </div>
 
-                &lt;div class=&quot;resource-card&quot;&gt;
-                    &lt;div class=&quot;resource-icon&quot;&gt;🌍&lt;/div&gt;
-                    &lt;h3&gt;GlobalExam&lt;/h3&gt;
-                    &lt;p&gt;Préparation aux tests de langues internationaux. Entraînements et certifications pour TOEIC, TOEFL, IELTS et bien d'autres.&lt;/p&gt;
-                    &lt;a href=&quot;https://global-exam.com/en&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;S'entraîner&lt;/a&gt;
-                &lt;/div&gt;
+                <div class="resource-card">
+                    <div class="resource-icon">🔬</div>
+                    <h3>EduMedia</h3>
+                    <p>Ressources pédagogiques interactives en sciences. Animations, simulations et exercices pour comprendre les phénomènes scientifiques.</p>
+                    <a href="https://www.edumedia.com/" target="_blank" rel="noopener noreferrer" class="resource-link">Explorer</a>
+                </div>
 
-                &lt;div class=&quot;resource-card&quot;&gt;
-                    &lt;div class=&quot;resource-icon&quot;&gt;📚&lt;/div&gt;
-                    &lt;h3&gt;Encyclopædia Universalis&lt;/h3&gt;
-                    &lt;p&gt;Encyclopédie de référence avec des articles de qualité rédigés par des experts dans tous les domaines de la connaissance.&lt;/p&gt;
-                    &lt;a href=&quot;https://www.universalis.fr/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Consulter&lt;/a&gt;
-                &lt;/div&gt;
+                <div class="resource-card">
+                    <div class="resource-icon">📚</div>
+                    <h3>Encyclopædia Universalis</h3>
+                    <p>Encyclopédie de référence avec des articles de qualité rédigés par des experts dans tous les domaines de la connaissance.</p>
+                    <a href="https://www.universalis.fr/" target="_blank" rel="noopener noreferrer" class="resource-link">Consulter</a>
+                </div>
 
-                &lt;div class=&quot;resource-card&quot;&gt;
-                    &lt;div class=&quot;resource-icon&quot;&gt;📖&lt;/div&gt;
-                    &lt;h3&gt;Esidoc&lt;/h3&gt;
-                    &lt;p&gt;Portail documentaire du CDI. Recherche dans le catalogue, ressources numériques et actualités de la documentation.&lt;/p&gt;
-                    &lt;a href=&quot;http://0595400z.esidoc.fr&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Accéder&lt;/a&gt;
-                &lt;/div&gt;
+                <div class="resource-card">
+                    <div class="resource-icon">📖</div>
+                    <h3>Esidoc</h3>
+                    <p>Portail documentaire du CDI. Recherche dans le catalogue, ressources numériques et actualités de la documentation.</p>
+                    <span class="resource-link" style="background: #ccc; cursor: not-allowed;" title="Lien accessible uniquement depuis l'établissement">Accès CDI</span>
+                </div>
 
-                &lt;div class=&quot;resource-card&quot;&gt;
-                    &lt;div class=&quot;resource-icon&quot;&gt;🛡️&lt;/div&gt;
-                    &lt;h3&gt;Internet Sans Crainte&lt;/h3&gt;
-                    &lt;p&gt;Sensibilisation aux usages responsables d'Internet. Conseils, ressources et outils pour une navigation sécurisée.&lt;/p&gt;
-                    &lt;a href=&quot;https://www.internetsanscrainte.fr/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Apprendre&lt;/a&gt;
-                &lt;/div&gt;
+                <div class="resource-card">
+                    <div class="resource-icon">🛡️</div>
+                    <h3>Internet Sans Crainte</h3>
+                    <p>Sensibilisation aux usages responsables d'Internet. Conseils, ressources et outils pour une navigation sécurisée.</p>
+                    <a href="https://www.internetsanscrainte.fr/" target="_blank" rel="noopener noreferrer" class="resource-link">Apprendre</a>
+                </div>
 
-                &lt;div class=&quot;resource-card&quot;&gt;
-                    &lt;div class=&quot;resource-icon&quot;&gt;📝&lt;/div&gt;
-                    &lt;h3&gt;Exercices multimédia Néo&lt;/h3&gt;
-                    &lt;p&gt;Application complète pour créer et gérer des exercices interactifs. Planification automatique, rendu audio, relance de classe et suivi personnalisé pour le travail à distance.&lt;/p&gt;
-                    &lt;a href=&quot;https://edifice.io/application/exercices-neo/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Découvrir&lt;/a&gt;
-                &lt;/div&gt;
+                <div class="resource-card">
+                    <div class="resource-icon">📰</div>
+                    <h3>Madmagz</h3>
+                    <p>Création de magazines numériques. Outil collaboratif pour réaliser des journaux scolaires et des projets éditoriaux.</p>
+                    <a href="https://madmagz.com/fr/" target="_blank" rel="noopener noreferrer" class="resource-link">Créer</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                &lt;div class=&quot;resource-card&quot;&gt;
-                    &lt;div class=&quot;resource-icon&quot;&gt;📰&lt;/div&gt;
-                    &lt;h3&gt;Madmagz&lt;/h3&gt;
-                    &lt;p&gt;Création de magazines numériques. Outil collaboratif pour réaliser des journaux scolaires et des projets éditoriaux.&lt;/p&gt;
-                    &lt;a href=&quot;https://madmagz.com/fr/&quot; target=&quot;_blank&quot; class=&quot;resource-link&quot;&gt;Créer&lt;/a&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;script&gt;
+    <script>
         let score = 0;
         let questionsAnswered = 0;
         const totalQuestions = 4;
 
-        document.querySelectorAll('.option').forEach(option =&gt; {
+        document.querySelectorAll('.option').forEach(option => {
             option.addEventListener('click', function() {
                 const quizItem = this.closest('.quiz-item');
                 const allOptions = quizItem.querySelectorAll('.option');
@@ -656,11 +669,11 @@
                 quizItem.classList.add('answered');
                 
                 // Désactiver tous les options
-                allOptions.forEach(opt =&gt; {
+                allOptions.forEach(opt => {
                     opt.style.pointerEvents = 'none';
                     if (opt.dataset.answer === 'correct') {
                         opt.classList.add('correct');
-                    } else if (opt === this &amp;&amp; !isCorrect) {
+                    } else if (opt === this && !isCorrect) {
                         opt.classList.add('incorrect');
                     }
                 });
@@ -685,9 +698,9 @@
                 document.getElementById('progress').style.width = progress + '%';
 
                 // Animation de célébration si toutes les questions sont bonnes
-                if (questionsAnswered === totalQuestions &amp;&amp; score === totalQuestions) {
-                    setTimeout(() =&gt; {
-                        alert('🎉 Félicitations ! Vous avez obtenu un score parfait ! Vous maîtrisez parfaitement les applications de l\'ENT Néo !');
+                if (questionsAnswered === totalQuestions && score === totalQuestions) {
+                    setTimeout(() => {
+                        document.getElementById('celebration').classList.add('show');
                     }, 1000);
                 }
             });
@@ -699,8 +712,8 @@
             rootMargin: '0px 0px -50px 0px'
         };
 
-        const observer = new IntersectionObserver((entries) =&gt; {
-            entries.forEach(entry =&gt; {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
@@ -708,14 +721,20 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.resource-card').forEach((card, index) =&gt; {
+        // Initialiser l'animation pour toutes les cartes
+        document.querySelectorAll('.resource-card, .usage-card').forEach((card, index) => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(50px)';
             card.style.transition = `all 0.6s ease ${index * 0.1}s`;
             observer.observe(card);
         });
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</pre>
+
+        // Gestion d'erreur pour les liens externes
+        document.querySelectorAll('a[target="_blank"]').forEach(link => {
+            link.addEventListener('error', function(e) {
+                console.warn('Lien non accessible:', this.href);
+            });
+        });
+    </script>
 </body>
 </html>
