@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz : L'IA dans l'éducation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #1e293b;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      border: 1px solid #f1f5f9;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      color: white;
+      text-align: center;
+      padding: 20px 15px;
+      position: relative;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><circle cx="36" cy="5" r="3"/><circle cx="47" cy="19" r="2"/><circle cx="15" cy="28" r="2"/><circle cx="8" cy="8" r="1.5"/><circle cx="52" cy="45" r="1.5"/></g></svg>') repeat;
+      opacity: 0.1;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.85;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+    }
+
+    .quiz-content {
+      padding: 20px;
+    }
+
+    .score-display {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 15px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .progress-bar {
+      background: #f1f5f9;
+      height: 6px;
+      border-radius: 3px;
+      margin: 15px 0 20px 0;
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+      height: 100%;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 3px;
+    }
+
+    .question-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+      display: none;
+      animation: slideIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    .question-card.active {
+      display: block;
+    }
+
+    .question-title {
+      font-size: 1.2rem;
+      color: #1e293b;
+      margin-bottom: 15px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .options {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .option {
+      background: #ffffff;
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border: 2px solid #e2e8f0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .option:hover {
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.08);
+    }
+
+    .option input[type="radio"] {
+      display: none;
+    }
+
+    .option label {
+      display: block;
+      padding: 16px 20px;
+      cursor: pointer;
+      font-size: 1rem;
+      color: #475569;
+      font-weight: 500;
+      line-height: 1.5;
+      transition: color 0.2s ease;
+    }
+
+    .option.correct {
+      background: #f0fdf4;
+      border-color: #22c55e;
+      color: #15803d;
+    }
+
+    .option.correct label {
+      color: #15803d;
+    }
+
+    .option.incorrect {
+      background: #fef2f2;
+      border-color: #ef4444;
+      color: #dc2626;
+    }
+
+    .option.incorrect label {
+      color: #dc2626;
+    }
+
+    .option.selected {
+      border-color: #3b82f6;
+      background: #eff6ff;
+    }
+
+    .option.selected label {
+      color: #1d4ed8;
+    }
+
+    .feedback {
+      margin-top: 15px;
+      padding: 15px;
+      border-radius: 12px;
+      display: none;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .feedback.correct {
+      background: #f0fdf4;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .feedback.incorrect {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+
+    .navigation {
+      text-align: center;
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      min-width: 120px;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px -6px rgba(30, 41, 59, 0.5);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .final-score {
+      display: none;
+      text-align: center;
+      padding: 25px;
+      border-radius: 20px;
+      margin-top: 30px;
+    }
+
+    .final-score.excellent {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border: 2px solid #22c55e;
+      color: #15803d;
+    }
+
+    .final-score.good {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: 2px solid #f59e0b;
+      color: #d97706;
+    }
+
+    .final-score.needs-improvement {
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      border: 2px solid #ef4444;
+      color: #dc2626;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .emoji {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.6rem;
+      }
+      .container {
+        margin: 10px;
+        border-radius: 20px;
+      }
+      .quiz-content {
+        padding: 20px;
+      }
+      .question-card {
+        padding: 20px;
+      }
+      .navigation {
+        flex-direction: column;
+        align-items: center;
+      }
+      .btn {
+        width: 100%;
+        max-width: 280px;
+      }
+    }
+
+    .question-card:hover {
+      box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.08);
+    }
+
+    .final-score .btn {
+      background: linear-gradient(135deg, #475569 0%, #64748b 100%);
+      margin-top: 25px;
+    }
+  </style>
+</head>
+<body>
+  <!-- ... le reste du contenu HTML est inchangé ... -->
+</body>
+</html>
