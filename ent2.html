@@ -76,6 +76,7 @@
 
         .quiz-container {
             display: grid;
+            grid-template-columns: 1fr;
             gap: 20px;
         }
 
@@ -118,7 +119,7 @@
 
         .quiz-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: 1fr;
             gap: 15px;
             margin-top: 20px;
         }
@@ -177,7 +178,7 @@
 
         .resources-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr;
             gap: 25px;
             margin-top: 30px;
         }
@@ -258,7 +259,7 @@
 
         .usage-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: 1fr;
             gap: 25px;
             margin-bottom: 30px;
         }
@@ -418,18 +419,8 @@
             .header h1 {
                 font-size: 2rem;
             }
-            
-            .quiz-options {
-                grid-template-columns: 1fr;
-            }
-            
-            .usage-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .resources-grid {
-                grid-template-columns: 1fr;
-            }
+
+            /* Les grilles sont déjà fixées sur une seule colonne, pas besoin de modification ici */
         }
     </style>
 </head>
@@ -597,18 +588,12 @@
                     <p>Le magazine de la DANE de Lille qui présente toutes les ressources numériques disponibles dans l'académie. Guide complet pour découvrir les outils pédagogiques.</p>
                     <a href="https://dane.site.ac-lille.fr/2024/10/18/le-magazine-focus-ressources/" target="_blank" rel="noopener noreferrer" class="resource-link">Consulter</a>
                 </div>
+
                 <div class="resource-card">
                     <div class="resource-icon">📚</div>
                     <h3>Capeezy</h3>
                     <p>Plateforme de soutien scolaire en ligne des éditions Bordas. Exercices interactifs, cours et révisions pour tous les niveaux.</p>
                     <a href="https://www.editions-bordas.fr/capeezy-soutien-scolaire-en-ligne.html" target="_blank" rel="noopener noreferrer" class="resource-link">Découvrir</a>
-                </div>
-
-                <div class="resource-card">
-                    <div class="resource-icon">🎯</div>
-                    <h3>Exercices multimédia</h3>
-                    <p>Application pour créer des exercices interactifs : quiz, textes à trous, glisser-déposer. Correction automatique et suivi des résultats des élèves.</p>
-                    <a href="https://edifice.io/application/exercices-one/" target="_blank" rel="noopener noreferrer" class="resource-link">Découvrir</a>
                 </div>
 
                 <div class="resource-card">
@@ -629,7 +614,7 @@
                     <div class="resource-icon">📖</div>
                     <h3>Esidoc</h3>
                     <p>Portail documentaire du CDI. Recherche dans le catalogue, ressources numériques et actualités de la documentation.</p>
-                    <span class="resource-link" style="background: #ccc; cursor: not-allowed;" title="Lien accessible uniquement depuis l'établissement">Accès CDI</span>
+                    <a href="https://solutions-documentaires.reseau-canope.fr/se-former/tutoriels/e-sidoc/" target="_blank" rel="noopener noreferrer" class="resource-link">Accès Esidoc</a>
                 </div>
 
                 <div class="resource-card">
@@ -732,7 +717,7 @@
         // Gestion d'erreur pour les liens externes
         document.querySelectorAll('a[target="_blank"]').forEach(link => {
             link.addEventListener('error', function(e) {
-                console.warn('Lien non accessible:', this.href);
+                console.warn('Lien non accessible :', this.href);
             });
         });
     </script>
