@@ -6,14 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f4f4f6;
-      color: #222;
-      min-height: 100vh;
-    }
+    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f5f6fa; color: #222; min-height: 100vh; }
     .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
     .header { text-align: center; margin-bottom: 30px; }
     .header h1 { font-size: 2.3rem; font-weight: 700; margin: 0; color: #222; }
@@ -61,7 +54,7 @@
     .card.dragging { opacity: 0.7; border-color: #e67e22; background: #f9e7d2; }
     .card.placed { opacity: 0.6; cursor: default; background: #e4e7ec; color: #888; border-color: #bbb; }
     .timeline {
-      min-height: 120px;
+      min-height: 90px;
       border: 2px dashed #bbb;
       border-radius: 16px;
       padding: 20px;
@@ -69,81 +62,23 @@
       margin-bottom: 18px;
       position: relative;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      flex-wrap: wrap;
       gap: 10px;
+      justify-content: center;
+      align-items: center;
       transition: all 0.2s;
     }
-    .timeline.drag-over {
-      border-color: #e67e22;
-      background: #f9e7d2;
-    }
+    .timeline.drag-over { border-color: #e67e22; background: #f9e7d2; }
     .timeline::before {
       content: "Déposez les cartes ici dans l'ordre chronologique";
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       opacity: 0.5;
       font-size: 1rem;
       pointer-events: none;
     }
     .timeline:not(:empty)::before { display: none; }
-    .timeline-line {
-      width: 4px;
-      background: #222;
-      height: 100%;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 0;
-    }
-    .timeline-card-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      position: relative;
-      gap: 20px;
-    }
-    .timeline-card {
-      width: 80%;
-      max-width: 400px;
-      position: relative;
-      z-index: 1;
-    }
-    .timeline-card::before {
-      content: '';
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      background: #222;
-      border-radius: 50%;
-      left: 50%;
-      transform: translateX(-50%);
-      top: -6px;
-    }
-    .timeline-drop-zone {
-      width: 100%;
-      height: 40px;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .timeline-drop-zone::before {
-      content: '+';
-      position: absolute;
-      color: #aaa;
-      font-size: 2rem;
-      opacity: 0.3;
-    }
-    .timeline-drop-zone.highlight {
-      background: rgba(230, 126, 34, 0.1);
-    }
-    .timeline-drop-zone.highlight::before {
-      opacity: 0.6;
-    }
     .message { text-align: center; font-size: 1.1rem; font-weight: 600; margin: 15px 0; padding: 12px; border-radius: 8px; }
     .message.success { background: #eafaf1; color: #27ae60; border: 1px solid #27ae60; }
     .message.error { background: #fdeaea; color: #e74c3c; border: 1px solid #e74c3c; }
@@ -154,7 +89,6 @@
       .card { min-width: 100%; max-width: 100%; }
       .scoreboard { flex-direction: column; align-items: center; }
       .team-setup { grid-template-columns: 1fr; }
-      .timeline-card { width: 95%; }
     }
   </style>
 </head>
@@ -201,12 +135,7 @@
         <div class="timer" id="timer"></div>
       </div>
       <div class="card-container" id="cardContainer"></div>
-      <div class="timeline" id="timeline">
-        <div class="timeline-line"></div>
-        <div class="timeline-card-container" id="timelineCardContainer">
-          <!-- Les zones de drop et les cartes seront ajoutées ici dynamiquement -->
-        </div>
-      </div>
+      <div class="timeline" id="timeline"></div>
       <div class="message" id="message"></div>
       <div class="game-controls">
         <button class="btn btn-secondary" onclick="skipTurn()">Passer le tour</button>
@@ -220,7 +149,6 @@
     </div>
   </div>
   <script>
-    // --- Jeu Timeline IA, drag and drop sobre ---
     const aiEvents = [
       { year: 1943, text: "Warren McCulloch et Walter Pitts créent le premier neurone artificiel" },
       { year: 1950, text: "Alan Turing publie « Computing Machinery and Intelligence »" },
@@ -250,8 +178,6 @@
     let roundCards = [];
     let timeline = [];
     let placementEnabled = true;
-    let draggedCard = null;
-    let dropZones = [];
 
     document.addEventListener('DOMContentLoaded', setupColorSelection);
 
@@ -379,89 +305,60 @@
         if (!event) return;
         const card = document.createElement('div');
         card.className = 'card';
-        card.textContent = `${event.year} : ${event.text}`;
+        card.textContent = event.text;
         card.dataset.year = event.year;
         card.dataset.idx = idx;
         card.draggable = placementEnabled && !timeline.includes(idx);
         if (timeline.includes(idx)) card.classList.add('placed');
         if (placementEnabled && !timeline.includes(idx)) {
           card.addEventListener('dragstart', dragStart);
+          card.addEventListener('dragend', dragEnd);
         }
         cardContainer.appendChild(card);
       });
     }
 
     function dragStart(e) {
-      draggedCard = e.target;
       e.dataTransfer.setData('text/plain', e.target.dataset.idx);
       e.target.classList.add('dragging');
-      // Ajouter une classe aux zones de drop potentielles
-      document.querySelectorAll('.timeline-drop-zone').forEach(zone => {
-        zone.classList.add('highlight');
-      });
     }
-
     function dragEnd(e) {
       e.target.classList.remove('dragging');
-      // Retirer la classe highlight de toutes les zones
-      document.querySelectorAll('.timeline-drop-zone').forEach(zone => {
-        zone.classList.remove('highlight');
-      });
     }
 
-    function updateTimeline() {
-      const timelineCardContainer = document.getElementById('timelineCardContainer');
-      timelineCardContainer.innerHTML = '';
-
-      // Créer les zones de drop entre les cartes
-      for (let i = 0; i <= timeline.length; i++) {
-        // Créer une zone de drop
-        const dropZone = document.createElement('div');
-        dropZone.className = 'timeline-drop-zone';
-        dropZone.dataset.position = i;
-
-        // Ajouter les événements pour le drag and drop
-        dropZone.addEventListener('dragover', (e) => {
-          e.preventDefault();
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-          e.preventDefault();
-          document.querySelectorAll('.timeline-drop-zone').forEach(zone => {
-            zone.classList.remove('highlight');
-          });
-
-          const cardIdx = parseInt(e.dataTransfer.getData('text/plain'));
-          if (!timeline.includes(cardIdx)) {
-            const position = parseInt(e.currentTarget.dataset.position);
-            timeline.splice(position, 0, cardIdx);
-            updateTimeline();
-            displayCards();
-
-            if (timeline.length === roundCards.length) {
-              clearInterval(timer);
-              placementEnabled = false;
-              setTimeout(checkTimeline, 400);
-            }
-          }
-        });
-
-        timelineCardContainer.appendChild(dropZone);
-
-        // Ajouter une carte si elle existe à cette position
-        if (i < timeline.length) {
-          const cardIdx = timeline[i];
-          const ev = roundCards[cardIdx];
-
-          const card = document.createElement('div');
-          card.className = 'card timeline-card';
-          card.textContent = `${ev.year} : ${ev.text}`;
-          card.dataset.idx = cardIdx;
-          card.draggable = false;
-
-          timelineCardContainer.appendChild(card);
+    const timelineDiv = document.getElementById('timeline');
+    timelineDiv.addEventListener('dragover', e => {
+      if (!placementEnabled) return;
+      e.preventDefault();
+      timelineDiv.classList.add('drag-over');
+    });
+    timelineDiv.addEventListener('dragleave', e => {
+      timelineDiv.classList.remove('drag-over');
+    });
+    timelineDiv.addEventListener('drop', e => {
+      if (!placementEnabled) return;
+      e.preventDefault();
+      timelineDiv.classList.remove('drag-over');
+      const idx = parseInt(e.dataTransfer.getData('text/plain'));
+      if (!timeline.includes(idx)) {
+        timeline.push(idx);
+        updateTimeline();
+        displayCards();
+        if (timeline.length === 4) {
+          clearInterval(timer);
+          placementEnabled = false;
+          setTimeout(checkTimeline, 400);
         }
       }
+    });
+
+    function updateTimeline() {
+      timelineDiv.innerHTML = '';
+      if (!timeline.length) return;
+      timelineDiv.innerHTML = timeline.map(i => {
+        const ev = roundCards[i];
+        return `<div class="card placed">${ev.year} : ${ev.text}</div>`;
+      }).join('');
     }
 
     function checkTimeline() {
@@ -472,16 +369,13 @@
           break;
         }
       }
-
-      if (timeline.length < roundCards.length) correct = false;
-
+      if (timeline.length < 4) correct = false;
       if (correct) {
         showMessage("Bravo ! Toutes les cartes sont bien placées. +40 points", "success");
         teams[currentTeamIndex].score += 40;
       } else {
         showMessage("Dommage ! L'ordre n'est pas correct ou incomplet.", "error");
       }
-
       updateScoreboard();
       setTimeout(() => {
         currentTeamIndex = (currentTeamIndex + 1) % teams.length;
