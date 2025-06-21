@@ -6,52 +6,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* (Styles identiques à paste.txt, voir ton fichier pour la version complète) */
-    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; min-height: 100vh; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f6fa;
+      color: #222;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
     .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
     .header { text-align: center; margin-bottom: 30px; }
-    .header h1 { font-size: 2.5rem; font-weight: 700; margin: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); background: linear-gradient(45deg, #ffd700, #ffed4e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .subtitle { font-size: 1.2rem; opacity: 0.9; margin-top: 10px; }
-    .setup-screen { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 30px; text-align: center; margin-bottom: 20px; }
+    .header h1 { font-size: 2.5rem; font-weight: 700; margin: 0; color: #222; }
+    .subtitle { font-size: 1.2rem; opacity: 0.8; margin-top: 10px; }
+    .setup-screen { background: #fff; border-radius: 20px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); padding: 30px; text-align: center; margin-bottom: 20px; }
     .team-setup { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
-    .team-input { background: rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 20px; }
-    .team-input input { width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 1.1rem; margin-bottom: 10px; background: rgba(255, 255, 255, 0.9); color: #333; }
+    .team-input { background: #f0f1f4; border-radius: 15px; padding: 20px; }
+    .team-input input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 1.1rem; margin-bottom: 10px; background: #fff; color: #333; }
     .color-palette { display: flex; justify-content: center; gap: 10px; margin: 15px 0; }
-    .team-color { width: 40px; height: 40px; border-radius: 50%; border: 3px solid white; cursor: pointer; transition: transform 0.2s; }
-    .team-color.selected { border-width: 4px; transform: scale(1.2); }
+    .team-color { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #eee; cursor: pointer; transition: transform 0.2s, border 0.2s; }
+    .team-color.selected { border: 3px solid #222; transform: scale(1.15); }
     .game-controls { display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
-    .btn { padding: 12px 24px; border: none; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; color: white; }
-    .btn-primary { background: linear-gradient(45deg, #4CAF50, #45a049); box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3); }
-    .btn-secondary { background: linear-gradient(45deg, #2196F3, #1976D2); box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3); }
-    .btn-danger { background: linear-gradient(45deg, #f44336, #d32f2f); box-shadow: 0 4px 15px rgba(244, 67, 54, 0.3); }
-    .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+    .btn { padding: 12px 24px; border: none; border-radius: 25px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px; color: #fff; }
+    .btn-primary { background: #222; }
+    .btn-secondary { background: #888; }
+    .btn-danger { background: #e74c3c; }
+    .btn:hover { opacity: 0.85; }
     .scoreboard { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
-    .team-score { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); border-radius: 15px; padding: 20px; text-align: center; min-width: 200px; border: 3px solid transparent; transition: all 0.3s ease; }
-    .team-score.active { border-color: #ffd700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); transform: scale(1.05); }
+    .team-score { background: #fff; border-radius: 15px; padding: 20px; text-align: center; min-width: 200px; border: 2px solid #eee; transition: all 0.3s ease; }
+    .team-score.active { border-color: #222; box-shadow: 0 0 12px rgba(34,34,34,0.08); }
     .team-name { font-size: 1.2rem; font-weight: 600; margin-bottom: 10px; }
     .score { font-size: 2rem; font-weight: 700; margin-bottom: 5px; }
-    .streak { font-size: 0.9rem; opacity: 0.8; }
     .game-area { display: none; animation: fadeIn 0.5s ease-in; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .round-info { background: rgba(255, 255, 255, 0.15); border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 30px; }
-    .round-number { font-size: 1.5rem; font-weight: 700; color: #ffd700; }
-    .current-team { font-size: 1.2rem; margin-top: 10px; }
-    .timer { font-size: 2rem; font-weight: 700; color: #ff6b6b; margin: 10px 0; }
+    .round-info { background: #fff; border-radius: 15px; padding: 20px; text-align: center; margin-bottom: 30px; box-shadow: 0 2px 12px rgba(0,0,0,0.03);}
+    .round-number { font-size: 1.5rem; font-weight: 700; color: #222; }
+    .current-team { font-size: 1.1rem; margin-top: 10px; }
+    .timer { font-size: 2rem; font-weight: 700; color: #e67e22; margin: 10px 0; }
     .card-container { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom: 30px; min-height: 120px; }
-    .card { background: linear-gradient(135deg, #fff, #f8f9fa); color: #333; padding: 15px 20px; border-radius: 15px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); cursor: pointer; min-width: 200px; max-width: 280px; text-align: center; transition: all 0.3s ease; border: 2px solid transparent; font-weight: 500; }
-    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-    .card.placed { background: linear-gradient(135deg, #4CAF50, #66BB6A); color: white; cursor: default; border-color: #2E7D32; }
-    .card.error { animation: shake 0.5s; background: linear-gradient(135deg, #f44336, #ef5350); color: white; }
+    .card { background: #f7f7f7; color: #222; padding: 15px 20px; border-radius: 15px; box-shadow: 0 4px 16px rgba(0,0,0,0.07); cursor: pointer; min-width: 200px; max-width: 280px; text-align: center; transition: all 0.3s ease; border: 2px solid transparent; font-weight: 500; }
+    .card:hover { border-color: #222; }
+    .card.placed { background: #222; color: #fff; cursor: default; border-color: #222; }
+    .card.error { animation: shake 0.5s; background: #e74c3c; color: #fff; }
     @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-8px); } 80% { transform: translateX(8px); } }
-    .timeline { min-height: 180px; border: 3px dashed rgba(255, 255, 255, 0.6); border-radius: 20px; padding: 30px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); margin-bottom: 20px; position: relative; transition: all 0.3s ease; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
-    .timeline::before { content: "Placez les cartes ici dans l'ordre chronologique"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.7; font-size: 1.1rem; pointer-events: none; }
+    .timeline { min-height: 100px; border: 2px dashed #bbb; border-radius: 20px; padding: 30px; background: #f0f1f4; margin-bottom: 20px; position: relative; transition: all 0.3s ease; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
+    .timeline::before { content: "Placez les cartes ici dans l'ordre chronologique"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.5; font-size: 1.1rem; pointer-events: none; }
     .timeline:not(:empty)::before { display: none; }
     .message { text-align: center; font-size: 1.2rem; font-weight: 600; margin: 20px 0; padding: 15px; border-radius: 10px; transition: all 0.3s ease; }
-    .message.success { background: rgba(76, 175, 80, 0.2); color: #4CAF50; border: 2px solid #4CAF50; }
-    .message.error { background: rgba(244, 67, 54, 0.2); color: #f44336; border: 2px solid #f44336; }
-    .final-results { display: none; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 20px; padding: 40px; text-align: center; animation: slideIn 0.5s ease-out; }
-    @keyframes slideIn { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    .winner-announcement { font-size: 3rem; font-weight: 700; color: #ffd700; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+    .message.success { background: #eafaf1; color: #27ae60; border: 1px solid #27ae60; }
+    .message.error { background: #fdeaea; color: #e74c3c; border: 1px solid #e74c3c; }
+    .final-results { display: none; background: #fff; border-radius: 20px; padding: 40px; text-align: center; box-shadow: 0 2px 16px rgba(0,0,0,0.06);}
+    .winner-announcement { font-size: 2.2rem; font-weight: 700; color: #222; margin-bottom: 20px; }
     @media (max-width: 768px) { .header h1 { font-size: 2rem; } .card { min-width: 100%; max-width: 100%; } .scoreboard { flex-direction: column; align-items: center; } .team-setup { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -61,7 +67,6 @@
       <h1>🤖 Timeline IA Challenge</h1>
       <p class="subtitle">Jeu d'équipes - Qui connaît le mieux l'histoire de l'Intelligence Artificielle ?</p>
     </div>
-    <!-- Écran de configuration -->
     <div id="setupScreen" class="setup-screen">
       <h2>Configuration du Jeu</h2>
       <p>Créez vos équipes et choisissez vos couleurs !</p>
@@ -114,7 +119,7 @@
     </div>
   </div>
   <script>
-    // --- Jeu Timeline IA, version 4 cartes à placer par manche ---
+    // --- Jeu Timeline IA, 4 cartes à placer, score par équipe, fond sobre ---
     const aiEvents = [
       { year: 1943, text: "Warren McCulloch et Walter Pitts créent le premier neurone artificiel" },
       { year: 1950, text: "Alan Turing publie « Computing Machinery and Intelligence »" },
@@ -270,6 +275,7 @@
       const cardContainer = document.getElementById('cardContainer');
       cardContainer.innerHTML = '';
       roundCards.forEach((event, idx) => {
+        if (!event) return;
         const card = document.createElement('div');
         card.className = 'card';
         card.textContent = event.text;
@@ -279,14 +285,12 @@
         card.addEventListener('dragstart', dragStart);
         card.addEventListener('dragend', dragEnd);
         card.addEventListener('click', function() {
-          // Pour mobile, placer à la fin
           placeCard(idx, timeline.length);
         });
         cardContainer.appendChild(card);
       });
     }
 
-    // Drag & drop
     function dragStart(e) {
       e.dataTransfer.setData('text/plain', e.target.dataset.index);
       setTimeout(() => e.target.classList.add('dragging'), 0);
@@ -295,7 +299,6 @@
       e.target.classList.remove('dragging');
     }
 
-    // Timeline drop
     const timelineDiv = document.getElementById('timeline');
     timelineDiv.addEventListener('dragover', e => {
       e.preventDefault();
@@ -308,7 +311,6 @@
       e.preventDefault();
       timelineDiv.classList.remove('drag-over');
       const idx = parseInt(e.dataTransfer.getData('text/plain'));
-      // On place à la fin (ou on peut demander une position)
       placeCard(idx, timeline.length);
     });
 
@@ -316,14 +318,11 @@
       if (!gameInProgress) return;
       const event = roundCards[cardIdx];
       if (!event) return;
-      // On ajoute à la timeline à la position demandée
-      // Pour simplifier, on ne gère que l'ajout à la fin (ordre croissant)
       timeline.push(event);
-      roundCards[cardIdx] = null; // Marquer comme placée
+      roundCards[cardIdx] = null;
       cardsPlaced++;
       updateTimeline();
       displayCards();
-      // Quand toutes les cartes sont placées, on vérifie l'ordre
       if (cardsPlaced === 4) {
         setTimeout(() => checkTimeline(), 400);
       }
@@ -332,15 +331,14 @@
     function updateTimeline() {
       const timeline = document.getElementById('timeline');
       timeline.innerHTML = '';
+      if (!timeline.length) return;
       timeline.innerHTML = timelineDivContent();
     }
     function timelineDivContent() {
-      if (!timeline.length) return '';
       return timeline.map(ev => `<div class="card placed">${ev.year} : ${ev.text}</div>`).join('');
     }
 
     function checkTimeline() {
-      // Vérifier si la timeline est bien triée
       let correct = true;
       for (let i = 1; i < timeline.length; i++) {
         if (timeline[i-1].year > timeline[i].year) {
