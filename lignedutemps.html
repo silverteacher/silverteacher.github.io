@@ -1,12 +1,457 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Timeline IA - Jeu d'équipes</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* ... [Styles identiques à ta version, voir fichier source] ... */
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #f1f5f9;
+      --accent: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --text: #1e293b;
+      --text-light: #64748b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      padding: 32px;
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+    }
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0;
+      background: linear-gradient(45deg, #fff, #e0e7ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-top: 12px;
+      font-weight: 400;
+    }
+    .setup-screen {
+      background: var(--card-bg);
+      border-radius: 20px;
+      box-shadow: var(--shadow-lg);
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+    .team-setup {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin: 32px 0;
+    }
+    .team-input {
+      background: var(--secondary);
+      border-radius: 16px;
+      padding: 24px;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .team-input:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .team-input h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    .team-input input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      font-size: 1rem;
+      margin-bottom: 16px;
+      background: var(--card-bg);
+      color: var(--text);
+      transition: border-color 0.2s;
+      font-weight: 500;
+    }
+    .team-input input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .color-palette {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .team-color {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .team-color:hover {
+      transform: scale(1.1);
+    }
+    .team-color.selected {
+      border-color: var(--text);
+      transform: scale(1.15);
+      box-shadow: 0 0 0 2px var(--card-bg), 0 0 0 4px var(--primary);
+    }
+    .remove-team-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: var(--danger);
+      transition: color 0.2s;
+    }
+    .remove-team-btn:hover {
+      color: #b91c1c;
+    }
+    .game-controls {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 48px;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      box-shadow: var(--shadow);
+    }
+    .btn-secondary {
+      background: linear-gradient(135deg, var(--text-light), #475569);
+    }
+    .btn-danger {
+      background: linear-gradient(135deg, var(--danger), #dc2626);
+    }
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg);
+    }
+    .btn:active {
+      transform: translateY(0);
+    }
+    .scoreboard {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .team-score {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      min-width: 180px;
+      border: 2px solid var(--border);
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+    .team-score.active {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1), var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .team-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .score {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .game-area {
+      display: none;
+      animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .round-info {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .round-number {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .current-team {
+      font-size: 1.1rem;
+      margin-top: 8px;
+      font-weight: 500;
+    }
+    .timer {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--warning);
+      margin: 12px 0;
+    }
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 32px;
+      min-height: 100px;
+    }
+    .card {
+      background: var(--card-bg);
+      color: var(--text);
+      padding: 16px 20px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      cursor: grab;
+      min-width: 200px;
+      max-width: 280px;
+      text-align: center;
+      transition: all 0.2s ease;
+      border: 2px solid var(--border);
+      font-weight: 500;
+      user-select: none;
+      position: relative;
+    }
+    .card:hover:not(.placed) {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+    .card.dragging {
+      opacity: 0.8;
+      transform: rotate(5deg) scale(1.05);
+      z-index: 1000;
+      box-shadow: var(--shadow-lg);
+    }
+    .card.placed {
+      opacity: 0.95;
+      background: linear-gradient(135deg, var(--accent), #059669);
+      color: white;
+      border-color: var(--accent);
+      cursor: grab;
+    }
+    .card:active {
+      cursor: grabbing;
+    }
+    .timeline {
+      min-height: 120px;
+      border: 3px dashed var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      background: var(--secondary);
+      margin-bottom: 24px;
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      transition: all 0.3s ease;
+    }
+    .timeline.drag-over {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.1);
+      transform: scale(1.02);
+    }
+    .timeline::before {
+      content: "📅 Glissez et organisez les cartes dans l'ordre chronologique";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.6;
+      font-size: 1.1rem;
+      pointer-events: none;
+      text-align: center;
+      font-weight: 500;
+      color: var(--text-light);
+    }
+    .timeline:not(:empty)::before {
+      display: none;
+    }
+    .timeline-card {
+      background: linear-gradient(135deg, var(--accent), #059669);
+      color: white;
+      padding: 16px 20px;
+      border-radius: 12px;
+      min-width: 200px;
+      max-width: 280px;
+      text-align: center;
+      font-weight: 500;
+      box-shadow: var(--shadow);
+      border: 2px solid var(--accent);
+      cursor: grab;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .timeline-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg);
+    }
+    .timeline-card::before {
+      content: attr(data-position);
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      background: var(--primary);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .drop-zone {
+      width: 4px;
+      min-height: 80px;
+      background: transparent;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+      opacity: 0;
+    }
+    .drop-zone.active {
+      background: var(--primary);
+      opacity: 1;
+      width: 8px;
+    }
+    .message {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 20px 0;
+      padding: 16px 24px;
+      border-radius: 12px;
+      animation: slideIn 0.3s ease-out;
+      display: none;
+    }
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .message.success {
+      background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+      color: #166534;
+      border: 2px solid var(--accent);
+      display: block;
+    }
+    .message.error {
+      background: linear-gradient(135deg, #fef2f2, #fecaca);
+      color: #991b1b;
+      border: 2px solid var(--danger);
+      display: block;
+    }
+    .final-results {
+      display: none;
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+    }
+    .winner-announcement {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+      .card,
+      .timeline-card {
+        min-width: 100%;
+        max-width: 100%;
+      }
+      .scoreboard {
+        flex-direction: column;
+        align-items: center;
+      }
+      .team-setup {
+        grid-template-columns: 1fr;
+      }
+      .container {
+        padding: 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -15,17 +460,39 @@
       <h1>🤖 Timeline IA Challenge</h1>
       <p class="subtitle">Placez les événements de l'intelligence artificielle dans l'ordre chronologique !</p>
     </div>
+
     <div id="setupScreen" class="setup-screen">
       <h2>⚙️ Configuration du Jeu</h2>
       <div class="team-setup" id="teamSetup">
-        <!-- Les équipes seront générées dynamiquement -->
+        <div class="team-input" data-team-idx="0">
+          <h3>Équipe 1 <button class="remove-team-btn" aria-label="Supprimer l'équipe 1" onclick="removeTeam(0)">❌</button></h3>
+          <input type="text" placeholder="Nom de l'équipe" id="teamName0" />
+          <div class="color-palette">
+            <div class="team-color selected" style="background: #6366f1" data-color="#6366f1" data-team="0" onclick="selectColor(0, '#6366f1')"></div>
+            <div class="team-color" style="background: #8b5cf6" data-color="#8b5cf6" data-team="0" onclick="selectColor(0, '#8b5cf6')"></div>
+            <div class="team-color" style="background: #f59e0b" data-color="#f59e0b" data-team="0" onclick="selectColor(0, '#f59e0b')"></div>
+            <div class="team-color" style="background: #ef4444" data-color="#ef4444" data-team="0" onclick="selectColor(0, '#ef4444')"></div>
+          </div>
+        </div>
+        <div class="team-input" data-team-idx="1">
+          <h3>Équipe 2 <button class="remove-team-btn" aria-label="Supprimer l'équipe 2" onclick="removeTeam(1)">❌</button></h3>
+          <input type="text" placeholder="Nom de l'équipe" id="teamName1" />
+          <div class="color-palette">
+            <div class="team-color selected" style="background: #10b981" data-color="#10b981" data-team="1" onclick="selectColor(1, '#10b981')"></div>
+            <div class="team-color" style="background: #3b82f6" data-color="#3b82f6" data-team="1" onclick="selectColor(1, '#3b82f6')"></div>
+            <div class="team-color" style="background: #64748b" data-color="#64748b" data-team="1" onclick="selectColor(1, '#64748b')"></div>
+            <div class="team-color" style="background: #1e293b" data-color="#1e293b" data-team="1" onclick="selectColor(1, '#1e293b')"></div>
+          </div>
+        </div>
       </div>
       <div class="game-controls">
-        <button class="btn btn-secondary" id="addTeamBtn">➕ Ajouter une équipe</button>
-        <button class="btn btn-primary" id="startGameBtn">🚀 Commencer le jeu</button>
+        <button class="btn btn-secondary" onclick="addTeam()">➕ Ajouter une équipe</button>
+        <button class="btn btn-primary" onclick="startGame()">🚀 Commencer le jeu</button>
       </div>
     </div>
+
     <div id="scoreboard" class="scoreboard" style="display:none;"></div>
+
     <div id="gameArea" class="game-area">
       <div class="round-info">
         <div class="round-number" id="roundNumber"></div>
@@ -36,18 +503,19 @@
       <div class="timeline" id="timeline"></div>
       <div class="message" id="message"></div>
       <div class="game-controls">
-        <button class="btn btn-secondary" id="skipTurnBtn">⏭️ Passer le tour</button>
-        <button class="btn btn-danger" id="resetGameBtn">🔄 Nouvelle partie</button>
+        <button class="btn btn-secondary" onclick="skipTurn()">⏭️ Passer le tour</button>
+        <button class="btn btn-danger" onclick="resetGame()">🔄 Nouvelle partie</button>
       </div>
     </div>
+
     <div id="finalResults" class="final-results">
       <div class="winner-announcement" id="winnerText"></div>
       <div id="finalScores"></div>
-      <button class="btn btn-primary" id="resetGameBtn2">🔄 Nouvelle partie</button>
+      <button class="btn btn-primary" onclick="resetGame()">🔄 Nouvelle partie</button>
     </div>
   </div>
+
   <script>
-    // --- Données des événements IA ---
     const aiEvents = [
       { year: 1943, text: "Warren McCulloch et Walter Pitts créent le premier neurone artificiel" },
       { year: 1950, text: "Alan Turing publie « Computing Machinery and Intelligence »" },
@@ -67,8 +535,10 @@
       { year: 2023, text: "GPT-4 et explosion de l'IA générative" }
     ];
 
-    // --- Variables globales ---
-    let teams = [];
+    let teams = [
+      { name: "", color: "#6366f1", score: 0 },
+      { name: "", color: "#10b981", score: 0 }
+    ];
     let currentTeamIndex = 0;
     let currentRound = 1;
     const maxRounds = 5;
@@ -78,102 +548,123 @@
     let roundCards = [];
     let timeline = [];
     let placementEnabled = true;
-    const maxTeams = 6;
-    const teamColors = [
-      "#6366f1", "#8b5cf6", "#f59e0b", "#ef4444", "#10b981", "#3b82f6", "#64748b", "#1e293b"
-    ];
 
-    // --- Génération dynamique des équipes ---
-    function renderTeamInputs() {
-      const teamSetup = document.getElementById('teamSetup');
-      teamSetup.innerHTML = '';
+    // Sélection couleur par équipe
+    function selectColor(teamIdx, color) {
+      // Vérifier que la couleur n'est pas déjà prise par une autre équipe
+      if (teams.some((t, i) => i !== teamIdx && t.color === color)) {
+        alert("Cette couleur est déjà choisie par une autre équipe.");
+        return;
+      }
+      teams[teamIdx].color = color;
+      updateTeamColorsUI();
+    }
+
+    // Met à jour l'affichage des couleurs sélectionnées
+    function updateTeamColorsUI() {
+      document.querySelectorAll('.team-input').forEach((div, idx) => {
+        const teamColors = div.querySelectorAll('.team-color');
+        teamColors.forEach(tc => {
+          if (tc.dataset.color === teams[idx].color) {
+            tc.classList.add('selected');
+          } else {
+            tc.classList.remove('selected');
+          }
+        });
+      });
+    }
+
+    // Ajout d'une équipe (max 6)
+    function addTeam() {
+      if (teams.length >= 6) {
+        alert("Nombre maximum d'équipes atteint (6).");
+        return;
+      }
+      // Couleurs disponibles
+      const availableColors = ["#6366f1", "#8b5cf6", "#f59e0b", "#ef4444", "#10b981", "#3b82f6", "#64748b", "#1e293b"];
+      const usedColors = teams.map(t => t.color);
+      const newColor = availableColors.find(c => !usedColors.includes(c)) || "#000000";
+      teams.push({ name: "", color: newColor, score: 0 });
+      renderTeamsSetup();
+    }
+
+    // Suppression d'une équipe
+    function removeTeam(idx) {
+      if (teams.length <= 2) {
+        alert("Il doit y avoir au moins 2 équipes.");
+        return;
+      }
+      teams.splice(idx, 1);
+      renderTeamsSetup();
+    }
+
+    // Affiche la configuration des équipes dans le setup
+    function renderTeamsSetup() {
+      const teamSetup = document.getElementById("teamSetup");
+      teamSetup.innerHTML = "";
       teams.forEach((team, idx) => {
-        const colorsForTeam = teamColors.filter(color =>
-          !teams.some((t, i) => t.color === color && i !== idx)
-        );
+        const colorsAvailable = ["#6366f1", "#8b5cf6", "#f59e0b", "#ef4444", "#10b981", "#3b82f6", "#64748b", "#1e293b"];
+        const colorsForTeam = colorsAvailable.filter(c => !teams.some((t, i) => t.color === c && i !== idx));
         teamSetup.innerHTML += `
           <div class="team-input" data-team-idx="${idx}">
-            <h3>Équipe ${idx + 1} <button onclick="removeTeam(${idx})" style="float:right;font-size:1.1em;" aria-label="Supprimer l'équipe">❌</button></h3>
-            <input type="text" placeholder="Nom de l'équipe" value="${team.name || ''}" oninput="teams[${idx}].name=this.value">
+            <h3>Équipe ${idx + 1} <button class="remove-team-btn" aria-label="Supprimer l'équipe ${idx + 1}" onclick="removeTeam(${idx})">❌</button></h3>
+            <input type="text" placeholder="Nom de l'équipe" id="teamName${idx}" value="${team.name}" oninput="teams[${idx}].name=this.value" />
             <div class="color-palette">
-              ${colorsForTeam.map(color =>
-                `<div class="team-color${team.color === color ? ' selected' : ''}" style="background:${color}" data-color="${color}" data-team="${idx}" tabindex="0" aria-label="Choisir la couleur ${color}" onclick="selectColor(${idx},'${color}')"></div>`
-              ).join('')}
+              ${colorsForTeam.map(color => `
+                <div class="team-color${team.color === color ? " selected" : ""}" style="background: ${color}" data-color="${color}" data-team="${idx}" onclick="selectColor(${idx}, '${color}')"></div>
+              `).join('')}
             </div>
           </div>
         `;
       });
     }
 
-    // --- Sélection de la couleur ---
-    window.selectColor = function(idx, color) {
-      teams[idx].color = color;
-      renderTeamInputs();
-    };
-
-    // --- Ajout et suppression d'équipe ---
-    document.getElementById('addTeamBtn').onclick = function() {
-      if (teams.length >= maxTeams) {
-        alert("Nombre maximum d'équipes atteint (6).");
-        return;
-      }
-      teams.push({ name: '', color: teamColors.find(c => !teams.some(t => t.color === c)), score: 0 });
-      renderTeamInputs();
-    };
-    window.removeTeam = function(idx) {
-      teams.splice(idx, 1);
-      renderTeamInputs();
-    };
-
-    // --- Validation et démarrage du jeu ---
-    document.getElementById('startGameBtn').onclick = function() {
-      // Validation
+    // Validation avant démarrage
+    function validateTeams() {
       if (teams.length < 2) {
         showMessage("Ajoutez au moins 2 équipes.", "error");
-        return;
+        return false;
       }
       for (const team of teams) {
         if (!team.name.trim()) {
           showMessage("Chaque équipe doit avoir un nom.", "error");
-          return;
-        }
-        if (!team.color) {
-          showMessage("Chaque équipe doit choisir une couleur.", "error");
-          return;
+          return false;
         }
       }
-      startGame();
-    };
-
-    // --- Initialisation de base ---
-    function init() {
-      teams = [
-        { name: '', color: teamColors[0], score: 0 },
-        { name: '', color: teamColors[4], score: 0 }
-      ];
-      renderTeamInputs();
-      document.getElementById('setupScreen').style.display = '';
-      document.getElementById('gameArea').style.display = 'none';
-      document.getElementById('scoreboard').style.display = 'none';
-      document.getElementById('finalResults').style.display = 'none';
-      hideMessage();
+      return true;
     }
 
-    // --- Démarrage du jeu ---
+    // Démarre le jeu
     function startGame() {
+      if (!validateTeams()) return;
       gameInProgress = true;
       currentTeamIndex = 0;
       currentRound = 1;
-      teams.forEach(t => t.score = 0);
-      document.getElementById('setupScreen').style.display = 'none';
-      document.getElementById('gameArea').style.display = '';
-      document.getElementById('scoreboard').style.display = '';
-      document.getElementById('finalResults').style.display = 'none';
+      teams.forEach(t => (t.score = 0));
+      document.getElementById("setupScreen").style.display = "none";
+      document.getElementById("gameArea").style.display = "";
+      document.getElementById("scoreboard").style.display = "";
+      document.getElementById("finalResults").style.display = "none";
       updateScoreboard();
       startRound();
     }
 
-    // --- Round ---
+    // Mise à jour du scoreboard
+    function updateScoreboard() {
+      const sb = document.getElementById("scoreboard");
+      sb.innerHTML = teams
+        .map(
+          (team, i) => `
+        <div class="team-score${i === currentTeamIndex ? " active" : ""}" style="border-color:${team.color}">
+          <div class="team-name" style="color:${team.color}">${team.name}</div>
+          <div class="score">${team.score}</div>
+        </div>
+      `
+        )
+        .join("");
+    }
+
+    // Démarre une manche
     function startRound() {
       roundCards = shuffle(aiEvents).slice(0, Math.min(5, aiEvents.length));
       timeline = [];
@@ -185,20 +676,21 @@
       startTimer();
     }
 
+    // Mise à jour infos manche
     function updateRoundInfo() {
-      document.getElementById('roundNumber').textContent = `Manche ${currentRound} / ${maxRounds}`;
-      document.getElementById('currentTeam').textContent = `À ${teams[currentTeamIndex].name} de jouer !`;
-      document.getElementById('timer').textContent = `⏰ 30s`;
+      document.getElementById("roundNumber").textContent = `Manche ${currentRound} / ${maxRounds}`;
+      document.getElementById("currentTeam").textContent = `À ${teams[currentTeamIndex].name} de jouer !`;
+      document.getElementById("timer").textContent = `⏰ 30s`;
     }
 
-    // --- Timer ---
+    // Timer
     function startTimer() {
       clearInterval(timer);
       timeLeft = 30;
-      document.getElementById('timer').textContent = `⏰ ${timeLeft}s`;
+      document.getElementById("timer").textContent = `⏰ ${timeLeft}s`;
       timer = setInterval(() => {
         timeLeft--;
-        document.getElementById('timer').textContent = `⏰ ${timeLeft}s`;
+        document.getElementById("timer").textContent = `⏰ ${timeLeft}s`;
         if (timeLeft <= 0) {
           clearInterval(timer);
           showMessage("⏱️ Temps écoulé !", "error");
@@ -207,77 +699,77 @@
       }, 1000);
     }
 
-    // --- Scoreboard ---
-    function updateScoreboard() {
-      const sb = document.getElementById('scoreboard');
-      sb.innerHTML = teams.map((team, i) =>
-        `<div class="team-score${i === currentTeamIndex ? ' active' : ''}" style="border-color:${team.color}">
-          <div class="team-name" style="color:${team.color}">${team.name}</div>
-          <div class="score">${team.score}</div>
-        </div>`
-      ).join('');
-    }
-
-    // --- Cartes à placer ---
+    // Affiche les cartes à placer
     function renderCards() {
-      const cc = document.getElementById('cardContainer');
-      cc.innerHTML = roundCards.map((card, i) =>
-        `<div class="card" draggable="true" data-idx="${i}" tabindex="0">${card.text}</div>`
-      ).join('');
-      // Drag & drop
-      cc.querySelectorAll('.card').forEach(card => {
-        card.ondragstart = e => {
-          e.dataTransfer.setData('text/plain', card.dataset.idx);
-          card.classList.add('dragging');
+      const cc = document.getElementById("cardContainer");
+      cc.innerHTML = roundCards
+        .map(
+          (card, i) => `
+        <div class="card" draggable="true" data-idx="${i}" tabindex="0">${card.text}</div>
+      `
+        )
+        .join("");
+      cc.querySelectorAll(".card").forEach((card) => {
+        card.ondragstart = (e) => {
+          e.dataTransfer.setData("text/plain", card.dataset.idx);
+          card.classList.add("dragging");
         };
-        card.ondragend = () => card.classList.remove('dragging');
+        card.ondragend = () => card.classList.remove("dragging");
       });
       setupTimelineDrop();
     }
 
-    // --- Timeline (zone de dépôt) ---
+    // Affiche la timeline
     function renderTimeline() {
-      const t = document.getElementById('timeline');
-      t.innerHTML = timeline.map((card, i) =>
-        `<div class="timeline-card" data-position="${i + 1}" style="background:${teams[currentTeamIndex].color}">${card.text}</div>`
-      ).join('');
+      const t = document.getElementById("timeline");
+      t.innerHTML = timeline
+        .map(
+          (card, i) => `
+        <div class="timeline-card" data-position="${i + 1}" style="background:${teams[currentTeamIndex].color}">${card.text}</div>
+      `
+        )
+        .join("");
     }
 
+    // Configuration zone de dépôt
     function setupTimelineDrop() {
-      const timelineDiv = document.getElementById('timeline');
-      timelineDiv.ondragover = e => { e.preventDefault(); timelineDiv.classList.add('drag-over'); };
-      timelineDiv.ondragleave = () => timelineDiv.classList.remove('drag-over');
-      timelineDiv.ondrop = e => {
+      const timelineDiv = document.getElementById("timeline");
+      timelineDiv.ondragover = (e) => {
         e.preventDefault();
-        timelineDiv.classList.remove('drag-over');
+        timelineDiv.classList.add("drag-over");
+      };
+      timelineDiv.ondragleave = () => timelineDiv.classList.remove("drag-over");
+      timelineDiv.ondrop = (e) => {
+        e.preventDefault();
+        timelineDiv.classList.remove("drag-over");
         if (!placementEnabled) return;
-        const idx = e.dataTransfer.getData('text/plain');
+        const idx = e.dataTransfer.getData("text/plain");
         placeCard(idx);
       };
     }
 
+    // Place une carte dans la timeline
     function placeCard(idx) {
       const card = roundCards[idx];
-      if (!timeline.some(c => c === card)) {
+      if (!timeline.some((c) => c === card)) {
         timeline.push(card);
         renderTimeline();
-        // Retirer la carte du container
-        document.querySelector(`.card[data-idx="${idx}"]`).style.display = 'none';
+        // Cacher la carte placée
+        const cardEl = document.querySelector(`.card[data-idx="${idx}"]`);
+        if (cardEl) cardEl.style.display = "none";
         if (timeline.length === roundCards.length) {
           checkTimeline();
         }
       }
     }
 
-    // --- Vérification de l'ordre ---
+    // Vérifie l'ordre des cartes
     function checkTimeline() {
       placementEnabled = false;
       clearInterval(timer);
-      const isCorrect = timeline.every((card, i, arr) =>
-        i === 0 || arr[i - 1].year <= card.year
-      );
+      const isCorrect = timeline.every((card, i, arr) => i === 0 || arr[i - 1].year <= card.year);
       if (isCorrect) {
-        teams[currentTeamIndex].score += 1;
+        teams[currentTeamIndex].score++;
         showMessage("✅ Bravo, ordre correct !", "success");
       } else {
         showMessage("❌ Mauvais ordre !", "error");
@@ -286,7 +778,7 @@
       setTimeout(nextTurn, 2000);
     }
 
-    // --- Passage au tour suivant ---
+    // Passe au tour suivant
     function nextTurn() {
       currentTeamIndex = (currentTeamIndex + 1) % teams.length;
       if (currentTeamIndex === 0) currentRound++;
@@ -297,52 +789,84 @@
       }
     }
 
-    // --- Fin de partie ---
+    // Fin de partie
     function endGame() {
       gameInProgress = false;
-      document.getElementById('gameArea').style.display = 'none';
-      document.getElementById('finalResults').style.display = '';
-      const maxScore = Math.max(...teams.map(t => t.score));
-      const winners = teams.filter(t => t.score === maxScore);
-      document.getElementById('winnerText').textContent =
+      document.getElementById("gameArea").style.display = "none";
+      document.getElementById("finalResults").style.display = "";
+      const maxScore = Math.max(...teams.map((t) => t.score));
+      const winners = teams.filter((t) => t.score === maxScore);
+      document.getElementById("winnerText").textContent =
         winners.length > 1
-          ? `Égalité ! Victoire des équipes : ${winners.map(t => t.name).join(', ')}`
+          ? `Égalité ! Victoire des équipes : ${winners.map((t) => t.name).join(", ")}`
           : `Victoire de ${winners[0].name} !`;
-      document.getElementById('finalScores').innerHTML = teams.map(team =>
-        `<div style="margin:8px 0;"><span style="color:${team.color};font-weight:700;">${team.name}</span> : ${team.score} point${team.score > 1 ? 's' : ''}</div>`
-      ).join('');
+      document.getElementById("finalScores").innerHTML = teams
+        .map(
+          (team) =>
+            `<div style="margin:8px 0;"><span style="color:${team.color};font-weight:700;">${team.name}</span> : ${team.score} point${
+              team.score > 1 ? "s" : ""
+            }</div>`
+        )
+        .join("");
     }
 
-    // --- Réinitialisation ---
+    // Réinitialise le jeu
     function resetGame() {
       clearInterval(timer);
-      init();
+      teams = [
+        { name: "", color: "#6366f1", score: 0 },
+        { name: "", color: "#10b981", score: 0 },
+      ];
+      currentTeamIndex = 0;
+      currentRound = 1;
+      gameInProgress = false;
+      timeline = [];
+      roundCards = [];
+      placementEnabled = true;
+      document.getElementById("setupScreen").style.display = "";
+      document.getElementById("gameArea").style.display = "none";
+      document.getElementById("scoreboard").style.display = "none";
+      document.getElementById("finalResults").style.display = "none";
+      renderTeamsSetup();
+      hideMessage();
     }
-    document.getElementById('resetGameBtn').onclick = resetGame;
-    document.getElementById('resetGameBtn2').onclick = resetGame;
-    document.getElementById('skipTurnBtn').onclick = nextTurn;
 
-    // --- Messages utilisateur ---
+    // Passe le tour
+    function skipTurn() {
+      clearInterval(timer);
+      showMessage("⏭️ Tour passé.", "warning");
+      setTimeout(() => {
+        hideMessage();
+        nextTurn();
+      }, 1500);
+    }
+
+    // Messages utilisateur
     function showMessage(msg, type) {
-      const m = document.getElementById('message');
+      const m = document.getElementById("message");
       m.textContent = msg;
       m.className = `message ${type}`;
-      m.style.display = '';
+      m.style.display = "block";
     }
     function hideMessage() {
-      const m = document.getElementById('message');
-      m.textContent = '';
-      m.className = 'message';
-      m.style.display = 'none';
+      const m = document.getElementById("message");
+      m.textContent = "";
+      m.className = "message";
+      m.style.display = "none";
     }
 
-    // --- Utilitaires ---
+    // Mélange un tableau
     function shuffle(arr) {
-      return arr.slice().sort(() => Math.random() - 0.5);
+      return arr
+        .map((a) => ({ sort: Math.random(), value: a }))
+        .sort((a, b) => a.sort - b.sort)
+        .map((a) => a.value);
     }
 
-    // --- Initialisation au chargement ---
-    window.onload = init;
+    // Initialisation au chargement
+    window.onload = () => {
+      renderTeamsSetup();
+    };
   </script>
 </body>
 </html>
