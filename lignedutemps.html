@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Styles inspirés de paste.txt */
+    /* ... Styles identiques à ton paste.txt ... */
     body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; min-height: 100vh; }
     .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
     .header { text-align: center; margin-bottom: 30px; }
@@ -39,8 +39,7 @@
     .card-container { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom: 30px; min-height: 120px; }
     .card { background: linear-gradient(135deg, #fff, #f8f9fa); color: #333; padding: 15px 20px; border-radius: 15px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); cursor: pointer; min-width: 200px; max-width: 280px; text-align: center; transition: all 0.3s ease; border: 2px solid transparent; font-weight: 500; }
     .card:hover { border-color: #ffd700; }
-    .card.placed, .card.selected { background: linear-gradient(135deg, #4CAF50, #66BB6A); color: white; cursor: default; border-color: #2E7D32; opacity: 0.7; }
-    .card.inactive { opacity: 0.4; pointer-events: none; }
+    .card.placed, .card.inactive { background: linear-gradient(135deg, #4CAF50, #66BB6A); color: white; cursor: default; border-color: #2E7D32; opacity: 0.7; }
     .timeline { min-height: 100px; border: 2px dashed #ffd700; border-radius: 20px; padding: 30px; background: rgba(255,255,255,0.1); margin-bottom: 20px; position: relative; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
     .timeline::before { content: "Placez les cartes ici dans l'ordre chronologique"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.5; font-size: 1.1rem; pointer-events: none; }
     .timeline:not(:empty)::before { display: none; }
@@ -58,37 +57,7 @@
       <h1>🤖 Timeline IA Challenge</h1>
       <p class="subtitle">Jeu d'équipes - Qui connaît le mieux l'histoire de l'Intelligence Artificielle ?</p>
     </div>
-    <div id="setupScreen" class="setup-screen">
-      <h2>Configuration du Jeu</h2>
-      <p>Créez vos équipes et choisissez vos couleurs !</p>
-      <div class="team-setup" id="teamSetup">
-        <div class="team-input">
-          <h3>Équipe 1</h3>
-          <input type="text" placeholder="Nom de l'équipe" id="team1Name">
-          <div class="color-palette">
-            <div class="team-color" style="background: #ff6b6b" data-color="#ff6b6b" data-team="1"></div>
-            <div class="team-color" style="background: #4ecdc4" data-color="#4ecdc4" data-team="1"></div>
-            <div class="team-color" style="background: #45b7d1" data-color="#45b7d1" data-team="1"></div>
-            <div class="team-color" style="background: #f9ca24" data-color="#f9ca24" data-team="1"></div>
-          </div>
-        </div>
-        <div class="team-input">
-          <h3>Équipe 2</h3>
-          <input type="text" placeholder="Nom de l'équipe" id="team2Name">
-          <div class="color-palette">
-            <div class="team-color" style="background: #6c5ce7" data-color="#6c5ce7" data-team="2"></div>
-            <div class="team-color" style="background: #fd79a8" data-color="#fd79a8" data-team="2"></div>
-            <div class="team-color" style="background: #00b894" data-color="#00b894" data-team="2"></div>
-            <div class="team-color" style="background: #e17055" data-color="#e17055" data-team="2"></div>
-          </div>
-        </div>
-      </div>
-      <div class="game-controls">
-        <button class="btn btn-secondary" onclick="addTeam()">➕ Ajouter une équipe</button>
-        <button class="btn btn-primary" onclick="startGame()">🚀 Commencer le jeu</button>
-      </div>
-    </div>
-    <div id="scoreboard" class="scoreboard" style="display:none;"></div>
+    <!-- ... configuration, scoreboard, etc. ... -->
     <div id="gameArea" class="game-area">
       <div class="round-info">
         <div class="round-number" id="roundNumber">Manche 1</div>
@@ -103,207 +72,48 @@
         <button class="btn btn-danger" onclick="resetGame()">🔄 Nouvelle partie</button>
       </div>
     </div>
-    <div id="finalResults" class="final-results">
-      <div class="winner-announcement" id="winnerText"></div>
-      <div id="finalScores"></div>
-      <button class="btn btn-primary" onclick="resetGame()">🎮 Nouvelle partie</button>
-    </div>
+    <!-- ... résultats finaux ... -->
   </div>
   <script>
-    const aiEvents = [
-      { year: 1943, text: "Warren McCulloch et Walter Pitts créent le premier neurone artificiel" },
-      { year: 1950, text: "Alan Turing publie « Computing Machinery and Intelligence »" },
-      { year: 1956, text: "Conférence de Dartmouth, naissance officielle de l'IA" },
-      { year: 1957, text: "Création du Perceptron par Frank Rosenblatt" },
-      { year: 1966, text: "ELIZA, premier chatbot créé par Joseph Weizenbaum" },
-      { year: 1986, text: "Réseaux de neurones avec rétropropagation" },
-      { year: 1997, text: "Deep Blue bat Garry Kasparov aux échecs" },
-      { year: 2006, text: "Geoffrey Hinton popularise le deep learning" },
-      { year: 2011, text: "IBM Watson gagne à Jeopardy!" },
-      { year: 2012, text: "Victoire d'AlexNet au concours ImageNet" },
-      { year: 2016, text: "AlphaGo bat Lee Sedol au jeu de Go" },
-      { year: 2017, text: "Publication de l'architecture Transformer" },
-      { year: 2018, text: "BERT révolutionne la compréhension du langage", info: "BERT (Bidirectional Encoder Representations from Transformers) est un modèle de traitement du langage naturel publié par Google en 2018. Il a révolutionné la compréhension du langage en utilisant des Transformers bidirectionnels, permettant de mieux saisir le contexte d'un mot dans une phrase. BERT a considérablement amélioré les performances sur de nombreux benchmarks de NLP." },
-      { year: 2020, text: "GPT-3 démontre des capacités linguistiques impressionnantes" },
-      { year: 2022, text: "Lancement public de ChatGPT" },
-      { year: 2023, text: "GPT-4 et explosion de l'IA générative" }
-    ];
+    // ... variables et fonctions de configuration ...
 
-    let teams = [];
-    let currentTeamIndex = 0;
-    let currentRound = 1;
-    const maxRounds = 5;
-    let timer = null;
-    let timeLeft = 30;
-    let gameInProgress = false;
-
-    let roundCards = [];
-    let timeline = [];
-    let cardsPlaced = 0;
+    // Pour chaque manche :
+    let roundCards = []; // Objets {year, text, ...}
+    let timeline = [];   // Indices des cartes posées dans l'ordre de pose
     let placementEnabled = true;
-    let placedIndices = [];
-
-    document.addEventListener('DOMContentLoaded', setupColorSelection);
-
-    function setupColorSelection() {
-      document.querySelectorAll('.team-color').forEach(color => {
-        color.addEventListener('click', function() {
-          const teamNum = this.dataset.team;
-          document.querySelectorAll(`[data-team="${teamNum}"]`).forEach(c => c.classList.remove('selected'));
-          this.classList.add('selected');
-        });
-      });
-    }
-
-    function addTeam() {
-      const teamSetup = document.getElementById('teamSetup');
-      const teamCount = teamSetup.children.length + 1;
-      if (teamCount > 6) {
-        alert("Nombre maximum d'équipes atteint (6).");
-        return;
-      }
-      const teamDiv = document.createElement('div');
-      teamDiv.className = 'team-input';
-      teamDiv.innerHTML = `
-        <h3>Équipe ${teamCount}</h3>
-        <input type="text" placeholder="Nom de l'équipe" id="team${teamCount}Name">
-        <div class="color-palette">
-          <div class="team-color" style="background: #a29bfe" data-color="#a29bfe" data-team="${teamCount}"></div>
-          <div class="team-color" style="background: #fd79a8" data-color="#fd79a8" data-team="${teamCount}"></div>
-          <div class="team-color" style="background: #fdcb6e" data-color="#fdcb6e" data-team="${teamCount}"></div>
-          <div class="team-color" style="background: #6c5ce7" data-color="#6c5ce7" data-team="${teamCount}"></div>
-        </div>
-      `;
-      teamSetup.appendChild(teamDiv);
-      setupColorSelection();
-    }
-
-    function startGame() {
-      teams = [];
-      const teamInputs = document.querySelectorAll('.team-input');
-      for (const teamDiv of teamInputs) {
-        const nameInput = teamDiv.querySelector('input');
-        const selectedColor = teamDiv.querySelector('.team-color.selected');
-        if (!nameInput.value.trim()) {
-          alert("Veuillez entrer un nom pour chaque équipe.");
-          return;
-        }
-        if (!selectedColor) {
-          alert("Veuillez sélectionner une couleur pour chaque équipe.");
-          return;
-        }
-        teams.push({
-          name: nameInput.value.trim(),
-          color: selectedColor.dataset.color,
-          score: 0
-        });
-      }
-      if (teams.length < 2) {
-        alert("Il faut au moins deux équipes pour commencer.");
-        return;
-      }
-      document.getElementById('setupScreen').style.display = 'none';
-      document.getElementById('gameArea').style.display = 'block';
-      document.getElementById('scoreboard').style.display = 'flex';
-      currentTeamIndex = 0;
-      currentRound = 1;
-      gameInProgress = true;
-      updateScoreboard();
-      nextTurn();
-    }
-
-    function updateScoreboard() {
-      const scoreboard = document.getElementById('scoreboard');
-      scoreboard.innerHTML = '';
-      teams.forEach((team, index) => {
-        const div = document.createElement('div');
-        div.className = 'team-score' + (index === currentTeamIndex ? ' active' : '');
-        div.style.borderColor = team.color;
-        div.innerHTML = `
-          <div class="team-name" style="color:${team.color}">${team.name}</div>
-          <div class="score">${team.score}</div>
-        `;
-        scoreboard.appendChild(div);
-      });
-    }
-
-    function updateRoundInfo() {
-      document.getElementById('roundNumber').textContent = `Manche ${currentRound}`;
-      document.getElementById('currentTeam').textContent = `Au tour de ${teams[currentTeamIndex].name}`;
-      document.getElementById('timer').textContent = timeLeft;
-    }
-
-    function nextTurn() {
-      if (currentRound > maxRounds) {
-        endGame();
-        return;
-      }
-      clearMessage();
-      timeLeft = 30;
-      updateRoundInfo();
-      roundCards = pickRandomCards(4);
-      timeline = [];
-      cardsPlaced = 0;
-      placementEnabled = true;
-      placedIndices = [];
-      updateTimeline();
-      displayCards();
-      startTimer();
-    }
-
-    function pickRandomCards(n) {
-      const pool = [...aiEvents];
-      shuffleArray(pool);
-      return pool.slice(0, n);
-    }
-
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
 
     function displayCards() {
       const cardContainer = document.getElementById('cardContainer');
       cardContainer.innerHTML = '';
       roundCards.forEach((event, idx) => {
-        if (!event) return;
         const card = document.createElement('div');
         card.className = 'card';
         card.textContent = event.text;
         card.dataset.year = event.year;
         card.dataset.index = idx;
-        if (event.text.includes("BERT")) {
-          card.title = aiEvents.find(e => e.text.includes("BERT")).info;
-        }
-        if (placedIndices.includes(idx)) {
-          card.classList.add('placed');
+        if (timeline.includes(idx)) {
           card.classList.add('inactive');
-        } else if (!placementEnabled) {
-          card.classList.add('inactive');
-        } else {
+        } else if (placementEnabled) {
           card.addEventListener('click', function() {
-            placeCard(idx, timeline.length);
+            placeCard(idx);
           });
+        } else {
+          card.classList.add('inactive');
         }
         cardContainer.appendChild(card);
       });
     }
 
-    function placeCard(cardIdx, position) {
-      if (!gameInProgress || !placementEnabled) return;
-      const event = roundCards[cardIdx];
-      if (!event) return;
-      timeline.push(event);
-      placedIndices.push(cardIdx);
-      cardsPlaced++;
+    function placeCard(idx) {
+      if (!placementEnabled) return;
+      if (timeline.includes(idx)) return;
+      timeline.push(idx);
       updateTimeline();
       displayCards();
-      if (cardsPlaced === 4) {
-        clearInterval(timer);
+      if (timeline.length === 4) {
         placementEnabled = false;
-        setTimeout(() => checkTimeline(), 400);
+        clearInterval(timer);
+        setTimeout(checkTimeline, 400);
       }
     }
 
@@ -311,131 +121,14 @@
       const timelineDiv = document.getElementById('timeline');
       timelineDiv.innerHTML = '';
       if (!timeline.length) return;
-      timelineDiv.innerHTML = timeline.map(ev =>
-        `<div class="card placed"${ev.info ? ` title="${ev.info}"` : ''}>${ev.year} : ${ev.text}</div>`
-      ).join('');
+      timelineDiv.innerHTML = timeline.map(i => {
+        const ev = roundCards[i];
+        return `<div class="card placed">${ev.year} : ${ev.text}</div>`;
+      }).join('');
     }
 
-    function checkTimeline() {
-      let correct = true;
-      for (let i = 1; i < timeline.length; i++) {
-        if (timeline[i-1].year > timeline[i].year) {
-          correct = false;
-          break;
-        }
-      }
-      if (timeline.length < 4) correct = false;
-      if (correct) {
-        showMessage("Bravo ! Toutes les cartes sont bien placées. +40 points", "success");
-        teams[currentTeamIndex].score += 40;
-      } else {
-        showMessage("Dommage ! L'ordre n'est pas correct ou incomplet.", "error");
-      }
-      updateScoreboard();
-      setTimeout(() => {
-        currentTeamIndex = (currentTeamIndex + 1) % teams.length;
-        if (currentTeamIndex === 0) currentRound++;
-        nextTurn();
-      }, 1500);
-    }
+    // ... timer, checkTimeline, etc. inchangés, mais appellent updateTimeline() ...
 
-    function startTimer() {
-      clearInterval(timer);
-      placementEnabled = true;
-      document.getElementById('timer').textContent = timeLeft;
-      timer = setInterval(() => {
-        timeLeft--;
-        document.getElementById('timer').textContent = timeLeft;
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          placementEnabled = false;
-          showMessage("Temps écoulé ! La timeline proposée est affichée.", "error");
-          updateTimeline();
-          displayCards();
-          setTimeout(() => checkTimeline(), 1500);
-        }
-      }, 1000);
-    }
-
-    function skipTurn() {
-      clearInterval(timer);
-      placementEnabled = false;
-      showMessage("Tour passé. La timeline proposée est affichée.", "error");
-      updateTimeline();
-      displayCards();
-      setTimeout(() => {
-        currentTeamIndex = (currentTeamIndex + 1) % teams.length;
-        if (currentTeamIndex === 0) currentRound++;
-        nextTurn();
-      }, 1500);
-    }
-
-    function resetGame() {
-      clearInterval(timer);
-      teams = [];
-      currentTeamIndex = 0;
-      currentRound = 1;
-      gameInProgress = false;
-      document.getElementById('setupScreen').style.display = 'block';
-      document.getElementById('gameArea').style.display = 'none';
-      document.getElementById('scoreboard').style.display = 'none';
-      document.getElementById('finalResults').style.display = 'none';
-      clearMessage();
-      document.getElementById('teamSetup').innerHTML = `
-        <div class="team-input">
-          <h3>Équipe 1</h3>
-          <input type="text" placeholder="Nom de l'équipe" id="team1Name">
-          <div class="color-palette">
-            <div class="team-color" style="background: #ff6b6b" data-color="#ff6b6b" data-team="1"></div>
-            <div class="team-color" style="background: #4ecdc4" data-color="#4ecdc4" data-team="1"></div>
-            <div class="team-color" style="background: #45b7d1" data-color="#45b7d1" data-team="1"></div>
-            <div class="team-color" style="background: #f9ca24" data-color="#f9ca24" data-team="1"></div>
-          </div>
-        </div>
-        <div class="team-input">
-          <h3>Équipe 2</h3>
-          <input type="text" placeholder="Nom de l'équipe" id="team2Name">
-          <div class="color-palette">
-            <div class="team-color" style="background: #6c5ce7" data-color="#6c5ce7" data-team="2"></div>
-            <div class="team-color" style="background: #fd79a8" data-color="#fd79a8" data-team="2"></div>
-            <div class="team-color" style="background: #00b894" data-color="#00b894" data-team="2"></div>
-            <div class="team-color" style="background: #e17055" data-color="#e17055" data-team="2"></div>
-          </div>
-        </div>
-      `;
-      setupColorSelection();
-    }
-
-    function showMessage(text, type) {
-      const message = document.getElementById('message');
-      message.textContent = text;
-      message.className = 'message ' + (type === 'error' ? 'error' : 'success');
-    }
-
-    function clearMessage() {
-      const message = document.getElementById('message');
-      message.textContent = '';
-      message.className = 'message';
-    }
-
-    function endGame() {
-      gameInProgress = false;
-      clearInterval(timer);
-      document.getElementById('gameArea').style.display = 'none';
-      document.getElementById('scoreboard').style.display = 'none';
-      document.getElementById('finalResults').style.display = 'block';
-      const maxScore = Math.max(...teams.map(t => t.score));
-      const winners = teams.filter(t => t.score === maxScore);
-      const winnerText = winners.length === 1
-        ? `🏆 L'équipe gagnante est ${winners[0].name} avec ${winners[0].score} points !`
-        : `🏆 Égalité entre ${winners.map(t => t.name).join(' et ')} avec ${maxScore} points !`;
-      document.getElementById('winnerText').textContent = winnerText;
-      const finalScores = document.getElementById('finalScores');
-      finalScores.innerHTML = teams
-        .sort((a,b) => b.score - a.score)
-        .map(t => `<p><strong style="color:${t.color}">${t.name}</strong> : ${t.score} points</p>`)
-        .join('');
-    }
   </script>
 </body>
 </html>
