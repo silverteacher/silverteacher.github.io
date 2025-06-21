@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
+    /* Styles inspirés de paste.txt, sobres et modernes */
     body {
       font-family: 'Poppins', sans-serif;
       margin: 0;
@@ -49,6 +49,15 @@
     .card:hover { border-color: #222; }
     .card.placed { background: #222; color: #fff; cursor: default; border-color: #222; }
     .card.error { animation: shake 0.5s; background: #e74c3c; color: #fff; }
+    .card[title] { position: relative; }
+    .card[title]:hover::after {
+      content: attr(title);
+      position: absolute;
+      left: 50%; top: 120%; min-width: 220px; max-width: 350px;
+      background: #fff; color: #222; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      font-size: 1rem; padding: 12px 16px; z-index: 99; transform: translateX(-50%);
+      white-space: normal;
+    }
     @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-8px); } 80% { transform: translateX(8px); } }
     .timeline { min-height: 100px; border: 2px dashed #bbb; border-radius: 20px; padding: 30px; background: #f0f1f4; margin-bottom: 20px; position: relative; transition: all 0.3s ease; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
     .timeline::before { content: "Placez les cartes ici dans l'ordre chronologique"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.5; font-size: 1.1rem; pointer-events: none; }
@@ -119,7 +128,7 @@
     </div>
   </div>
   <script>
-    // --- Jeu Timeline IA, 4 cartes à placer, score par équipe, fond sobre ---
+    // Jeu Timeline IA, 4 cartes à placer, score par équipe, timeline visible en temps réel
     const aiEvents = [
       { year: 1943, text: "Warren McCulloch et Walter Pitts créent le premier neurone artificiel" },
       { year: 1950, text: "Alan Turing publie « Computing Machinery and Intelligence »" },
@@ -133,7 +142,7 @@
       { year: 2012, text: "Victoire d'AlexNet au concours ImageNet" },
       { year: 2016, text: "AlphaGo bat Lee Sedol au jeu de Go" },
       { year: 2017, text: "Publication de l'architecture Transformer" },
-      { year: 2018, text: "BERT révolutionne la compréhension du langage" },
+      { year: 2018, text: "BERT révolutionne la compréhension du langage", info: "BERT (Bidirectional Encoder Representations from Transformers) est un modèle de traitement du langage naturel publié par Google en 2018. Il a révolutionné la compréhension du langage en utilisant des Transformers bidirectionnels, permettant de mieux saisir le contexte d'un mot dans une phrase. BERT a considérablement amélioré les performances sur de nombreux benchmarks de NLP." },
       { year: 2020, text: "GPT-3 démontre des capacités linguistiques impressionnantes" },
       { year: 2022, text: "Lancement public de ChatGPT" },
       { year: 2023, text: "GPT-4 et explosion de l'IA générative" }
@@ -150,6 +159,7 @@
     let roundCards = [];
     let timeline = [];
     let cardsPlaced = 0;
+    let placementEnabled = true;
 
     document.addEventListener('DOMContentLoaded', setupColorSelection);
 
@@ -249,10 +259,10 @@
       clearMessage();
       timeLeft = 30;
       updateRoundInfo();
-      // Nouvelle manche : 4 cartes à placer
       roundCards = pickRandomCards(4);
       timeline = [];
       cardsPlaced = 0;
+      placementEnabled = true;
       updateTimeline();
       displayCards();
       startTimer();
@@ -281,12 +291,18 @@
         card.textContent = event.text;
         card.dataset.year = event.year;
         card.dataset.index = idx;
-        card.draggable = true;
-        card.addEventListener('dragstart', dragStart);
-        card.addEventListener('dragend', dragEnd);
-        card.addEventListener('click', function() {
-          placeCard(idx, timeline.length);
-        });
+        if (event.text.includes("BERT")) {
+          card.title = aiEvents.find(e => e.text.includes("BERT")).info;
+        }
+        card.draggable = placementEnabled;
+        card.style.opacity = placementEnabled ? 1 : 0.5;
+        if (placementEnabled) {
+          card.addEventListener('dragstart', dragStart);
+          card.addEventListener('dragend', dragEnd);
+          card.addEventListener('click', function() {
+            placeCard(idx, timeline.length);
+          });
+        }
         cardContainer.appendChild(card);
       });
     }
@@ -301,6 +317,7 @@
 
     const timelineDiv = document.getElementById('timeline');
     timelineDiv.addEventListener('dragover', e => {
+      if (!placementEnabled) return;
       e.preventDefault();
       timelineDiv.classList.add('drag-over');
     });
@@ -308,6 +325,7 @@
       timelineDiv.classList.remove('drag-over');
     });
     timelineDiv.addEventListener('drop', e => {
+      if (!placementEnabled) return;
       e.preventDefault();
       timelineDiv.classList.remove('drag-over');
       const idx = parseInt(e.dataTransfer.getData('text/plain'));
@@ -315,7 +333,7 @@
     });
 
     function placeCard(cardIdx, position) {
-      if (!gameInProgress) return;
+      if (!gameInProgress || !placementEnabled) return;
       const event = roundCards[cardIdx];
       if (!event) return;
       timeline.push(event);
@@ -324,6 +342,8 @@
       updateTimeline();
       displayCards();
       if (cardsPlaced === 4) {
+        clearInterval(timer);
+        placementEnabled = false;
         setTimeout(() => checkTimeline(), 400);
       }
     }
@@ -332,10 +352,9 @@
       const timeline = document.getElementById('timeline');
       timeline.innerHTML = '';
       if (!timeline.length) return;
-      timeline.innerHTML = timelineDivContent();
-    }
-    function timelineDivContent() {
-      return timeline.map(ev => `<div class="card placed">${ev.year} : ${ev.text}</div>`).join('');
+      timeline.innerHTML = timeline.map(ev =>
+        `<div class="card placed"${ev.info ? ` title="${ev.info}"` : ''}>${ev.year} : ${ev.text}</div>`
+      ).join('');
     }
 
     function checkTimeline() {
@@ -346,11 +365,12 @@
           break;
         }
       }
+      if (timeline.length < 4) correct = false; // Incomplet = faux
       if (correct) {
         showMessage("Bravo ! Toutes les cartes sont bien placées. +40 points", "success");
         teams[currentTeamIndex].score += 40;
       } else {
-        showMessage("Dommage ! L'ordre n'est pas correct.", "error");
+        showMessage("Dommage ! L'ordre n'est pas correct ou incomplet.", "error");
       }
       updateScoreboard();
       setTimeout(() => {
@@ -362,30 +382,33 @@
 
     function startTimer() {
       clearInterval(timer);
+      placementEnabled = true;
       document.getElementById('timer').textContent = timeLeft;
       timer = setInterval(() => {
         timeLeft--;
         document.getElementById('timer').textContent = timeLeft;
         if (timeLeft <= 0) {
           clearInterval(timer);
-          showMessage("Temps écoulé ! Tour passé.", "error");
-          setTimeout(() => {
-            currentTeamIndex = (currentTeamIndex + 1) % teams.length;
-            if (currentTeamIndex === 0) currentRound++;
-            nextTurn();
-          }, 1200);
+          placementEnabled = false;
+          showMessage("Temps écoulé ! La timeline proposée est affichée.", "error");
+          updateTimeline();
+          displayCards();
+          setTimeout(() => checkTimeline(), 1500);
         }
       }, 1000);
     }
 
     function skipTurn() {
       clearInterval(timer);
-      showMessage("Tour passé.", "error");
+      placementEnabled = false;
+      showMessage("Tour passé. La timeline proposée est affichée.", "error");
+      updateTimeline();
+      displayCards();
       setTimeout(() => {
         currentTeamIndex = (currentTeamIndex + 1) % teams.length;
         if (currentTeamIndex === 0) currentRound++;
         nextTurn();
-      }, 1200);
+      }, 1500);
     }
 
     function resetGame() {
