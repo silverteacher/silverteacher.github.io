@@ -722,7 +722,21 @@
             { year: 2023, text: "GPT-4 et explosion de l'IA générative", hint: "Nouvelle génération multimodale et avènement de l'IA générative mainstream" }
         ];
 
-        const teamColors = ["#00d2ff", "#3a7bd5", "#00ff88", "#ff6b35", "#ff3838", "#667eea"];
+        // Expanded list of team colors
+        const teamColors = [
+            "#00d2ff", "#3a7bd5", "#00ff88", "#ff6b35", "#ff3838", "#667eea",
+            "#F94144", "#F3722C", "#F8961E", "#F9C74F", "#90BE6D", "#43AA8B",
+            "#4D908E", "#277DA1", "#577590", "#C77DFF", "#A9DEF9", "#B2F7EF"
+        ];
+
+        // Expanded list of default team names
+        const defaultTeamNames = [
+            "Les Visionnaires", "Les Algorithmes Fous", "Les Neurones Puissants",
+            "Les Coders du Futur", "Les Cyborgs Malins", "Les Génies de l'IA",
+            "Les Réseaux Intelligents", "Les Deep Thinkers", "Les Data Dominators",
+            "Les Automates Agile", "Les Esprits Artificiels", "Les Innovateurs Robotiques"
+        ];
+
         let teams = [];
         let currentTeamIndex = 0;
         let currentRound = 1;
@@ -760,8 +774,8 @@
         // Initialisation des équipes par défaut
         function initializeDefaultTeams() {
             teams = [
-                { name: "Équipe Alpha", color: teamColors[0], score: 0 },
-                { name: "Équipe Beta", color: teamColors[1], score: 0 }
+                { name: defaultTeamNames[0], color: teamColors[0], score: 0 },
+                { name: defaultTeamNames[1], color: teamColors[1], score: 0 }
             ];
             renderTeamsSetup();
         }
@@ -817,17 +831,21 @@
 
         // Event Listeners for setup buttons
         document.getElementById('addTeamBtn').addEventListener('click', function() {
-            if (teams.length >= 6) {
-                showMessage("Nombre maximum d'équipes atteint (6).", "error");
+            if (teams.length >= teamColors.length || teams.length >= defaultTeamNames.length) {
+                showMessage("Nombre maximum d'équipes atteint ou plus de noms/couleurs disponibles.", "error");
                 return;
             }
             const usedColors = teams.map(t => t.color);
-            const newColor = teamColors.find(c => !usedColors.includes(c));
-            if (!newColor) {
-                showMessage("Aucune couleur disponible. Toutes les couleurs sont utilisées.", "error");
+            const newColor = teamColors.find(c => !usedColors.includes(c)); // Find first unused color
+
+            const usedNames = teams.map(t => t.name);
+            const newName = defaultTeamNames.find(n => !usedNames.includes(n)); // Find first unused name
+
+            if (!newColor || !newName) {
+                showMessage("Aucune couleur ou nom d'équipe disponible. Toutes les options sont utilisées.", "error");
                 return;
             }
-            teams.push({ name: `Équipe ${teams.length + 1}`, color: newColor, score: 0 });
+            teams.push({ name: newName, color: newColor, score: 0 });
             renderTeamsSetup();
         });
 
@@ -988,13 +1006,14 @@
             timelineDiv.classList.remove('drag-over');
         });
 
-        // The main timeline drop area will mostly be handled by individual drop zones
         timelineDiv.addEventListener('drop', (e) => {
             e.preventDefault();
             timelineDiv.classList.remove('drag-over');
-            // This drop event will mostly fire if dropping on the timeline background, not a specific zone.
-            // If dropping from grid, we can add to end here.
-            if (placementEnabled && draggedCard && draggedCard.source === 'grid') {
+            
+            if (!placementEnabled || !draggedCard) return;
+
+            // If dropping from grid, add to end of timeline if not on a specific drop zone
+            if (draggedCard.source === 'grid') {
                 const originalIndex = parseInt(draggedCard.id);
                 const cardData = roundCards[originalIndex];
                 const cardElementInGrid = document.querySelector(`.card[data-id="${originalIndex}"]`);
