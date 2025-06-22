@@ -327,6 +327,7 @@
             text-align: center;
             font-weight: 600;
             font-size: 1.1rem;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
         }
 
         .timer {
@@ -335,6 +336,16 @@
             font-family: 'JetBrains Mono', monospace;
             font-size: 1.3rem;
             box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .timer.warning-time {
+            background: linear-gradient(135deg, var(--accent-warning), #ff8c42);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .timer.danger-time {
+            background: linear-gradient(135deg, var(--accent-danger), #ff6b6b);
+            box-shadow: 0 0 20px rgba(255, 56, 56, 0.3);
         }
 
         .card-container {
@@ -393,6 +404,7 @@
             opacity: 0.5;
             transform: scale(0.95);
             filter: grayscale(50%);
+            cursor: not-allowed; /* Indicate it's no longer draggable from here */
         }
 
         .hint-button {
@@ -462,6 +474,8 @@
             flex-wrap: wrap;
             gap: 12px;
             min-height: 60px;
+            align-items: center; /* Vertically align items in flex container */
+            justify-content: flex-start; /* Align items to the start */
         }
 
         .timeline-card {
@@ -475,7 +489,6 @@
             position: relative;
             animation: slideIn 0.3s ease;
             cursor: grab;
-            /* Added for drag-and-drop within timeline */
         }
 
         .timeline-card.dragging-timeline {
@@ -485,11 +498,13 @@
 
         .timeline-drop-zone {
             width: 4px;
-            min-height: 80px;
+            height: 100px; /* Make it more visible for vertical drag */
             background: var(--accent-primary);
             opacity: 0;
             transition: all 0.3s ease;
             border-radius: 2px;
+            flex-shrink: 0; /* Prevent it from shrinking */
+            align-self: stretch; /* Make it fill the height */
         }
 
         .timeline-drop-zone.active {
@@ -675,7 +690,7 @@
             <div class="game-controls">
                 <button class="btn btn-primary" id="validateBtn">✅ Valider l'ordre</button>
                 <button class="btn btn-secondary" id="skipTurnBtn">⏭️ Passer le tour</button>
-                <button class="btn btn-danger" id="resetGameBtn">🔄 Nouvelle partie</button>
+                <button class="btn btn-danger" id="resetGameBtnGame">🔄 Nouvelle partie</button>
             </div>
         </div>
 
@@ -737,7 +752,7 @@
         const messageDiv = document.getElementById('message');
         const validateBtn = document.getElementById('validateBtn');
         const skipTurnBtn = document.getElementById('skipTurnBtn');
-        const resetGameBtn = document.getElementById('resetGameBtn');
+        const resetGameBtnGame = document.getElementById('resetGameBtnGame'); // Corrected ID
         const resetGameBtn2 = document.getElementById('resetGameBtn2');
         const winnerTextDiv = document.getElementById('winnerText');
         const finalScoresDiv = document.getElementById('finalScores');
@@ -782,7 +797,6 @@
 
         // Fonctions globales pour la gestion des équipes (accessible depuis le HTML)
         window.selectColor = function(idx, color) {
-            // Check if the color is already chosen by another team
             const isColorTaken = teams.some((team, i) => i !== idx && team.color === color);
             if (isColorTaken) {
                 showMessage("Cette couleur est déjà prise par une autre équipe.", "error");
@@ -801,29 +815,29 @@
             renderTeamsSetup();
         };
 
-        // Gestion des événements de configuration
-        document.getElementById('addTeamBtn').onclick = function() {
+        // Event Listeners for setup buttons
+        document.getElementById('addTeamBtn').addEventListener('click', function() {
             if (teams.length >= 6) {
                 showMessage("Nombre maximum d'équipes atteint (6).", "error");
                 return;
             }
             const usedColors = teams.map(t => t.color);
-            const newColor = teamColors.find(c => !usedColors.includes(c)); // Find first unused color
+            const newColor = teamColors.find(c => !usedColors.includes(c));
             if (!newColor) {
                 showMessage("Aucune couleur disponible. Toutes les couleurs sont utilisées.", "error");
                 return;
             }
             teams.push({ name: `Équipe ${teams.length + 1}`, color: newColor, score: 0 });
             renderTeamsSetup();
-        };
+        });
 
-        document.getElementById('startGameBtn').onclick = function() {
+        document.getElementById('startGameBtn').addEventListener('click', function() {
             if (teams.length < 2 || teams.some(t => !t.name.trim())) {
                 showMessage("Chaque équipe doit avoir un nom et il faut au moins 2 équipes.", "error");
                 return;
             }
             startGame();
-        };
+        });
 
         // Démarrage du jeu
         function startGame() {
@@ -832,7 +846,7 @@
             teams.forEach(t => t.score = 0);
             setupScreen.style.display = 'none';
             gameArea.style.display = '';
-            scoreboardDiv.style.display = 'flex'; // Use flex to center with gap
+            scoreboardDiv.style.display = 'flex';
             finalResultsScreen.style.display = 'none';
             updateScoreboard();
             startRound();
@@ -899,43 +913,40 @@
                 timelineDiv.classList.add('has-cards');
             }
 
+            // Always add a leading drop zone for precise placement
+            const initialDropZone = document.createElement('div');
+            initialDropZone.className = 'timeline-drop-zone';
+            initialDropZone.dataset.index = 0; // Index 0 for the first position
+            initialDropZone.addEventListener('dragenter', handleDragEnterDropZone);
+            initialDropZone.addEventListener('dragleave', handleDragLeaveDropZone);
+            initialDropZone.addEventListener('dragover', handleDragOverDropZone);
+            initialDropZone.addEventListener('drop', handleDropOnDropZone);
+            timelineCardsDiv.appendChild(initialDropZone);
+
             timeline.forEach((card, index) => {
                 const timelineCard = document.createElement('div');
                 timelineCard.className = 'timeline-card';
-                timelineCard.setAttribute('draggable', 'true'); // Make timeline cards draggable too
-                timelineCard.setAttribute('data-id', card.originalIndex); // Store original index
-                timelineCard.setAttribute('data-position', index + 1);
+                timelineCard.setAttribute('draggable', 'true');
+                timelineCard.setAttribute('data-original-index', card.originalIndex); // Store original index
+                timelineCard.setAttribute('data-position', index + 1); // Position in current timeline
                 timelineCard.textContent = card.text;
-                timelineCard.style.backgroundColor = teams[currentTeamIndex].color; // Color of the current team
+                timelineCard.style.backgroundColor = teams[currentTeamIndex].color;
                 timelineCard.style.boxShadow = `0 0 20px ${teams[currentTeamIndex].color}50`;
 
                 timelineCard.addEventListener('dragstart', handleTimelineCardDragStart);
                 timelineCardsDiv.appendChild(timelineCard);
 
-                // Add drop zone between cards for reordering
-                if (index < timeline.length) {
-                    const dropZone = document.createElement('div');
-                    dropZone.className = 'timeline-drop-zone';
-                    dropZone.addEventListener('dragenter', handleDragEnterDropZone);
-                    dropZone.addEventListener('dragleave', handleDragLeaveDropZone);
-                    dropZone.addEventListener('dragover', handleDragOverDropZone);
-                    dropZone.addEventListener('drop', handleDropOnDropZone);
-                    timelineCardsDiv.appendChild(dropZone);
-                }
-            });
-
-            // Add an initial drop zone if the timeline is empty, or a final one
-            if (timeline.length === 0 || timelineCardsDiv.lastElementChild.className !== 'timeline-drop-zone') {
+                // Add drop zone after each card
                 const dropZone = document.createElement('div');
                 dropZone.className = 'timeline-drop-zone';
+                dropZone.dataset.index = index + 1; // Index for placement after this card
                 dropZone.addEventListener('dragenter', handleDragEnterDropZone);
                 dropZone.addEventListener('dragleave', handleDragLeaveDropZone);
                 dropZone.addEventListener('dragover', handleDragOverDropZone);
                 dropZone.addEventListener('drop', handleDropOnDropZone);
                 timelineCardsDiv.appendChild(dropZone);
-            }
+            });
         }
-
 
         // Drag and Drop Handlers
         function handleDragStart(e) {
@@ -945,7 +956,7 @@
             }
             draggedCard = {
                 id: e.target.dataset.id,
-                source: 'grid' // Indicate the source of the drag
+                source: 'grid'
             };
             e.dataTransfer.setData('text/plain', e.target.dataset.id);
             e.target.classList.add('dragging');
@@ -956,12 +967,13 @@
                 e.preventDefault();
                 return;
             }
+            const originalIndex = parseInt(e.target.dataset.originalIndex);
             draggedCard = {
-                id: e.target.dataset.id,
-                source: 'timeline', // Indicate the source of the drag
-                currentIndex: Array.from(timelineCardsDiv.children).indexOf(e.target) / 2 // Calculate index considering drop zones
+                id: originalIndex,
+                source: 'timeline',
+                data: timeline.find(card => card.originalIndex === originalIndex)
             };
-            e.dataTransfer.setData('text/plain', e.target.dataset.id);
+            e.dataTransfer.setData('text/plain', originalIndex); // Pass original index
             e.target.classList.add('dragging-timeline');
         }
 
@@ -976,32 +988,30 @@
             timelineDiv.classList.remove('drag-over');
         });
 
-        timelineDiv.addEventListener('drop', handleDropOnTimeline);
-
-        function handleDropOnTimeline(e) {
+        // The main timeline drop area will mostly be handled by individual drop zones
+        timelineDiv.addEventListener('drop', (e) => {
             e.preventDefault();
             timelineDiv.classList.remove('drag-over');
-
-            if (!placementEnabled) return;
-
-            const cardId = e.dataTransfer.getData('text/plain');
-            const cardElement = document.querySelector(`.card[data-id="${cardId}"]`);
-
-            if (draggedCard.source === 'grid' && cardElement && !cardElement.classList.contains('placed')) {
-                const originalIndex = parseInt(cardId);
+            // This drop event will mostly fire if dropping on the timeline background, not a specific zone.
+            // If dropping from grid, we can add to end here.
+            if (placementEnabled && draggedCard && draggedCard.source === 'grid') {
+                const originalIndex = parseInt(draggedCard.id);
                 const cardData = roundCards[originalIndex];
-                timeline.push({ ...cardData, originalIndex: originalIndex }); // Add to timeline
-                cardElement.classList.add('placed'); // Mark as placed
-                cardElement.draggable = false; // Cannot drag from grid anymore
+                const cardElementInGrid = document.querySelector(`.card[data-id="${originalIndex}"]`);
 
-                renderTimeline(); // Re-render timeline to include the new card
-                showMessage("Carte ajoutée à la timeline. Réorganisez si besoin !", "success");
-            } else if (draggedCard.source === 'timeline') {
-                // Handle reordering within the timeline (covered by drop zones)
-                showMessage("Utilisez les zones de dépôt entre les cartes pour réorganiser.", "warning");
+                if (cardElementInGrid && !cardElementInGrid.classList.contains('placed')) {
+                    timeline.push({ ...cardData, originalIndex: originalIndex });
+                    cardElementInGrid.classList.add('placed');
+                    cardElementInGrid.draggable = false;
+                    renderTimeline();
+                    showMessage("Carte ajoutée à la fin de la timeline.", "success");
+                } else if (cardElementInGrid && cardElementInGrid.classList.contains('placed')) {
+                    showMessage("Cette carte est déjà placée.", "warning");
+                }
             }
-            draggedCard = null;
-        }
+            draggedCard = null; // Clear dragged card after drop
+        });
+
 
         function handleDragEnterDropZone(e) {
             e.preventDefault();
@@ -1025,42 +1035,43 @@
             e.preventDefault();
             this.classList.remove('active');
 
-            if (!placementEnabled) return;
+            if (!placementEnabled || !draggedCard) return;
 
-            const cardId = e.dataTransfer.getData('text/plain');
-            const targetDropZone = this;
+            const targetDropZoneIndex = parseInt(this.dataset.index);
 
             if (draggedCard.source === 'grid') {
-                const originalIndex = parseInt(cardId);
+                const originalIndex = parseInt(draggedCard.id);
                 const cardData = roundCards[originalIndex];
-                const newIndex = Array.from(timelineCardsDiv.children).indexOf(targetDropZone) / 2; // Calculate target index
+                const cardElementInGrid = document.querySelector(`.card[data-id="${originalIndex}"]`);
 
-                // Check if card is already placed
-                if (document.querySelector(`.card[data-id="${cardId}"]`).classList.contains('placed')) {
+                if (cardElementInGrid && !cardElementInGrid.classList.contains('placed')) {
+                    timeline.splice(targetDropZoneIndex, 0, { ...cardData, originalIndex: originalIndex });
+                    cardElementInGrid.classList.add('placed');
+                    cardElementInGrid.draggable = false;
+                    showMessage("Carte ajoutée à la timeline.", "success");
+                } else if (cardElementInGrid && cardElementInGrid.classList.contains('placed')) {
                     showMessage("Cette carte est déjà placée.", "warning");
-                    return;
                 }
-
-                timeline.splice(newIndex, 0, { ...cardData, originalIndex: originalIndex });
-                document.querySelector(`.card[data-id="${cardId}"]`).classList.add('placed');
-                document.querySelector(`.card[data-id="${cardId}"]`).draggable = false;
-                showMessage("Carte ajoutée à la timeline.", "success");
-
             } else if (draggedCard.source === 'timeline') {
-                const movedCardOriginalIndex = parseInt(cardId);
-                const movedCardIndexInTimeline = timeline.findIndex(card => card.originalIndex === movedCardOriginalIndex);
+                const movedCardOriginalIndex = parseInt(draggedCard.id);
+                const movedCardData = draggedCard.data;
 
-                if (movedCardIndexInTimeline > -1) {
-                    const [movedCardData] = timeline.splice(movedCardIndexInTimeline, 1);
-                    const newIndex = Array.from(timelineCardsDiv.children).indexOf(targetDropZone) / 2; // Calculate target index in new array
+                const currentPositionInTimeline = timeline.findIndex(card => card.originalIndex === movedCardOriginalIndex);
 
-                    // Adjust newIndex if moving to a position before the original
-                    const adjustedNewIndex = newIndex > movedCardIndexInTimeline ? newIndex -1 : newIndex;
-                    timeline.splice(adjustedNewIndex, 0, movedCardData);
+                if (currentPositionInTimeline !== -1) {
+                    timeline.splice(currentPositionInTimeline, 1); // Remove from old position
+
+                    // Adjust the target index if the card was moved from before it
+                    let finalDropIndex = targetDropZoneIndex;
+                    if (currentPositionInTimeline < targetDropZoneIndex) {
+                        finalDropIndex--; // Adjust index if moved from left to right
+                    }
+
+                    timeline.splice(finalDropIndex, 0, movedCardData); // Insert into new position
                     showMessage("Carte réorganisée sur la timeline.", "success");
                 }
             }
-            renderTimeline();
+            renderTimeline(); // Re-render to reflect changes
             draggedCard = null;
         }
 
@@ -1077,32 +1088,32 @@
         // Timer functionality
         function startTimer() {
             timerDiv.textContent = `Temps restant : ${timeLeft}s`;
+            // Reset timer styling
+            timerDiv.classList.remove('warning-time', 'danger-time');
+            timerDiv.style.backgroundColor = ''; // Reset to CSS default
+            timerDiv.style.boxShadow = ''; // Reset to CSS default
+
             timer = setInterval(() => {
                 timeLeft--;
                 timerDiv.textContent = `Temps restant : ${timeLeft}s`;
+
                 if (timeLeft <= 10) {
-                    timerDiv.style.backgroundColor = varColor('--accent-danger');
-                    timerDiv.style.boxShadow = varColor('--glow-danger');
+                    timerDiv.classList.add('danger-time');
+                    timerDiv.classList.remove('warning-time');
                 } else if (timeLeft <= 30) {
-                    timerDiv.style.backgroundColor = varColor('--accent-warning');
-                    timerDiv.style.boxShadow = varColor('--glow-warning');
+                    timerDiv.classList.add('warning-time');
+                    timerDiv.classList.remove('danger-time');
                 } else {
-                    timerDiv.style.backgroundColor = 'var(--bg-card)';
-                    timerDiv.style.boxShadow = 'none';
+                    timerDiv.classList.remove('warning-time', 'danger-time');
                 }
 
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     showMessage("Temps écoulé ! Tour terminé.", "error");
-                    placementEnabled = false; // Disable further placement
-                    setTimeout(endTurn, 2000); // Wait a bit before ending turn
+                    placementEnabled = false;
+                    setTimeout(endTurn, 2000);
                 }
             }, 1000);
-        }
-
-        // Get CSS variable value
-        function varColor(variableName) {
-            return getComputedStyle(document.documentElement).getPropertyValue(variableName).trim();
         }
 
         // Check if timeline is correct and calculate score
@@ -1113,37 +1124,38 @@
 
             if (timeline.length !== roundCards.length) {
                 showMessage("Toutes les cartes n'ont pas été placées !", "error");
-                // Allow them to continue playing their turn if not all cards are placed
-                placementEnabled = true;
+                placementEnabled = true; // Allow them to continue playing their turn
                 startTimer(); // Restart timer
                 return;
             }
 
-            const sortedTimeline = [...timeline].sort((a, b) => a.year - b.year);
+            // Create a sorted version of the events used in this round for comparison
+            const sortedRoundEvents = [...roundCards].sort((a, b) => a.year - b.year);
+
             let correctCount = 0;
             let allCorrect = true;
 
-            timeline.forEach((card, index) => {
-                if (card.year === sortedTimeline[index].year && card.text === sortedTimeline[index].text) {
+            // Compare placed cards with the correctly sorted events
+            for (let i = 0; i < timeline.length; i++) {
+                if (timeline[i].year === sortedRoundEvents[i].year && timeline[i].text === sortedRoundEvents[i].text) {
                     correctCount++;
                 } else {
                     allCorrect = false;
+                    break; // Stop checking if an incorrect card is found
                 }
-            });
+            }
 
             if (allCorrect) {
-                currentTeam.score += 10 + (hintUsed ? 0 : 5); // 10 points for correct order, +5 bonus if no hint
+                currentTeam.score += 10 + (hintUsed ? 0 : 5); // 10 points + 5 bonus if no hint
                 showMessage(`✅ Bravo ${currentTeam.name} ! Ordre correct. +${10 + (hintUsed ? 0 : 5)} points !`, "success");
             } else {
                 currentTeam.score -= 5; // Penalty for incorrect order
                 showMessage(`❌ Mauvais ordre, ${currentTeam.name} ! -5 points.`, "error");
             }
 
-            // Display correct order for learning
             displayCorrectOrder();
-
             updateScoreboard();
-            setTimeout(endTurn, 4000); // Wait before ending turn
+            setTimeout(endTurn, 4000);
         }
 
         function displayCorrectOrder() {
@@ -1154,7 +1166,7 @@
             correctOrderDiv.innerHTML += correctCards.map(card => `
                 <p><strong>${card.year}</strong>: ${card.text}</p>
             `).join('');
-            messageDiv.appendChild(correctOrderDiv); // Append to message area
+            messageDiv.appendChild(correctOrderDiv);
         }
 
         // Fin du tour
@@ -1181,12 +1193,19 @@
         // Afficher l'indice
         hintBtn.addEventListener('click', () => {
             if (roundCards.length > 0 && !hintUsed) {
-                const randomCard = roundCards[Math.floor(Math.random() * roundCards.length)];
-                hintDiv.textContent = `Indice : "${randomCard.hint}" (pour l'événement "${randomCard.text}"). Cela coûte 5 points !`;
-                hintDiv.style.display = 'block';
-                hintUsed = true; // Mark hint as used for this round
-                teams[currentTeamIndex].score -= 5; // Deduct points
-                updateScoreboard();
+                const placedOriginalIndices = timeline.map(c => c.originalIndex);
+                const unplacedCards = roundCards.filter((card, index) => !placedOriginalIndices.includes(index));
+
+                if (unplacedCards.length > 0) {
+                    const randomCard = unplacedCards[Math.floor(Math.random() * unplacedCards.length)];
+                    hintDiv.textContent = `Indice : "${randomCard.hint}" (pour l'événement "${randomCard.text}"). Cela coûte 5 points !`;
+                    hintDiv.style.display = 'block';
+                    hintUsed = true;
+                    teams[currentTeamIndex].score -= 5;
+                    updateScoreboard();
+                } else {
+                    showMessage("Toutes les cartes sont déjà placées. Pas besoin d'indice !", "warning");
+                }
             } else if (hintUsed) {
                 showMessage("Vous avez déjà utilisé un indice pour cette manche.", "warning");
             } else {
@@ -1202,14 +1221,15 @@
             setTimeout(endTurn, 2000);
         });
 
-        resetGameBtn.addEventListener('click', () => {
+        // Reset buttons event listeners (using new IDs)
+        resetGameBtnGame.addEventListener('click', () => {
             clearInterval(timer);
             showMessage("Nouvelle partie démarrée.", "info");
             setupScreen.style.display = '';
             gameArea.style.display = 'none';
             scoreboardDiv.style.display = 'none';
             finalResultsScreen.style.display = 'none';
-            initializeDefaultTeams(); // Reset teams to default
+            initializeDefaultTeams();
         });
 
         resetGameBtn2.addEventListener('click', () => {
@@ -1219,7 +1239,7 @@
             gameArea.style.display = 'none';
             scoreboardDiv.style.display = 'none';
             finalResultsScreen.style.display = 'none';
-            initializeDefaultTeams(); // Reset teams to default
+            initializeDefaultTeams();
         });
 
 
@@ -1230,7 +1250,7 @@
             scoreboardDiv.style.display = 'none';
             finalResultsScreen.style.display = '';
 
-            teams.sort((a, b) => b.score - a.score); // Sort teams by score
+            teams.sort((a, b) => b.score - a.score);
 
             const winner = teams[0];
             winnerTextDiv.textContent = `🎉 Le grand gagnant est ${winner.name} avec ${winner.score} points ! 🎉`;
