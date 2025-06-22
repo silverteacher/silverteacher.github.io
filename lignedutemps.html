@@ -7,8 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-primary: #0f0f23;
-      --bg-secondary: #1a1a2e;
+      --bg-primary: #1e293b;
+      --bg-secondary: #334155;
       --bg-card: #16213e;
       --bg-glass: rgba(255, 255, 255, 0.05);
       --border-glass: rgba(255, 255, 255, 0.1);
@@ -452,6 +452,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
+      min-height: 60px;
     }
 
     .timeline-card {
@@ -464,6 +465,22 @@
       box-shadow: var(--glow-success);
       position: relative;
       animation: slideIn 0.3s ease;
+      cursor: grab;
+    }
+
+    .timeline-drop-zone {
+      width: 4px;
+      min-height: 80px;
+      background: var(--accent-primary);
+      opacity: 0;
+      transition: all 0.3s ease;
+      border-radius: 2px;
+    }
+
+    .timeline-drop-zone.active {
+      opacity: 0.7;
+      width: 20px;
+      box-shadow: var(--glow-primary);
     }
 
     @keyframes slideIn {
@@ -765,12 +782,12 @@
     function updateRoundInfo() {
       document.getElementById('roundNumber').textContent = `Manche ${currentRound} / ${maxRounds}`;
       document.getElementById('currentTeam').textContent = `À ${teams[currentTeamIndex].name} de jouer !`;
-      document.getElementById('timer').textContent = `⏰ 30s`;
+      document.getElementById('timer').textContent = `⏰ 60s`;
     }
 
     function startTimer() {
       clearInterval(timer);
-      timeLeft = 30;
+      timeLeft = 60;
       document.getElementById('timer').textContent = `⏰ ${timeLeft}s`;
       timer = setInterval(() => {
         timeLeft--;
@@ -807,9 +824,47 @@
 
     function renderTimeline() {
       const t = document.getElementById('timelineCards');
-      t.innerHTML = timeline.map((card, i) => `
-        <div class="timeline-card" data-position="${i + 1}">${card.text}</div>
-      `).join('');
+      let html = '<div class="timeline-drop-zone" data-position="0"></div>';
+      timeline.forEach((card, i) => {
+        html += `<div class="timeline-card" data-position="${i + 1}" draggable="true" data-timeline-idx="${i}">${card.text}</div>`;
+        html += `<div class="timeline-drop-zone" data-position="${i + 1}"></div>`;
+      });
+      t.innerHTML = html;
+      
+      // Ajouter les événements de drag pour réorganiser
+      t.querySelectorAll('.timeline-card').forEach(card => {
+        card.ondragstart = e => {
+          e.dataTransfer.setData('timeline-idx', card.dataset.timelineIdx);
+          card.classList.add('dragging');
+        };
+        card.ondragend = () => card.classList.remove('dragging');
+      });
+      
+      // Zones de drop
+      t.querySelectorAll('.timeline-drop-zone').forEach(zone => {
+        zone.ondragover = e => {
+          e.preventDefault();
+          zone.classList.add('active');
+        };
+        zone.ondragleave = () => zone.classList.remove('active');
+        zone.ondrop = e => {
+          e.preventDefault();
+          zone.classList.remove('active');
+          if (!placementEnabled) return;
+          
+          const cardIdx = e.dataTransfer.getData('text/plain');
+          const timelineIdx = e.dataTransfer.getData('timeline-idx');
+          const position = parseInt(zone.dataset.position);
+          
+          if (cardIdx !== '') {
+            // Nouvelle carte depuis les cartes disponibles
+            insertCardAtPosition(cardIdx, position);
+          } else if (timelineIdx !== '') {
+            // Réorganisation dans la timeline
+            moveCardInTimeline(parseInt(timelineIdx), position);
+          }
+        };
+      });
     }
 
     function setupTimelineDrop() {
@@ -828,17 +883,27 @@
       };
     }
 
-    function placeCard(idx) {
-      const card = roundCards[idx];
+    function insertCardAtPosition(cardIdx, position) {
+      const card = roundCards[cardIdx];
       if (!timeline.includes(card)) {
-        timeline.push(card);
+        timeline.splice(position, 0, card);
         renderTimeline();
-        const cardEl = document.querySelector(`.card[data-idx="${idx}"]`);
+        const cardEl = document.querySelector(`.card[data-idx="${cardIdx}"]`);
         if (cardEl) cardEl.classList.add('placed');
         if (timeline.length === roundCards.length) {
           checkTimeline();
         }
       }
+    }
+
+    function moveCardInTimeline(fromIndex, toPosition) {
+      const card = timeline.splice(fromIndex, 1)[0];
+      timeline.splice(toPosition, 0, card);
+      renderTimeline();
+    }
+
+    function placeCard(idx) {
+      insertCardAtPosition(idx, timeline.length);
     }
 
     function checkTimeline() {
