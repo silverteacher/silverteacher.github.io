@@ -1,825 +1,1252 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Timeline IA - Jeu d'équipes</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg-primary: #1e293b;
-      --bg-secondary: #334155;
-      --bg-card: #16213e;
-      --bg-glass: rgba(255, 255, 255, 0.05);
-      --border-glass: rgba(255, 255, 255, 0.1);
-      --accent-primary: #00d2ff;
-      --accent-secondary: #3a7bd5;
-      --accent-success: #00ff88;
-      --accent-warning: #ff6b35;
-      --accent-danger: #ff3838;
-      --text-primary: #ffffff;
-      --text-secondary: #b8c5d6;
-      --text-muted: #6b7894;
-      --glow-primary: 0 0 20px rgba(0, 210, 255, 0.3);
-      --glow-success: 0 0 20px rgba(0, 255, 136, 0.3);
-      --glow-danger: 0 0 20px rgba(255, 56, 56, 0.3);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
-      color: var(--text-primary);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle at 20% 50%, rgba(0, 210, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(58, 123, 213, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 80%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px;
-      position: relative;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 40px;
-      padding: 40px 20px;
-      background: var(--bg-glass);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border-glass);
-      border-radius: 24px;
-      box-shadow: var(--glow-primary);
-    }
-
-    .header h1 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 16px;
-      text-shadow: 0 0 30px rgba(0, 210, 255, 0.5);
-    }
-
-    .subtitle {
-      font-size: 1.2rem;
-      color: var(--text-secondary);
-      font-weight: 300;
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
-
-    .setup-screen, .game-area, .final-results {
-      background: var(--bg-glass);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border-glass);
-      border-radius: 20px;
-      padding: 40px;
-      margin-bottom: 30px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .setup-screen h2 {
-      font-size: 2rem;
-      margin-bottom: 30px;
-      text-align: center;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .team-input {
-      background: var(--bg-card);
-      border: 1px solid var(--border-glass);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 20px;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .team-input:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--glow-primary);
-    }
-
-    .team-input h3 {
-      font-size: 1.2rem;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .remove-team-btn {
-      background: none;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-    }
-
-    .remove-team-btn:hover {
-      background: var(--accent-danger);
-      transform: scale(1.1);
-    }
-
-    .team-input input {
-      width: 100%;
-      padding: 12px 16px;
-      border: 1px solid var(--border-glass);
-      border-radius: 12px;
-      background: var(--bg-glass);
-      color: var(--text-primary);
-      font-size: 1rem;
-      margin-bottom: 16px;
-      transition: all 0.3s ease;
-    }
-
-    .team-input input:focus {
-      outline: none;
-      border-color: var(--accent-primary);
-      box-shadow: var(--glow-primary);
-    }
-
-    .team-input input::placeholder {
-      color: var(--text-muted);
-    }
-
-    .color-palette {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .team-color {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 3px solid transparent;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .team-color:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 20px currentColor;
-    }
-
-    .team-color.selected {
-      border-color: var(--text-primary);
-      box-shadow: 0 0 20px currentColor;
-      transform: scale(1.15);
-    }
-
-    .btn {
-      padding: 14px 28px;
-      border: none;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s;
-    }
-
-    .btn:hover::before {
-      left: 100%;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: white;
-      box-shadow: var(--glow-primary);
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(0, 210, 255, 0.4);
-    }
-
-    .btn-secondary {
-      background: var(--bg-card);
-      color: var(--text-primary);
-      border: 1px solid var(--border-glass);
-    }
-
-    .btn-secondary:hover {
-      background: var(--bg-glass);
-      transform: translateY(-2px);
-    }
-
-    .btn-danger {
-      background: linear-gradient(135deg, var(--accent-danger), #ff6b6b);
-      color: white;
-      box-shadow: var(--glow-danger);
-    }
-
-    .btn-danger:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(255, 56, 56, 0.4);
-    }
-
-    .game-controls {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 30px;
-    }
-
-    .scoreboard {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 30px;
-    }
-
-    .team-score {
-      background: var(--bg-glass);
-      backdrop-filter: blur(20px);
-      border: 2px solid var(--border-glass);
-      border-radius: 16px;
-      padding: 20px;
-      text-align: center;
-      min-width: 140px;
-      transition: all 0.3s ease;
-    }
-
-    .team-score.active {
-      transform: scale(1.05);
-      box-shadow: var(--glow-primary);
-    }
-
-    .team-name {
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-    }
-
-    .score {
-      font-size: 2rem;
-      font-weight: 800;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .round-info {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .round-number, .current-team, .timer {
-      background: var(--bg-card);
-      border: 1px solid var(--border-glass);
-      border-radius: 12px;
-      padding: 16px;
-      text-align: center;
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .timer {
-      background: linear-gradient(135deg, var(--accent-warning), #ff8c42);
-      color: white;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.3rem;
-      box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
-    }
-
-    .card-container {
-      margin-bottom: 40px;
-    }
-
-    .card-container h3 {
-      font-size: 1.4rem;
-      margin-bottom: 20px;
-      text-align: center;
-      color: var(--accent-primary);
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-
-    .card {
-      background: var(--bg-card);
-      border: 2px solid var(--border-glass);
-      border-radius: 12px;
-      padding: 20px;
-      cursor: grab;
-      transition: all 0.3s ease;
-      font-size: 0.95rem;
-      line-height: 1.5;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
-    }
-
-    .card:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: var(--glow-primary);
-      border-color: var(--accent-primary);
-    }
-
-    .card.dragging {
-      opacity: 0.7;
-      transform: rotate(5deg) scale(1.05);
-    }
-
-    .card.placed {
-      opacity: 0.5;
-      transform: scale(0.95);
-      filter: grayscale(50%);
-    }
-
-    .hint-button {
-      background: linear-gradient(135deg, var(--accent-secondary), #667eea);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 25px;
-      cursor: pointer;
-      font-weight: 500;
-      transition: all 0.3s ease;
-      margin-bottom: 20px;
-    }
-
-    .hint-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(58, 123, 213, 0.4);
-    }
-
-    .hint {
-      background: var(--bg-card);
-      border: 1px solid var(--border-glass);
-      border-radius: 12px;
-      padding: 20px;
-      margin-top: 16px;
-      line-height: 1.6;
-      color: var(--text-secondary);
-      display: none;
-    }
-
-    .timeline {
-      background: var(--bg-card);
-      border: 2px dashed var(--border-glass);
-      border-radius: 16px;
-      min-height: 200px;
-      padding: 20px;
-      margin-bottom: 30px;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .timeline::before {
-      content: '📅 Glissez les cartes ici dans l\'ordre chronologique';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: var(--text-muted);
-      font-weight: 500;
-      pointer-events: none;
-      opacity: 0.7;
-      font-size: 1.1rem;
-    }
-
-    .timeline.drag-over {
-      border-color: var(--accent-primary);
-      background: var(--bg-glass);
-      box-shadow: var(--glow-primary);
-    }
-
-    .timeline-cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      min-height: 60px;
-    }
-
-    .timeline-card {
-      background: linear-gradient(135deg, var(--accent-success), #00d084);
-      color: white;
-      padding: 16px;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      box-shadow: var(--glow-success);
-      position: relative;
-      animation: slideIn 0.3s ease;
-      cursor: grab;
-    }
-
-    .timeline-drop-zone {
-      width: 4px;
-      min-height: 80px;
-      background: var(--accent-primary);
-      opacity: 0;
-      transition: all 0.3s ease;
-      border-radius: 2px;
-    }
-
-    .timeline-drop-zone.active {
-      opacity: 0.7;
-      width: 20px;
-      box-shadow: var(--glow-primary);
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .timeline-card::before {
-      content: attr(data-position);
-      position: absolute;
-      top: -8px;
-      left: -8px;
-      background: var(--accent-primary);
-      color: white;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: bold;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .message {
-      text-align: center;
-      padding: 16px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin: 20px 0;
-      animation: messageSlide 0.3s ease;
-    }
-
-    @keyframes messageSlide {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .message.success {
-      background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 208, 132, 0.2));
-      color: var(--accent-success);
-      border: 1px solid var(--accent-success);
-      box-shadow: var(--glow-success);
-    }
-
-    .message.error {
-      background: linear-gradient(135deg, rgba(255, 56, 56, 0.2), rgba(255, 107, 107, 0.2));
-      color: var(--accent-danger);
-      border: 1px solid var(--accent-danger);
-      box-shadow: var(--glow-danger);
-    }
-
-    .message.warning {
-      background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 140, 66, 0.2));
-      color: var(--accent-warning);
-      border: 1px solid var(--accent-warning);
-    }
-
-    .final-results {
-      text-align: center;
-      display: none;
-    }
-
-    .winner-announcement {
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 30px;
-      background: linear-gradient(135deg, var(--accent-success), var(--accent-primary));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: celebrate 1s ease infinite alternate;
-    }
-
-    @keyframes celebrate {
-      from { transform: scale(1); }
-      to { transform: scale(1.05); }
-    }
-
-    #finalScores {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-      line-height: 1.8;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 15px;
-      }
-      
-      .header {
-        padding: 30px 15px;
-      }
-      
-      .setup-screen, .game-area, .final-results {
-        padding: 25px;
-      }
-      
-      .cards-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .round-info {
-        grid-template-columns: 1fr;
-      }
-      
-      .scoreboard {
-        gap: 15px;
-      }
-      
-      .team-score {
-        min-width: 120px;
-        padding: 15px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <title>Timeline IA - Jeu d'équipes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg-primary: #1e293b;
+            --bg-secondary: #334155;
+            --bg-card: #16213e;
+            --bg-glass: rgba(255, 255, 255, 0.05);
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --accent-primary: #00d2ff;
+            --accent-secondary: #3a7bd5;
+            --accent-success: #00ff88;
+            --accent-warning: #ff6b35;
+            --accent-danger: #ff3838;
+            --text-primary: #ffffff;
+            --text-secondary: #b8c5d6;
+            --text-muted: #6b7894;
+            --glow-primary: 0 0 20px rgba(0, 210, 255, 0.3);
+            --glow-success: 0 0 20px rgba(0, 255, 136, 0.3);
+            --glow-danger: 0 0 20px rgba(255, 56, 56, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(0, 210, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(58, 123, 213, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(0, 255, 136, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            box-shadow: var(--glow-primary);
+        }
+
+        .header h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 16px;
+            text-shadow: 0 0 30px rgba(0, 210, 255, 0.5);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .setup-screen,
+        .game-area,
+        .final-results {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .setup-screen h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .team-input {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .team-input:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-primary);
+        }
+
+        .team-input h3 {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .remove-team-btn {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+        }
+
+        .remove-team-btn:hover {
+            background: var(--accent-danger);
+            transform: scale(1.1);
+        }
+
+        .team-input input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            background: var(--bg-glass);
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .team-input input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: var(--glow-primary);
+        }
+
+        .team-input input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .team-color {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .team-color:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .team-color.selected {
+            border-color: var(--text-primary);
+            box-shadow: 0 0 20px currentColor;
+            transform: scale(1.15);
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            box-shadow: var(--glow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-glass);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-glass);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--accent-danger), #ff6b6b);
+            color: white;
+            box-shadow: var(--glow-danger);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 56, 56, 0.4);
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .scoreboard {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .team-score {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            min-width: 140px;
+            transition: all 0.3s ease;
+        }
+
+        .team-score.active {
+            transform: scale(1.05);
+            box-shadow: var(--glow-primary);
+        }
+
+        .team-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .round-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .round-number,
+        .current-team,
+        .timer {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .timer {
+            background: linear-gradient(135deg, var(--accent-warning), #ff8c42);
+            color: white;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .card-container {
+            margin-bottom: 40px;
+        }
+
+        .card-container h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--accent-primary);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: grab;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+        }
+
+        .card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: var(--glow-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .card.dragging {
+            opacity: 0.7;
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .card.placed {
+            opacity: 0.5;
+            transform: scale(0.95);
+            filter: grayscale(50%);
+        }
+
+        .hint-button {
+            background: linear-gradient(135deg, var(--accent-secondary), #667eea);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .hint-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(58, 123, 213, 0.4);
+        }
+
+        .hint {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            display: none;
+        }
+
+        .timeline {
+            background: var(--bg-card);
+            border: 2px dashed var(--border-glass);
+            border-radius: 16px;
+            min-height: 200px;
+            padding: 20px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '📅 Glissez les cartes ici dans l\'ordre chronologique';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-muted);
+            font-weight: 500;
+            pointer-events: none;
+            opacity: 0.7;
+            font-size: 1.1rem;
+        }
+
+        .timeline.drag-over {
+            border-color: var(--accent-primary);
+            background: var(--bg-glass);
+            box-shadow: var(--glow-primary);
+        }
+
+        .timeline.has-cards::before {
+            display: none;
+        }
+
+        .timeline-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            min-height: 60px;
+        }
+
+        .timeline-card {
+            background: linear-gradient(135deg, var(--accent-success), #00d084);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: var(--glow-success);
+            position: relative;
+            animation: slideIn 0.3s ease;
+            cursor: grab;
+            /* Added for drag-and-drop within timeline */
+        }
+
+        .timeline-card.dragging-timeline {
+            opacity: 0.7;
+            transform: rotate(2deg);
+        }
+
+        .timeline-drop-zone {
+            width: 4px;
+            min-height: 80px;
+            background: var(--accent-primary);
+            opacity: 0;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .timeline-drop-zone.active {
+            opacity: 0.7;
+            width: 20px;
+            box-shadow: var(--glow-primary);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .timeline-card::before {
+            content: attr(data-position);
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: var(--accent-primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .message {
+            text-align: center;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 20px 0;
+            animation: messageSlide 0.3s ease;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 208, 132, 0.2));
+            color: var(--accent-success);
+            border: 1px solid var(--accent-success);
+            box-shadow: var(--glow-success);
+        }
+
+        .message.error {
+            background: linear-gradient(135deg, rgba(255, 56, 56, 0.2), rgba(255, 107, 107, 0.2));
+            color: var(--accent-danger);
+            border: 1px solid var(--accent-danger);
+            box-shadow: var(--glow-danger);
+        }
+
+        .message.warning {
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 140, 66, 0.2));
+            color: var(--accent-warning);
+            border: 1px solid var(--accent-warning);
+        }
+
+        .final-results {
+            text-align: center;
+            display: none;
+        }
+
+        .winner-announcement {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--accent-success), var(--accent-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: celebrate 1s ease infinite alternate;
+        }
+
+        @keyframes celebrate {
+            from {
+                transform: scale(1);
+            }
+
+            to {
+                transform: scale(1.05);
+            }
+        }
+
+        #finalScores {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 30px 15px;
+            }
+
+            .setup-screen,
+            .game-area,
+            .final-results {
+                padding: 25px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .round-info {
+                grid-template-columns: 1fr;
+            }
+
+            .scoreboard {
+                gap: 15px;
+            }
+
+            .team-score {
+                min-width: 120px;
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <h1>🤖 Timeline IA Challenge</h1>
-      <p class="subtitle">Placez les événements de l'intelligence artificielle dans l'ordre chronologique !</p>
-    </div>
-
-    <div id="setupScreen" class="setup-screen">
-      <h2>⚙️ Configuration du Jeu</h2>
-      <div class="team-setup" id="teamSetup"></div>
-      <div class="game-controls">
-        <button class="btn btn-secondary" id="addTeamBtn">➕ Ajouter une équipe</button>
-        <button class="btn btn-primary" id="startGameBtn">🚀 Commencer le jeu</button>
-      </div>
-    </div>
-
-    <div id="scoreboard" class="scoreboard" style="display:none;"></div>
-
-    <div id="gameArea" class="game-area" style="display:none;">
-      <div class="round-info">
-        <div class="round-number" id="roundNumber"></div>
-        <div class="current-team" id="currentTeam"></div>
-        <div class="timer" id="timer"></div>
-      </div>
-      <div class="card-container" id="cardContainer">
-        <h3>📚 Cartes à placer :</h3>
-        <div class="cards-grid" id="cardsGrid"></div>
-        <div style="text-align: center; margin-top: 15px;">
-          <button class="hint-button" id="hintBtn">💡 Besoin d'un indice ?</button>
-          <div class="hint" id="hint"></div>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Timeline IA Challenge</h1>
+            <p class="subtitle">Placez les événements de l'intelligence artificielle dans l'ordre chronologique !</p>
         </div>
-      </div>
-      <div class="timeline" id="timeline">
-        <div class="timeline-cards" id="timelineCards"></div>
-      </div>
-      <div class="message" id="message"></div>
-      <div class="game-controls">
-        <button class="btn btn-secondary" id="skipTurnBtn">⏭️ Passer le tour</button>
-        <button class="btn btn-danger" id="resetGameBtn">🔄 Nouvelle partie</button>
-      </div>
-    </div>
 
-    <div id="finalResults" class="final-results">
-      <div class="winner-announcement" id="winnerText"></div>
-      <div id="finalScores"></div>
-      <button class="btn btn-primary" id="resetGameBtn2">🔄 Nouvelle partie</button>
-    </div>
-  </div>
-
-  <script>
-    // Données des événements IA avec indices
-    const aiEvents = [
-      { year: 1943, text: "Warren McCulloch et Walter Pitts créent le premier neurone artificiel", hint: "Première modélisation mathématique d'un neurone, pendant la Seconde Guerre mondiale" },
-      { year: 1950, text: "Alan Turing publie « Computing Machinery and Intelligence »", hint: "Introduction du célèbre 'Test de Turing' pour mesurer l'intelligence artificielle" },
-      { year: 1956, text: "Conférence de Dartmouth, naissance officielle de l'IA", hint: "Événement fondateur où le terme 'Intelligence Artificielle' est créé" },
-      { year: 1957, text: "Création du Perceptron par Frank Rosenblatt", hint: "Premier algorithme d'apprentissage automatique, ancêtre des réseaux de neurones" },
-      { year: 1966, text: "ELIZA, premier chatbot créé par Joseph Weizenbaum", hint: "Premier programme capable de simuler une conversation, inspiré de la psychothérapie" },
-      { year: 1986, text: "Réseaux de neurones avec rétropropagation", hint: "Révolution dans l'entraînement des réseaux de neurones multicouches" },
-      { year: 1997, text: "Deep Blue bat Garry Kasparov aux échecs", hint: "Premier ordinateur à battre un champion du monde d'échecs en titre" },
-      { year: 2006, text: "Geoffrey Hinton popularise le deep learning", hint: "Renaissance des réseaux de neurones profonds après des décennies d'oubli" },
-      { year: 2011, text: "IBM Watson gagne à Jeopardy!", hint: "Démonstration de traitement du langage naturel dans un jeu télévisé populaire" },
-      { year: 2012, text: "Victoire d'AlexNet au concours de reconnaissance d'images, ImageNet", hint: "Percée majeure en vision par ordinateur grâce au deep learning" },
-      { year: 2016, text: "AlphaGo bat Lee Sedol au jeu de Go", hint: "Victoire historique dans un jeu considéré comme impossible à maîtriser pour une machine" },
-      { year: 2017, text: "Publication de l'architecture Transformer", hint: "Architecture révolutionnaire qui donnera naissance à GPT, BERT et tous les grands modèles actuels" },
-      { year: 2018, text: "BERT révolutionne la compréhension du langage des machines", hint: "Premier modèle à vraiment comprendre le contexte bidirectionnel dans les phrases" },
-      { year: 2020, text: "GPT-3 démontre des capacités linguistiques impressionnantes", hint: "Modèle de 175 milliards de paramètres qui surprend par sa polyvalence" },
-      { year: 2022, text: "Lancement public de ChatGPT", hint: "Démocratisation de l'IA conversationnelle auprès du grand public" },
-      { year: 2023, text: "GPT-4 et explosion de l'IA générative", hint: "Nouvelle génération multimodale et avènement de l'IA générative mainstream" }
-    ];
-
-    const teamColors = ["#00d2ff", "#3a7bd5", "#00ff88", "#ff6b35", "#ff3838", "#667eea"];
-    let teams = [];
-    let currentTeamIndex = 0;
-    let currentRound = 1;
-    const maxRounds = 5;
-    let timer = null;
-    let timeLeft = 30;
-    let roundCards = [];
-    let timeline = [];
-    let placementEnabled = true;
-
-    function renderTeamsSetup() {
-      const teamSetup = document.getElementById('teamSetup');
-      teamSetup.innerHTML = '';
-      teams.forEach((team, idx) => {
-        const availableColors = teamColors.filter(c => !teams.some((t, i) => t.color === c && i !== idx));
-        teamSetup.innerHTML += `
-          <div class="team-input" data-team-idx="${idx}">
-            <h3>Équipe ${idx + 1} ${teams.length > 2 ? `<button class="remove-team-btn" aria-label="Supprimer l'équipe" onclick="removeTeam(${idx})">❌</button>` : ''}</h3>
-            <input type="text" placeholder="Nom de l'équipe" value="${team.name}" oninput="teams[${idx}].name=this.value" />
-            <div class="color-palette">
-              ${availableColors.map(color => `
-                <div class="team-color${team.color === color ? ' selected' : ''}" style="background:${color}" onclick="selectColor(${idx}, '${color}')"></div>
-              `).join('')}
+        <div id="setupScreen" class="setup-screen">
+            <h2>⚙️ Configuration du Jeu</h2>
+            <div class="team-setup" id="teamSetup"></div>
+            <div class="game-controls">
+                <button class="btn btn-secondary" id="addTeamBtn">➕ Ajouter une équipe</button>
+                <button class="btn btn-primary" id="startGameBtn">🚀 Commencer le jeu</button>
             </div>
-          </div>
-        `;
-      });
-    }
-
-    window.selectColor = function(idx, color) {
-      teams[idx].color = color;
-      renderTeamsSetup();
-    };
-
-    window.removeTeam = function(idx) {
-      if (teams.length <= 2) {
-        alert("Il doit y avoir au moins 2 équipes.");
-        return;
-      }
-      teams.splice(idx, 1);
-      renderTeamsSetup();
-    };
-
-    document.getElementById('addTeamBtn').onclick = function() {
-      if (teams.length >= 6) {
-        alert("Nombre maximum d'équipes atteint (6).");
-        return;
-      }
-      const usedColors = teams.map(t => t.color);
-      const newColor = teamColors.find(c => !usedColors.includes(c)) || "#000000";
-      teams.push({ name: "", color: newColor, score: 0 });
-      renderTeamsSetup();
-    };
-
-    document.getElementById('startGameBtn').onclick = function() {
-      if (teams.length < 2 || teams.some(t => !t.name.trim())) {
-        showMessage("Chaque équipe doit avoir un nom et il faut au moins 2 équipes.", "error");
-        return;
-      }
-      startGame();
-    };
-
-    function startGame() {
-      currentTeamIndex = 0;
-      currentRound = 1;
-      teams.forEach(t => t.score = 0);
-      document.getElementById('setupScreen').style.display = 'none';
-      document.getElementById('gameArea').style.display = '';
-      document.getElementById('scoreboard').style.display = '';
-      document.getElementById('finalResults').style.display = 'none';
-      updateScoreboard();
-      startRound();
-    }
-
-    function updateScoreboard() {
-      const sb = document.getElementById('scoreboard');
-      sb.innerHTML = teams.map((team, i) => `
-        <div class="team-score${i === currentTeamIndex ? ' active' : ''}" style="border-color:${team.color}">
-          <div class="team-name" style="color:${team.color}">${team.name}</div>
-          <div class="score">${team.score}</div>
         </div>
-      `).join('');
-      sb.style.display = '';
-    }
 
-    function startRound() {
-      roundCards = shuffle(aiEvents).slice(0, 5);
-      timeline = [];
-      placementEnabled = true;
-      updateRoundInfo();
-      renderCards();
-      renderTimeline();
-      hideMessage();
-      startTimer();
-    }
+        <div id="scoreboard" class="scoreboard" style="display:none;"></div>
 
-    function updateRoundInfo() {
-      document.getElementById('roundNumber').textContent = `Manche ${currentRound} / ${maxRounds}`;
-      document.getElementById('currentTeam').textContent = `À ${teams[currentTeamIndex].name} de jouer !`;
-      document.getElementById('timer').textContent = `⏰ 60s`;
-    }
-
-    function startTimer() {
-      clearInterval(timer);
-      timeLeft = 60;
-      document.getElementById('timer').textContent = `⏰ ${timeLeft}s`;
-      timer = setInterval(() => {
-        timeLeft--;
-        document.getElementById('timer').textContent = `⏰ ${timeLeft}s`;
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          showMessage("⏱️ Temps écoulé !", "error");
-          nextTurn();
-        }
-      }, 1000);
-    }
-
-    function renderCards() {
-      const cardsGrid = document.getElementById('cardsGrid');
-      cardsGrid.innerHTML = roundCards.map((card, i) => `
-      <div class="timeline" id="timeline">
-        <div class="timeline-cards" id="timelineCards">
-          <!-- Les cartes placées apparaîtront ici -->
+        <div id="gameArea" class="game-area" style="display:none;">
+            <div class="round-info">
+                <div class="round-number" id="roundNumber"></div>
+                <div class="current-team" id="currentTeam"></div>
+                <div class="timer" id="timer"></div>
+            </div>
+            <div class="card-container" id="cardContainer">
+                <h3>📚 Cartes à placer :</h3>
+                <div class="cards-grid" id="cardsGrid"></div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button class="hint-button" id="hintBtn">💡 Besoin d'un indice ?</button>
+                    <div class="hint" id="hint"></div>
+                </div>
+            </div>
+            <div class="timeline" id="timeline">
+                <div class="timeline-cards" id="timelineCards"></div>
+            </div>
+            <div class="message" id="message"></div>
+            <div class="game-controls">
+                <button class="btn btn-primary" id="validateBtn">✅ Valider l'ordre</button>
+                <button class="btn btn-secondary" id="skipTurnBtn">⏭️ Passer le tour</button>
+                <button class="btn btn-danger" id="resetGameBtn">🔄 Nouvelle partie</button>
+            </div>
         </div>
-      </div>
-      <div id="message" class="message" style="display:none;"></div>
-      <div class="game-controls">
-        <button class="btn btn-primary" id="validateBtn">✅ Valider l'ordre</button>
-        <button class="btn btn-secondary" id="nextRoundBtn" style="display:none;">⏭️ Manche suivante</button>
-        <button class="btn btn-danger" id="endGameBtn">🏁 Terminer la partie</button>
-      </div>
-    </div> <!-- Fin de game-area -->
 
-    <div id="finalResults" class="final-results">
-      <div class="winner-announcement" id="winnerAnnouncement"></div>
-      <div id="finalScores"></div>
-      <button class="btn btn-primary" id="restartBtn">🔄 Rejouer</button>
+        <div id="finalResults" class="final-results">
+            <div class="winner-announcement" id="winnerText"></div>
+            <div id="finalScores"></div>
+            <button class="btn btn-primary" id="resetGameBtn2">🔄 Nouvelle partie</button>
+        </div>
     </div>
-  </div>
+
+    <script>
+        // Données des événements IA avec indices
+        const aiEvents = [
+            { year: 1943, text: "Warren McCulloch et Walter Pitts créent le premier neurone artificiel", hint: "Première modélisation mathématique d'un neurone, pendant la Seconde Guerre mondiale" },
+            { year: 1950, text: "Alan Turing publie « Computing Machinery and Intelligence »", hint: "Introduction du célèbre 'Test de Turing' pour mesurer l'intelligence artificielle" },
+            { year: 1956, text: "Conférence de Dartmouth, naissance officielle de l'IA", hint: "Événement fondateur où le terme 'Intelligence Artificielle' est créé" },
+            { year: 1957, text: "Création du Perceptron par Frank Rosenblatt", hint: "Premier algorithme d'apprentissage automatique, ancêtre des réseaux de neurones" },
+            { year: 1966, text: "ELIZA, premier chatbot créé par Joseph Weizenbaum", hint: "Premier programme capable de simuler une conversation, inspiré de la psychothérapie" },
+            { year: 1986, text: "Réseaux de neurones avec rétropropagation", hint: "Révolution dans l'entraînement des réseaux de neurones multicouches" },
+            { year: 1997, text: "Deep Blue bat Garry Kasparov aux échecs", hint: "Premier ordinateur à battre un champion du monde d'échecs en titre" },
+            { year: 2006, text: "Geoffrey Hinton popularise le deep learning", hint: "Renaissance des réseaux de neurones profonds après des décennies d'oubli" },
+            { year: 2011, text: "IBM Watson gagne à Jeopardy!", hint: "Démonstration de traitement du langage naturel dans un jeu télévisé populaire" },
+            { year: 2012, text: "Victoire d'AlexNet au concours de reconnaissance d'images, ImageNet", hint: "Percée majeure en vision par ordinateur grâce au deep learning" },
+            { year: 2016, text: "AlphaGo bat Lee Sedol au jeu de Go", hint: "Victoire historique dans un jeu considéré comme impossible à maîtriser pour une machine" },
+            { year: 2017, text: "Publication de l'architecture Transformer", hint: "Architecture révolutionnaire qui donnera naissance à GPT, BERT et tous les grands modèles actuels" },
+            { year: 2018, text: "BERT révolutionne la compréhension du langage des machines", hint: "Premier modèle à vraiment comprendre le contexte bidirectionnel dans les phrases" },
+            { year: 2020, text: "GPT-3 démontre des capacités linguistiques impressionnantes", hint: "Modèle de 175 milliards de paramètres qui surprend par sa polyvalence" },
+            { year: 2022, text: "Lancement public de ChatGPT", hint: "Démocratisation de l'IA conversationnelle auprès du grand public" },
+            { year: 2023, text: "GPT-4 et explosion de l'IA générative", hint: "Nouvelle génération multimodale et avènement de l'IA générative mainstream" }
+        ];
+
+        const teamColors = ["#00d2ff", "#3a7bd5", "#00ff88", "#ff6b35", "#ff3838", "#667eea"];
+        let teams = [];
+        let currentTeamIndex = 0;
+        let currentRound = 1;
+        const maxRounds = 5;
+        let timer = null;
+        let timeLeft = 60;
+        let roundCards = []; // Cards available for the current round
+        let timeline = []; // Cards placed on the timeline
+        let placementEnabled = true;
+        let hintUsed = false;
+        let draggedCard = null; // To keep track of the card being dragged
+
+        // Get DOM elements
+        const setupScreen = document.getElementById('setupScreen');
+        const gameArea = document.getElementById('gameArea');
+        const finalResultsScreen = document.getElementById('finalResults');
+        const teamSetupDiv = document.getElementById('teamSetup');
+        const scoreboardDiv = document.getElementById('scoreboard');
+        const roundNumberDiv = document.getElementById('roundNumber');
+        const currentTeamDiv = document.getElementById('currentTeam');
+        const timerDiv = document.getElementById('timer');
+        const cardsGridDiv = document.getElementById('cardsGrid');
+        const hintBtn = document.getElementById('hintBtn');
+        const hintDiv = document.getElementById('hint');
+        const timelineDiv = document.getElementById('timeline');
+        const timelineCardsDiv = document.getElementById('timelineCards');
+        const messageDiv = document.getElementById('message');
+        const validateBtn = document.getElementById('validateBtn');
+        const skipTurnBtn = document.getElementById('skipTurnBtn');
+        const resetGameBtn = document.getElementById('resetGameBtn');
+        const resetGameBtn2 = document.getElementById('resetGameBtn2');
+        const winnerTextDiv = document.getElementById('winnerText');
+        const finalScoresDiv = document.getElementById('finalScores');
+
+        // Initialisation des équipes par défaut
+        function initializeDefaultTeams() {
+            teams = [
+                { name: "Équipe Alpha", color: teamColors[0], score: 0 },
+                { name: "Équipe Beta", color: teamColors[1], score: 0 }
+            ];
+            renderTeamsSetup();
+        }
+
+        // Mélanger un tableau
+        function shuffle(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Rendu de la configuration des équipes
+        function renderTeamsSetup() {
+            teamSetupDiv.innerHTML = '';
+            teams.forEach((team, idx) => {
+                const availableColors = teamColors.filter(c => !teams.some((t, i) => t.color === c && i !== idx));
+                teamSetupDiv.innerHTML += `
+                    <div class="team-input" data-team-idx="${idx}">
+                        <h3>Équipe ${idx + 1} ${teams.length > 2 ? `<button class="remove-team-btn" aria-label="Supprimer l'équipe" onclick="removeTeam(${idx})">❌</button>` : ''}</h3>
+                        <input type="text" placeholder="Nom de l'équipe" value="${team.name}" oninput="teams[${idx}].name=this.value" />
+                        <div class="color-palette">
+                            ${availableColors.map(color => `
+                                <div class="team-color${team.color === color ? ' selected' : ''}" style="background:${color}" onclick="selectColor(${idx}, '${color}')"></div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Fonctions globales pour la gestion des équipes (accessible depuis le HTML)
+        window.selectColor = function(idx, color) {
+            // Check if the color is already chosen by another team
+            const isColorTaken = teams.some((team, i) => i !== idx && team.color === color);
+            if (isColorTaken) {
+                showMessage("Cette couleur est déjà prise par une autre équipe.", "error");
+                return;
+            }
+            teams[idx].color = color;
+            renderTeamsSetup();
+        };
+
+        window.removeTeam = function(idx) {
+            if (teams.length <= 2) {
+                showMessage("Il doit y avoir au moins 2 équipes.", "error");
+                return;
+            }
+            teams.splice(idx, 1);
+            renderTeamsSetup();
+        };
+
+        // Gestion des événements de configuration
+        document.getElementById('addTeamBtn').onclick = function() {
+            if (teams.length >= 6) {
+                showMessage("Nombre maximum d'équipes atteint (6).", "error");
+                return;
+            }
+            const usedColors = teams.map(t => t.color);
+            const newColor = teamColors.find(c => !usedColors.includes(c)); // Find first unused color
+            if (!newColor) {
+                showMessage("Aucune couleur disponible. Toutes les couleurs sont utilisées.", "error");
+                return;
+            }
+            teams.push({ name: `Équipe ${teams.length + 1}`, color: newColor, score: 0 });
+            renderTeamsSetup();
+        };
+
+        document.getElementById('startGameBtn').onclick = function() {
+            if (teams.length < 2 || teams.some(t => !t.name.trim())) {
+                showMessage("Chaque équipe doit avoir un nom et il faut au moins 2 équipes.", "error");
+                return;
+            }
+            startGame();
+        };
+
+        // Démarrage du jeu
+        function startGame() {
+            currentTeamIndex = 0;
+            currentRound = 1;
+            teams.forEach(t => t.score = 0);
+            setupScreen.style.display = 'none';
+            gameArea.style.display = '';
+            scoreboardDiv.style.display = 'flex'; // Use flex to center with gap
+            finalResultsScreen.style.display = 'none';
+            updateScoreboard();
+            startRound();
+        }
+
+        // Mise à jour du tableau de scores
+        function updateScoreboard() {
+            scoreboardDiv.innerHTML = teams.map((team, i) => `
+                <div class="team-score${i === currentTeamIndex ? ' active' : ''}" style="border-color:${team.color}; ${i === currentTeamIndex ? `box-shadow: 0 0 20px ${team.color}50;` : ''}">
+                    <div class="team-name" style="color: ${team.color}">${team.name}</div>
+                    <div class="score">${team.score}</div>
+                </div>
+            `).join('');
+        }
+
+        // Démarrage d'un nouveau round
+        function startRound() {
+            if (currentRound > maxRounds) {
+                endGame();
+                return;
+            }
+
+            roundCards = shuffle(aiEvents).slice(0, 5); // 5 random cards per round
+            timeline = [];
+            placementEnabled = true;
+            hintUsed = false;
+            hintDiv.style.display = 'none';
+            hintDiv.textContent = '';
+            showMessage(""); // Clear previous message
+            clearInterval(timer);
+            timeLeft = 60; // Reset timer for each round
+
+            updateGameInfo();
+            renderCards();
+            renderTimeline();
+            startTimer();
+        }
+
+        // Mise à jour des informations de jeu
+        function updateGameInfo() {
+            roundNumberDiv.textContent = `Manche : ${currentRound} / ${maxRounds}`;
+            currentTeamDiv.textContent = `Équipe actuelle : ${teams[currentTeamIndex].name}`;
+            currentTeamDiv.style.borderColor = teams[currentTeamIndex].color;
+            currentTeamDiv.style.boxShadow = `0 0 20px ${teams[currentTeamIndex].color}50`;
+        }
+
+        // Afficher les cartes disponibles
+        function renderCards() {
+            cardsGridDiv.innerHTML = roundCards.map((card, index) => `
+                <div class="card" draggable="true" data-id="${index}">${card.text}</div>
+            `).join('');
+
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('dragstart', handleDragStart);
+            });
+        }
+
+        // Afficher la timeline
+        function renderTimeline() {
+            timelineCardsDiv.innerHTML = '';
+            if (timeline.length === 0) {
+                timelineDiv.classList.remove('has-cards');
+            } else {
+                timelineDiv.classList.add('has-cards');
+            }
+
+            timeline.forEach((card, index) => {
+                const timelineCard = document.createElement('div');
+                timelineCard.className = 'timeline-card';
+                timelineCard.setAttribute('draggable', 'true'); // Make timeline cards draggable too
+                timelineCard.setAttribute('data-id', card.originalIndex); // Store original index
+                timelineCard.setAttribute('data-position', index + 1);
+                timelineCard.textContent = card.text;
+                timelineCard.style.backgroundColor = teams[currentTeamIndex].color; // Color of the current team
+                timelineCard.style.boxShadow = `0 0 20px ${teams[currentTeamIndex].color}50`;
+
+                timelineCard.addEventListener('dragstart', handleTimelineCardDragStart);
+                timelineCardsDiv.appendChild(timelineCard);
+
+                // Add drop zone between cards for reordering
+                if (index < timeline.length) {
+                    const dropZone = document.createElement('div');
+                    dropZone.className = 'timeline-drop-zone';
+                    dropZone.addEventListener('dragenter', handleDragEnterDropZone);
+                    dropZone.addEventListener('dragleave', handleDragLeaveDropZone);
+                    dropZone.addEventListener('dragover', handleDragOverDropZone);
+                    dropZone.addEventListener('drop', handleDropOnDropZone);
+                    timelineCardsDiv.appendChild(dropZone);
+                }
+            });
+
+            // Add an initial drop zone if the timeline is empty, or a final one
+            if (timeline.length === 0 || timelineCardsDiv.lastElementChild.className !== 'timeline-drop-zone') {
+                const dropZone = document.createElement('div');
+                dropZone.className = 'timeline-drop-zone';
+                dropZone.addEventListener('dragenter', handleDragEnterDropZone);
+                dropZone.addEventListener('dragleave', handleDragLeaveDropZone);
+                dropZone.addEventListener('dragover', handleDragOverDropZone);
+                dropZone.addEventListener('drop', handleDropOnDropZone);
+                timelineCardsDiv.appendChild(dropZone);
+            }
+        }
+
+
+        // Drag and Drop Handlers
+        function handleDragStart(e) {
+            if (!placementEnabled) {
+                e.preventDefault();
+                return;
+            }
+            draggedCard = {
+                id: e.target.dataset.id,
+                source: 'grid' // Indicate the source of the drag
+            };
+            e.dataTransfer.setData('text/plain', e.target.dataset.id);
+            e.target.classList.add('dragging');
+        }
+
+        function handleTimelineCardDragStart(e) {
+            if (!placementEnabled) {
+                e.preventDefault();
+                return;
+            }
+            draggedCard = {
+                id: e.target.dataset.id,
+                source: 'timeline', // Indicate the source of the drag
+                currentIndex: Array.from(timelineCardsDiv.children).indexOf(e.target) / 2 // Calculate index considering drop zones
+            };
+            e.dataTransfer.setData('text/plain', e.target.dataset.id);
+            e.target.classList.add('dragging-timeline');
+        }
+
+        timelineDiv.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Allow drop
+            if (placementEnabled) {
+                timelineDiv.classList.add('drag-over');
+            }
+        });
+
+        timelineDiv.addEventListener('dragleave', () => {
+            timelineDiv.classList.remove('drag-over');
+        });
+
+        timelineDiv.addEventListener('drop', handleDropOnTimeline);
+
+        function handleDropOnTimeline(e) {
+            e.preventDefault();
+            timelineDiv.classList.remove('drag-over');
+
+            if (!placementEnabled) return;
+
+            const cardId = e.dataTransfer.getData('text/plain');
+            const cardElement = document.querySelector(`.card[data-id="${cardId}"]`);
+
+            if (draggedCard.source === 'grid' && cardElement && !cardElement.classList.contains('placed')) {
+                const originalIndex = parseInt(cardId);
+                const cardData = roundCards[originalIndex];
+                timeline.push({ ...cardData, originalIndex: originalIndex }); // Add to timeline
+                cardElement.classList.add('placed'); // Mark as placed
+                cardElement.draggable = false; // Cannot drag from grid anymore
+
+                renderTimeline(); // Re-render timeline to include the new card
+                showMessage("Carte ajoutée à la timeline. Réorganisez si besoin !", "success");
+            } else if (draggedCard.source === 'timeline') {
+                // Handle reordering within the timeline (covered by drop zones)
+                showMessage("Utilisez les zones de dépôt entre les cartes pour réorganiser.", "warning");
+            }
+            draggedCard = null;
+        }
+
+        function handleDragEnterDropZone(e) {
+            e.preventDefault();
+            if (placementEnabled) {
+                this.classList.add('active');
+            }
+        }
+
+        function handleDragLeaveDropZone() {
+            this.classList.remove('active');
+        }
+
+        function handleDragOverDropZone(e) {
+            e.preventDefault(); // Necessary to allow drop
+            if (placementEnabled) {
+                this.classList.add('active');
+            }
+        }
+
+        function handleDropOnDropZone(e) {
+            e.preventDefault();
+            this.classList.remove('active');
+
+            if (!placementEnabled) return;
+
+            const cardId = e.dataTransfer.getData('text/plain');
+            const targetDropZone = this;
+
+            if (draggedCard.source === 'grid') {
+                const originalIndex = parseInt(cardId);
+                const cardData = roundCards[originalIndex];
+                const newIndex = Array.from(timelineCardsDiv.children).indexOf(targetDropZone) / 2; // Calculate target index
+
+                // Check if card is already placed
+                if (document.querySelector(`.card[data-id="${cardId}"]`).classList.contains('placed')) {
+                    showMessage("Cette carte est déjà placée.", "warning");
+                    return;
+                }
+
+                timeline.splice(newIndex, 0, { ...cardData, originalIndex: originalIndex });
+                document.querySelector(`.card[data-id="${cardId}"]`).classList.add('placed');
+                document.querySelector(`.card[data-id="${cardId}"]`).draggable = false;
+                showMessage("Carte ajoutée à la timeline.", "success");
+
+            } else if (draggedCard.source === 'timeline') {
+                const movedCardOriginalIndex = parseInt(cardId);
+                const movedCardIndexInTimeline = timeline.findIndex(card => card.originalIndex === movedCardOriginalIndex);
+
+                if (movedCardIndexInTimeline > -1) {
+                    const [movedCardData] = timeline.splice(movedCardIndexInTimeline, 1);
+                    const newIndex = Array.from(timelineCardsDiv.children).indexOf(targetDropZone) / 2; // Calculate target index in new array
+
+                    // Adjust newIndex if moving to a position before the original
+                    const adjustedNewIndex = newIndex > movedCardIndexInTimeline ? newIndex -1 : newIndex;
+                    timeline.splice(adjustedNewIndex, 0, movedCardData);
+                    showMessage("Carte réorganisée sur la timeline.", "success");
+                }
+            }
+            renderTimeline();
+            draggedCard = null;
+        }
+
+        document.addEventListener('dragend', (e) => {
+            if (e.target.classList.contains('card')) {
+                e.target.classList.remove('dragging');
+            } else if (e.target.classList.contains('timeline-card')) {
+                e.target.classList.remove('dragging-timeline');
+            }
+            document.querySelectorAll('.timeline-drop-zone').forEach(zone => zone.classList.remove('active'));
+            timelineDiv.classList.remove('drag-over');
+        });
+
+        // Timer functionality
+        function startTimer() {
+            timerDiv.textContent = `Temps restant : ${timeLeft}s`;
+            timer = setInterval(() => {
+                timeLeft--;
+                timerDiv.textContent = `Temps restant : ${timeLeft}s`;
+                if (timeLeft <= 10) {
+                    timerDiv.style.backgroundColor = varColor('--accent-danger');
+                    timerDiv.style.boxShadow = varColor('--glow-danger');
+                } else if (timeLeft <= 30) {
+                    timerDiv.style.backgroundColor = varColor('--accent-warning');
+                    timerDiv.style.boxShadow = varColor('--glow-warning');
+                } else {
+                    timerDiv.style.backgroundColor = 'var(--bg-card)';
+                    timerDiv.style.boxShadow = 'none';
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    showMessage("Temps écoulé ! Tour terminé.", "error");
+                    placementEnabled = false; // Disable further placement
+                    setTimeout(endTurn, 2000); // Wait a bit before ending turn
+                }
+            }, 1000);
+        }
+
+        // Get CSS variable value
+        function varColor(variableName) {
+            return getComputedStyle(document.documentElement).getPropertyValue(variableName).trim();
+        }
+
+        // Check if timeline is correct and calculate score
+        function validateOrder() {
+            clearInterval(timer);
+            placementEnabled = false;
+            const currentTeam = teams[currentTeamIndex];
+
+            if (timeline.length !== roundCards.length) {
+                showMessage("Toutes les cartes n'ont pas été placées !", "error");
+                // Allow them to continue playing their turn if not all cards are placed
+                placementEnabled = true;
+                startTimer(); // Restart timer
+                return;
+            }
+
+            const sortedTimeline = [...timeline].sort((a, b) => a.year - b.year);
+            let correctCount = 0;
+            let allCorrect = true;
+
+            timeline.forEach((card, index) => {
+                if (card.year === sortedTimeline[index].year && card.text === sortedTimeline[index].text) {
+                    correctCount++;
+                } else {
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                currentTeam.score += 10 + (hintUsed ? 0 : 5); // 10 points for correct order, +5 bonus if no hint
+                showMessage(`✅ Bravo ${currentTeam.name} ! Ordre correct. +${10 + (hintUsed ? 0 : 5)} points !`, "success");
+            } else {
+                currentTeam.score -= 5; // Penalty for incorrect order
+                showMessage(`❌ Mauvais ordre, ${currentTeam.name} ! -5 points.`, "error");
+            }
+
+            // Display correct order for learning
+            displayCorrectOrder();
+
+            updateScoreboard();
+            setTimeout(endTurn, 4000); // Wait before ending turn
+        }
+
+        function displayCorrectOrder() {
+            const correctOrderDiv = document.createElement('div');
+            correctOrderDiv.className = 'message warning';
+            correctOrderDiv.innerHTML = '<h3>Ordre correct :</h3>';
+            const correctCards = [...roundCards].sort((a, b) => a.year - b.year);
+            correctOrderDiv.innerHTML += correctCards.map(card => `
+                <p><strong>${card.year}</strong>: ${card.text}</p>
+            `).join('');
+            messageDiv.appendChild(correctOrderDiv); // Append to message area
+        }
+
+        // Fin du tour
+        function endTurn() {
+            currentTeamIndex = (currentTeamIndex + 1) % teams.length;
+            if (currentTeamIndex === 0) {
+                currentRound++;
+            }
+            updateScoreboard();
+            startRound();
+        }
+
+        // Afficher un message temporaire
+        function showMessage(msg, type = "info") {
+            messageDiv.textContent = msg;
+            messageDiv.className = `message ${type}`;
+            if (msg === "") {
+                messageDiv.style.display = 'none';
+            } else {
+                messageDiv.style.display = 'block';
+            }
+        }
+
+        // Afficher l'indice
+        hintBtn.addEventListener('click', () => {
+            if (roundCards.length > 0 && !hintUsed) {
+                const randomCard = roundCards[Math.floor(Math.random() * roundCards.length)];
+                hintDiv.textContent = `Indice : "${randomCard.hint}" (pour l'événement "${randomCard.text}"). Cela coûte 5 points !`;
+                hintDiv.style.display = 'block';
+                hintUsed = true; // Mark hint as used for this round
+                teams[currentTeamIndex].score -= 5; // Deduct points
+                updateScoreboard();
+            } else if (hintUsed) {
+                showMessage("Vous avez déjà utilisé un indice pour cette manche.", "warning");
+            } else {
+                showMessage("Aucune carte à placer pour obtenir un indice.", "warning");
+            }
+        });
+
+        // Boutons d'action du jeu
+        validateBtn.addEventListener('click', validateOrder);
+        skipTurnBtn.addEventListener('click', () => {
+            clearInterval(timer);
+            showMessage(`${teams[currentTeamIndex].name} a passé son tour.`, "warning");
+            setTimeout(endTurn, 2000);
+        });
+
+        resetGameBtn.addEventListener('click', () => {
+            clearInterval(timer);
+            showMessage("Nouvelle partie démarrée.", "info");
+            setupScreen.style.display = '';
+            gameArea.style.display = 'none';
+            scoreboardDiv.style.display = 'none';
+            finalResultsScreen.style.display = 'none';
+            initializeDefaultTeams(); // Reset teams to default
+        });
+
+        resetGameBtn2.addEventListener('click', () => {
+            clearInterval(timer);
+            showMessage("Nouvelle partie démarrée.", "info");
+            setupScreen.style.display = '';
+            gameArea.style.display = 'none';
+            scoreboardDiv.style.display = 'none';
+            finalResultsScreen.style.display = 'none';
+            initializeDefaultTeams(); // Reset teams to default
+        });
+
+
+        // Fin du jeu
+        function endGame() {
+            clearInterval(timer);
+            gameArea.style.display = 'none';
+            scoreboardDiv.style.display = 'none';
+            finalResultsScreen.style.display = '';
+
+            teams.sort((a, b) => b.score - a.score); // Sort teams by score
+
+            const winner = teams[0];
+            winnerTextDiv.textContent = `🎉 Le grand gagnant est ${winner.name} avec ${winner.score} points ! 🎉`;
+            winnerTextDiv.style.background = `linear-gradient(135deg, ${winner.color}, var(--accent-success))`;
+            winnerTextDiv.style.webkitBackgroundClip = 'text';
+            winnerTextDiv.style.backgroundClip = 'text';
+            winnerTextDiv.style.webkitTextFillColor = 'transparent';
+
+            finalScoresDiv.innerHTML = '<h3>Scores finaux :</h3>';
+            teams.forEach(team => {
+                finalScoresDiv.innerHTML += `<p><strong style="color:${team.color}">${team.name}</strong> : ${team.score} points</p>`;
+            });
+        }
+
+        // Initialisation au chargement de la page
+        document.addEventListener('DOMContentLoaded', initializeDefaultTeams);
+    </script>
 </body>
+</html>
