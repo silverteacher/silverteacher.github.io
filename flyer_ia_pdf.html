@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'IA au service des élèves et des enseignants</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            line-height: 1.6;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            page-break-after: always;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page:last-child {
+            margin-bottom: 0;
+        }
+
+        /* PAGE 1 - COUVERTURE */
+        .page-1 {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30mm;
+            position: relative;
+        }
+
+        .page-1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .page-1-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .logo-ai {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin: 0 auto 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .main-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            line-height: 1.2;
+        }
+
+        .main-subtitle {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .event-details {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .event-date {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #fbbf24;
+        }
+
+        .event-location {
+            font-size: 1.2rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .organizer {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        /* PAGE 2 - CONTENU DÉTAILLÉ */
+        .page-2 {
+            padding: 25mm;
+            background: #f8fafc;
+        }
+
+        .header-page2 {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-page2::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.05) 10px,
+                rgba(255,255,255,0.05) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+
+        @keyframes slide {
+            0% { transform: translateX(-50px); }
+            100% { transform: translateX(50px); }
+        }
+
+        .header-page2-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page2-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .page2-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            position: relative;
+        }
+
+        .content-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 0 5px 5px 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .section-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .speakers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .speaker-card {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid #e2e8f0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .speaker-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            border-color: #3b82f6;
+        }
+
+        .speaker-card::before {
+            content: '👨‍🏫';
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            font-size: 2rem;
+            background: white;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .speaker-card:nth-child(2)::before {
+            content: '👩‍💻';
+        }
+
+        .speaker-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .speaker-role {
+            color: #64748b;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .program-timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .program-timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 3px;
+        }
+
+        .program-item {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .program-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .program-item::before {
+            content: '';
+            position: absolute;
+            left: -52px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            background: #f59e0b;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0 0 3px #f59e0b;
+        }
+
+        .program-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .program-description {
+            color: #64748b;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .footer-section {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .footer-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .website-link {
+            display: inline-block;
+            background: #f59e0b;
+            color: #1e293b;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .website-link:hover {
+            background: #d97706;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+        }
+
+        .download-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        @media print {
+            body {
+                background: white !important;
+            }
+            
+            .page {
+                box-shadow: none;
+                margin: 0;
+                page-break-after: always;
+            }
+            
+            .page:last-child {
+                page-break-after: auto;
+            }
+
+            .download-btn {
+                display: none !important;
+            }
+
+            /* Simplification des couleurs pour l'impression */
+            .page-1 {
+                background: white !important;
+                color: #1e293b !important;
+                border: 3px solid #3b82f6 !important;
+            }
+
+            .page-1::before {
+                display: none !important;
+            }
+
+            .logo-ai {
+                background: white !important;
+                border: 3px solid #3b82f6 !important;
+                color: #3b82f6 !important;
+            }
+
+            .main-title {
+                color: #1e293b !important;
+                text-shadow: none !important;
+            }
+
+            .main-subtitle {
+                background: #f8fafc !important;
+                color: #1e293b !important;
+                border: 2px solid #3b82f6 !important;
+            }
+
+            .event-details {
+                background: #f8fafc !important;
+                color: #1e293b !important;
+                border: 2px solid #3b82f6 !important;
+            }
+
+            .event-date {
+                color: #1e293b !important;
+            }
+
+            .organizer {
+                color: #64748b !important;
+            }
+
+            .header-page2 {
+                background: white !important;
+                color: #1e293b !important;
+                border: 3px solid #3b82f6 !important;
+            }
+
+            .header-page2::before {
+                display: none !important;
+            }
+
+            .section-icon {
+                background: white !important;
+                color: #3b82f6 !important;
+                border: 2px solid #3b82f6 !important;
+            }
+
+            .content-section::before {
+                background: #3b82f6 !important;
+            }
+
+            .program-timeline::before {
+                background: #3b82f6 !important;
+            }
+
+            .program-item::before {
+                background: #3b82f6 !important;
+                box-shadow: 0 0 0 3px #3b82f6 !important;
+            }
+
+            .footer-section {
+                background: white !important;
+                color: #1e293b !important;
+                border: 3px solid #1e293b !important;
+            }
+
+            .website-link {
+                background: #f8fafc !important;
+                color: #3b82f6 !important;
+                border: 2px solid #3b82f6 !important;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .page {
+                width: 100%;
+                min-height: auto;
+                margin: 0;
+                box-shadow: none;
+            }
+            
+            .page-1 {
+                padding: 20px;
+            }
+            
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .speakers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-2 {
+                padding: 20px;
+            }
+
+            .download-btn {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 20px auto;
+                display: flex;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PAGE 1 - COUVERTURE -->
+    <div class="page page-1">
+        <div class="page-1-content">
+            <div class="logo-ai">🤖</div>
+            
+            <h1 class="main-title">L'IA au service des élèves et des enseignants</h1>
+            
+            <div class="main-subtitle">
+                Séminaire sur l'IA pour les secrétaires généraux
+            </div>
+            
+            <div class="event-details">
+                <div class="event-date">📅 Jeudi 26 juin 2025</div>
+                <div class="event-location">📍 ENSAIT Roubaix</div>
+            </div>
+            
+            <div class="organizer">
+                Une initiative de l'Académie de Lille
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2 - CONTENU DÉTAILLÉ -->
+    <div class="page page-2">
+        <div class="header-page2">
+            <div class="header-page2-content">
+                <h2 class="page2-title">Programme & Intervenants</h2>
+                <p class="page2-subtitle">Découvrez l'intelligence artificielle au service de l'éducation</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-icon">👥</div>
+                <h3 class="section-title">Nos Experts</h3>
+            </div>
+            
+            <div class="speakers-grid">
+                <div class="speaker-card">
+                    <h4 class="speaker-name">Dimitri Saputa</h4>
+                    <p class="speaker-role">Enseignant d'histoire-géographie et formateur spécialisé dans l'intégration des technologies éducatives</p>
+                </div>
+                
+                <div class="speaker-card">
+                    <h4 class="speaker-name">Amélie Silvert</h4>
+                    <p class="speaker-role">Responsable académique pour le numérique éducatif, experte en innovation pédagogique</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <div class="section-icon">📋</div>
+                <h3 class="section-title">Programme de la Journée</h3>
+            </div>
+            
+            <div class="program-timeline">
+                <div class="program-item">
+                    <h4 class="program-title">🔍 Découverte de la timeline de l'IA</h4>
+                    <p class="program-description">Session interactive sous forme de jeu collectif pour explorer l'évolution historique de l'intelligence artificielle et comprendre les enjeux actuels</p>
+                </div>
+                
+                <div class="program-item">
+                    <h4 class="program-title">📈 Retours sur l'évolution de l'IA</h4>
+                    <p class="program-description">Analyse des dates clés et des moments charnières qui ont marqué le développement de l'intelligence artificielle dans l'éducation</p>
+                </div>
+                
+                <div class="program-item">
+                    <h4 class="program-title">🎯 Jeu du jeune enseignant de mathématiques</h4>
+                    <p class="program-description">Mise en situation pratique : comment un enseignant peut-il intégrer l'IA dans ses pratiques pédagogiques ? Défis et opportunités</p>
+                </div>
+                
+                <div class="program-item">
+                    <h4 class="program-title">🛠️ Découverte des outils d'IA</h4>
+                    <p class="program-description">Présentation et démonstration pratique des plateformes ComparIA, Mistral et Vittascience : outils concrets pour l'enseignement</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-section">
+            <h3 class="footer-title">Pour plus d'informations</h3>
+            <a href="https://dane.site.ac-lille.fr/" class="website-link">
+                🌐 Visitez le site de la DANE
+            </a>
+        </div>
+    </div>
+
+    <!-- Bouton de téléchargement -->
+    <button class="download-btn" id="downloadBtn">
+        📄 Télécharger PDF
+    </button>
+
+    <script>
+        // Fonction de téléchargement PDF
+        function downloadPDF() {
+            // Configuration des options d'impression
+            const originalTitle = document.title;
+            document.title = 'Seminaire_IA_Lille_2025';
+            
+            // Lancement de l'impression
+            window.print();
+            
+            // Restauration du titre original
+            setTimeout(() => {
+                document.title = originalTitle;
+            }, 1000);
+        }
+
+        // Initialisation du bouton
+        document.addEventListener('DOMContentLoaded', function() {
+            const downloadBtn = document.getElementById('downloadBtn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', downloadPDF);
+            }
+        });
+
+        // Gestion du responsive et des animations
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialisation du bouton de téléchargement
+            const downloadBtn = document.getElementById('downloadBtn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', downloadPDF);
+            }
+
+            // Animation des cartes au scroll
+            const cards = document.querySelectorAll('.speaker-card, .program-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
