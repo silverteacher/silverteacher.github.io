@@ -1,0 +1,535 @@
+<!doctypehtml><html lang=fr><meta charset=UTF-8><meta content="width=device-width,initial-scale=1"name=viewport><meta content="Amélie Silvert"name=author><meta content="Escape Game pédagogique pour maîtriser la scénarisation de webinaires - Créé par Amélie Silvert avec l'aide de l'IA"name=description><title>WEBINAIRE EN PÉRIL - Escape Game Pédagogique</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Courier New',monospace;background:linear-gradient(135deg,#0a0a0a 0,#1a1a2e 50%,#16213e 100%);color:#0f0;min-height:100vh;overflow-x:hidden}.terminal-header{background:linear-gradient(135deg,red 0,#c00 100%);color:#fff;padding:20px;text-align:center;font-size:24px;font-weight:700;border-bottom:4px solid #0f0;animation:glitch 3s infinite}@keyframes glitch{0%,100%,90%{transform:translateX(0)}92%{transform:translateX(-3px)}94%{transform:translateX(3px)}96%{transform:translateX(-2px)}}.container{max-width:1200px;margin:0 auto;padding:40px 20px}.progress-bar{background:rgba(0,255,0,.1);border:2px solid #0f0;border-radius:10px;height:40px;margin-bottom:30px;position:relative;overflow:hidden}.progress-fill{background:linear-gradient(90deg,#0f0 0,#0c0 100%);height:100%;width:0%;transition:width .5s ease;display:flex;align-items:center;justify-content:center;color:#000;font-weight:700}.timer{position:fixed;top:20px;right:20px;background:rgba(255,0,0,.8);color:#fff;padding:15px 25px;border-radius:8px;font-size:24px;font-weight:700;border:2px solid red;z-index:1000;animation:pulse 2s infinite}@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(255,0,0,.5)}50%{box-shadow:0 0 40px rgba(255,0,0,.8)}}.module{display:none}.module.active{display:block;animation:slideIn .6s ease}@keyframes slideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}.terminal-box{background:rgba(0,0,0,.8);border:3px solid #0f0;border-radius:10px;padding:30px;margin-bottom:30px;box-shadow:0 0 30px rgba(0,255,0,.3)}.terminal-title{color:#0f0;font-size:22px;margin-bottom:15px;text-transform:uppercase;display:flex;align-items:center;gap:10px}.terminal-title::before{content:'>';color:red;font-size:28px}.terminal-content{color:#ccc;line-height:1.8;font-size:16px}.incident-alert{background:linear-gradient(135deg,red 0,#c00 100%);color:#fff;padding:20px;border-radius:10px;margin:20px 0;border:3px solid #ff0;animation:shake .5s infinite;text-align:center;font-size:20px;font-weight:700}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}.ransomware{background:linear-gradient(135deg,#000 0,#300 100%);border:5px solid red;border-radius:15px;padding:30px;margin:30px 0;text-align:center;position:relative;box-shadow:0 0 50px rgba(255,0,0,.5)}.ransomware-title{color:red;font-size:28px;margin-bottom:20px;text-transform:uppercase;animation:blink 1s infinite}@keyframes blink{0%,50%{opacity:1}100%,51%{opacity:.5}}.challenge-question{background:rgba(255,0,0,.1);border-left:4px solid red;padding:20px;margin:20px 0;color:#fff;font-size:18px}.options-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:20px 0}.option-btn{background:rgba(0,255,0,.1);border:2px solid #0f0;color:#0f0;padding:15px;border-radius:8px;cursor:pointer;font-size:16px;font-family:'Courier New',monospace;transition:all .3s ease}.option-btn:hover{background:rgba(0,255,0,.3);transform:scale(1.05)}.option-btn.correct{background:linear-gradient(135deg,#0f0 0,#0c0 100%);color:#000;border-color:#0f0;animation:correctPulse .6s ease}.option-btn.incorrect{background:linear-gradient(135deg,red 0,#c00 100%);color:#fff;border-color:red;animation:wrongShake .5s ease}@keyframes correctPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}@keyframes wrongShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}.text-input{width:100%;background:rgba(0,0,0,.8);border:2px solid #0f0;color:#0f0;padding:15px;border-radius:8px;font-family:'Courier New',monospace;font-size:16px;margin:15px 0}.btn-primary{background:linear-gradient(135deg,#0f0 0,#0c0 100%);color:#000;border:none;padding:15px 35px;border-radius:8px;font-size:18px;font-weight:700;cursor:pointer;font-family:'Courier New',monospace;transition:all .3s ease;margin:10px 5px}.btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,255,0,.4)}.btn-secondary{background:rgba(255,255,0,.2);border:2px solid #ff0;color:#ff0}.btn-secondary:hover{background:rgba(255,255,0,.4)}.cheat-btn{background:rgba(255,0,0,.2);border:2px solid red;color:red;font-size:12px;padding:8px 15px;margin-top:20px}.cheat-btn:hover{background:rgba(255,0,0,.4)}.reflection-zone{background:linear-gradient(135deg,#1a1a2e 0,#16213e 100%);border:3px solid #ff0;border-radius:10px;padding:25px;margin:30px 0}.reflection-title{color:#ff0;font-size:20px;margin-bottom:15px;display:flex;align-items:center;gap:10px}.resource-card{background:rgba(0,255,255,.1);border-left:4px solid #0ff;padding:20px;margin:15px 0;border-radius:8px}.resource-card h4{color:#0ff;margin-bottom:10px}.resource-card a{color:#0ff;text-decoration:none;border-bottom:1px dotted #0ff}.resource-card a:hover{color:#fff;border-bottom:1px solid #fff}.success-message{background:linear-gradient(135deg,#0f0 0,#0c0 100%);color:#000;padding:20px;border-radius:10px;margin:20px 0;text-align:center;font-size:18px;font-weight:700;animation:slideIn .6s ease}.unlock-animation{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#0f0 0,#0c0 100%);color:#000;padding:40px 60px;border-radius:20px;font-size:32px;font-weight:700;z-index:2000;animation:unlockPop .8s cubic-bezier(.68,-.55,.265,1.55);box-shadow:0 20px 60px rgba(0,255,0,.6)}@keyframes unlockPop{0%{transform:translate(-50%,-50%) scale(0) rotate(-30deg);opacity:0}100%{transform:translate(-50%,-50%) scale(1) rotate(0);opacity:1}}.certificate{background:linear-gradient(135deg,#fff 0,#f0f0f0 100%);color:#000;border:10px solid gold;border-radius:20px;padding:40px;text-align:center;margin:30px auto;max-width:800px;box-shadow:0 20px 60px rgba(255,215,0,.5)}.certificate h2{color:#c00;font-size:36px;margin-bottom:20px}.certificate-name{color:#00f;font-size:28px;font-weight:700;margin:20px 0}.scenario-position{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:25px 0}.position-card{background:rgba(0,255,255,.1);border:2px solid #0ff;border-radius:10px;padding:20px;cursor:pointer;transition:all .3s ease}.position-card:hover{background:rgba(0,255,255,.3);transform:translateY(-5px)}.position-card h4{color:#0ff;margin-bottom:10px}.hint-bubble{position:fixed;bottom:20px;right:20px;background:rgba(255,255,0,.9);color:#000;padding:15px 20px;border-radius:20px;max-width:300px;font-size:14px;box-shadow:0 5px 20px rgba(255,255,0,.5);z-index:1000;display:none}.hint-bubble.show{display:block;animation:slideUp .5s ease}@keyframes slideUp{from{transform:translateY(100px);opacity:0}to{transform:translateY(0);opacity:1}}@media (max-width:768px){.options-grid{grid-template-columns:1fr}.scenario-position{grid-template-columns:1fr}.timer{top:10px;right:10px;font-size:18px;padding:10px 15px}}</style><div class=terminal-header>⚠️ WEBINAIRE EN PÉRIL - ESCAPE GAME PÉDAGOGIQUE ⚠️</div><div class=timer id=timer>⏱️ 90:00</div><div class=container><div class=progress-bar><div class=progress-fill id=progress>MODULE 0/7</div></div><div class="module active"id=module0><div class=terminal-box><div class=terminal-title>🚨 ALERTE SYSTÈME - VOUS ÊTES PIÉGÉ(E)</div><div class=terminal-content><div class=incident-alert>⚠️ ERREUR CRITIQUE DÉTECTÉE ⚠️<br>Votre webinaire a été infecté par un virus pédagogique</div><p style="margin:20px 0">Bienvenue dans <strong style=color:red>WEBINAIRE EN PÉRIL</strong>, la seule formation où vous devrez littéralement ÉCHAPPER aux catastrophes pour maîtriser la scénarisation de webinaires.<p style="margin:20px 0"><strong style=color:#0f0>VOTRE MISSION :</strong><br>Vous allez vivre 5 INCIDENTS réels qui arrivent dans les webinaires. Pour chaque incident, vous devrez :<br>✅ Comprendre ce qui a dérapé<br>✅ Résoudre différents types de défis (quiz, collecte, partage, énigmes chrono)<br>✅ Débloquer l'étape suivante<br>✅ Collecter badges, power-ups et points bonus<div class=reflection-zone><div class=reflection-title>💡 CONTEXTE DE CETTE FORMATION</div><div class=terminal-content>Cette formation s'adresse à des <strong>formateurs intermédiaires/expérimentés</strong> qui animent déjà des webinaires mais veulent passer au niveau supérieur en maîtrisant la <strong>scénarisation pédagogique</strong>.<br><br>Durée : <strong>1h30</strong> (90 minutes chrono!)<br>Format : <strong>Escape Game linéaire</strong><br>Participants : <strong>Maximum 30 personnes</strong></div></div><p style="margin:20px 0"><strong style=color:#ff0>⏱️ CHRONOMÈTRE :</strong> Vous avez 90 minutes pour débloquer tous les modules. Mais pas de panique : le but est d'apprendre, pas de stresser ! Prenez votre temps et profitez de l'expérience. 🎮</div></div><div class=terminal-box><div class=terminal-title>📋 LES 7 MODULES À DÉBLOQUER</div><div class=terminal-content><p style=color:#0f0>✅ MODULE 0 : Introduction (vous êtes ici)<p style=color:#666>🔒 MODULE 1 : Scénariser selon la position dans le parcours<p style=color:#666>🔒 MODULE 2 : INCIDENT #1 - Les stagiaires zombies<p style=color:#666>🔒 MODULE 3 : INCIDENT #2 - Le PowerPoint de la mort<p style=color:#666>🔒 MODULE 4 : INCIDENT #3 - Le silence radio<p style=color:#666>🔒 MODULE 5 : INCIDENT #4 - L'invasion du chaos<p style=color:#666>🔒 MODULE 6 : INCIDENT #5 - Le partage d'écran maudit<p style=color:#666>🔒 MODULE 7 : FINALE - Template + Certificat</div></div><div style=text-align:center;margin-top:30px><button class=btn-primary onclick=startGame()>🚀 COMMENCER L'ESCAPE GAME</button></div></div><div class=module id=module1><div class=terminal-box><div class=terminal-title>📍 MODULE 1 : SCÉNARISER SELON LA POSITION</div><div class=terminal-content><p style=margin-bottom:20px>Avant de plonger dans les incidents, une question ESSENTIELLE : <strong style=color:#0f0>Où se situe votre webinaire dans le parcours de formation ?</strong><p style=margin-bottom:20px>Cette position change RADICALEMENT la scénarisation. Un webinaire en début de formation n'a PAS les mêmes objectifs qu'un webinaire en milieu ou en fin de parcours.<div class=scenario-position><div class=position-card onclick='showPosition("debut")'><h4>🎬 DÉBUT DE FORMATION</h4><p style=color:#ccc;font-size:14px>Créer l'engagement, poser les bases, briser la glace</div><div class=position-card onclick='showPosition("milieu")'><h4>⚙️ MILIEU DE FORMATION</h4><p style=color:#ccc;font-size:14px>Approfondir, pratiquer, consolider les acquis</div><div class=position-card onclick='showPosition("fin")'><h4>🏁 FIN DE FORMATION</h4><p style=color:#ccc;font-size:14px>Synthétiser, ancrer, projeter dans l'action</div></div><div style=display:none;margin-top:30px id=position-content><div style=display:none id=debut-content><div class=terminal-box><div class=terminal-title>🎬 WEBINAIRE EN DÉBUT DE FORMATION</div><div class=terminal-content><p><strong style=color:#0f0>OBJECTIFS PRIORITAIRES :</strong><ul style=margin-left:30px;line-height:1.8><li>Créer du lien et de la confiance (vous ET entre participants)<li>Poser le cadre et les règles du jeu<li>Diagnostiquer les attentes et le niveau<li>Susciter la curiosité et l'engagement</ul><p style=margin-top:20px><strong style=color:#0f0>STRUCTURE RECOMMANDÉE :</strong><ul style=margin-left:30px;line-height:1.8><li><strong>15 min</strong> : Brise-glace original (sondage Wooclap créatif, tour de table décalé)<li><strong>10 min</strong> : Présentation du parcours et des outils<li><strong>20 min</strong> : Quiz diagnostic interactif (BBB ou Wooclap)<li><strong>30 min</strong> : Introduction au contenu (mini-atelier collaboratif)<li><strong>15 min</strong> : Définir les objectifs personnels + planning</ul><p style=margin-top:20px><strong style=color:#ff0>⚠️ PIÈGES À ÉVITER :</strong><ul style=margin-left:30px;line-height:1.8><li>❌ Commencer par un monologue de 30 min<li>❌ Négliger les brise-glaces ("on n'a pas le temps")<li>❌ Oublier de tester les outils avant</ul></div></div></div><div style=display:none id=milieu-content><div class=terminal-box><div class=terminal-title>⚙️ WEBINAIRE EN MILIEU DE FORMATION</div><div class=terminal-content><p><strong style=color:#0f0>OBJECTIFS PRIORITAIRES :</strong><ul style=margin-left:30px;line-height:1.8><li>Approfondir les concepts déjà vus<li>Faire pratiquer et expérimenter<li>Corriger les erreurs de compréhension<li>Maintenir la motivation (c'est le "creux" )</ul><p style=margin-top:20px><strong style=color:#0f0>STRUCTURE RECOMMANDÉE :</strong><ul style=margin-left:30px;line-height:1.8><li><strong>10 min</strong> : Énergizer + rappel des acquis précédents<li><strong>15 min</strong> : Présentation du nouveau concept (courte!)<li><strong>30 min</strong> : Atelier pratique en breakout rooms BBB<li><strong>20 min</strong> : Restitution collective + feedback<li><strong>15 min</strong> : Q&A + ressources complémentaires</ul><p style=margin-top:20px><strong style=color:#ff0>⚠️ PIÈGES À ÉVITER :</strong><ul style=margin-left:30px;line-height:1.8><li>❌ Trop de théorie, pas assez de pratique<li>❌ Breakout rooms sans consigne claire<li>❌ Oublier de faire le lien avec le module précédent</ul></div></div></div><div style=display:none id=fin-content><div class=terminal-box><div class=terminal-title>🏁 WEBINAIRE EN FIN DE FORMATION</div><div class=terminal-content><p><strong style=color:#0f0>OBJECTIFS PRIORITAIRES :</strong><ul style=margin-left:30px;line-height:1.8><li>Faire la synthèse de tout le parcours<li>Ancrer les apprentissages dans le concret<li>Élaborer un plan d'action individuel<li>Célébrer les progrès et clôturer positivement</ul><p style=margin-top:20px><strong style=color:#0f0>STRUCTURE RECOMMANDÉE :</strong><ul style=margin-left:30px;line-height:1.8><li><strong>15 min</strong> : Rétrospective collaborative (Wooclap ou tableau blanc BBB)<li><strong>20 min</strong> : Quiz de validation final (gamifié!)<li><strong>30 min</strong> : Atelier "Plan d'action" (individuel puis partage)<li><strong>15 min</strong> : Ressources et communauté (où continuer ?)<li><strong>10 min</strong> : Célébration + feedback formation</ul><p style=margin-top:20px><strong style=color:#ff0>⚠️ PIÈGES À ÉVITER :</strong><ul style=margin-left:30px;line-height:1.8><li>❌ Finir en queue de poisson ("c'était bien, au revoir")<li>❌ Ne pas donner de perspective concrète post-formation<li>❌ Oublier de célébrer et valoriser les apprentissages</ul></div></div></div></div></div></div><div style="background:linear-gradient(135deg,#0f0 0,#0c0 100%);border:3px solid #ff0;border-radius:15px;padding:30px;margin:30px 0;text-align:center;color:#000"><div style=font-size:28px;font-weight:700;margin-bottom:20px>🎁 RÉCOMPENSE INSTANTANÉE !</div><p style=font-size:18px;margin-bottom:20px>Vous avez exploré les 3 positions ! Pour vous récompenser, choisissez votre badge de départ :<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin:20px 0"><div class=position-card style=background:rgba(255,255,255,.2);border-color:#000 onclick='selectBadge("stratège")'><h4 style=color:#000>🎯 STRATÈGE</h4><p style=color:#000;font-size:14px>Je planifie tout en détail</div><div class=position-card style=background:rgba(255,255,255,.2);border-color:#000 onclick='selectBadge("improvisateur")'><h4 style=color:#000>⚡ IMPROVISATEUR</h4><p style=color:#000;font-size:14px>Je m'adapte en live</div><div class=position-card style=background:rgba(255,255,255,.2);border-color:#000 onclick='selectBadge("collaboratif")'><h4 style=color:#000>🤝 COLLABORATIF</h4><p style=color:#000;font-size:14px>Je co-construis avec les participants</div></div><p style=font-size:14px;margin-top:15px;color:#000>✨ Ce badge sera ajouté à votre certificat final</div></div><div class=module id=module2><div class=incident-alert>🚨 INCIDENT #1 DÉTECTÉ 🚨<br>LES STAGIAIRES ZOMBIES</div><div class=terminal-box><div class=terminal-title>💤 SCÉNARIO CATASTROPHE</div><div class=terminal-content><p style=margin-bottom:20px><strong>Minute 45 de votre webinaire...</strong><p style=margin-bottom:20px>Vous présentez votre PowerPoint. C'est fluide, c'est clair, c'est... MORTEL. Littéralement.<p style=margin-bottom:20px>✅ Caméras éteintes<br>✅ Aucune réaction dans le chat<br>✅ Participants en mode "spectateur Netflix"<br>✅ Vous entendez vaguement quelqu'un mâcher des chips<p style=color:red;font-weight:700>DIAGNOSTIC : Vos stagiaires sont devenus des ZOMBIES. Ils sont présents physiquement mais absents mentalement.</div></div><div class=reflection-zone><div class=reflection-title>🧠 POURQUOI ÇA ARRIVE ?</div><div class=terminal-content><p><strong style=color:#0f0>BASES SCIENTIFIQUES :</strong><ul style=margin-left:30px;line-height:1.8><li><strong>Courbe d'attention de Mackworth</strong> : L'attention naturelle chute drastiquement après 20-30 minutes SANS variation<li><strong>4 piliers de Dehaene</strong> : Sans ENGAGEMENT ACTIF (pilier 2), pas d'apprentissage<li><strong>Charge cognitive passive</strong> : Écouter = charge très faible = cerveau en veille</ul><div class=resource-card><h4>📚 Ressources scientifiques</h4><p>• Stanislas Dehaene - <a href=https://www.college-de-france.fr/fr/chaire/stanislas-dehaene-psychologie-cognitive-experimentale-chaire-statutaire target=_blank>"Les 4 piliers de l'apprentissage"</a><p>• Norman Mackworth - <a href=https://en.wikipedia.org/wiki/Sustained_attention target=_blank>"The Breakdown of Vigilance" (1948)</a></div></div></div><div class=terminal-box><div class=terminal-title>💊 LE REMÈDE</div><div class=terminal-content><p><strong style=color:#0f0>RÈGLE D'OR : VARIATION TOUTES LES 15-20 MINUTES</strong><p style="margin:20px 0"><strong>TOOLKIT BBB ANTI-ZOMBIES :</strong><ul style=margin-left:30px;line-height:1.8><li>🔹 <strong>Sondages BBB</strong> : Quiz rapide pour réveiller (2-3 min max)<li>🔹 <strong>Tableau blanc collaboratif</strong> : Brainstorm visuel collectif<li>🔹 <strong>Breakout rooms</strong> : Groupes de 3-5 pour mini-atelier (10-15 min)<li>🔹 <strong>Chat dédié</strong> : Question précise + réponses en 1 min chrono<li>🔹 <strong>Énergizers</strong> : Pause active de 2 min (stretching, quiz décalé)</ul><p style="margin:20px 0"><strong>ALTERNATIVE WOOCLAP :</strong><ul style=margin-left:30px;line-height:1.8><li>🔹 Nuage de mots en temps réel<li>🔹 QCM compétitif avec classement<li>🔹 Brainstorming participatif<li>🔹 Échelle de notation instantanée</ul><div class=resource-card><h4>🛠️ Outils recommandés</h4><p>• <a href=https://bigbluebutton.org/ target=_blank>BigBlueButton</a> - Open source, sondages intégrés<p>• <a href=https://www.wooclap.com/ target=_blank>Wooclap</a> - Interactions variées et gamification<p>• <a href=https://view.genial.ly/ target=_blank>Genially</a> - Présentations interactives</div></div></div><div style="background:linear-gradient(135deg,#4caf50 0,#8bc34a 100%);border:3px solid #cddc39;border-radius:15px;padding:30px;margin:30px 0;color:#fff"><div style=font-size:28px;font-weight:700;margin-bottom:20px;text-align:center>✨ SUCCESS STORY - QUAND ÇA MARCHE !</div><div style=background:rgba(255,255,255,.2);padding:20px;border-radius:10px;margin-bottom:20px><p style=margin-bottom:15px;font-size:16px><strong>📖 CAS RÉEL :</strong> Marie, formatrice, animait un webinaire de 2h sur la gestion de projet. Elle a appliqué la règle de variation toutes les 20 min :<ul style=margin-left:30px;line-height:1.8><li>⏱️ <strong>0-20 min</strong> : Brise-glace Wooclap + présentation courte<li>⏱️ <strong>20-40 min</strong> : Sondage BBB → Breakout rooms (cas pratique)<li>⏱️ <strong>40-45 min</strong> : Énergizer (quiz décalé sur les films de projet)<li>⏱️ <strong>45-65 min</strong> : Démonstration outil → Tableau blanc collaboratif<li>⏱️ <strong>65-90 min</strong> : Quiz récap gamifié → Plan d'action individuel</ul><p style=margin-top:20px;font-weight:700;font-size:18px;color:#ffeb3b>🎉 RÉSULTAT : 95% de satisfaction, participants ultra-engagés, ZÉRO décrochage !</div><p style=text-align:center;font-size:16px>💡 La clé ? <strong>VARIÉTÉ + RYTHME + OUTILS INTERACTIFS</strong></div><div style="background:linear-gradient(135deg,#2196f3 0,#00bcd4 100%);border:3px solid #0ff;border-radius:15px;padding:30px;margin:30px 0;text-align:center"><div style=font-size:24px;font-weight:700;margin-bottom:20px;color:#fff>🎮 MINI-JEU : QUIZ RAPIDE !</div><div class=challenge-question style=background:rgba(0,0,0,.3);color:#fff>❓ D'après le cas de Marie, combien de variations a-t-elle prévu pour son webinaire de 2h (120 min) ?</div><div class=options-grid><button class=option-btn onclick=checkAnswer(this,!1,2)>A) 2 variations</button> <button class=option-btn onclick=checkAnswer(this,!1,2)>B) 3 variations</button> <button class=option-btn onclick=checkAnswer(this,!1,2)>C) 4 variations</button> <button class=option-btn onclick=checkAnswer(this,!0,2)>D) 5 variations (toutes les 20 min environ)</button></div><div style=display:none id=feedback2></div><p style=margin-top:15px;color:#fff;font-size:14px>✨ Bonne réponse = déblocage instantané + badge bonus !</div></div><div class=module id=module3><div class=incident-alert>🚨 INCIDENT #2 DÉTECTÉ 🚨<br>LE POWERPOINT DE LA MORT</div><div class=terminal-box><div class=terminal-title>📊 SCÉNARIO CATASTROPHE</div><div class=terminal-content><p style=margin-bottom:20px><strong>Minute 15 de votre webinaire...</strong><p style=margin-bottom:20px>Vous partagez votre écran. Diapo 1 : OK. Diapo 2 : OK. Diapo 3... FIGÉE. Impossible d'avancer. Le PowerPoint est gelé. Vous cliquez partout. Rien. Le silence s'installe. Les participants attendent. Le malaise grandit.<p style=color:red;font-weight:700>PANIQUE TECHNIQUE + 30 secondes de silence = CATASTROPHE PÉDAGOGIQUE</div></div><div class=reflection-zone><div class=reflection-title>🧠 POURQUOI C'EST GRAVE ?</div><div class=terminal-content><p><strong style=color:#0f0>IMPACT PSYCHOLOGIQUE :</strong><ul style=margin-left:30px;line-height:1.8><li>30 secondes de silence = perception d'une éternité en ligne<li>Perte de crédibilité instantanée<li>Décrochage des participants (ils ouvrent leurs emails)<li>Stress du formateur = baisse de qualité pédagogique</ul><p style=margin-top:20px><strong style=color:#0f0>LE VRAI PROBLÈME :</strong><p>Ce n'est PAS le bug technique. C'est <strong>l'absence de plan B</strong>.</div></div><div class=terminal-box><div class=terminal-title>💊 LE REMÈDE</div><div class=terminal-content><p><strong style=color:#0f0>STRATÉGIE DE SURVIE EN 3 ÉTAPES :</strong><p style="margin:20px 0"><strong>1️⃣ PRÉVENTION (avant le webinaire) :</strong><ul style=margin-left:30px;line-height:1.8><li>✅ Exporter le PPT en PDF (backup)<li>✅ Avoir une version simplifiée sur Google Slides<li>✅ Préparer 2-3 questions clés SANS support visuel<li>✅ Tester 30 min avant avec un collègue</ul><p style="margin:20px 0"><strong>2️⃣ GESTION DE CRISE (pendant le bug) :</strong><ul style=margin-left:30px;line-height:1.8><li>🔹 <strong>0-10 secondes</strong> : "Petit souci technique, je rebondis autrement"<li>🔹 <strong>10-30 secondes</strong> : Lancer un sondage BBB ou question dans le chat<li>🔹 <strong>30+ secondes</strong> : Passer en mode collaboratif (tableau blanc, brainstorm)<li>🔹 <strong>Dernière option</strong> : "Pause 3 min, je reviens avec le plan B"</ul><p style="margin:20px 0"><strong>3️⃣ TRANSFORMATION (après) :</strong><ul style=margin-left:30px;line-height:1.8><li>💡 Utilisez l'incident comme cas d'école ("Vous voyez, même moi...")<li>💡 Renforcez votre crédibilité en montrant votre adaptabilité<li>💡 Documentez ce qui s'est passé pour améliorer vos process</ul><div class=resource-card><h4>🛠️ Outils de backup recommandés</h4><p>• <a href=https://www.canva.com/presentations/ target=_blank>Canva Presentations</a> - Présentations en ligne (avec IA)<p>• <a href=https://www.google.com/slides/about/ target=_blank>Google Slides</a> - Accessible partout, collaborative<p>• <a href=https://prezi.com/ target=_blank>Prezi</a> - Format non-linéaire (moins de dépendance aux slides)<p>• <a href=https://miro.com/ target=_blank>Miro</a> - Tableau blanc pour mode collaboratif d'urgence</div></div></div><div style="background:linear-gradient(135deg,#9c27b0 0,#e91e63 100%);border:3px solid #ff4081;border-radius:15px;padding:30px;margin:30px 0;text-align:center"><div style=font-size:28px;font-weight:700;margin-bottom:20px;color:#fff>⚡ POWER-UP DÉBLOQ UÉ !</div><p style=color:#fff;font-size:18px;margin-bottom:25px>Vous avez survécu au bug technique ! Collectez maintenant votre TROUSSE DE SURVIE :<div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:20px 0"><div style="background:rgba(255,255,255,.2);padding:20px;border-radius:10px;border:2px solid #ffeb3b"><div style=font-size:40px;margin-bottom:10px>📦</div><h4 style=color:#ffeb3b;margin-bottom:10px>PLAN B ALWAYS</h4><p style=color:#fff;font-size:14px>PDF backup + Google Slides de secours</p><button class=option-btn onclick='collectPowerUp(3,"planb")'style=margin-top:10px;width:100%>✅ COLLECTER</button></div><div style="background:rgba(255,255,255,.2);padding:20px;border-radius:10px;border:2px solid #0f0"><div style=font-size:40px;margin-bottom:10px>🎯</div><h4 style=color:#0f0;margin-bottom:10px>MODE PIVOT</h4><p style=color:#fff;font-size:14px>3 questions clés sans support visuel</p><button class=option-btn onclick='collectPowerUp(3,"pivot")'style=margin-top:10px;width:100%>✅ COLLECTER</button></div><div style="background:rgba(255,255,255,.2);padding:20px;border-radius:10px;border:2px solid #0ff"><div style=font-size:40px;margin-bottom:10px>🛡️</div><h4 style=color:#0ff;margin-bottom:10px>BOUCLIER ZEN</h4><p style=color:#fff;font-size:14px>"Je rebondis autrement" + sondage immédiat</p><button class=option-btn onclick='collectPowerUp(3,"zen")'style=margin-top:10px;width:100%>✅ COLLECTER</button></div><div style="background:rgba(255,255,255,.2);padding:20px;border-radius:10px;border:2px solid #ff6b6b"><div style=font-size:40px;margin-bottom:10px>🎭</div><h4 style=color:#ff6b6b;margin-bottom:10px>TRANSFORMATION</h4><p style=color:#fff;font-size:14px>Utiliser l'incident comme cas d'école</p><button class=option-btn onclick='collectPowerUp(3,"transform")'style=margin-top:10px;width:100%>✅ COLLECTER</button></div></div><div style=display:none;margin-top:20px id=powerup-feedback3></div><p style=color:#fff;font-size:14px;margin-top:20px>💡 Collectez les 4 power-ups pour débloquer le niveau suivant !</div></div><div class=module id=module4><div class=incident-alert>🚨 INCIDENT #3 DÉTECTÉ 🚨<br>LE SILENCE RADIO</div><div class=terminal-box><div class=terminal-title>🔇 SCÉNARIO CATASTROPHE</div><div class=terminal-content><p style=margin-bottom:20px><strong>Minute 60 de votre webinaire...</strong><p style=margin-bottom:20px>Vous posez une question ouverte : "Qu'en pensez-vous ?"<br>Silence. 5 secondes.<br>"N'hésitez pas à réagir !"<br>Silence. 10 secondes.<br>"Personne ? Vraiment ?"<br>Silence. 15 secondes.<br>Malaise palpable.<p style=color:red;font-weight:700>CHAT VIDE + PARTICIPANTS MUETS = VOUS PARLEZ DANS LE VIDE</div></div><div class=reflection-zone><div class=reflection-title>🧠 POURQUOI ÇA ARRIVE ?</div><div class=terminal-content><p><strong style=color:#0f0>CAUSES PSYCHOLOGIQUES :</strong><ul style=margin-left:30px;line-height:1.8><li><strong>Angoisse sociale digitale</strong> : Peur d'être jugé devant 30 personnes<li><strong>Manque de temps de réflexion</strong> : Le cerveau a besoin de 10-15 secondes pour formuler<li><strong>Question trop vague</strong> : "Qu'en pensez-vous ?" = trop large, personne ne sait par où commencer<li><strong>Absence de structure</strong> : Pas de "permission" explicite de participer</ul><div class=resource-card><h4>📚 Base scientifique</h4><p>• Jean-Philippe Lachaux - <a href=https://www.cerveauetpsycho.fr/sd/neurosciences/le-cerveau-attentif-19127.php target=_blank>Programme ATOLE (Attention)</a><p>• John Sweller - <a href=https://en.wikipedia.org/wiki/Cognitive_load target=_blank>Théorie de la charge cognitive</a></div></div></div><div class=terminal-box><div class=terminal-title>💊 LE REMÈDE</div><div class=terminal-content><p><strong style=color:#0f0>LA MÉTHODE "SILENCE FERTILE" :</strong><p style="margin:20px 0"><strong>1️⃣ STRUCTURER LA PARTICIPATION :</strong><ul style=margin-left:30px;line-height:1.8><li>✅ Annoncer : "Je vais vous poser une question. Prenez 15 secondes pour réfléchir SILENCIEUSEMENT"<li>✅ Poser une question PRÉCISE (pas "qu'en pensez-vous")<li>✅ Attendre 15 secondes SANS PARLER (c'est inconfortable mais ESSENTIEL)<li>✅ Utiliser un outil intermédiaire : sondage BBB, Wooclap, ou chat</ul><p style="margin:20px 0"><strong>2️⃣ TYPES DE QUESTIONS EFFICACES :</strong><ul style=margin-left:30px;line-height:1.8><li>🔹 <strong>Questions fermées d'abord</strong> : "Levez la main si..." ou sondage Vrai/Faux<li>🔹 <strong>Questions à choix</strong> : "Option A ou B ? Tapez A ou B dans le chat"<li>🔹 <strong>Questions personnelles</strong> : "Dans VOTRE contexte, quelle serait la difficulté ?"<li>🔹 <strong>Questions avec exemple</strong> : "Par exemple, moi je dirais X. Et vous ?"</ul><p style="margin:20px 0"><strong>3️⃣ ALTERNATIVES SI SILENCE PERSISTE :</strong><ul style=margin-left:30px;line-height:1.8><li>🔸 Breakout rooms (groupes de 3) : plus facile de parler en petit comité<li>🔸 Tableau blanc collaboratif BBB : écrire = moins intimidant que parler<li>🔸 Sondage anonyme : enlève la pression du jugement<li>🔸 "Je nomme quelqu'un au hasard dans 10 secondes" : crée l'urgence (mais avec bienveillance)</ul><div class=resource-card><h4>🎯 Template de questions efficaces</h4><p>❌ Mauvais : "Des questions ?"<p>✅ Bon : "Si vous deviez choisir entre A et B, lequel choisiriez-vous et pourquoi ? Écrivez A ou B dans le chat dans les 10 prochaines secondes"</div></div></div><div style="background:linear-gradient(135deg,#ff9800 0,#ff5722 100%);border:3px solid #ffeb3b;border-radius:15px;padding:30px;margin:30px 0;text-align:center"><div style=font-size:28px;font-weight:700;margin-bottom:20px;color:#fff>🧩 ÉNIGME CHRONO !</div><p style=color:#fff;font-size:18px;margin-bottom:20px>⏱️ Vous avez <span id=countdown4 style=font-weight:700;font-size:24px;color:#ffeb3b>30</span> secondes !<div class=challenge-question style=background:rgba(0,0,0,.3);color:#fff>❓ Combien de secondes MINIMUM devez-vous attendre en silence après une question pour laisser le cerveau traiter ?</div><div style="display:flex;gap:15px;justify-content:center;margin:20px 0"><button class=option-btn onclick='checkTimedAnswer(this,!1,4,"5")'style="font-size:24px;padding:20px 30px">5</button> <button class=option-btn onclick='checkTimedAnswer(this,!0,4,"15")'style="font-size:24px;padding:20px 30px">15</button> <button class=option-btn onclick='checkTimedAnswer(this,!1,4,"30")'style="font-size:24px;padding:20px 30px">30</button> <button class=option-btn onclick='checkTimedAnswer(this,!1,4,"60")'style="font-size:24px;padding:20px 30px">60</button></div><div style=display:none id=feedback4></div><p style=color:#fff;font-size:14px;margin-top:15px>💨 Réponse rapide = bonus de temps pour la suite !</div></div><div class=module id=module5><div class=incident-alert>🚨 INCIDENT #4 DÉTECTÉ 🚨<br>L'INVASION DU CHAOS</div><div class=terminal-box><div class=terminal-title>🐶 SCÉNARIO CATASTROPHE</div><div class=terminal-content><p style=margin-bottom:20px><strong>Minute 40 de votre webinaire...</strong><p style=margin-bottom:20px>Vous êtes en pleine explication. Soudain :<br>- Le chien d'un participant aboie furieusement 🐕<br>- Un enfant débarque en criant "MAMAAAN!" 👶<br>- Une notification Teams retentit à fond 📢<br>- Quelqu'un mâche des chips près du micro 🥔<br>- Un camion de poubelle passe devant une fenêtre 🚛<p style=color:red;font-weight:700>CHAOS SONORE + DISTRACTIONS VISUELLES = IMPOSSIBLE DE SE CONCENTRER</div></div><div class=reflection-zone><div class=reflection-title>🧠 POURQUOI C'EST NORMAL (ET GÉRABLE)</div><div class=terminal-content><p><strong style=color:#0f0>RÉALITÉ DU TÉLÉTRAVAIL :</strong><ul style=margin-left:30px;line-height:1.8><li>Les participants sont chez eux = environnement non-contrôlé<li>Famille, animaux, livreurs = variables imprévisibles<li>Multi-tasking = tentation permanente (emails, notifications)<li>Fatigue Zoom = surcharge sensorielle</ul><p style=margin-top:20px><strong style=color:#ff0>⚠️ LE PIÈGE :</strong><p>Vouloir un webinaire "parfait" comme en salle de formation = impossible et frustrant.</div></div><div class=terminal-box><div class=terminal-title>💊 LE REMÈDE</div><div class=terminal-content><p><strong style=color:#0f0>STRATÉGIE "ACCUEILLIR LE CHAOS" :</strong><p style="margin:20px 0"><strong>1️⃣ PRÉVENTION (début du webinaire) :</strong><ul style=margin-left:30px;line-height:1.8><li>✅ Poser les règles avec humour : "Les chiens sont les bienvenus, les tondeuses un peu moins"<li>✅ Expliquer : "Si votre environnement est bruyant, coupez votre micro SAUF quand vous parlez"<li>✅ Nommer un co-animateur / modérateur qui peut gérer le technique pendant que vous animez<li>✅ Proposer : "Si interruption importante, écrivez dans le chat, pas de stress"</ul><p style="margin:20px 0"><strong>2️⃣ GESTION EN LIVE :</strong><ul style=margin-left:30px;line-height:1.8><li>🔹 <strong>Chien qui aboie</strong> : "Bonjour le chien ! On continue" (léger, pas de drama)<li>🔹 <strong>Enfant qui débarque</strong> : "Coucou ! Tu veux dire bonjour ?" puis "On reprend..."<li>🔹 <strong>Bruit de fond continu</strong> : Message privé ou général "Quelqu'un peut couper son micro svp ?"<li>🔹 <strong>Chaos généralisé</strong> : "Pause technique 2 min, on se retrouve à 14h32 précises"</ul><p style="margin:20px 0"><strong>3️⃣ TRANSFORMER EN OPPORTUNITÉ :</strong><ul style=margin-left:30px;line-height:1.8><li>💡 Utilisez les incidents pour créer de la proximité : "On est tous dans le même bateau"<li>💡 Préparez 2-3 anecdotes personnelles d'incidents passés (désacralise le "parfait")<li>💡 Créez un channel Slack/Discord post-webinaire : "Le mur des fails" (partage des anecdotes)</ul><div class=resource-card><h4>🛠️ Outils de gestion du son</h4><p>• <strong>BBB</strong> : Fonction "Mute all" pour couper tous les micros<p>• <strong>Zoom/Teams</strong> : "Mute upon entry" activé par défaut<p>• <strong>Krisp.ai</strong> : IA qui supprime les bruits de fond en temps réel<p>• <strong>RTX Voice (NVIDIA)</strong> : Suppression de bruit ultra-efficace</div><div class=resource-card><h4>🎬 Inspiration</h4><p>• <a href="https://www.youtube.com/watch?v=Mh4f9AYRCZY"target=_blank>BBC Interview fail (devenu viral)</a> - Preuve que le chaos arrive même aux pros</div></div></div><div style="background:linear-gradient(135deg,#4caf50 0,#8bc34a 100%);border:3px solid #cddc39;border-radius:15px;padding:30px;margin:30px 0"><div style=font-size:28px;font-weight:700;margin-bottom:20px;text-align:center;color:#fff>✨ SUCCESS STORY #2 - LE CHAOS APPRIVOISÉ !</div><div style=background:rgba(255,255,255,.2);padding:20px;border-radius:10px;margin-bottom:20px;color:#fff><p style=margin-bottom:15px;font-size:16px><strong>📖 CAS RÉEL :</strong> Thomas animait un webinaire quand soudain :<ul style=margin-left:30px;line-height:1.8><li>🐕 Le chien d'un participant aboie<li>👶 Un enfant débarque en criant "Papa regarde !"<li>🚛 Un camion poubelle passe avec sa musique</ul><p style=margin-top:20px;font-size:16px><strong>Sa réaction :</strong> "Wow, on a le trio gagnant ! Bonjour le chien, coucou le petit, et bravo au camion pour l'ambiance ! Bon, qui peut me résumer ce qu'on disait avant ce concert improvisé ?"<p style=margin-top:20px;font-weight:700;font-size:18px;color:#ffeb3b>🎉 RÉSULTAT : Tout le monde a ri, l'ambiance s'est détendue, et la participation a EXPLOSÉ après !</div><p style=text-align:center;font-size:16px;color:#fff>💡 La clé ? <strong>HUMOUR + BIENVEILLANCE + REBONDIR VITE</strong></div><div style="background:linear-gradient(135deg,#673ab7 0,#9c27b0 100%);border:3px solid #e1bee7;border-radius:15px;padding:30px;margin:30px 0;text-align:center"><div style=font-size:24px;font-weight:700;margin-bottom:20px;color:#fff>🎁 DÉBLOCAGE PAR PARTAGE !</div><p style=color:#fff;font-size:16px;margin-bottom:20px>Partagez VOTRE anecdote de chaos (ou imaginez-en une drôle) pour débloquer :</p><textarea class=text-input id=reflection5 placeholder="Ex: Mon chat a sauté sur le clavier pendant une démo, résultat : j'ai partagé mon historique de recherche 'recette cookies' au lieu du rapport financier 😅"rows=3 style=background:rgba(255,255,255,.9);color:#000></textarea><p style="color:#ffeb3b;font-size:14px;margin:10px 0">✨ Astuce : Plus c'est drôle/authentique, plus vous gagnez de points bonus !</p><button class=btn-primary onclick=unlockModule5Positive()>🚀 PARTAGER ET DÉBLOQUER</button> <button class=btn-secondary onclick=skipWithEncouragement(5)>⏭️ PASSER (mais vous ratez des bonus!)</button></div></div><div class=module id=module6><div class=incident-alert>🚨 INCIDENT #5 DÉTECTÉ 🚨<br>LE PARTAGE D'ÉCRAN MAUDIT</div><div class=terminal-box><div class=terminal-title>🖥️ SCÉNARIO CATASTROPHE</div><div class=terminal-content><p style=margin-bottom:20px><strong>Minute 20 de votre webinaire...</strong><p style=margin-bottom:20px>Un participant veut montrer son écran pour partager un document. Vous lui donnez les droits. Il partage. Et là...<p style=margin-bottom:20px;color:red>📧 20 emails non-lus avec sujets sensibles visibles<br>💬 Conversation WhatsApp personnelle ouverte<br>🖼️ Fond d'écran de vacances en maillot de bain<br>📂 Dossier "Recherche emploi concurrent" sur le bureau<br>🔔 Notification Tinder qui pop "You have a new match!"<p style=color:red;font-weight:700>MALAISE × 1000 + CONFIDENTIALITÉ COMPROMISE = CATASTROPHE SOCIALE</div></div><div class=reflection-zone><div class=reflection-title>🧠 POURQUOI C'EST DANGEREUX ?</div><div class=terminal-content><p><strong style=color:#0f0>RISQUES MULTIPLES :</strong><ul style=margin-left:30px;line-height:1.8><li><strong>Confidentialité</strong> : Données sensibles exposées (RH, clients, projets)<li><strong>RGPD</strong> : Violation possible de données personnelles<li><strong>Image professionnelle</strong> : Perte de crédibilité instantanée<li><strong>Concentration</strong> : Tous les participants se focalisent sur le "fail" au lieu du contenu</ul><p style=margin-top:20px><strong style=color:#ff0>⚠️ LE PROBLÈME :</strong><p>La plupart des gens ne pensent PAS à préparer leur écran avant de partager.</div></div><div class=terminal-box><div class=terminal-title>💊 LE REMÈDE</div><div class=terminal-content><p><strong style=color:#0f0>PROTOCOLE "PARTAGE D'ÉCRAN SÉCURISÉ" :</strong><p style="margin:20px 0"><strong>1️⃣ POUR VOUS (formateur) :</strong><ul style=margin-left:30px;line-height:1.8><li>✅ Créer un compte utilisateur "Formation" dédié (bureau vierge)<li>✅ OU créer un bureau virtuel "propre" (Windows/Mac)<li>✅ Fermer TOUTES les apps non-essentielles avant le webinaire<li>✅ Désactiver les notifications (mode "Ne pas déranger")<li>✅ Partager UNE FENÊTRE spécifique (pas tout l'écran) si possible<li>✅ Utiliser un fond d'écran neutre</ul><p style="margin:20px 0"><strong>2️⃣ POUR LES PARTICIPANTS :</strong><ul style=margin-left:30px;line-height:1.8><li>🔹 Annoncer AVANT : "Si vous devez partager votre écran, préparez-le AVANT que je vous donne les droits"<li>🔹 Checklist à énoncer : "Fermez vos emails, vos messages, vérifiez votre fond d'écran"<li>🔹 Alternative : "Envoyez-moi le document, JE le partage" (plus sûr)<li>🔹 Si incident : coupez immédiatement le partage et passez à autre chose avec humour</ul><p style="margin:20px 0"><strong>3️⃣ GESTION DE CRISE :</strong><ul style=margin-left:30px;line-height:1.8><li>💡 Si incident mineur : "Oups, on a vu votre chat ! Adorable. On reprend..."<li>💡 Si incident sérieux : Coupez IMMÉDIATEMENT, puis "Petit souci technique, on passe à la suite"<li>💡 Après le webinaire : Message privé à la personne pour la rassurer</ul><div class=resource-card><h4>🛠️ Outils et paramètres essentiels</h4><p>• <strong>Windows</strong> : Bureau virtuel (Win + Tab) + Focus Assist (paramètres)<p>• <strong>Mac</strong> : Plusieurs bureaux (Mission Control) + Ne pas déranger<p>• <strong>BBB</strong> : Partage de fenêtre spécifique (pas tout l'écran)<p>• <strong>Miro/Mural</strong> : Alternative collaborative (pas besoin de partager l'écran)</div></div></div><div style="background:linear-gradient(135deg,#00bcd4 0,#03a9f4 100%);border:3px solid #0ff;border-radius:15px;padding:30px;margin:30px 0"><div style=font-size:28px;font-weight:700;margin-bottom:20px;text-align:center;color:#fff>⚖️ LE GRAND CONTRASTE !</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0"><div style=background:linear-gradient(135deg,#4caf50,#8bc34a);padding:20px;border-radius:10px><div style=text-align:center;font-size:40px;margin-bottom:10px>✅</div><h4 style=color:#ffeb3b;text-align:center;margin-bottom:15px>PARTAGE SÉCURISÉ</h4><p style=color:#fff;font-size:14px;line-height:1.6>Sophie partage UNE FENÊTRE spécifique (son PDF). Bureau propre, notifications OFF, fond d'écran neutre. Résultat : présentation fluide, zéro distraction, 100% professionnel ! 🎯</div><div style=background:linear-gradient(135deg,#f44336,#e91e63);padding:20px;border-radius:10px><div style=text-align:center;font-size:40px;margin-bottom:10px>❌</div><h4 style=color:#ffeb3b;text-align:center;margin-bottom:15px>PARTAGE CATASTROPHE</h4><p style=color:#fff;font-size:14px;line-height:1.6>Marc partage TOUT l'écran. On voit : 18 emails RH, chat WhatsApp perso, notification Tinder, dossier "Cherche nouvel emploi". Malaise × 1000 😱</div></div><p style="text-align:center;font-size:18px;margin:20px 0;color:#fff">💡 La différence ? <strong>UNE préparation de 30 secondes</strong></div><div style="background:linear-gradient(135deg,#ff9800 0,#ff5722 100%);border:3px solid #ffeb3b;border-radius:15px;padding:30px;margin:30px 0;text-align:center"><div style=font-size:24px;font-weight:700;margin-bottom:20px;color:#fff>🎯 VALIDATION EXPRESS !</div><div class=challenge-question style=background:rgba(0,0,0,.3);color:#fff>❓ Quelle est la pratique LA MOINS recommandée pour un partage d'écran sécurisé ?</div><div class=options-grid><button class=option-btn onclick=checkAnswerFinal(this,!1,6)>A) Partager une fenêtre spécifique</button> <button class=option-btn onclick=checkAnswerFinal(this,!1,6)>B) Désactiver les notifications</button> <button class=option-btn onclick=checkAnswerFinal(this,!0,6)>C) Tout partager pour plus de spontanéité</button> <button class=option-btn onclick=checkAnswerFinal(this,!1,6)>D) Créer un bureau dédié</button></div><div style=display:none id=feedback6></div></div></div><div class=module id=module7><div class=success-message style=font-size:24px;padding:30px>🎉 FÉLICITATIONS ! VOUS AVEZ SURVÉCU À TOUS LES INCIDENTS ! 🎉</div><div style="display:none;background:linear-gradient(135deg,gold 0,orange 100%);border:5px solid #ff4500;border-radius:20px;padding:40px;margin:30px 0;text-align:center;animation:pulse 2s infinite"id=perfectScoreMessage><div style=font-size:48px;margin-bottom:20px>🌟</div><h2 style=color:#8b0000;font-size:32px;margin-bottom:20px>SCORE PARFAIT LÉGENDAIRE !</h2><p style=color:#000;font-size:20px;font-weight:700>Vous avez collecté TOUS les badges, TOUS les power-ups,<br>et terminé sans triche avec un score de <span id=perfectScorePoints style=color:#ff4500;font-size:28px>0</span> points !<p style=color:#000;font-size:18px;margin-top:20px>🏆 Vous êtes officiellement un <strong>MAÎTRE DE LA SCÉNARISATION</strong> !</div><div class=terminal-box><div class=terminal-title>🏆 RÉCAPITULATIF DE VOS ACQUIS</div><div class=terminal-content><p style=margin-bottom:20px>Vous avez maintenant débloqué les 5 compétences essentielles du scénariste de webinaire aguerri :<p style="color:#0f0;margin:15px 0">✅ <strong>MODULE 1</strong> : Adapter le scénario selon la position (début/milieu/fin)<p style="color:#0f0;margin:15px 0">✅ <strong>MODULE 2</strong> : Éviter les stagiaires zombies (variation 15-20 min)<p style="color:#0f0;margin:15px 0">✅ <strong>MODULE 3</strong> : Gérer les pannes techniques (plan B toujours prêt)<p style="color:#0f0;margin:15px 0">✅ <strong>MODULE 4</strong> : Débloquer le silence (questions structurées + 15 sec)<p style="color:#0f0;margin:15px 0">✅ <strong>MODULE 5</strong> : Accueillir le chaos (humour + bienveillance)<p style="color:#0f0;margin:15px 0">✅ <strong>MODULE 6</strong> : Sécuriser les partages d'écran (protocole strict)</div></div><div style="background:linear-gradient(135deg,#4caf50 0,#8bc34a 100%);border:3px solid #cddc39;border-radius:15px;padding:30px;margin:30px 0"><div style=font-size:28px;font-weight:700;margin-bottom:20px;text-align:center;color:#fff>🌟 CE QUE VOUS AVEZ APPRIS À FAIRE BIEN !</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px"><div style=background:rgba(255,255,255,.2);padding:20px;border-radius:10px><h4 style=color:#ffeb3b;margin-bottom:15px;text-align:center>✨ SUCCESS STORIES VUES</h4><ul style=color:#fff;line-height:1.8;list-style:none><li>📖 Marie : 5 variations = 95% satisfaction<li>📖 Thomas : Chaos transformé en rires<li>📖 Sophie : Partage d'écran parfait</ul></div><div style=background:rgba(255,255,255,.2);padding:20px;border-radius:10px><h4 style=color:#ffeb3b;margin-bottom:15px;text-align:center>⚡ POWER-UPS COLLECTÉS</h4><ul style=color:#fff;line-height:1.8;list-style:none id=powerupsList><li>Chargement...</ul></div></div><p style=text-align:center;font-size:18px;margin-top:20px;color:#fff>💡 Vous avez maintenant tous les outils pour créer des webinaires <strong>IRRÉSISTIBLES</strong> !</div><div class=reflection-zone><div class=reflection-title>📚 RESSOURCES SCIENTIFIQUES COMPLÈTES</div><div class=terminal-content><div class=resource-card><h4>🧠 Neurosciences de l'apprentissage</h4><p>• Stanislas Dehaene - <a href=https://www.college-de-france.fr/fr/chaire/stanislas-dehaene-psychologie-cognitive-experimentale-chaire-statutaire target=_blank>"Les 4 piliers de l'apprentissage"</a><p>• Jean-Philippe Lachaux - <a href=https://www.cerveauetpsycho.fr/sd/neurosciences/le-cerveau-attentif-19127.php target=_blank>Programme ATOLE (Attention)</a><p>• John Sweller - <a href=https://en.wikipedia.org/wiki/Cognitive_load target=_blank>Théorie de la charge cognitive</a><p>• Norman Mackworth - <a href=https://en.wikipedia.org/wiki/Sustained_attention target=_blank>Courbe d'attention (1948)</a></div><div class=resource-card><h4>🛠️ Outils recommandés</h4><p>• <a href=https://bigbluebutton.org/ target=_blank>BigBlueButton</a> - Plateforme open source complète<p>• <a href=https://www.wooclap.com/ target=_blank>Wooclap</a> - Interactions et gamification<p>• <a href=https://view.genial.ly/ target=_blank>Genially</a> - Présentations interactives<p>• <a href=https://www.canva.com/ai-presentation-maker/ target=_blank>Canva AI</a> - Création de présentations avec IA<p>• <a href=https://miro.com/ target=_blank>Miro</a> - Tableau blanc collaboratif<p>• <a href=https://krisp.ai/ target=_blank>Krisp</a> - Suppression de bruit IA</div><div class=resource-card><h4>🎨 Templates et générateurs</h4><p>• <a href=https://www.canva.com/templates/ target=_blank>Canva Templates</a> - Présentations prêtes à l'emploi<p>• <a href=https://view.genial.ly/templates target=_blank>Genially Templates</a> - Webinaires interactifs<p>• <a href=https://chat.openai.com/ target=_blank>ChatGPT</a> - Génération de scénarios pédagogiques<p>• <a href=https://www.magicschool.ai/ target=_blank>MagicSchool AI</a> - IA spécialisée éducation</div></div></div><div class=terminal-box><div class=terminal-title>📥 VOTRE TEMPLATE DE SCÉNARIO PERSONNALISABLE</div><div class=terminal-content><p style=margin-bottom:20px>Téléchargez votre template de scénarisation de webinaire prêt à l'emploi :</p><button class=btn-primary onclick=downloadTemplate()>📄 TÉLÉCHARGER LE TEMPLATE (DOCX)</button><p style=margin-top:15px;color:#0ff;font-size:14px>Ce template inclut : structure détaillée par position, checklist technique, timing recommandé, exemples d'activités BBB/Wooclap, et protocoles d'urgence.</div></div><div class=certificate><h2>🏆 CERTIFICAT D'EXPERT 🏆</h2><p style="font-size:20px;margin:20px 0">Ce document atteste que<div class=certificate-name id=userName>VOUS</div><p style="font-size:18px;margin:20px 0">a brillamment survécu à l'Escape Game Pédagogique<br><strong>"WEBINAIRE EN PÉRIL"</strong><p style="font-size:16px;margin:20px 0">Et maîtrise désormais les 6 compétences essentielles<br>de la scénarisation de webinaires professionnels<div style="background:#f0f0f0;padding:20px;border-radius:10px;margin:20px 0"><p style=font-size:18px;font-weight:700;color:#5755d9;margin-bottom:15px>🎖️ BADGES COLLECTÉS<div style=font-size:16px;color:#333 id=finalBadges></div><p style=font-size:24px;font-weight:700;color:#ff9800;margin-top:15px>⭐ POINTS BONUS : <span id=finalBonus>0</span></div><p style=font-size:14px;color:#666;margin-top:30px>Temps de complétion : <span id=finalTime>--:--</span><br>Date : <span id=currentDate></span></p><button class=btn-primary onclick=downloadCertificate() style=margin-top:20px>📥 TÉLÉCHARGER LE CERTIFICAT</button></div><div class=terminal-box><div class=terminal-title>🚀 ET MAINTENANT ?</div><div class=terminal-content><p style=margin-bottom:20px><strong style=color:#0f0>PLAN D'ACTION POST-FORMATION :</strong><p style="margin:15px 0">1️⃣ <strong>Dans les 24h</strong> : Téléchargez le template et adaptez-le à votre prochain webinaire<p style="margin:15px 0">2️⃣ <strong>Cette semaine</strong> : Testez AU MOINS UN outil (BBB sondages, Wooclap, ou Genially)<p style="margin:15px 0">3️⃣ <strong>Dans le mois</strong> : Animez votre prochain webinaire avec la méthode "variation 15-20 min"<p style="margin:15px 0">4️⃣ <strong>Long terme</strong> : Constituez votre bibliothèque de brise-glaces et énergizers<p style=margin-top:30px;color:#ff0>💡 <strong>BONUS</strong> : Partagez ce que vous avez appris avec vos collègues formateurs. L'enseignement est le meilleur moyen de consolider ses apprentissages !</div></div><div style=text-align:center;margin-top:40px><button class=btn-secondary onclick=location.reload()>🔄 RECOMMENCER L'ESCAPE GAME</button></div></div></div><div style="background:rgba(0,0,0,.5);color:#888;text-align:center;padding:20px;margin-top:40px;border-top:2px solid #0f0;font-size:14px"><p style=margin:0>Créé par <strong style=color:#0f0>Amélie Silvert</strong> (avec l'aide de l'IA)<br>© Tous droits réservés</div><div class=hint-bubble id=hintBubble></div><script>// Variables globales
+        let currentModule = 0;
+        let startTime = Date.now();
+        let timerInterval;
+        let cheatUsed = false;
+        let badges = [];
+        let powerUpsCollected = new Set();
+        let bonusPoints = 0;
+
+        // Sélection de badge (Module 1)
+        function selectBadge(badgeType) {
+            badges.push(badgeType);
+            unlockAnimation(`🎖️ Badge "${badgeType.toUpperCase()}" collecté !`);
+            setTimeout(() => goToModule(2), 1500);
+        }
+
+        // Collecte de power-ups (Module 3)
+        function collectPowerUp(moduleNum, powerUpType) {
+            if (powerUpsCollected.has(powerUpType)) {
+                showHint('Vous avez déjà collecté ce power-up !');
+                return;
+            }
+            
+            powerUpsCollected.add(powerUpType);
+            bonusPoints += 10;
+            
+            const feedback = document.getElementById('powerup-feedback3');
+            feedback.innerHTML = `<div class="success-message">⚡ Power-up "${powerUpType}" ajouté à votre arsenal ! (${powerUpsCollected.size}/4)</div>`;
+            feedback.style.display = 'block';
+            
+            if (powerUpsCollected.size >= 4) {
+                setTimeout(() => {
+                    unlockAnimation('🎉 Trousse de survie complète !');
+                    setTimeout(() => goToModule(4), 1500);
+                }, 800);
+            }
+        }
+
+        // Quiz avec chrono (Module 4)
+        let countdownInterval;
+        function checkTimedAnswer(btn, isCorrect, moduleNum, value) {
+            clearInterval(countdownInterval);
+            const container = btn.parentElement;
+            container.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+            
+            if (isCorrect) {
+                btn.classList.add('correct');
+                bonusPoints += 20;
+                const feedback = document.getElementById(`feedback${moduleNum}`);
+                feedback.innerHTML = '<div class="success-message">⚡ EXCELLENT ! Réponse rapide = +20 points bonus !</div>';
+                feedback.style.display = 'block';
+                unlockAnimation('🚀 Bonus de rapidité débloqué !');
+                setTimeout(() => goToModule(moduleNum + 1), 2000);
+            } else {
+                btn.classList.add('incorrect');
+                const feedback = document.getElementById(`feedback${moduleNum}`);
+                feedback.innerHTML = '<div style="background: #ff0000; color: white; padding: 15px; border-radius: 8px; margin-top: 15px;">❌ INCORRECT. Réessayez !</div>';
+                feedback.style.display = 'block';
+                setTimeout(() => {
+                    container.querySelectorAll('.option-btn').forEach(b => {
+                        b.disabled = false;
+                        b.classList.remove('incorrect');
+                    });
+                    startCountdown(moduleNum);
+                }, 2000);
+            }
+        }
+
+        function startCountdown(moduleNum) {
+            let timeLeft = 30;
+            const countdownEl = document.getElementById(`countdown${moduleNum}`);
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                if (countdownEl) countdownEl.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    showHint('⏰ Temps écoulé ! Mais vous pouvez toujours répondre.');
+                }
+            }, 1000);
+        }
+
+        // Déblocage positif Module 5
+        function unlockModule5Positive() {
+            const reflection = document.getElementById('reflection5').value;
+            if (reflection.length < 20) {
+                alert('✍️ Partagez un peu plus votre anecdote (minimum 20 caractères) pour débloquer les bonus !');
+                return;
+            }
+            bonusPoints += 15;
+            unlockAnimation('🎭 Merci pour le partage ! +15 points');
+            setTimeout(() => goToModule(6), 1500);
+        }
+
+        function skipWithEncouragement(moduleNum) {
+            if (confirm('⚠️ Vous allez passer sans partager. Vous ratez 15 points bonus. Continuer ?')) {
+                showHint('Dommage ! Le partage crée de la connexion avec les autres. 💬');
+                goToModule(moduleNum + 1);
+            }
+        }
+
+        // Quiz final du Module 6
+        function checkAnswerFinal(btn, isCorrect, moduleNum) {
+            const container = btn.parentElement;
+            container.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+            
+            if (isCorrect) {
+                btn.classList.add('correct');
+                bonusPoints += 10;
+                const feedback = document.getElementById(`feedback${moduleNum}`);
+                feedback.innerHTML = '<div class="success-message">✅ PARFAIT ! Dernier module débloqué !</div>';
+                feedback.style.display = 'block';
+                unlockAnimation('🎉 MISSION ACCOMPLIE !');
+                setTimeout(() => goToModule(7), 2000);
+            } else {
+                btn.classList.add('incorrect');
+                const feedback = document.getElementById(`feedback${moduleNum}`);
+                feedback.innerHTML = '<div style="background: #ff0000; color: white; padding: 15px; border-radius: 8px; margin-top: 15px;">❌ Réessayez !</div>';
+                feedback.style.display = 'block';
+                setTimeout(() => {
+                    container.querySelectorAll('.option-btn').forEach(b => {
+                        b.disabled = false;
+                        b.classList.remove('incorrect');
+                    });
+                }, 2000);
+            }
+        }
+
+        // Démarrer le jeu
+        function startGame() {
+            startTime = Date.now();
+            startTimer();
+            goToModule(1);
+        }
+
+        // Timer
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const remaining = Math.max(5400 - elapsed, 0); // 90 minutes = 5400 secondes
+                const minutes = Math.floor(remaining / 60);
+                const seconds = remaining % 60;
+                document.getElementById('timer').textContent = 
+                    `⏱️ ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                if (remaining === 0) {
+                    clearInterval(timerInterval);
+                    alert('⏰ Temps écoulé ! Mais vous pouvez continuer sans limite de temps.');
+                }
+            }, 1000);
+        }
+
+        // Navigation entre modules
+        function goToModule(moduleNum) {
+            document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+            document.getElementById(`module${moduleNum}`).classList.add('active');
+            currentModule = moduleNum;
+            updateProgress();
+            window.scrollTo(0, 0);
+            
+            // Mettre à jour le certificat si on arrive au module 7
+            if (moduleNum === 7) {
+                updateFinalCertificate();
+            }
+            
+            // Initialiser le countdown pour le module 4
+            if (moduleNum === 4) {
+                setTimeout(() => startCountdown(4), 500);
+            }
+            
+            // Afficher le bouton triche après 2 minutes (sauf pour les modules avec nouvelles mécaniques)
+            if ([2, 3, 4, 5, 6].indexOf(moduleNum) === -1) {
+                setTimeout(() => {
+                    const cheatBtn = document.getElementById(`cheat${moduleNum}`);
+                    if (cheatBtn) cheatBtn.style.display = 'inline-block';
+                }, 120000); // 2 minutes
+            }
+        }
+
+        // Mettre à jour le certificat avec les badges et bonus
+        function updateFinalCertificate() {
+            const badgesEl = document.getElementById('finalBadges');
+            const bonusEl = document.getElementById('finalBonus');
+            const powerupsEl = document.getElementById('powerupsList');
+            
+            if (badgesEl) {
+                if (badges.length > 0) {
+                    badgesEl.innerHTML = badges.map(b => `🎖️ ${b.toUpperCase()}`).join('<br>');
+                } else {
+                    badgesEl.innerHTML = '(Aucun badge de départ sélectionné)';
+                }
+            }
+            
+            if (bonusEl) {
+                bonusEl.textContent = bonusPoints;
+            }
+
+            if (powerupsEl) {
+                if (powerUpsCollected.size > 0) {
+                    const powerupNames = {
+                        'planb': '📦 Plan B Always',
+                        'pivot': '🎯 Mode Pivot',
+                        'zen': '🛡️ Bouclier Zen',
+                        'transform': '🎭 Transformation'
+                    };
+                    powerupsEl.innerHTML = Array.from(powerUpsCollected).map(p => `<li>${powerupNames[p] || p}</li>`).join('');
+                } else {
+                    powerupsEl.innerHTML = '<li>(Aucun power-up collecté)</li>';
+                }
+            }
+
+            const finalTimeEl = document.getElementById('finalTime');
+            if (finalTimeEl) {
+                const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = elapsed % 60;
+                finalTimeEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+
+            // Afficher message de score parfait si conditions remplies
+            const perfectScoreMsg = document.getElementById('perfectScoreMessage');
+            const perfectScorePoints = document.getElementById('perfectScorePoints');
+            if (perfectScoreMsg && !cheatUsed && badges.length > 0 && powerUpsCollected.size >= 4 && bonusPoints >= 50) {
+                perfectScoreMsg.style.display = 'block';
+                if (perfectScorePoints) perfectScorePoints.textContent = bonusPoints;
+            }
+        }
+
+        // Mise à jour de la barre de progression
+        function updateProgress() {
+            const progress = (currentModule / 7) * 100;
+            const progressBar = document.getElementById('progress');
+            progressBar.style.width = `${progress}%`;
+            progressBar.textContent = `MODULE ${currentModule}/7`;
+        }
+
+        // Afficher position (début/milieu/fin)
+        function showPosition(position) {
+            document.getElementById('position-content').style.display = 'block';
+            document.querySelectorAll('[id$="-content"]').forEach(el => {
+                el.style.display = 'none';
+            });
+            document.getElementById(`${position}-content`).style.display = 'block';
+            showHint('Excellente question ! Lisez attentivement les recommandations pour cette position.');
+        }
+
+        // Vérification des réponses quiz (pour Module 2)
+        function checkAnswer(btn, isCorrect, moduleNum) {
+            const container = btn.parentElement;
+            container.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+            
+            if (isCorrect) {
+                btn.classList.add('correct');
+                bonusPoints += 10;
+                const feedback = document.getElementById(`feedback${moduleNum}`);
+                feedback.innerHTML = '<div class="success-message">✅ CORRECT ! +10 points + badge bonus débloqué !</div>';
+                feedback.style.display = 'block';
+                unlockAnimation('🏅 Badge "Maître du Rythme" débloqué !');
+                setTimeout(() => goToModule(moduleNum + 1), 2000);
+            } else {
+                btn.classList.add('incorrect');
+                const feedback = document.getElementById(`feedback${moduleNum}`);
+                feedback.innerHTML = '<div style="background: #ff0000; color: white; padding: 15px; border-radius: 8px; margin-top: 15px;">❌ INCORRECT. Réessayez !</div>';
+                feedback.style.display = 'block';
+                // Réactiver les boutons après 3 secondes
+                setTimeout(() => {
+                    container.querySelectorAll('.option-btn').forEach(b => {
+                        b.disabled = false;
+                        b.classList.remove('incorrect');
+                    });
+                }, 3000);
+            }
+        }
+
+        // Force unlock (triche)
+        function forceUnlock(moduleNum) {
+            if (confirm('⚠️ Êtes-vous sûr(e) de vouloir utiliser la triche ? Vous manquerez une opportunité d\'apprentissage.')) {
+                cheatUsed = true;
+                showHint('Triche utilisée ! Mais vous auriez pu le faire 💪');
+                unlockAnimation();
+                setTimeout(() => goToModule(moduleNum + 1), 1500);
+            }
+        }
+
+        // Animation de déblocage
+        function unlockAnimation(message = '🔓 MODULE DÉBLOQUÉ !') {
+            const unlock = document.createElement('div');
+            unlock.className = 'unlock-animation';
+            unlock.textContent = message;
+            document.body.appendChild(unlock);
+            setTimeout(() => {
+                unlock.style.opacity = '0';
+                setTimeout(() => unlock.remove(), 300);
+            }, 1500);
+        }
+
+        // Afficher un hint
+        function showHint(message) {
+            const hint = document.getElementById('hintBubble');
+            hint.textContent = message;
+            hint.classList.add('show');
+            setTimeout(() => {
+                hint.classList.remove('show');
+            }, 4000);
+        }
+
+        // Télécharger le template
+        function downloadTemplate() {
+            const template = `# TEMPLATE DE SCÉNARISATION DE WEBINAIRE
+======================================
+
+Créé par Amélie Silvert (avec l'aide de l'IA)
+© Tous droits réservés
+
+## 📋 INFORMATIONS GÉNÉRALES
+- Titre du webinaire : _______________________
+- Position dans le parcours : ☐ Début ☐ Milieu ☐ Fin
+- Durée totale : _______ minutes
+- Nombre de participants : _______
+- Outil principal : ☐ BBB ☐ Zoom ☐ Teams ☐ Autre : _______
+
+## 🎯 OBJECTIFS PÉDAGOGIQUES
+1. À la fin de ce webinaire, les participants seront capables de :
+   - _______________________________________
+   - _______________________________________
+   - _______________________________________
+
+## ⏱️ DÉROULÉ DÉTAILLÉ (exemple pour 90 min)
+
+### 🎬 INTRODUCTION (15 min)
+- [0-5 min] Accueil + règles du jeu
+- [5-10 min] Brise-glace : _______________________
+  * Outil : ☐ Sondage BBB ☐ Wooclap ☐ Chat ☐ Autre
+- [10-15 min] Présentation des objectifs + agenda
+
+### 📚 CONTENU PRINCIPAL (60 min)
+⚠️ VARIATION TOUTES LES 15-20 MIN
+
+#### Séquence 1 (20 min)
+- [15-25 min] Présentation concept 1
+  * Support : _______________________
+- [25-30 min] Activité interactive 1 : _______________________
+  * Outil : ☐ Sondage ☐ Quiz ☐ Breakout ☐ Tableau blanc
+- [30-35 min] Débriefing collectif
+
+#### Séquence 2 (20 min)
+- [35-40 min] Présentation concept 2
+- [40-50 min] Atelier pratique en breakout rooms
+  * Consigne précise : _______________________
+  * Livrable attendu : _______________________
+- [50-55 min] Restitution groupes
+
+#### Séquence 3 (20 min)
+- [55-60 min] Énergizer / Pause active
+- [60-70 min] Approfondissement + Q&A
+- [70-75 min] Cas pratique final
+
+### 🏁 CONCLUSION (15 min)
+- [75-80 min] Synthèse collaborative (tableau blanc ou Wooclap)
+- [80-85 min] Plan d'action individuel
+- [85-90 min] Ressources + prochaines étapes + feedback
+
+## 🛠️ CHECKLIST TECHNIQUE PRÉ-WEBINAIRE
+
+### 24h AVANT
+☐ Tester la connexion internet
+☐ Vérifier l'accès à BBB/Zoom/etc
+☐ Préparer les sondages/quiz
+☐ Créer les breakout rooms (si applicable)
+☐ Envoyer le lien + instructions aux participants
+☐ Préparer le plan B (PDF, Google Slides)
+
+### 30 MIN AVANT
+☐ Se connecter en avance
+☐ Tester micro + caméra + partage d'écran
+☐ Désactiver notifications
+☐ Nettoyer le bureau / fond d'écran
+☐ Fermer apps non-nécessaires
+☐ Lancer les outils (Wooclap, Genially, etc)
+☐ Vérifier que le modérateur est prêt (si co-animation)
+
+### PENDANT
+☐ Accueillir chaleureusement
+☐ Enregistrer (si autorisé)
+☐ Respecter le timing des variations
+☐ Gérer le chat régulièrement
+☐ Faire des pauses si > 60 min
+
+## 🚨 PROTOCOLES D'URGENCE
+
+### Si bug technique majeur
+1. "Petit souci technique, pause 2 min"
+2. Basculer sur plan B (PDF, Google Slides)
+3. OU passer en mode collaboratif (tableau blanc)
+
+### Si silence radio
+1. Reformuler la question de façon précise
+2. Attendre 15 secondes SANS parler
+3. Lancer un sondage ou breakout rooms
+
+### Si chaos sonore/visuel
+1. Message général : "Quelqu'un peut couper son micro ?"
+2. Si persiste : "Mute all" ou pause technique
+3. Gérer avec humour et bienveillance
+
+### Si partage d'écran problématique
+1. Couper immédiatement
+2. "Petit souci, je reprends la main"
+3. Message privé après le webinaire
+
+## 📚 RESSOURCES À PARTAGER
+
+### Pendant le webinaire
+- Lien 1 : _______________________
+- Lien 2 : _______________________
+- Lien 3 : _______________________
+
+### Après le webinaire
+- Enregistrement (sous 24h) : _______________________
+- Documentation complémentaire : _______________________
+- Communauté / Forum : _______________________
+
+## 📊 ÉVALUATION POST-WEBINAIRE
+
+### Questions à poser
+1. Objectifs atteints ? (échelle 1-5)
+2. Niveau d'interactivité ? (échelle 1-5)
+3. Point fort du webinaire ? (texte libre)
+4. Point à améliorer ? (texte libre)
+5. Souhaitez-vous un suivi ? (oui/non)
+
+## 📝 NOTES PERSONNELLES
+_______________________________________
+_______________________________________
+_______________________________________
+
+---
+Template créé par Amélie Silvert (avec l'aide de l'IA)
+© Tous droits réservés
+Généré depuis l'Escape Game "Webinaire en Péril"
+`;
+
+            const blob = new Blob([template], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'Template_Scenarisation_Webinaire.txt';
+            link.click();
+            showHint('📥 Template téléchargé ! Personnalisez-le pour votre prochain webinaire.');
+        }
+
+        // Télécharger le certificat
+        function downloadCertificate() {
+            const userName = prompt('Entrez votre nom pour le certificat :', 'Votre Nom') || 'Participant';
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            const finalTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            const badgesText = badges.length > 0 ? badges.map(b => `  • ${b.toUpperCase()}`).join('\n') : '  (Aucun badge de départ)';
+            
+            const certificate = `
+╔═══════════════════════════════════════════════════════════════╗
+║                     🏆 CERTIFICAT D'EXPERT 🏆                 ║
+╚═══════════════════════════════════════════════════════════════╝
+
+                    WEBINAIRE EN PÉRIL
+              Escape Game Pédagogique Complété
+
+Ce document atteste que
+
+                      ${userName}
+
+a brillamment survécu à l'Escape Game Pédagogique
+et maîtrise désormais les 6 compétences essentielles
+de la scénarisation de webinaires professionnels :
+
+✅ Adapter le scénario selon la position dans le parcours
+✅ Éviter les stagiaires zombies (variation 15-20 min)
+✅ Gérer les pannes techniques (plan B systématique)
+✅ Débloquer le silence (questions structurées)
+✅ Accueillir le chaos (humour + bienveillance)
+✅ Sécuriser les partages d'écran (protocole strict)
+
+🎖️ BADGES COLLECTÉS :
+${badgesText}
+
+⭐ POINTS BONUS : ${bonusPoints}
+
+Temps de complétion : ${finalTime}
+Date : ${new Date().toLocaleDateString('fr-FR')}
+${cheatUsed ? '⚠️ Note : Triche utilisée (mais on ne juge pas!)' : '🌟 Parcours authentique - Bravo !'}
+
+╔═══════════════════════════════════════════════════════════════╗
+║  Ce certificat prouve votre engagement à améliorer vos       ║
+║  pratiques de formation à distance. Partagez-le fièrement !  ║
+╚═══════════════════════════════════════════════════════════════╝
+
+Créé par Amélie Silvert (avec l'aide de l'IA)
+© Tous droits réservés
+`;
+
+            const blob = new Blob([certificate], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Certificat_Webinaire_Expert_${userName.replace(/\s+/g, '_')}.txt`;
+            link.click();
+            showHint('🏆 Certificat généré ! Partagez votre réussite avec fierté.');
+        }
+
+        // Initialiser la date sur le certificat
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateElement = document.getElementById('currentDate');
+            if (dateElement) {
+                dateElement.textContent = new Date().toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+        });
+
+        // Easter egg
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+            
+            if (JSON.stringify(konamiCode) === JSON.stringify(konamiSequence)) {
+                showHint('🎮 Code Konami détecté ! Vous êtes un vrai gamer pédagogique ! Tous les modules sont débloqués.');
+                for (let i = 1; i <= 7; i++) {
+                    setTimeout(() => unlockAnimation(), i * 200);
+                }
+            }
+        });</script>
