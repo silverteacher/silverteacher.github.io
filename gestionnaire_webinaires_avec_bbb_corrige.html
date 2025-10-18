@@ -1,0 +1,1612 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestionnaire de Webinaires</title>
+<script>
+// Implémentation Data SDK avec localStorage pour GitHub Pages
+window.dataSdk = {
+    handler: null,
+
+    async init(handler) {
+        this.handler = handler;
+        setTimeout(() => this.loadData(), 0);
+        return { isOk: true };
+    },
+
+    loadData() {
+        const data = JSON.parse(localStorage.getItem('webinarData') || '[]');
+        if (this.handler && this.handler.onDataChanged) {
+            this.handler.onDataChanged(data);
+        }
+    },
+
+    async create(item) {
+        const data = JSON.parse(localStorage.getItem('webinarData') || '[]');
+        item.__backendId = item.id + '-' + Date.now();
+        data.push(item);
+        localStorage.setItem('webinarData', JSON.stringify(data));
+        this.loadData();
+        return { isOk: true };
+    },
+
+    async update(item) {
+        const data = JSON.parse(localStorage.getItem('webinarData') || '[]');
+        const index = data.findIndex(i => i.__backendId === item.__backendId);
+        if (index !== -1) {
+            data[index] = item;
+            localStorage.setItem('webinarData', JSON.stringify(data));
+            this.loadData();
+            return { isOk: true };
+        }
+        return { isOk: false, error: 'Item not found' };
+    },
+
+    async delete(item) {
+        const data = JSON.parse(localStorage.getItem('webinarData') || '[]');
+        const filtered = data.filter(i => i.__backendId !== item.__backendId);
+        localStorage.setItem('webinarData', JSON.stringify(filtered));
+        this.loadData();
+        return { isOk: true };
+    }
+};
+
+// Implémentation Element SDK pour GitHub Pages
+window.elementSdk = {
+    config: {},
+
+    async init(options) {
+        this.config = options.defaultConfig || {};
+        if (options.render) {
+            options.render(this.config);
+        }
+        return { isOk: true };
+    },
+
+    setConfig(newConfig) {
+        Object.assign(this.config, newConfig);
+    }
+};
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body {
+box-sizing: border-box;
+}
+.card {
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+cursor: pointer;
+user-select: none;
+height: 150px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+position: relative;
+backdrop-filter: blur(10px);
+border: 1px solid rgba(255, 255, 255, 0.2);
+background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+}
+.card:hover {
+transform: translateY(-6px) scale(1.02);
+box-shadow: 0 20px 40px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.08);
+border-color: rgba(59, 130, 246, 0.3);
+}
+.card:focus {
+outline: 3px solid #3b82f6;
+outline-offset: 2px;
+}
+.card.dragging {
+opacity: 0.9;
+transform: rotate(3deg) scale(1.05);
+z-index: 1000;
+box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+}
+.card[draggable="true"] {
+cursor: grab;
+}
+.card[draggable="true"]:active {
+cursor: grabbing;
+}
+.card-content {
+padding: 1.25rem;
+text-align: center;
+flex: 1;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 0.75rem;
+}
+.card-icon {
+font-size: 2.8rem;
+line-height: 1;
+margin-bottom: 0.5rem;
+flex-shrink: 0;
+filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+transition: all 0.3s ease;
+}
+.card:hover .card-icon {
+transform: scale(1.1);
+filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+}
+.card-title {
+font-weight: 700;
+font-size: 0.95rem;
+line-height: 1.3;
+color: #1e293b;
+margin-bottom: 0.25rem;
+text-align: center;
+flex-shrink: 0;
+text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.card-description {
+font-size: 0.8rem;
+color: #64748b;
+line-height: 1.3;
+text-align: center;
+flex-shrink: 0;
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 2;
+-webkit-box-orient: vertical;
+font-weight: 500;
+}
+.card-actions {
+position: absolute;
+top: 10px;
+right: 10px;
+display: flex;
+gap: 6px;
+opacity: 0;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+transform: translateY(-5px);
+}
+.card:hover .card-actions,
+.card:focus .card-actions {
+opacity: 1;
+transform: translateY(0);
+}
+.card-action-btn {
+width: 32px;
+height: 32px;
+border-radius: 50%;
+border: none;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 0.85rem;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+backdrop-filter: blur(10px);
+}
+.add-btn {
+background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+color: white;
+border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.add-btn:hover {
+background: linear-gradient(135deg, #059669 0%, #047857 100%);
+transform: scale(1.15);
+box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+}
+.drag-handle {
+background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+color: white;
+border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.drag-handle:hover {
+background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+transform: scale(1.15);
+box-shadow: 0 4px 16px rgba(107, 114, 128, 0.4);
+}
+/* Styles pour les onglets */
+.tab-button.active {
+border-bottom-color: #3b82f6;
+color: #3b82f6;
+background-color: #eff6ff;
+}
+.tab-panel {
+animation: fadeIn 0.3s ease-in-out;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.chemin-fer {
+min-height: 150px;
+background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+border: 2px dashed #cbd5e1;
+transition: all 0.3s ease;
+}
+.chemin-fer.drag-over {
+background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+border-color: #10b981;
+transform: scale(1.02);
+}
+.sequence-item {
+position: relative;
+background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);
+backdrop-filter: blur(10px);
+border: 2px solid rgba(148, 163, 184, 0.2);
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sequence-item:hover {
+transform: translateY(-2px);
+box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+border-color: rgba(59, 130, 246, 0.3);
+}
+.sequence-item::after {
+content: '→';
+position: absolute;
+right: -18px;
+top: 50%;
+transform: translateY(-50%);
+color: #3b82f6;
+font-size: 24px;
+font-weight: bold;
+text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+z-index: 10;
+}
+.sequence-item:last-child::after {
+display: none;
+}
+.drag-over-sequence {
+border-color: #3b82f6 !important;
+background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;
+transform: scale(1.02);
+}
+.sequence-item.dragging {
+opacity: 0.7;
+transform: rotate(2deg) scale(1.05);
+z-index: 1000;
+box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+.drag-handle-icon:hover {
+color: #3b82f6;
+transform: scale(1.1);
+}
+.drop-indicator {
+animation: pulse-indicator 1s infinite;
+}
+@keyframes pulse-indicator {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.5; }
+}
+.loading-spinner {
+border: 2px solid #f3f4f6;
+border-top: 2px solid #3b82f6;
+border-radius: 50%;
+width: 16px;
+height: 16px;
+animation: spin 1s linear infinite;
+}
+@keyframes spin {
+0% { transform: rotate(0deg); }
+100% { transform: rotate(360deg); }
+}
+.pulse-animation {
+animation: pulse 2s infinite;
+}
+@keyframes pulse {
+0%, 100% { opacity: 1; }
+50% { opacity: 0.7; }
+}
+</style>
+<style>@view-transition { navigation: auto; }</style>
+</head>
+<body class="min-h-full bg-gradient-to-br from-slate-50 to-blue-50">
+<main class="container mx-auto px-4 py-6"><!-- Header -->
+<header class="text-center mb-8">
+<h1 id="app-title" class="text-4xl font-bold text-slate-800 mb-4">🎯 Gestionnaire de Webinaires</h1><!-- Informations du webinaire -->
+<div class="bg-white rounded-xl shadow-lg p-6 max-w-4xl mx-auto mb-6">
+<h2 class="text-xl font-bold text-slate-800 mb-4">📋 Informations du Webinaire</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div><label for="webinar-name" class="block text-sm font-medium text-slate-700 mb-2">Nom du webinaire</label> <input type="text" id="webinar-name" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: Formation BigBlueButton">
+</div>
+<div><label for="webinar-date" class="block text-sm font-medium text-slate-700 mb-2">Date du webinaire</label> <input type="date" id="webinar-date" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+<div><label for="participants-count" class="block text-sm font-medium text-slate-700 mb-2">Nombre de participants</label> <input type="number" id="participants-count" min="1" max="1000" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: 25">
+</div>
+</div><button id="save-webinar-info" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 mx-auto"> <span>💾 Sauvegarder les informations</span>
+<div id="info-loading" class="loading-spinner hidden"></div></button>
+</div>
+<p class="text-slate-600">Glissez vos cartes sur le chemin de fer pour créer votre séquence</p>
+</header><!-- Cartes d'outils et animations avec onglets -->
+<section class="bg-white rounded-xl shadow-lg mb-8"><!-- Navigation par onglets -->
+<div class="border-b border-slate-200">
+<nav class="flex" role="tablist" aria-label="Catégories d'éléments"><button id="tab-animations" class="tab-button flex-1 px-6 py-4 text-center font-medium border-b-2 border-transparent hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-colors" role="tab" aria-selected="true" aria-controls="panel-animations" tabindex="0"> <span class="flex items-center justify-center gap-2"> 🎭 <span class="hidden sm:inline">Gestes d'Animation</span><span class="sm:hidden">Animation</span> </span> </button> <button id="tab-tools" class="tab-button flex-1 px-6 py-4 text-center font-medium border-b-2 border-transparent hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-colors" role="tab" aria-selected="false" aria-controls="panel-tools" tabindex="-1"> <span class="flex items-center justify-center gap-2"> 🛠️ <span class="hidden sm:inline">Outils BigBlueButton</span><span class="sm:hidden">Outils BBB</span> </span> </button>
+ <button id="tab-bbb-effects" class="tab-button flex-1 px-6 py-4 text-center font-medium border-b-2 border-transparent hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-colors" role="tab" aria-selected="false" aria-controls="panel-bbb-effects" tabindex="-1"> <span class="flex items-center justify-center gap-2"> 🎯 <span class="hidden sm:inline">Effets BBB</span><span class="sm:hidden">Effets</span> </span> </button></nav>
+</div><!-- Contenu des onglets -->
+<div class="p-6"><!-- Panel Animations -->
+<div id="panel-animations" class="tab-panel" role="tabpanel" aria-labelledby="tab-animations" tabindex="0">
+<div class="mb-4">
+<h2 class="text-xl font-bold text-slate-800 mb-2">🎭 Gestes d'Animation</h2>
+<p class="text-sm text-slate-600">Cliquez sur une carte pour l'ajouter au chemin de fer, ou utilisez le glisser-déposer</p>
+</div>
+<div id="available-animations" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"><!-- Les cartes de séquences seront générées ici -->
+</div>
+</div><!-- Panel Tools -->
+<div id="panel-tools" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-tools" tabindex="0">
+<div class="mb-4">
+<h2 class="text-xl font-bold text-slate-800 mb-2">🛠️ Outils BigBlueButton</h2>
+<p class="text-sm text-slate-600">Cliquez sur une carte pour l'ajouter au chemin de fer, ou utilisez le glisser-déposer</p>
+</div>
+<div id="available-tools" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"><!-- Les cartes d'outils seront générées ici -->
+</div>
+</div>
+</div>
+</section><!-- Chemin de fer -->
+<section class="bg-white rounded-xl shadow-lg p-6 mb-8">
+<header class="mb-6">
+<h2 class="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2">🚂 Chemin de Fer - Séquence du Webinaire</h2>
+<p class="text-sm text-slate-600">Organisez vos éléments dans l'ordre de votre webinaire. Glissez pour réorganiser.</p>
+</header>
+<div id="chemin-fer" class="chemin-fer rounded-lg p-6 min-h-[200px] focus:outline-none focus:ring-2 focus:ring-blue-500" role="region" aria-label="Zone de séquence du webinaire" tabindex="0">
+<div class="text-center text-slate-500 py-12" id="chemin-empty">
+<div class="text-5xl mb-4" aria-hidden="true">
+🚂
+</div>
+<h3 class="font-medium text-lg mb-2">Votre séquence est vide</h3>
+<p class="text-sm mb-4">Cliquez sur les cartes ci-dessus ou glissez-les ici pour créer votre séquence</p>
+<div class="flex flex-col sm:flex-row gap-2 justify-center items-center text-xs text-slate-400"><span class="flex items-center gap-1"> <span class="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">+</span> Clic pour ajouter </span> <span class="flex items-center gap-1"> <span class="w-4 h-4 bg-gray-500 rounded-full flex items-center justify-center text-white text-xs">⋮⋮</span> Glisser pour organiser </span>
+</div>
+</div>
+<div id="sequence-items" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"></div>
+</div>
+</section><!-- Notes générales -->
+<section class="bg-white rounded-xl shadow-lg p-6 mb-8">
+<h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">📝 Notes Générales</h3>
+<div><label class="block text-sm font-medium text-slate-700 mb-2">Vos notes sur le webinaire (Les liens http:// et https:// seront automatiquement cliquables)</label> <textarea id="global-notes" class="w-full h-40 p-3 border border-slate-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Vos notes générales sur le webinaire..."></textarea>
+<div id="global-notes-display" class="hidden w-full h-40 p-3 border border-slate-300 rounded-lg bg-gray-50 overflow-auto"></div>
+<div class="flex gap-2 mt-3"><button id="save-notes-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"> <span>💾 Sauvegarder les notes</span>
+<div id="notes-loading" class="loading-spinner hidden"></div></button> <button id="toggle-global-notes-view" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"> 👁️ Aperçu </button>
+</div>
+</div>
+</section><!-- Export et Actions Section -->
+<section class="bg-white rounded-xl shadow-lg p-6 mb-8">
+<h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">📸 Export et Actions</h3>
+<div class="flex flex-col sm:flex-row gap-4 justify-center items-center"><button id="export-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"> <span>📸 Exporter Capture + Notes</span>
+<div id="export-loading" class="loading-spinner hidden"></div></button> <button id="reset-btn" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"> <span>🗑️ Réinitialiser Tout</span>
+<div id="reset-loading" class="loading-spinner hidden"></div></button>
+</div>
+<div class="text-center mt-2">
+<p class="text-sm text-slate-600">Export : génère un fichier avec toutes vos données</p>
+<p class="text-sm text-slate-600">Réinitialiser : supprime toutes les cartes et notes</p>
+</div>
+</section>
+</main><!-- Signature -->
+<footer class="text-center py-6 text-slate-500 text-sm">
+<p>Conçu par <strong>Amélie Silvert</strong> à l'aide de l'IA</p>
+</footer>
+<script>
+// Configuration par défaut
+const defaultConfig = {
+app_title: "🎯 Gestionnaire de Webinaires",
+primary_color: "#3b82f6",
+secondary_color: "#8b5cf6"
+};
+// Variables globales
+let items = [];
+let draggedElement = null;
+// Cartes prédéfinies BigBlueButton
+const availableTools = [
+{ id: 'selection-aleatoire', name: 'Sélection Aléatoire', icon: '🎲', color: 'bg-purple-100 border-purple-300', description: 'Choix aléatoire' },
+{ id: 'horloge', name: 'L\'Horloge', icon: '⏰', color: 'bg-orange-100 border-orange-300', description: 'Gestion du temps' },
+{ id: 'notes-partagees', name: 'Notes Partagées', icon: '📝', color: 'bg-yellow-100 border-yellow-300', description: 'Prise de notes collaborative' },
+{ id: 'partage-ecran', name: 'Partage d\'Écran', icon: '🖥️', color: 'bg-red-100 border-red-300', description: 'Partage d\'écran' },
+{ id: 'post-it', name: 'Post-it', icon: '📋', color: 'bg-indigo-100 border-indigo-300', description: 'Notes adhésives' },
+{ id: 'tableau-blanc', name: 'Tableau Blanc', icon: '🎨', color: 'bg-pink-100 border-pink-300', description: 'Tableau collaboratif' },
+{ id: 'diapo-magique', name: 'Diapo Magique', icon: '✨', color: 'bg-cyan-100 border-cyan-300', description: 'Présentation interactive' },
+{ id: 'webcam-micro', name: 'Webcam et Micro', icon: '🎥', color: 'bg-teal-100 border-teal-300', description: 'Audio et vidéo' },
+{ id: 'chat', name: 'Chat', icon: '💬', color: 'bg-green-100 border-green-300', description: 'Discussion en temps réel' },
+{ id: 'emoji', name: 'Emoji', icon: '😊', color: 'bg-yellow-100 border-yellow-300', description: 'Réactions et émojis' }
+];
+const availableAnimations = [
+{ id: 'contenu', name: 'Contenu', icon: '📚', color: 'bg-emerald-100 border-emerald-300', description: 'Présentation du contenu' },
+{ id: 'accueil', name: 'Accueil', icon: '👋', color: 'bg-lime-100 border-lime-300', description: 'Accueil des participants' },
+{ id: 'brise-glace', name: 'Brise-glace', icon: '🧊', color: 'bg-amber-100 border-amber-300', description: 'Activité d\'introduction' },
+{ id: 'retour-reflexif', name: 'Retour Réflexif', icon: '🤔', color: 'bg-violet-100 border-violet-300', description: 'Moment de réflexion' },
+{ id: 'témoignage', name: 'Témoignage', icon: '🗣️', color: 'bg-fuchsia-100 border-fuchsia-300', description: 'Partage d\'expérience' },
+{ id: 'ateliers', name: 'Ateliers', icon: '🔧', color: 'bg-rose-100 border-rose-300', description: 'Travail en groupe' },
+{ id: 'prolongement', name: 'Prolongement', icon: '🔄', color: 'bg-sky-100 border-sky-300', description: 'Suite et continuité' },
+{ id: 'pause', name: 'Pause', icon: '⏸️', color: 'bg-slate-100 border-slate-300', description: 'Pause dans le webinaire' },
+{ id: 'quiz', name: 'Quiz', icon: '❓', color: 'bg-emerald-100 border-emerald-300', description: 'Quiz interactif' },
+{ id: 'jeu', name: 'Jeu', icon: '🎮', color: 'bg-violet-100 border-violet-300', description: 'Activité ludique' }
+];
+// Gestionnaire de données
+const dataHandler = {
+onDataChanged(data) {
+items = data.sort((a, b) => (a.position || 0) - (b.position || 0));
+renderSequenceItems();
+loadWebinarInfo();
+}
+};
+// Fonction de rendu
+async function render(config) {
+document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+}
+// Rendu des cartes disponibles
+function renderAvailableCards() {
+renderToolCards();
+renderAnimationCards();
+}
+function renderToolCards() {
+const container = document.getElementById('available-tools');
+container.innerHTML = availableTools.map(tool => `
+<div class="card ${tool.color} border-2 rounded-xl shadow-sm hover:shadow-lg"
+draggable="false"
+data-card-id="${tool.id}"
+data-type="tool"
+tabindex="0"
+role="button"
+aria-label="Ajouter ${tool.name} au chemin de fer"
+title="Cliquez pour ajouter ou glissez vers le chemin de fer">
+<div class="card-content">
+<div class="card-icon" aria-hidden="true">${tool.icon}</div>
+<div class="card-title">${tool.name}</div>
+<div class="card-description">${tool.description}</div>
+</div>
+<div class="card-actions">
+<button class="card-action-btn add-btn"
+aria-label="Ajouter ${tool.name}"
+title="Ajouter au chemin de fer">+</button>
+<button class="card-action-btn drag-handle"
+aria-label="Glisser ${tool.name}"
+title="Maintenir pour glisser">⋮⋮</button>
+</div>
+</div>
+`).join('');
+attachCardEvents();
+}
+function renderAnimationCards() {
+const container = document.getElementById('available-animations');
+container.innerHTML = availableAnimations.map(animation => `
+<div class="card ${animation.color} border-2 rounded-xl shadow-sm hover:shadow-lg"
+draggable="false"
+data-card-id="${animation.id}"
+data-type="animation"
+tabindex="0"
+role="button"
+aria-label="Ajouter ${animation.name} au chemin de fer"
+title="Cliquez pour ajouter ou glissez vers le chemin de fer">
+<div class="card-content">
+<div class="card-icon" aria-hidden="true">${animation.icon}</div>
+<div class="card-title">${animation.name}</div>
+<div class="card-description">${animation.description}</div>
+</div>
+<div class="card-actions">
+<button class="card-action-btn add-btn"
+aria-label="Ajouter ${animation.name}"
+title="Ajouter au chemin de fer">+</button>
+<button class="card-action-btn drag-handle"
+aria-label="Glisser ${animation.name}"
+title="Maintenir pour glisser">⋮⋮</button>
+</div>
+</div>
+`).join('');
+attachCardEvents();
+}
+function renderSequenceItems() {
+const sequenceContainer = document.getElementById('sequence-items');
+const emptyState = document.getElementById('chemin-empty');
+const sequenceItems = items.filter(item => item.position >= 1000 && item.position < 2000);
+if (sequenceItems.length === 0) {
+emptyState.classList.remove('hidden');
+sequenceContainer.innerHTML = '';
+return;
+}
+emptyState.classList.add('hidden');
+sequenceContainer.innerHTML = sequenceItems.map((item, index) => `
+<div class="sequence-item card bg-white border-2 border-slate-200 rounded-lg p-4 shadow-sm min-w-[180px] relative"
+draggable="true"
+data-id="${item.__backendId}"
+data-type="${item.type}"
+data-position="${item.position}">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="text-2xl drag-handle-icon cursor-grab" title="Glisser pour réorganiser">⋮⋮</span>
+<span class="text-2xl">${item.icon}</span>
+<div>
+<div class="font-medium text-slate-800 text-sm">${item.name}</div>
+<div class="text-xs text-slate-500">Étape ${index + 1}</div>
+</div>
+</div>
+<button class="text-slate-400 hover:text-red-500 transition-colors delete-btn text-lg"
+data-id="${item.__backendId}">×</button>
+</div>
+${item.description ? `<div class="text-xs text-slate-600 mb-2">${item.description}</div>` : ''}
+<div class="mt-2">
+<button class="text-xs text-blue-600 hover:text-blue-800 transition-colors notes-toggle"
+data-id="${item.__backendId}">
+📝 ${item.notes ? 'Modifier notes' : 'Ajouter notes'}
+</button>
+<div class="notes-area mt-2 max-h-0 overflow-hidden transition-all duration-300" data-id="${item.__backendId}">
+<textarea class="w-full p-2 text-xs border border-slate-300 rounded notes-input"
+placeholder="Notes pour cette étape... (Les liens http:// et https:// seront automatiquement cliquables)"
+data-id="${item.__backendId}">${item.notes || ''}</textarea>
+<div class="notes-display hidden w-full p-2 text-xs border border-slate-300 rounded bg-gray-50"
+data-id="${item.__backendId}"></div>
+<div class="flex gap-2 mt-1">
+<button class="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs save-item-notes"
+data-id="${item.__backendId}">Sauvegarder</button>
+<button class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs toggle-view-notes"
+data-id="${item.__backendId}">Aperçu</button>
+</div>
+</div>
+</div>
+</div>
+`).join('');
+attachCardEvents();
+setupSequenceDragAndDrop();
+}
+// Fonction pour convertir les liens en cliquables
+function makeLinksClickable(text) {
+const urlRegex = /(https?:\/\/[^\s]+)/g;
+return text.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">$1</a>');
+}
+// Gestion des onglets
+function setupTabs() {
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabPanels = document.querySelectorAll('.tab-panel');
+tabButtons.forEach(button => {
+button.addEventListener('click', () => switchTab(button.id));
+button.addEventListener('keydown', handleTabKeydown);
+});
+// Activer le premier onglet par défaut
+switchTab('tab-animations');
+}
+function switchTab(activeTabId) {
+const tabButtons = document.querySelectorAll('.tab-button');
+const tabPanels = document.querySelectorAll('.tab-panel');
+// Désactiver tous les onglets
+tabButtons.forEach(button => {
+button.classList.remove('active');
+button.setAttribute('aria-selected', 'false');
+button.setAttribute('tabindex', '-1');
+});
+tabPanels.forEach(panel => {
+panel.classList.add('hidden');
+});
+// Activer l'onglet sélectionné
+const activeButton = document.getElementById(activeTabId);
+const panelId = activeButton.getAttribute('aria-controls');
+const activePanel = document.getElementById(panelId);
+activeButton.classList.add('active');
+activeButton.setAttribute('aria-selected', 'true');
+activeButton.setAttribute('tabindex', '0');
+activePanel.classList.remove('hidden');
+}
+function handleTabKeydown(e) {
+const tabButtons = Array.from(document.querySelectorAll('.tab-button'));
+const currentIndex = tabButtons.indexOf(e.target);
+switch (e.key) {
+case 'ArrowLeft':
+e.preventDefault();
+const prevIndex = currentIndex > 0 ? currentIndex - 1 : tabButtons.length - 1;
+tabButtons[prevIndex].focus();
+switchTab(tabButtons[prevIndex].id);
+break;
+case 'ArrowRight':
+e.preventDefault();
+const nextIndex = currentIndex < tabButtons.length - 1 ? currentIndex + 1 : 0;
+tabButtons[nextIndex].focus();
+switchTab(tabButtons[nextIndex].id);
+break;
+case 'Home':
+e.preventDefault();
+tabButtons[0].focus();
+switchTab(tabButtons[0].id);
+break;
+case 'End':
+e.preventDefault();
+tabButtons[tabButtons.length - 1].focus();
+switchTab(tabButtons[tabButtons.length - 1].id);
+break;
+}
+}
+// Événements des cartes
+function attachCardEvents() {
+// Clic pour ajouter directement - cartes disponibles
+const availableCards = document.querySelectorAll('.card[data-card-id]');
+availableCards.forEach(card => {
+// Supprimer les anciens événements
+card.removeEventListener('click', handleCardClick);
+card.removeEventListener('keydown', handleCardKeydown);
+// Ajouter les nouveaux événements
+card.addEventListener('click', handleCardClick);
+card.addEventListener('keydown', handleCardKeydown);
+// Bouton d'ajout
+const addBtn = card.querySelector('.add-btn');
+if (addBtn) {
+addBtn.removeEventListener('click', handleAddButtonClick);
+addBtn.addEventListener('click', handleAddButtonClick);
+}
+// Gestion du drag avec le handle
+const dragHandle = card.querySelector('.drag-handle');
+if (dragHandle) {
+dragHandle.addEventListener('mousedown', (e) => {
+e.stopPropagation();
+card.setAttribute('draggable', 'true');
+card.addEventListener('dragstart', handleDragStart);
+card.addEventListener('dragend', handleDragEnd);
+});
+}
+});
+// Suppression
+const deleteButtons = document.querySelectorAll('.delete-btn');
+deleteButtons.forEach(btn => {
+btn.addEventListener('click', handleDelete);
+});
+// Notes
+const notesToggle = document.querySelectorAll('.notes-toggle');
+notesToggle.forEach(btn => {
+btn.addEventListener('click', toggleNotes);
+});
+const saveNotesButtons = document.querySelectorAll('.save-item-notes');
+saveNotesButtons.forEach(btn => {
+btn.addEventListener('click', saveItemNotes);
+});
+// Boutons d'aperçu des notes
+const toggleViewButtons = document.querySelectorAll('.toggle-view-notes');
+toggleViewButtons.forEach(btn => {
+btn.addEventListener('click', toggleNotesView);
+});
+}
+// Gestionnaire pour le bouton d'ajout
+function handleAddButtonClick(e) {
+e.preventDefault();
+e.stopPropagation();
+const card = e.target.closest('.card');
+if (card) {
+const cardId = card.dataset.cardId;
+const cardType = card.dataset.type;
+console.log('Ajout via bouton:', cardId, cardType);
+addCardToSequence(cardId, cardType);
+}
+}
+// Gestion du clic sur les cartes
+function handleCardClick(e) {
+// Ignorer si clic sur les boutons d'action
+if (e.target.closest('.card-actions') || e.target.classList.contains('card-action-btn')) {
+return;
+}
+const cardId = this.dataset.cardId;
+const cardType = this.dataset.type;
+console.log('Clic sur carte:', cardId, cardType);
+if (cardId && cardType) {
+// Ajouter directement au chemin de fer
+addCardToSequence(cardId, cardType);
+}
+}
+// Gestion du clavier sur les cartes
+function handleCardKeydown(e) {
+if (e.key === 'Enter' || e.key === ' ') {
+e.preventDefault();
+handleCardClick.call(this, e);
+}
+}
+// Ajouter une carte à la séquence
+async function addCardToSequence(cardId, cardType) {
+console.log('addCardToSequence appelée avec:', cardId, cardType);
+if (items.length >= 999) {
+showToast('Limite atteinte : maximum 999 éléments', 'error');
+return;
+}
+const cardData = cardType === 'tool' ?
+availableTools.find(t => t.id === cardId) :
+availableAnimations.find(a => a.id === cardId);
+console.log('Données de la carte trouvées:', cardData);
+if (!cardData) {
+console.error('Carte non trouvée:', cardId, cardType);
+showToast('Carte non trouvée', 'error');
+return;
+}
+const position = 1000 + items.filter(i => i.position >= 1000 && i.position < 2000).length;
+const uniqueId = `${cardData.id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+const newItem = {
+id: uniqueId,
+type: cardType,
+name: cardData.name,
+icon: cardData.icon,
+description: cardData.description,
+position: position,
+notes: '',
+webinar_type: '',
+participants: 0,
+validated: false,
+created_at: new Date().toISOString()
+};
+console.log('Création de l\'élément:', newItem);
+try {
+const result = await window.dataSdk.create(newItem);
+console.log('Résultat de la création:', result);
+if (result.isOk) {
+showToast(`✅ ${cardData.name} ajouté !`, 'success');
+} else {
+console.error('Erreur SDK:', result.error);
+showToast('Erreur lors de l\'ajout', 'error');
+}
+} catch (error) {
+console.error('Erreur lors de l\'ajout:', error);
+showToast('Erreur lors de l\'ajout', 'error');
+}
+}
+// Drag and Drop
+function handleDragStart(e) {
+draggedElement = this;
+this.classList.add('dragging');
+e.dataTransfer.effectAllowed = 'move';
+// Stocker les informations de la carte
+if (this.dataset.cardId) {
+e.dataTransfer.setData('text/plain', JSON.stringify({
+cardId: this.dataset.cardId,
+type: this.dataset.type,
+isNewCard: true
+}));
+} else {
+e.dataTransfer.setData('text/plain', JSON.stringify({
+itemId: this.dataset.id,
+type: this.dataset.type,
+isNewCard: false
+}));
+}
+}
+function handleDragEnd(e) {
+this.classList.remove('dragging');
+document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+}
+async function handleDelete(e) {
+e.stopPropagation();
+const itemId = e.target.dataset.id;
+const item = items.find(i => i.__backendId === itemId);
+if (!item) return;
+// Confirmation inline au lieu d'alert
+const confirmBtn = document.createElement('button');
+confirmBtn.textContent = 'Confirmer ?';
+confirmBtn.className = 'bg-red-500 text-white px-2 py-1 rounded text-xs ml-2';
+const cancelBtn = document.createElement('button');
+cancelBtn.textContent = 'Annuler';
+cancelBtn.className = 'bg-gray-500 text-white px-2 py-1 rounded text-xs ml-1';
+e.target.style.display = 'none';
+e.target.parentNode.appendChild(confirmBtn);
+e.target.parentNode.appendChild(cancelBtn);
+confirmBtn.onclick = async () => {
+try {
+const result = await window.dataSdk.delete(item);
+if (result.isOk) {
+showToast('Élément supprimé', 'success');
+} else {
+showToast('Erreur lors de la suppression', 'error');
+}
+} catch (error) {
+showToast('Erreur lors de la suppression', 'error');
+}
+};
+cancelBtn.onclick = () => {
+confirmBtn.remove();
+cancelBtn.remove();
+e.target.style.display = 'block';
+};
+}
+function toggleNotes(e) {
+e.preventDefault();
+e.stopPropagation();
+const itemId = e.target.dataset.id;
+const notesArea = document.querySelector(`.notes-area[data-id="${itemId}"]`);
+const toggleBtn = e.target;
+if (notesArea.classList.contains('notes-open')) {
+// Fermer les notes
+notesArea.style.maxHeight = '0px';
+notesArea.classList.remove('notes-open');
+toggleBtn.textContent = `📝 Ajouter notes`;
+} else {
+// Ouvrir les notes
+notesArea.style.maxHeight = '200px';
+notesArea.classList.add('notes-open');
+toggleBtn.textContent = `📝 Modifier notes`;
+// Focus sur le textarea
+setTimeout(() => {
+const textarea = notesArea.querySelector('.notes-input');
+if (textarea) textarea.focus();
+}, 100);
+}
+}
+async function saveItemNotes(e) {
+e.preventDefault();
+e.stopPropagation();
+const itemId = e.target.dataset.id;
+const notesInput = document.querySelector(`.notes-input[data-id="${itemId}"]`);
+const item = items.find(i => i.__backendId === itemId);
+if (!item) {
+showToast('Élément non trouvé', 'error');
+return;
+}
+// Désactiver le bouton pendant la sauvegarde
+const saveBtn = e.target;
+const originalText = saveBtn.textContent;
+saveBtn.disabled = true;
+saveBtn.textContent = 'Sauvegarde...';
+try {
+item.notes = notesInput.value;
+const result = await window.dataSdk.update(item);
+if (result.isOk) {
+showToast('Notes sauvegardées ✅', 'success');
+// Mettre à jour l'aperçu si visible
+updateNotesDisplay(itemId);
+// Mettre à jour le bouton toggle
+const toggleBtn = document.querySelector(`.notes-toggle[data-id="${itemId}"]`);
+if (toggleBtn) {
+toggleBtn.textContent = item.notes ? '📝 Modifier notes' : '📝 Ajouter notes';
+}
+} else {
+showToast('Erreur lors de la sauvegarde', 'error');
+}
+} catch (error) {
+console.error('Erreur sauvegarde notes:', error);
+showToast('Erreur lors de la sauvegarde', 'error');
+} finally {
+saveBtn.disabled = false;
+saveBtn.textContent = originalText;
+}
+}
+function toggleNotesView(e) {
+e.preventDefault();
+e.stopPropagation();
+const itemId = e.target.dataset.id;
+const notesInput = document.querySelector(`.notes-input[data-id="${itemId}"]`);
+const notesDisplay = document.querySelector(`.notes-display[data-id="${itemId}"]`);
+const toggleBtn = e.target;
+if (notesInput.classList.contains('hidden')) {
+// Passer en mode édition
+notesInput.classList.remove('hidden');
+notesDisplay.classList.add('hidden');
+toggleBtn.textContent = 'Aperçu';
+toggleBtn.className = 'bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs toggle-view-notes';
+} else {
+// Passer en mode aperçu
+updateNotesDisplay(itemId);
+notesInput.classList.add('hidden');
+notesDisplay.classList.remove('hidden');
+toggleBtn.textContent = 'Éditer';
+toggleBtn.className = 'bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs toggle-view-notes';
+}
+}
+function updateNotesDisplay(itemId) {
+const notesInput = document.querySelector(`.notes-input[data-id="${itemId}"]`);
+const notesDisplay = document.querySelector(`.notes-display[data-id="${itemId}"]`);
+if (notesInput && notesDisplay) {
+const notesText = notesInput.value || 'Aucune note';
+const notesWithLinks = makeLinksClickable(notesText);
+notesDisplay.innerHTML = notesWithLinks.replace(/\n/g, '<br>');
+}
+}
+// Configuration des zones de drop
+function setupDropZones() {
+const cheminFer = document.getElementById('chemin-fer');
+cheminFer.addEventListener('dragover', handleDragOver);
+cheminFer.addEventListener('drop', handleDrop);
+cheminFer.addEventListener('dragleave', handleDragLeave);
+}
+// Configuration du drag and drop pour les éléments de séquence
+function setupSequenceDragAndDrop() {
+const sequenceItems = document.querySelectorAll('.sequence-item');
+sequenceItems.forEach(item => {
+item.addEventListener('dragstart', handleSequenceDragStart);
+item.addEventListener('dragend', handleSequenceDragEnd);
+item.addEventListener('dragover', handleSequenceDragOver);
+item.addEventListener('drop', handleSequenceDrop);
+item.addEventListener('dragenter', handleSequenceDragEnter);
+item.addEventListener('dragleave', handleSequenceDragLeave);
+});
+}
+function handleSequenceDragStart(e) {
+draggedElement = this;
+this.classList.add('dragging');
+e.dataTransfer.effectAllowed = 'move';
+e.dataTransfer.setData('text/plain', JSON.stringify({
+itemId: this.dataset.id,
+type: this.dataset.type,
+isNewCard: false,
+isReordering: true
+}));
+}
+function handleSequenceDragEnd(e) {
+this.classList.remove('dragging');
+document.querySelectorAll('.drag-over-sequence').forEach(el => el.classList.remove('drag-over-sequence'));
+document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+}
+function handleSequenceDragEnter(e) {
+e.preventDefault();
+if (this !== draggedElement) {
+this.classList.add('drag-over-sequence');
+}
+}
+function handleSequenceDragLeave(e) {
+if (!this.contains(e.relatedTarget)) {
+this.classList.remove('drag-over-sequence');
+}
+}
+function handleSequenceDragOver(e) {
+e.preventDefault();
+e.dataTransfer.dropEffect = 'move';
+if (this === draggedElement) return;
+const rect = this.getBoundingClientRect();
+const midpoint = rect.left + rect.width / 2;
+const mouseX = e.clientX;
+// Supprimer les anciens indicateurs
+document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+// Créer un nouvel indicateur
+const indicator = document.createElement('div');
+indicator.className = 'drop-indicator absolute top-0 bottom-0 w-1 bg-blue-500 z-10 rounded';
+indicator.style.pointerEvents = 'none';
+if (mouseX < midpoint) {
+// Insérer avant
+indicator.style.left = '-2px';
+this.style.position = 'relative';
+this.appendChild(indicator);
+} else {
+// Insérer après
+indicator.style.right = '-2px';
+this.style.position = 'relative';
+this.appendChild(indicator);
+}
+}
+async function handleSequenceDrop(e) {
+e.preventDefault();
+e.stopPropagation();
+this.classList.remove('drag-over-sequence');
+document.querySelectorAll('.drop-indicator').forEach(el => el.remove());
+if (this === draggedElement) return;
+try {
+const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
+if (dragData.isReordering) {
+await reorderSequenceItems(dragData.itemId, this.dataset.id, e);
+}
+} catch (error) {
+console.error('Erreur lors du réarrangement:', error);
+showToast('Erreur lors du réarrangement', 'error');
+}
+}
+async function reorderSequenceItems(draggedItemId, targetItemId, event) {
+const draggedItem = items.find(i => i.__backendId === draggedItemId);
+const targetItem = items.find(i => i.__backendId === targetItemId);
+if (!draggedItem || !targetItem) return;
+const sequenceItems = items.filter(item => item.position >= 1000 && item.position < 2000)
+.sort((a, b) => a.position - b.position);
+const draggedIndex = sequenceItems.findIndex(i => i.__backendId === draggedItemId);
+const targetIndex = sequenceItems.findIndex(i => i.__backendId === targetItemId);
+if (draggedIndex === -1 || targetIndex === -1) return;
+// Déterminer si on insère avant ou après
+const rect = event.target.getBoundingClientRect();
+const midpoint = rect.left + rect.width / 2;
+const mouseX = event.clientX;
+const insertBefore = mouseX < midpoint;
+// Calculer la nouvelle position
+let newIndex = targetIndex;
+if (!insertBefore && draggedIndex < targetIndex) {
+// Pas de changement d'index si on insère après et qu'on vient de la gauche
+} else if (insertBefore && draggedIndex > targetIndex) {
+// Pas de changement d'index si on insère avant et qu'on vient de la droite
+} else if (!insertBefore) {
+newIndex = targetIndex + 1;
+}
+// Réorganiser le tableau
+const newSequence = [...sequenceItems];
+const [movedItem] = newSequence.splice(draggedIndex, 1);
+newSequence.splice(newIndex > draggedIndex ? newIndex - 1 : newIndex, 0, movedItem);
+// Mettre à jour les positions
+const updatePromises = newSequence.map((item, index) => {
+item.position = 1000 + index;
+return window.dataSdk.update(item);
+});
+try {
+await Promise.all(updatePromises);
+showToast('Ordre mis à jour ✅', 'success');
+} catch (error) {
+console.error('Erreur lors de la mise à jour des positions:', error);
+showToast('Erreur lors du réarrangement', 'error');
+}
+}
+function handleDragOver(e) {
+e.preventDefault();
+e.dataTransfer.dropEffect = 'move';
+this.classList.add('drag-over');
+}
+function handleDragLeave(e) {
+if (!this.contains(e.relatedTarget)) {
+this.classList.remove('drag-over');
+}
+}
+async function handleDrop(e) {
+e.preventDefault();
+this.classList.remove('drag-over');
+if (!draggedElement) return;
+try {
+const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));
+if (dragData.isNewCard) {
+await handleNewCardDrop(dragData, this.id);
+} else {
+await handleExistingItemDrop(dragData, this.id);
+}
+} catch (error) {
+console.error('Erreur lors du drop:', error);
+showToast('Erreur lors du déplacement', 'error');
+}
+}
+async function handleNewCardDrop(dragData, dropZoneId) {
+if (dropZoneId !== 'chemin-fer') return;
+if (items.length >= 999) {
+showToast('Limite atteinte : maximum 999 éléments', 'error');
+return;
+}
+const cardData = dragData.type === 'tool' ?
+availableTools.find(t => t.id === dragData.cardId) :
+availableAnimations.find(a => a.id === dragData.cardId);
+if (!cardData) return;
+const position = 1000 + items.filter(i => i.position >= 1000 && i.position < 2000).length;
+// Générer un ID unique pour permettre la sélection infinie
+const uniqueId = `${cardData.id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+const newItem = {
+id: uniqueId,
+type: dragData.type,
+name: cardData.name,
+icon: cardData.icon,
+description: cardData.description,
+position: position,
+notes: '',
+webinar_type: '',
+participants: 0,
+validated: false,
+created_at: new Date().toISOString()
+};
+const result = await window.dataSdk.create(newItem);
+if (result.isOk) {
+showToast(`${cardData.name} ajouté au chemin de fer`, 'success');
+} else {
+showToast('Erreur lors de l\'ajout', 'error');
+}
+}
+async function handleExistingItemDrop(dragData, dropZoneId) {
+const item = items.find(i => i.__backendId === dragData.itemId);
+if (!item) return;
+if (dropZoneId === 'chemin-fer') {
+const newPosition = 1000 + items.filter(i => i.position >= 1000 && i.position < 2000).length;
+item.position = newPosition;
+const result = await window.dataSdk.update(item);
+if (!result.isOk) {
+showToast('Erreur lors du déplacement', 'error');
+}
+}
+}
+// Informations du webinaire
+function setupWebinarInfo() {
+const saveInfoBtn = document.getElementById('save-webinar-info');
+saveInfoBtn.addEventListener('click', saveWebinarInfo);
+}
+async function saveWebinarInfo() {
+const name = document.getElementById('webinar-name').value;
+const date = document.getElementById('webinar-date').value;
+const participants = document.getElementById('participants-count').value;
+const loadingSpinner = document.getElementById('info-loading');
+const saveBtn = document.getElementById('save-webinar-info');
+loadingSpinner.classList.remove('hidden');
+saveBtn.disabled = true;
+try {
+let infoItem = items.find(item => item.type === 'webinar-info');
+const infoData = {
+id: 'webinar-info',
+type: 'webinar-info',
+name: 'Informations Webinaire',
+icon: '📋',
+position: 9997,
+notes: JSON.stringify({ name, date, participants }),
+webinar_type: '',
+participants: parseInt(participants) || 0,
+validated: false,
+created_at: new Date().toISOString()
+};
+if (infoItem) {
+Object.assign(infoItem, infoData);
+const result = await window.dataSdk.update(infoItem);
+if (!result.isOk) {
+throw new Error('Update failed');
+}
+} else {
+const result = await window.dataSdk.create(infoData);
+if (!result.isOk) {
+throw new Error('Create failed');
+}
+}
+showToast('Informations sauvegardées', 'success');
+} catch (error) {
+showToast('Erreur lors de la sauvegarde', 'error');
+} finally {
+loadingSpinner.classList.add('hidden');
+saveBtn.disabled = false;
+}
+}
+function loadWebinarInfo() {
+const infoItem = items.find(item => item.type === 'webinar-info');
+if (infoItem && infoItem.notes) {
+try {
+const info = JSON.parse(infoItem.notes);
+document.getElementById('webinar-name').value = info.name || '';
+document.getElementById('webinar-date').value = info.date || '';
+document.getElementById('participants-count').value = info.participants || '';
+} catch (error) {
+console.error('Erreur lors du chargement des informations:', error);
+}
+}
+}
+// Notes globales
+function setupGlobalNotes() {
+const saveNotesBtn = document.getElementById('save-notes-btn');
+const notesTextarea = document.getElementById('global-notes');
+const toggleViewBtn = document.getElementById('toggle-global-notes-view');
+saveNotesBtn.addEventListener('click', saveGlobalNotes);
+toggleViewBtn.addEventListener('click', toggleGlobalNotesView);
+// Charger les notes existantes
+const existingNotes = items.find(item => item.type === 'global-notes');
+if (existingNotes) {
+notesTextarea.value = existingNotes.notes || '';
+}
+}
+function toggleGlobalNotesView() {
+const notesTextarea = document.getElementById('global-notes');
+const notesDisplay = document.getElementById('global-notes-display');
+const toggleBtn = document.getElementById('toggle-global-notes-view');
+if (notesTextarea.classList.contains('hidden')) {
+// Passer en mode édition
+notesTextarea.classList.remove('hidden');
+notesDisplay.classList.add('hidden');
+toggleBtn.innerHTML = '👁️ Aperçu';
+toggleBtn.className = toggleBtn.className.replace('bg-green-600 hover:bg-green-700', 'bg-blue-600 hover:bg-blue-700');
+} else {
+// Passer en mode aperçu
+updateGlobalNotesDisplay();
+notesTextarea.classList.add('hidden');
+notesDisplay.classList.remove('hidden');
+toggleBtn.innerHTML = '✏️ Éditer';
+toggleBtn.className = toggleBtn.className.replace('bg-blue-600 hover:bg-blue-700', 'bg-green-600 hover:bg-green-700');
+}
+}
+function updateGlobalNotesDisplay() {
+const notesTextarea = document.getElementById('global-notes');
+const notesDisplay = document.getElementById('global-notes-display');
+const notesText = notesTextarea.value || 'Aucune note générale';
+const notesWithLinks = makeLinksClickable(notesText);
+notesDisplay.innerHTML = notesWithLinks.replace(/\n/g, '<br>');
+}
+// Export et Reset fonctions
+function setupExport() {
+const exportBtn = document.getElementById('export-btn');
+const resetBtn = document.getElementById('reset-btn');
+exportBtn.addEventListener('click', exportWebinarData);
+resetBtn.addEventListener('click', resetAllData);
+}
+async function resetAllData() {
+const resetBtn = document.getElementById('reset-btn');
+const loadingSpinner = document.getElementById('reset-loading');
+// Confirmation inline
+const confirmDiv = document.createElement('div');
+confirmDiv.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+confirmDiv.innerHTML = `
+<div class="bg-white rounded-lg p-6 max-w-md mx-4">
+<h3 class="text-lg font-bold text-slate-800 mb-4">⚠️ Confirmer la réinitialisation</h3>
+<p class="text-slate-600 mb-6">Cette action supprimera définitivement :</p>
+<ul class="text-slate-600 mb-6 list-disc list-inside">
+<li>Toutes les cartes du chemin de fer</li>
+<li>Toutes les notes détaillées</li>
+<li>Les notes générales</li>
+</ul>
+<div class="flex gap-3 justify-end">
+<button id="cancel-reset" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">Annuler</button>
+<button id="confirm-reset" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">Confirmer</button>
+</div>
+</div>
+`;
+document.body.appendChild(confirmDiv);
+document.getElementById('cancel-reset').onclick = () => {
+confirmDiv.remove();
+};
+document.getElementById('confirm-reset').onclick = async () => {
+confirmDiv.remove();
+loadingSpinner.classList.remove('hidden');
+resetBtn.disabled = true;
+try {
+// Supprimer tous les éléments un par un
+const deletePromises = items.map(item => window.dataSdk.delete(item));
+await Promise.all(deletePromises);
+// Vider aussi les notes globales
+document.getElementById('global-notes').value = '';
+document.getElementById('participants-count').value = '';
+showToast('Toutes les données ont été supprimées', 'success');
+} catch (error) {
+console.error('Erreur lors de la réinitialisation:', error);
+showToast('Erreur lors de la réinitialisation', 'error');
+} finally {
+loadingSpinner.classList.add('hidden');
+resetBtn.disabled = false;
+}
+};
+}
+async function exportWebinarData() {
+const loadingSpinner = document.getElementById('export-loading');
+const exportBtn = document.getElementById('export-btn');
+loadingSpinner.classList.remove('hidden');
+exportBtn.disabled = true;
+try {
+// Générer le contenu texte simple
+const now = new Date();
+const dateStr = now.toLocaleDateString('fr-FR');
+const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+let content = `EXPORT WEBINAIRE - AMELIE SILVERT\n`;
+content += `Exporte le ${dateStr} a ${timeStr}\n`;
+content += `========================================\n\n`;
+// Informations du webinaire
+const webinarName = document.getElementById('webinar-name').value;
+const webinarDate = document.getElementById('webinar-date').value;
+const participantsCount = document.getElementById('participants-count').value;
+content += `INFORMATIONS DU WEBINAIRE:\n`;
+content += `---------------------------\n`;
+if (webinarName) content += `Nom: ${webinarName}\n`;
+if (webinarDate) content += `Date: ${new Date(webinarDate).toLocaleDateString('fr-FR')}\n`;
+if (participantsCount) content += `Participants: ${participantsCount}\n`;
+content += `\n`;
+// Séquence du webinaire
+const sequenceItems = items.filter(item => item.position >= 1000 && item.position < 2000)
+.sort((a, b) => a.position - b.position);
+content += `SEQUENCE DU WEBINAIRE:\n`;
+content += `----------------------\n`;
+if (sequenceItems.length > 0) {
+sequenceItems.forEach((item, index) => {
+content += `${index + 1}. ${item.name}\n`;
+if (item.notes && item.notes.trim()) {
+content += ` Notes: ${item.notes}\n`;
+}
+content += `\n`;
+});
+} else {
+content += `Aucune sequence definie\n\n`;
+}
+// Notes globales
+const globalNotes = document.getElementById('global-notes').value;
+if (globalNotes && globalNotes.trim()) {
+content += `NOTES GENERALES:\n`;
+content += `----------------\n`;
+content += `${globalNotes}\n\n`;
+}
+content += `========================================\n`;
+content += `Concu par Amelie Silvert avec IA`;
+// Afficher directement dans une modal pour éviter les problèmes de téléchargement
+showExportModal(content);
+} catch (error) {
+console.error('Erreur export:', error);
+showToast('Erreur lors de l\'export', 'error');
+} finally {
+loadingSpinner.classList.add('hidden');
+exportBtn.disabled = false;
+}
+}
+function showExportModal(content) {
+const modal = document.createElement('div');
+modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+modal.innerHTML = `
+<div class="bg-white rounded-lg max-w-4xl max-h-full overflow-hidden flex flex-col">
+<div class="p-4 border-b flex justify-between items-center">
+<h3 class="text-lg font-bold">📄 Export Webinaire</h3>
+<button id="close-modal" class="text-gray-500 hover:text-gray-700 text-xl">&times;</button>
+</div>
+<div class="p-4 overflow-auto flex-1">
+<textarea readonly class="w-full h-96 p-3 border rounded font-mono text-sm" id="export-content">${content}</textarea>
+</div>
+<div class="p-4 border-t flex gap-2 justify-end">
+<button id="copy-export" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">📋 Copier</button>
+<button id="select-all" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">✅ Tout sélectionner</button>
+</div>
+</div>
+`;
+document.body.appendChild(modal);
+document.getElementById('close-modal').onclick = () => modal.remove();
+document.getElementById('select-all').onclick = () => {
+document.getElementById('export-content').select();
+showToast('Texte sélectionné ! Ctrl+C pour copier', 'success');
+};
+document.getElementById('copy-export').onclick = async () => {
+try {
+await navigator.clipboard.writeText(content);
+showToast('📋 Copié dans le presse-papiers !', 'success');
+} catch (e) {
+document.getElementById('export-content').select();
+showToast('Sélectionnez le texte et faites Ctrl+C', 'info');
+}
+};
+modal.onclick = (e) => {
+if (e.target === modal) modal.remove();
+};
+showToast('📄 Export affiché dans la fenêtre', 'success');
+}
+// Fonction utilitaire pour wrapper le texte
+function wrapText(ctx, text, maxWidth) {
+const words = text.split(' ');
+const lines = [];
+let currentLine = words[0];
+for (let i = 1; i < words.length; i++) {
+const word = words[i];
+const width = ctx.measureText(currentLine + ' ' + word).width;
+if (width < maxWidth) {
+currentLine += ' ' + word;
+} else {
+lines.push(currentLine);
+currentLine = word;
+}
+}
+lines.push(currentLine);
+return lines;
+}
+async function saveGlobalNotes() {
+const notesContent = document.getElementById('global-notes').value;
+const loadingSpinner = document.getElementById('notes-loading');
+const saveBtn = document.getElementById('save-notes-btn');
+loadingSpinner.classList.remove('hidden');
+saveBtn.disabled = true;
+try {
+let notesItem = items.find(item => item.type === 'global-notes');
+if (notesItem) {
+notesItem.notes = notesContent;
+const result = await window.dataSdk.update(notesItem);
+if (!result.isOk) {
+throw new Error('Update failed');
+}
+} else {
+const newNotesItem = {
+id: 'global-notes',
+type: 'global-notes',
+name: 'Notes Globales',
+icon: '📝',
+position: 9998,
+notes: notesContent,
+webinar_type: '',
+participants: 0,
+validated: false,
+created_at: new Date().toISOString()
+};
+const result = await window.dataSdk.create(newNotesItem);
+if (!result.isOk) {
+throw new Error('Create failed');
+}
+}
+showToast('Notes sauvegardées', 'success');
+// Mettre à jour l'aperçu si visible
+updateGlobalNotesDisplay();
+} catch (error) {
+showToast('Erreur lors de la sauvegarde des notes', 'error');
+} finally {
+loadingSpinner.classList.add('hidden');
+saveBtn.disabled = false;
+}
+}
+// Fonction toast
+function showToast(message, type = 'info') {
+const toast = document.createElement('div');
+toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 transition-all duration-300 ${
+type === 'success' ? 'bg-green-500' :
+type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+}`;
+toast.textContent = message;
+document.body.appendChild(toast);
+setTimeout(() => {
+toast.style.opacity = '0';
+setTimeout(() => toast.remove(), 300);
+}, 3000);
+}
+// Initialisation
+async function init() {
+try {
+// Initialiser le Data SDK
+const initResult = await window.dataSdk.init(dataHandler);
+if (!initResult.isOk) {
+console.error('Erreur d\'initialisation du Data SDK');
+return;
+}
+// Initialiser l'Element SDK
+if (window.elementSdk) {
+await window.elementSdk.init({
+defaultConfig,
+render,
+mapToCapabilities: (config) => ({
+recolorables: [
+{
+get: () => config.primary_color || defaultConfig.primary_color,
+set: (value) => {
+config.primary_color = value;
+window.elementSdk.setConfig({ primary_color: value });
+}
+},
+{
+get: () => config.secondary_color || defaultConfig.secondary_color,
+set: (value) => {
+config.secondary_color = value;
+window.elementSdk.setConfig({ secondary_color: value });
+}
+}
+],
+borderables: [],
+fontEditable: undefined,
+fontSizeable: undefined
+}),
+mapToEditPanelValues: (config) => new Map([
+['app_title', config.app_title || defaultConfig.app_title]
+])
+});
+}
+// Configuration des composants
+setupTabs();
+setupDropZones();
+setupWebinarInfo();
+setupGlobalNotes();
+setupExport();
+// Rendu initial
+renderAvailableCards();
+await render(window.elementSdk?.config || defaultConfig);
+} catch (error) {
+console.error('Erreur d\'initialisation:', error);
+}
+}
+// Démarrer l'application
+init();
+
+
+// ==========================================
+// ONGLET EFFETS BBB - Code isolé
+// ==========================================
+(function() {
+    let bbbCombos = [];
+    let currentBBBCombo = { outil: null, geste: null };
+    let draggedBBBItem = null;
+
+    function initBBBTab() {
+        const bbbCards = document.querySelectorAll('[data-bbb-type]');
+        const dropZone = document.getElementById('bbb-drop-zone');
+
+        bbbCards.forEach(card => {
+            card.addEventListener('dragstart', function(e) {
+                draggedBBBItem = {
+                    type: this.getAttribute('data-bbb-type'),
+                    name: this.getAttribute('data-bbb-name'),
+                    icon: this.getAttribute('data-bbb-icon')
+                };
+                this.style.opacity = '0.4';
+                e.dataTransfer.effectAllowed = 'copy';
+                e.dataTransfer.setData('text/plain', 'bbb');
+            });
+
+            card.addEventListener('dragend', function(e) {
+                this.style.opacity = '1';
+            });
+        });
+
+        if (dropZone) {
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+            });
+
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (draggedBBBItem) {
+                    if (draggedBBBItem.type === 'outil') {
+                        currentBBBCombo.outil = draggedBBBItem;
+                    } else {
+                        currentBBBCombo.geste = draggedBBBItem;
+                    }
+
+                    if (currentBBBCombo.outil && currentBBBCombo.geste) {
+                        bbbCombos.push({
+                            id: Date.now(),
+                            outil: currentBBBCombo.outil,
+                            geste: currentBBBCombo.geste,
+                            engagement: ''
+                        });
+                        currentBBBCombo = { outil: null, geste: null };
+                        updateBBBDisplay();
+                    }
+
+                    draggedBBBItem = null;
+                }
+            });
+        }
+    }
+
+    function updateBBBDisplay() {
+        const list = document.getElementById('bbb-combos-list');
+        if (!list) return;
+
+        if (bbbCombos.length === 0) {
+            list.innerHTML = '<div class="text-center text-green-700 py-6"><p class="mb-2">Glissez 1 outil + 1 geste ici</p><p class="text-sm">Analysez l'effet créé sur l'engagement</p></div>';
+            return;
+        }
+
+        list.innerHTML = bbbCombos.map((combo, idx) => `
+            <div class="bg-white rounded-lg p-4 shadow border-l-4 border-green-500">
+                <div class="flex justify-between items-start mb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-green-100 text-green-800 font-bold w-8 h-8 rounded-full flex items-center justify-center text-sm">${idx+1}</span>
+                        <div class="font-bold text-slate-800">
+                            ${combo.outil.icon} ${combo.outil.name} + ${combo.geste.icon} ${combo.geste.name}
+                        </div>
+                    </div>
+                    <button onclick="removeBBBCombo(${combo.id})" class="text-red-600 hover:bg-red-50 px-2 rounded font-bold text-xl">×</button>
+                </div>
+                <label class="block text-xs font-semibold text-slate-700 mb-1">🔥 Effet sur l'engagement :</label>
+                <textarea 
+                    onchange="updateBBBEngagement(${combo.id}, this.value)"
+                    class="w-full px-2 py-2 border-2 border-slate-200 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    rows="2"
+                    placeholder="Ex: Très fort engagement, participation active...">${combo.engagement}</textarea>
+            </div>
+        `).join('');
+    }
+
+    window.updateBBBEngagement = function(id, text) {
+        const combo = bbbCombos.find(c => c.id === id);
+        if (combo) combo.engagement = text;
+    };
+
+    window.removeBBBCombo = function(id) {
+        if (confirm('Supprimer cette analyse ?')) {
+            bbbCombos = bbbCombos.filter(c => c.id !== id);
+            updateBBBDisplay();
+        }
+    };
+
+    window.resetBBB = function() {
+        if (confirm('Réinitialiser toutes les analyses ?')) {
+            bbbCombos = [];
+            currentBBBCombo = { outil: null, geste: null };
+            updateBBBDisplay();
+        }
+    };
+
+    window.exportBBB = function() {
+        if (bbbCombos.length === 0) {
+            alert('Aucune analyse à exporter');
+            return;
+        }
+        const data = {
+            titre: 'Analyse engagement BBB',
+            date: new Date().toLocaleString('fr-FR'),
+            combos: bbbCombos.map((c, i) => ({
+                numero: i + 1,
+                outil: c.outil.name,
+                geste: c.geste.name,
+                engagement: c.engagement || 'Non renseigné'
+            }))
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'analyse-bbb-' + new Date().toISOString().split('T')[0] + '.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+
+    // Initialiser quand le DOM est prêt
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initBBBTab);
+    } else {
+        initBBBTab();
+    }
+})();
+
+</script>
+</body>
+</html>
