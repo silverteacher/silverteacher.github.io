@@ -1,0 +1,1649 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.1">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!doctype html&gt;</p>
+<p class="p1">&lt;html lang="fr"&gt;</p>
+<p class="p1"><span class="Apple-converted-space"> </span>&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Gestionnaire de Webinaires&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="/_sdk/data_sdk.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="/_sdk/element_sdk.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>user-select: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 150px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: space-between;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(10px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid rgba(255, 255, 255, 0.2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-6px) scale(1.02);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 20px 40px rgba(0,0,0,0.12), 0 8px 16px rgba(0,0,0,0.08);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-color: rgba(59, 130, 246, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card:focus {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>outline: 3px solid #3b82f6;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>outline-offset: 2px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card.dragging {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0.9;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: rotate(3deg) scale(1.05);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1000;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 25px 50px rgba(0,0,0,0.25);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card[draggable="true"] {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: grab;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card[draggable="true"]:active {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: grabbing;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-content {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 1.25rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 0.75rem;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-icon {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2.8rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 0.5rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-shrink: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card:hover .card-icon {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: scale(1.1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-title {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 700;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.95rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.3;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #1e293b;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 0.25rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-shrink: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-shadow: 0 1px 2px rgba(0,0,0,0.05);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-description {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.8rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #64748b;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.3;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-shrink: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-overflow: ellipsis;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: -webkit-box;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>-webkit-line-clamp: 2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>-webkit-box-orient: vertical;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 500;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-actions {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>right: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gap: 6px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-5px);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card:hover .card-actions,</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card:focus .card-actions {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(0);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-action-btn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 32px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 32px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 0.85rem;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: 600;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 2px 8px rgba(0,0,0,0.15);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(10px);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.add-btn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #10b981 0%, #059669 100%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid rgba(255, 255, 255, 0.2);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.add-btn:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #059669 0%, #047857 100%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: scale(1.15);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.drag-handle {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid rgba(255, 255, 255, 0.2);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.drag-handle:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #4b5563 0%, #374151 100%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: scale(1.15);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 16px rgba(107, 114, 128, 0.4);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* Styles pour les onglets */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.tab-button.active {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-bottom-color: #3b82f6;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #3b82f6;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #eff6ff;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.tab-panel {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: fadeIn 0.3s ease-in-out;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes fadeIn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>from { opacity: 0; transform: translateY(10px); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>to { opacity: 1; transform: translateY(0); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.chemin-fer {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>min-height: 150px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 2px dashed #cbd5e1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s ease;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.chemin-fer.drag-over {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-color: #10b981;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: scale(1.02);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p2"><br></p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sequence-item {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>backdrop-filter: blur(10px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid rgba(148, 163, 184, 0.2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sequence-item:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-2px);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 8px 25px rgba(0,0,0,0.1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-color: rgba(59, 130, 246, 0.3);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sequence-item::after {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>content: '→';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>right: -18px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>top: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(-50%);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #3b82f6;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 24px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>text-shadow: 0 2px 4px rgba(0,0,0,0.1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 10;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sequence-item:last-child::after {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.drag-over-sequence {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-color: #3b82f6 !important;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%) !important;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: scale(1.02);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.sequence-item.dragging {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0.7;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: rotate(2deg) scale(1.05);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>z-index: 1000;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 20px 40px rgba(0,0,0,0.2);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.drag-handle-icon:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #3b82f6;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transform: scale(1.1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.drop-indicator {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: pulse-indicator 1s infinite;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes pulse-indicator {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0%, 100% { opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>50% { opacity: 0.5; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.loading-spinner {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 2px solid #f3f4f6;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-top: 2px solid #3b82f6;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 16px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: spin 1s linear infinite;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes spin {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0% { transform: rotate(0deg); }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>100% { transform: rotate(360deg); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.pulse-animation {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: pulse 2s infinite;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes pulse {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>0%, 100% { opacity: 1; }</p>
+<p class="p1"><span class="Apple-converted-space">            </span>50% { opacity: 0.7; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;@view-transition { navigation: auto; }&lt;/style&gt;</p>
+<p class="p1"><span class="Apple-converted-space"> </span>&lt;/head&gt;</p>
+<p class="p1"><span class="Apple-converted-space"> </span>&lt;body class="min-h-full bg-gradient-to-br from-slate-50 to-blue-50"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;main class="container mx-auto px-4 py-6"&gt;&lt;!-- Header --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">   </span>&lt;header class="text-center mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1 id="app-title" class="text-4xl font-bold text-slate-800 mb-4"&gt;🎯 Gestionnaire de Webinaires&lt;/h1&gt;&lt;!-- Informations du webinaire --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="bg-white rounded-xl shadow-lg p-6 max-w-4xl mx-auto mb-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;h2 class="text-xl font-bold text-slate-800 mb-4"&gt;📋 Informations du Webinaire&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;div class="grid grid-cols-1 md:grid-cols-3 gap-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;&lt;label for="webinar-name" class="block text-sm font-medium text-slate-700 mb-2"&gt;Nom du webinaire&lt;/label&gt; &lt;input type="text" id="webinar-name" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: Formation BigBlueButton"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;&lt;label for="webinar-date" class="block text-sm font-medium text-slate-700 mb-2"&gt;Date du webinaire&lt;/label&gt; &lt;input type="date" id="webinar-date" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div&gt;&lt;label for="participants-count" class="block text-sm font-medium text-slate-700 mb-2"&gt;Nombre de participants&lt;/label&gt; &lt;input type="number" id="participants-count" min="1" max="1000" class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: 25"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;/div&gt;&lt;button id="save-webinar-info" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 mx-auto"&gt; &lt;span&gt;💾 Sauvegarder les informations&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="info-loading" class="loading-spinner hidden"&gt;&lt;/div&gt;&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;p class="text-slate-600"&gt;Glissez vos cartes sur le chemin de fer pour créer votre séquence&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">   </span>&lt;/header&gt;&lt;!-- Cartes d'outils et animations avec onglets --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">   </span>&lt;section class="bg-white rounded-xl shadow-lg mb-8"&gt;&lt;!-- Navigation par onglets --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="border-b border-slate-200"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;nav class="flex" role="tablist" aria-label="Catégories d'éléments"&gt;&lt;button id="tab-animations" class="tab-button flex-1 px-6 py-4 text-center font-medium border-b-2 border-transparent hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-colors" role="tab" aria-selected="true" aria-controls="panel-animations" tabindex="0"&gt; &lt;span class="flex items-center justify-center gap-2"&gt; 🎭 &lt;span class="hidden sm:inline"&gt;Gestes d'Animation&lt;/span&gt;&lt;span class="sm:hidden"&gt;Animation&lt;/span&gt; &lt;/span&gt; &lt;/button&gt; &lt;button id="tab-tools" class="tab-button flex-1 px-6 py-4 text-center font-medium border-b-2 border-transparent hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-inset transition-colors" role="tab" aria-selected="false" aria-controls="panel-tools" tabindex="-1"&gt; &lt;span class="flex items-center justify-center gap-2"&gt; 🛠️ &lt;span class="hidden sm:inline"&gt;Outils BigBlueButton&lt;/span&gt;&lt;span class="sm:hidden"&gt;Outils BBB&lt;/span&gt; &lt;/span&gt; &lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;/nav&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;&lt;!-- Contenu des onglets --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="p-6"&gt;&lt;!-- Panel Animations --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;div id="panel-animations" class="tab-panel" role="tabpanel" aria-labelledby="tab-animations" tabindex="0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="mb-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">       </span>&lt;h2 class="text-xl font-bold text-slate-800 mb-2"&gt;🎭 Gestes d'Animation&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">       </span>&lt;p class="text-sm text-slate-600"&gt;Cliquez sur une carte pour l'ajouter au chemin de fer, ou utilisez le glisser-déposer&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="available-animations" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"&gt;&lt;!-- Les cartes de séquences seront générées ici --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;/div&gt;&lt;!-- Panel Tools --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;div id="panel-tools" class="tab-panel hidden" role="tabpanel" aria-labelledby="tab-tools" tabindex="0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="mb-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">       </span>&lt;h2 class="text-xl font-bold text-slate-800 mb-2"&gt;🛠️ Outils BigBlueButton&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">       </span>&lt;p class="text-sm text-slate-600"&gt;Cliquez sur une carte pour l'ajouter au chemin de fer, ou utilisez le glisser-déposer&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="available-tools" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"&gt;&lt;!-- Les cartes d'outils seront générées ici --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">   </span>&lt;/section&gt;&lt;!-- Chemin de fer --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">   </span>&lt;section class="bg-white rounded-xl shadow-lg p-6 mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;header class="mb-6"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;h2 class="text-2xl font-bold text-slate-800 mb-2 flex items-center gap-2"&gt;🚂 Chemin de Fer - Séquence du Webinaire&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;p class="text-sm text-slate-600"&gt;Organisez vos éléments dans l'ordre de votre webinaire. Glissez pour réorganiser.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="chemin-fer" class="chemin-fer rounded-lg p-6 min-h-[200px] focus:outline-none focus:ring-2 focus:ring-blue-500" role="region" aria-label="Zone de séquence du webinaire" tabindex="0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;div class="text-center text-slate-500 py-12" id="chemin-empty"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="text-5xl mb-4" aria-hidden="true"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">       </span>🚂</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;h3 class="font-medium text-lg mb-2"&gt;Votre séquence est vide&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;p class="text-sm mb-4"&gt;Cliquez sur les cartes ci-dessus ou glissez-les ici pour créer votre séquence&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="flex flex-col sm:flex-row gap-2 justify-center items-center text-xs text-slate-400"&gt;&lt;span class="flex items-center gap-1"&gt; &lt;span class="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-white text-xs"&gt;+&lt;/span&gt; Clic pour ajouter &lt;/span&gt; &lt;span class="flex items-center gap-1"&gt; &lt;span class="w-4 h-4 bg-gray-500 rounded-full flex items-center justify-center text-white text-xs"&gt;⋮⋮&lt;/span&gt; Glisser pour organiser &lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;div id="sequence-items" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">   </span>&lt;/section&gt;&lt;!-- Notes générales --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">   </span>&lt;section class="bg-white rounded-xl shadow-lg p-6 mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2"&gt;📝 Notes Générales&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div&gt;&lt;label class="block text-sm font-medium text-slate-700 mb-2"&gt;Vos notes sur le webinaire (Les liens http:// et https:// seront automatiquement cliquables)&lt;/label&gt; &lt;textarea id="global-notes" class="w-full h-40 p-3 border border-slate-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Vos notes générales sur le webinaire..."&gt;&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;div id="global-notes-display" class="hidden w-full h-40 p-3 border border-slate-300 rounded-lg bg-gray-50 overflow-auto"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;div class="flex gap-2 mt-3"&gt;&lt;button id="save-notes-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"&gt; &lt;span&gt;💾 Sauvegarder les notes&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">       </span>&lt;div id="notes-loading" class="loading-spinner hidden"&gt;&lt;/div&gt;&lt;/button&gt; &lt;button id="toggle-global-notes-view" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"&gt; 👁️ Aperçu &lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">   </span>&lt;/section&gt;&lt;!-- Export et Actions Section --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">   </span>&lt;section class="bg-white rounded-xl shadow-lg p-6 mb-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2"&gt;📸 Export et Actions&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="flex flex-col sm:flex-row gap-4 justify-center items-center"&gt;&lt;button id="export-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"&gt; &lt;span&gt;📸 Exporter Capture + Notes&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="export-loading" class="loading-spinner hidden"&gt;&lt;/div&gt;&lt;/button&gt; &lt;button id="reset-btn" class="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"&gt; &lt;span&gt;🗑️ Réinitialiser Tout&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div id="reset-loading" class="loading-spinner hidden"&gt;&lt;/div&gt;&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="text-center mt-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;p class="text-sm text-slate-600"&gt;Export : génère un fichier avec toutes vos données&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">     </span>&lt;p class="text-sm text-slate-600"&gt;Réinitialiser : supprime toutes les cartes et notes&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">   </span>&lt;/section&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/main&gt;&lt;!-- Signature --&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;footer class="text-center py-6 text-slate-500 text-sm"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">   </span>&lt;p&gt;Conçu par &lt;strong&gt;Amélie Silvert&lt;/strong&gt; à l'aide de l'IA&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/footer&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Configuration par défaut</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const defaultConfig = {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>app_title: "🎯 Gestionnaire de Webinaires",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>primary_color: "#3b82f6",</p>
+<p class="p1"><span class="Apple-converted-space">            </span>secondary_color: "#8b5cf6"</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Variables globales</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let items = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let draggedElement = null;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Cartes prédéfinies BigBlueButton</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const availableTools = [</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'selection-aleatoire', name: 'Sélection Aléatoire', icon: '🎲', color: 'bg-purple-100 border-purple-300', description: 'Choix aléatoire' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'horloge', name: 'L\'Horloge', icon: '⏰', color: 'bg-orange-100 border-orange-300', description: 'Gestion du temps' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'notes-partagees', name: 'Notes Partagées', icon: '📝', color: 'bg-yellow-100 border-yellow-300', description: 'Prise de notes collaborative' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'partage-ecran', name: 'Partage d\'Écran', icon: '🖥️', color: 'bg-red-100 border-red-300', description: 'Partage d\'écran' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'post-it', name: 'Post-it', icon: '📋', color: 'bg-indigo-100 border-indigo-300', description: 'Notes adhésives' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'tableau-blanc', name: 'Tableau Blanc', icon: '🎨', color: 'bg-pink-100 border-pink-300', description: 'Tableau collaboratif' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'diapo-magique', name: 'Diapo Magique', icon: '✨', color: 'bg-cyan-100 border-cyan-300', description: 'Présentation interactive' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'webcam-micro', name: 'Webcam et Micro', icon: '🎥', color: 'bg-teal-100 border-teal-300', description: 'Audio et vidéo' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'chat', name: 'Chat', icon: '💬', color: 'bg-green-100 border-green-300', description: 'Discussion en temps réel' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'emoji', name: 'Emoji', icon: '😊', color: 'bg-yellow-100 border-yellow-300', description: 'Réactions et émojis' }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const availableAnimations = [</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'contenu', name: 'Contenu', icon: '📚', color: 'bg-emerald-100 border-emerald-300', description: 'Présentation du contenu' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'accueil', name: 'Accueil', icon: '👋', color: 'bg-lime-100 border-lime-300', description: 'Accueil des participants' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'brise-glace', name: 'Brise-glace', icon: '🧊', color: 'bg-amber-100 border-amber-300', description: 'Activité d\'introduction' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'retour-reflexif', name: 'Retour Réflexif', icon: '🤔', color: 'bg-violet-100 border-violet-300', description: 'Moment de réflexion' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'témoignage', name: 'Témoignage', icon: '🗣️', color: 'bg-fuchsia-100 border-fuchsia-300', description: 'Partage d\'expérience' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'ateliers', name: 'Ateliers', icon: '🔧', color: 'bg-rose-100 border-rose-300', description: 'Travail en groupe' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'prolongement', name: 'Prolongement', icon: '🔄', color: 'bg-sky-100 border-sky-300', description: 'Suite et continuité' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'pause', name: 'Pause', icon: '⏸️', color: 'bg-slate-100 border-slate-300', description: 'Pause dans le webinaire' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'quiz', name: 'Quiz', icon: '❓', color: 'bg-emerald-100 border-emerald-300', description: 'Quiz interactif' },</p>
+<p class="p1"><span class="Apple-converted-space">            </span>{ id: 'jeu', name: 'Jeu', icon: '🎮', color: 'bg-violet-100 border-violet-300', description: 'Activité ludique' }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Gestionnaire de données</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const dataHandler = {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>onDataChanged(data) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>items = data.sort((a, b) =&gt; (a.position || 0) - (b.position || 0));</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderSequenceItems();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>loadWebinarInfo();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Fonction de rendu</p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function render(config) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Rendu des cartes disponibles</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderAvailableCards() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>renderToolCards();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>renderAnimationCards();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderToolCards() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById('available-tools');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>container.innerHTML = availableTools.map(tool =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card ${tool.color} border-2 rounded-xl shadow-sm hover:shadow-lg"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>draggable="false"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                     </span>data-card-id="${tool.id}"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                     </span>data-type="tool"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>tabindex="0"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>role="button"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>aria-label="Ajouter ${tool.name} au chemin de fer"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>title="Cliquez pour ajouter ou glissez vers le chemin de fer"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="card-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="card-icon" aria-hidden="true"&gt;${tool.icon}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="card-title"&gt;${tool.name}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="card-description"&gt;${tool.description}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="card-actions"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button class="card-action-btn add-btn"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                                </span>aria-label="Ajouter ${tool.name}"</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>title="Ajouter au chemin de fer"&gt;+&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button class="card-action-btn drag-handle"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                                </span>aria-label="Glisser ${tool.name}"</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>title="Maintenir pour glisser"&gt;⋮⋮&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`).join('');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>attachCardEvents();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderAnimationCards() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const container = document.getElementById('available-animations');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>container.innerHTML = availableAnimations.map(animation =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="card ${animation.color} border-2 rounded-xl shadow-sm hover:shadow-lg"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>draggable="false"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                     </span>data-card-id="${animation.id}"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                     </span>data-type="animation"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>tabindex="0"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>role="button"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>aria-label="Ajouter ${animation.name} au chemin de fer"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>title="Cliquez pour ajouter ou glissez vers le chemin de fer"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="card-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="card-icon" aria-hidden="true"&gt;${animation.icon}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="card-title"&gt;${animation.name}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="card-description"&gt;${animation.description}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="card-actions"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button class="card-action-btn add-btn"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                                </span>aria-label="Ajouter ${animation.name}"</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>title="Ajouter au chemin de fer"&gt;+&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button class="card-action-btn drag-handle"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                                </span>aria-label="Glisser ${animation.name}"</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>title="Maintenir pour glisser"&gt;⋮⋮&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`).join('');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>attachCardEvents();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderSequenceItems() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sequenceContainer = document.getElementById('sequence-items');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const emptyState = document.getElementById('chemin-empty');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sequenceItems = items.filter(item =&gt; item.position &gt;= 1000 &amp;&amp; item.position &lt; 2000);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (sequenceItems.length === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>emptyState.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>sequenceContainer.innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>emptyState.classList.add('hidden');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>sequenceContainer.innerHTML = sequenceItems.map((item, index) =&gt; `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="sequence-item card bg-white border-2 border-slate-200 rounded-lg p-4 shadow-sm min-w-[180px] relative"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>draggable="true"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                     </span>data-id="${item.__backendId}"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                     </span>data-type="${item.type}"</p>
+<p class="p1"><span class="Apple-converted-space">                     </span>data-position="${item.position}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex items-center justify-between mb-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="flex items-center gap-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-2xl drag-handle-icon cursor-grab" title="Glisser pour réorganiser"&gt;⋮⋮&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;span class="text-2xl"&gt;${item.icon}&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div class="font-medium text-slate-800 text-sm"&gt;${item.name}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;div class="text-xs text-slate-500"&gt;Étape ${index + 1}&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button class="text-slate-400 hover:text-red-500 transition-colors delete-btn text-lg"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                                </span>data-id="${item.__backendId}"&gt;×&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>${item.description ? `&lt;div class="text-xs text-slate-600 mb-2"&gt;${item.description}&lt;/div&gt;` : ''}</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="mt-2"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button class="text-xs text-blue-600 hover:text-blue-800 transition-colors notes-toggle"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                                </span>data-id="${item.__backendId}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>📝 ${item.notes ? 'Modifier notes' : 'Ajouter notes'}</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;div class="notes-area mt-2 max-h-0 overflow-hidden transition-all duration-300" data-id="${item.__backendId}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;textarea class="w-full p-2 text-xs border border-slate-300 rounded notes-input"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                                      </span>placeholder="Notes pour cette étape... (Les liens http:// et https:// seront automatiquement cliquables)"</p>
+<p class="p1"><span class="Apple-converted-space">                                      </span>data-id="${item.__backendId}"&gt;${item.notes || ''}&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="notes-display hidden w-full p-2 text-xs border border-slate-300 rounded bg-gray-50"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                                 </span>data-id="${item.__backendId}"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;div class="flex gap-2 mt-1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs save-item-notes"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>data-id="${item.__backendId}"&gt;Sauvegarder&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>&lt;button class="bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs toggle-view-notes"<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>data-id="${item.__backendId}"&gt;Aperçu&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`).join('');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>attachCardEvents();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setupSequenceDragAndDrop();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Fonction pour convertir les liens en cliquables</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function makeLinksClickable(text) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const urlRegex = /(https?:\/\/[^\s]+)/g;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return text.replace(urlRegex, '&lt;a href="$1" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline"&gt;$1&lt;/a&gt;');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Gestion des onglets</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function setupTabs() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const tabButtons = document.querySelectorAll('.tab-button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const tabPanels = document.querySelectorAll('.tab-panel');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>tabButtons.forEach(button =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>button.addEventListener('click', () =&gt; switchTab(button.id));</p>
+<p class="p1"><span class="Apple-converted-space">                </span>button.addEventListener('keydown', handleTabKeydown);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Activer le premier onglet par défaut</p>
+<p class="p1"><span class="Apple-converted-space">            </span>switchTab('tab-animations');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function switchTab(activeTabId) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const tabButtons = document.querySelectorAll('.tab-button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const tabPanels = document.querySelectorAll('.tab-panel');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Désactiver tous les onglets</p>
+<p class="p1"><span class="Apple-converted-space">            </span>tabButtons.forEach(button =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>button.classList.remove('active');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>button.setAttribute('aria-selected', 'false');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>button.setAttribute('tabindex', '-1');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>tabPanels.forEach(panel =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>panel.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Activer l'onglet sélectionné</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const activeButton = document.getElementById(activeTabId);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const panelId = activeButton.getAttribute('aria-controls');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const activePanel = document.getElementById(panelId);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>activeButton.classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>activeButton.setAttribute('aria-selected', 'true');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>activeButton.setAttribute('tabindex', '0');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>activePanel.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleTabKeydown(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const tabButtons = Array.from(document.querySelectorAll('.tab-button'));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const currentIndex = tabButtons.indexOf(e.target);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>switch (e.key) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 'ArrowLeft':</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const prevIndex = currentIndex &gt; 0 ? currentIndex - 1 : tabButtons.length - 1;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tabButtons[prevIndex].focus();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>switchTab(tabButtons[prevIndex].id);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 'ArrowRight':</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const nextIndex = currentIndex &lt; tabButtons.length - 1 ? currentIndex + 1 : 0;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tabButtons[nextIndex].focus();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>switchTab(tabButtons[nextIndex].id);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 'Home':</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tabButtons[0].focus();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>switchTab(tabButtons[0].id);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 'End':</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tabButtons[tabButtons.length - 1].focus();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>switchTab(tabButtons[tabButtons.length - 1].id);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Événements des cartes</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function attachCardEvents() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Clic pour ajouter directement - cartes disponibles</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const availableCards = document.querySelectorAll('.card[data-card-id]');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>availableCards.forEach(card =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Supprimer les anciens événements</p>
+<p class="p1"><span class="Apple-converted-space">                </span>card.removeEventListener('click', handleCardClick);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>card.removeEventListener('keydown', handleCardKeydown);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Ajouter les nouveaux événements</p>
+<p class="p1"><span class="Apple-converted-space">                </span>card.addEventListener('click', handleCardClick);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>card.addEventListener('keydown', handleCardKeydown);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Bouton d'ajout</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const addBtn = card.querySelector('.add-btn');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (addBtn) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>addBtn.removeEventListener('click', handleAddButtonClick);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>addBtn.addEventListener('click', handleAddButtonClick);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Gestion du drag avec le handle</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const dragHandle = card.querySelector('.drag-handle');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (dragHandle) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>dragHandle.addEventListener('mousedown', (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>e.stopPropagation();</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>card.setAttribute('draggable', 'true');</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>card.addEventListener('dragstart', handleDragStart);</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>card.addEventListener('dragend', handleDragEnd);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Suppression</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const deleteButtons = document.querySelectorAll('.delete-btn');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>deleteButtons.forEach(btn =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.addEventListener('click', handleDelete);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Notes</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesToggle = document.querySelectorAll('.notes-toggle');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>notesToggle.forEach(btn =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.addEventListener('click', toggleNotes);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const saveNotesButtons = document.querySelectorAll('.save-item-notes');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>saveNotesButtons.forEach(btn =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.addEventListener('click', saveItemNotes);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Boutons d'aperçu des notes</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const toggleViewButtons = document.querySelectorAll('.toggle-view-notes');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>toggleViewButtons.forEach(btn =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>btn.addEventListener('click', toggleNotesView);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Gestionnaire pour le bouton d'ajout</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleAddButtonClick(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.stopPropagation();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const card = e.target.closest('.card');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (card) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const cardId = card.dataset.cardId;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const cardType = card.dataset.type;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.log('Ajout via bouton:', cardId, cardType);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>addCardToSequence(cardId, cardType);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Gestion du clic sur les cartes</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleCardClick(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Ignorer si clic sur les boutons d'action</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (e.target.closest('.card-actions') || e.target.classList.contains('card-action-btn')) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cardId = this.dataset.cardId;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cardType = this.dataset.type;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>console.log('Clic sur carte:', cardId, cardType);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (cardId &amp;&amp; cardType) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Ajouter directement au chemin de fer</p>
+<p class="p1"><span class="Apple-converted-space">                </span>addCardToSequence(cardId, cardType);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Gestion du clavier sur les cartes</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleCardKeydown(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (e.key === 'Enter' || e.key === ' ') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>handleCardClick.call(this, e);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Ajouter une carte à la séquence</p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function addCardToSequence(cardId, cardType) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>console.log('addCardToSequence appelée avec:', cardId, cardType);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (items.length &gt;= 999) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Limite atteinte : maximum 999 éléments', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cardData = cardType === 'tool' ?<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>availableTools.find(t =&gt; t.id === cardId) :</p>
+<p class="p1"><span class="Apple-converted-space">                </span>availableAnimations.find(a =&gt; a.id === cardId);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>console.log('Données de la carte trouvées:', cardData);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!cardData) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error('Carte non trouvée:', cardId, cardType);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Carte non trouvée', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const position = 1000 + items.filter(i =&gt; i.position &gt;= 1000 &amp;&amp; i.position &lt; 2000).length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const uniqueId = `${cardData.id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const newItem = {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>id: uniqueId,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>type: cardType,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>name: cardData.name,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>icon: cardData.icon,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>description: cardData.description,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>position: position,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notes: '',</p>
+<p class="p1"><span class="Apple-converted-space">                </span>webinar_type: '',</p>
+<p class="p1"><span class="Apple-converted-space">                </span>participants: 0,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>validated: false,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>created_at: new Date().toISOString()</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>console.log('Création de l\'élément:', newItem);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const result = await window.dataSdk.create(newItem);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.log('Résultat de la création:', result);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (result.isOk) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showToast(`✅ ${cardData.name} ajouté !`, 'success');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>console.error('Erreur SDK:', result.error);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showToast('Erreur lors de l\'ajout', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error('Erreur lors de l\'ajout:', error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Erreur lors de l\'ajout', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Drag and Drop</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleDragStart(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>draggedElement = this;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>this.classList.add('dragging');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.dataTransfer.effectAllowed = 'move';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Stocker les informations de la carte</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (this.dataset.cardId) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>e.dataTransfer.setData('text/plain', JSON.stringify({</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>cardId: this.dataset.cardId,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>type: this.dataset.type,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>isNewCard: true</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>e.dataTransfer.setData('text/plain', JSON.stringify({</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>itemId: this.dataset.id,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>type: this.dataset.type,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>isNewCard: false</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleDragEnd(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>this.classList.remove('dragging');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.drag-over').forEach(el =&gt; el.classList.remove('drag-over'));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.drop-indicator').forEach(el =&gt; el.remove());</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function handleDelete(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.stopPropagation();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const itemId = e.target.dataset.id;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const item = items.find(i =&gt; i.__backendId === itemId);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!item) return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Confirmation inline au lieu d'alert</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const confirmBtn = document.createElement('button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>confirmBtn.textContent = 'Confirmer ?';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>confirmBtn.className = 'bg-red-500 text-white px-2 py-1 rounded text-xs ml-2';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cancelBtn = document.createElement('button');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cancelBtn.textContent = 'Annuler';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cancelBtn.className = 'bg-gray-500 text-white px-2 py-1 rounded text-xs ml-1';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.target.style.display = 'none';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.target.parentNode.appendChild(confirmBtn);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.target.parentNode.appendChild(cancelBtn);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>confirmBtn.onclick = async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const result = await window.dataSdk.delete(item);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (result.isOk) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>showToast('Élément supprimé', 'success');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>showToast('Erreur lors de la suppression', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showToast('Erreur lors de la suppression', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>cancelBtn.onclick = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>confirmBtn.remove();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>cancelBtn.remove();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>e.target.style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function toggleNotes(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.stopPropagation();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const itemId = e.target.dataset.id;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesArea = document.querySelector(`.notes-area[data-id="${itemId}"]`);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const toggleBtn = e.target;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (notesArea.classList.contains('notes-open')) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Fermer les notes</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesArea.style.maxHeight = '0px';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesArea.classList.remove('notes-open');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleBtn.textContent = `📝 Ajouter notes`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Ouvrir les notes</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesArea.style.maxHeight = '200px';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesArea.classList.add('notes-open');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleBtn.textContent = `📝 Modifier notes`;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Focus sur le textarea</p>
+<p class="p1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const textarea = notesArea.querySelector('.notes-input');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (textarea) textarea.focus();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}, 100);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function saveItemNotes(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.stopPropagation();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const itemId = e.target.dataset.id;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesInput = document.querySelector(`.notes-input[data-id="${itemId}"]`);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const item = items.find(i =&gt; i.__backendId === itemId);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!item) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Élément non trouvé', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Désactiver le bouton pendant la sauvegarde</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const saveBtn = e.target;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const originalText = saveBtn.textContent;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>saveBtn.disabled = true;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>saveBtn.textContent = 'Sauvegarde...';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.notes = notesInput.value;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const result = await window.dataSdk.update(item);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (result.isOk) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showToast('Notes sauvegardées ✅', 'success');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Mettre à jour l'aperçu si visible</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>updateNotesDisplay(itemId);</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Mettre à jour le bouton toggle</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const toggleBtn = document.querySelector(`.notes-toggle[data-id="${itemId}"]`);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (toggleBtn) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>toggleBtn.textContent = item.notes ? '📝 Modifier notes' : '📝 Ajouter notes';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showToast('Erreur lors de la sauvegarde', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error('Erreur sauvegarde notes:', error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Erreur lors de la sauvegarde', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} finally {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>saveBtn.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>saveBtn.textContent = originalText;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function toggleNotesView(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.stopPropagation();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const itemId = e.target.dataset.id;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesInput = document.querySelector(`.notes-input[data-id="${itemId}"]`);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesDisplay = document.querySelector(`.notes-display[data-id="${itemId}"]`);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const toggleBtn = e.target;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (notesInput.classList.contains('hidden')) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Passer en mode édition</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesInput.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesDisplay.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleBtn.textContent = 'Aperçu';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleBtn.className = 'bg-blue-500 hover:bg-blue-600 text-white px-2 py-1 rounded text-xs toggle-view-notes';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Passer en mode aperçu</p>
+<p class="p1"><span class="Apple-converted-space">                </span>updateNotesDisplay(itemId);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesInput.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesDisplay.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleBtn.textContent = 'Éditer';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleBtn.className = 'bg-green-500 hover:bg-green-600 text-white px-2 py-1 rounded text-xs toggle-view-notes';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateNotesDisplay(itemId) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesInput = document.querySelector(`.notes-input[data-id="${itemId}"]`);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesDisplay = document.querySelector(`.notes-display[data-id="${itemId}"]`);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (notesInput &amp;&amp; notesDisplay) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const notesText = notesInput.value || 'Aucune note';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const notesWithLinks = makeLinksClickable(notesText);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesDisplay.innerHTML = notesWithLinks.replace(/\n/g, '&lt;br&gt;');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Configuration des zones de drop</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function setupDropZones() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cheminFer = document.getElementById('chemin-fer');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>cheminFer.addEventListener('dragover', handleDragOver);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cheminFer.addEventListener('drop', handleDrop);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cheminFer.addEventListener('dragleave', handleDragLeave);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Configuration du drag and drop pour les éléments de séquence</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function setupSequenceDragAndDrop() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sequenceItems = document.querySelectorAll('.sequence-item');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>sequenceItems.forEach(item =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.addEventListener('dragstart', handleSequenceDragStart);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.addEventListener('dragend', handleSequenceDragEnd);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.addEventListener('dragover', handleSequenceDragOver);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.addEventListener('drop', handleSequenceDrop);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.addEventListener('dragenter', handleSequenceDragEnter);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.addEventListener('dragleave', handleSequenceDragLeave);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleSequenceDragStart(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>draggedElement = this;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>this.classList.add('dragging');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.dataTransfer.effectAllowed = 'move';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.dataTransfer.setData('text/plain', JSON.stringify({</p>
+<p class="p1"><span class="Apple-converted-space">                </span>itemId: this.dataset.id,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>type: this.dataset.type,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>isNewCard: false,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>isReordering: true</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleSequenceDragEnd(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>this.classList.remove('dragging');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.drag-over-sequence').forEach(el =&gt; el.classList.remove('drag-over-sequence'));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.drop-indicator').forEach(el =&gt; el.remove());</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleSequenceDragEnter(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (this !== draggedElement) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>this.classList.add('drag-over-sequence');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleSequenceDragLeave(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!this.contains(e.relatedTarget)) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>this.classList.remove('drag-over-sequence');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleSequenceDragOver(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.dataTransfer.dropEffect = 'move';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (this === draggedElement) return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const rect = this.getBoundingClientRect();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const midpoint = rect.left + rect.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const mouseX = e.clientX;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Supprimer les anciens indicateurs</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.drop-indicator').forEach(el =&gt; el.remove());</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Créer un nouvel indicateur</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const indicator = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>indicator.className = 'drop-indicator absolute top-0 bottom-0 w-1 bg-blue-500 z-10 rounded';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>indicator.style.pointerEvents = 'none';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (mouseX &lt; midpoint) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Insérer avant</p>
+<p class="p1"><span class="Apple-converted-space">                </span>indicator.style.left = '-2px';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>this.style.position = 'relative';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>this.appendChild(indicator);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Insérer après</p>
+<p class="p1"><span class="Apple-converted-space">                </span>indicator.style.right = '-2px';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>this.style.position = 'relative';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>this.appendChild(indicator);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function handleSequenceDrop(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.stopPropagation();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>this.classList.remove('drag-over-sequence');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.drop-indicator').forEach(el =&gt; el.remove());</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (this === draggedElement) return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (dragData.isReordering) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>await reorderSequenceItems(dragData.itemId, this.dataset.id, e);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error('Erreur lors du réarrangement:', error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Erreur lors du réarrangement', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function reorderSequenceItems(draggedItemId, targetItemId, event) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const draggedItem = items.find(i =&gt; i.__backendId === draggedItemId);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const targetItem = items.find(i =&gt; i.__backendId === targetItemId);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!draggedItem || !targetItem) return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const sequenceItems = items.filter(item =&gt; item.position &gt;= 1000 &amp;&amp; item.position &lt; 2000)</p>
+<p class="p1"><span class="Apple-converted-space">                                      </span>.sort((a, b) =&gt; a.position - b.position);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const draggedIndex = sequenceItems.findIndex(i =&gt; i.__backendId === draggedItemId);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const targetIndex = sequenceItems.findIndex(i =&gt; i.__backendId === targetItemId);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (draggedIndex === -1 || targetIndex === -1) return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Déterminer si on insère avant ou après</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const rect = event.target.getBoundingClientRect();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const midpoint = rect.left + rect.width / 2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const mouseX = event.clientX;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const insertBefore = mouseX &lt; midpoint;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Calculer la nouvelle position</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let newIndex = targetIndex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!insertBefore &amp;&amp; draggedIndex &lt; targetIndex) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Pas de changement d'index si on insère après et qu'on vient de la gauche</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if (insertBefore &amp;&amp; draggedIndex &gt; targetIndex) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Pas de changement d'index si on insère avant et qu'on vient de la droite</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if (!insertBefore) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>newIndex = targetIndex + 1;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Réorganiser le tableau</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const newSequence = [...sequenceItems];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const [movedItem] = newSequence.splice(draggedIndex, 1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>newSequence.splice(newIndex &gt; draggedIndex ? newIndex - 1 : newIndex, 0, movedItem);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Mettre à jour les positions</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const updatePromises = newSequence.map((item, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.position = 1000 + index;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return window.dataSdk.update(item);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>await Promise.all(updatePromises);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Ordre mis à jour ✅', 'success');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error('Erreur lors de la mise à jour des positions:', error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Erreur lors du réarrangement', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleDragOver(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.dataTransfer.dropEffect = 'move';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>this.classList.add('drag-over');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleDragLeave(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!this.contains(e.relatedTarget)) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>this.classList.remove('drag-over');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function handleDrop(e) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>this.classList.remove('drag-over');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!draggedElement) return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const dragData = JSON.parse(e.dataTransfer.getData('text/plain'));</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (dragData.isNewCard) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>await handleNewCardDrop(dragData, this.id);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>await handleExistingItemDrop(dragData, this.id);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error('Erreur lors du drop:', error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Erreur lors du déplacement', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function handleNewCardDrop(dragData, dropZoneId) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (dropZoneId !== 'chemin-fer') return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (items.length &gt;= 999) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Limite atteinte : maximum 999 éléments', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cardData = dragData.type === 'tool' ?<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>availableTools.find(t =&gt; t.id === dragData.cardId) :</p>
+<p class="p1"><span class="Apple-converted-space">                </span>availableAnimations.find(a =&gt; a.id === dragData.cardId);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!cardData) return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const position = 1000 + items.filter(i =&gt; i.position &gt;= 1000 &amp;&amp; i.position &lt; 2000).length;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Générer un ID unique pour permettre la sélection infinie</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const uniqueId = `${cardData.id}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const newItem = {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>id: uniqueId,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>type: dragData.type,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>name: cardData.name,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>icon: cardData.icon,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>description: cardData.description,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>position: position,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notes: '',</p>
+<p class="p1"><span class="Apple-converted-space">                </span>webinar_type: '',</p>
+<p class="p1"><span class="Apple-converted-space">                </span>participants: 0,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>validated: false,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>created_at: new Date().toISOString()</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const result = await window.dataSdk.create(newItem);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (result.isOk) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast(`${cardData.name} ajouté au chemin de fer`, 'success');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Erreur lors de l\'ajout', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function handleExistingItemDrop(dragData, dropZoneId) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const item = items.find(i =&gt; i.__backendId === dragData.itemId);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!item) return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (dropZoneId === 'chemin-fer') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const newPosition = 1000 + items.filter(i =&gt; i.position &gt;= 1000 &amp;&amp; i.position &lt; 2000).length;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>item.position = newPosition;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const result = await window.dataSdk.update(item);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (!result.isOk) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showToast('Erreur lors du déplacement', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Informations du webinaire</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function setupWebinarInfo() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const saveInfoBtn = document.getElementById('save-webinar-info');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>saveInfoBtn.addEventListener('click', saveWebinarInfo);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function saveWebinarInfo() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const name = document.getElementById('webinar-name').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const date = document.getElementById('webinar-date').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const participants = document.getElementById('participants-count').value;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const loadingSpinner = document.getElementById('info-loading');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const saveBtn = document.getElementById('save-webinar-info');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>loadingSpinner.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>saveBtn.disabled = true;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>let infoItem = items.find(item =&gt; item.type === 'webinar-info');</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const infoData = {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>id: 'webinar-info',</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>type: 'webinar-info',</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>name: 'Informations Webinaire',</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>icon: '📋',</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>position: 9997,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>notes: JSON.stringify({ name, date, participants }),</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>webinar_type: '',</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>participants: parseInt(participants) || 0,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>validated: false,</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>created_at: new Date().toISOString()</p>
+<p class="p1"><span class="Apple-converted-space">                </span>};</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (infoItem) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>Object.assign(infoItem, infoData);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const result = await window.dataSdk.update(infoItem);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (!result.isOk) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>throw new Error('Update failed');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const result = await window.dataSdk.create(infoData);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (!result.isOk) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>throw new Error('Create failed');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Informations sauvegardées', 'success');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Erreur lors de la sauvegarde', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} finally {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>loadingSpinner.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>saveBtn.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function loadWebinarInfo() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const infoItem = items.find(item =&gt; item.type === 'webinar-info');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (infoItem &amp;&amp; infoItem.notes) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const info = JSON.parse(infoItem.notes);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('webinar-name').value = info.name || '';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('webinar-date').value = info.date || '';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('participants-count').value = info.participants || '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>console.error('Erreur lors du chargement des informations:', error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Notes globales</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function setupGlobalNotes() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const saveNotesBtn = document.getElementById('save-notes-btn');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesTextarea = document.getElementById('global-notes');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const toggleViewBtn = document.getElementById('toggle-global-notes-view');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>saveNotesBtn.addEventListener('click', saveGlobalNotes);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>toggleViewBtn.addEventListener('click', toggleGlobalNotesView);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Charger les notes existantes</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const existingNotes = items.find(item =&gt; item.type === 'global-notes');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (existingNotes) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesTextarea.value = existingNotes.notes || '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function toggleGlobalNotesView() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesTextarea = document.getElementById('global-notes');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesDisplay = document.getElementById('global-notes-display');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const toggleBtn = document.getElementById('toggle-global-notes-view');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (notesTextarea.classList.contains('hidden')) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Passer en mode édition</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesTextarea.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesDisplay.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleBtn.innerHTML = '👁️ Aperçu';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleBtn.className = toggleBtn.className.replace('bg-green-600 hover:bg-green-700', 'bg-blue-600 hover:bg-blue-700');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Passer en mode aperçu</p>
+<p class="p1"><span class="Apple-converted-space">                </span>updateGlobalNotesDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesTextarea.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>notesDisplay.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleBtn.innerHTML = '✏️ Éditer';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toggleBtn.className = toggleBtn.className.replace('bg-blue-600 hover:bg-blue-700', 'bg-green-600 hover:bg-green-700');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateGlobalNotesDisplay() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesTextarea = document.getElementById('global-notes');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesDisplay = document.getElementById('global-notes-display');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesText = notesTextarea.value || 'Aucune note générale';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesWithLinks = makeLinksClickable(notesText);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>notesDisplay.innerHTML = notesWithLinks.replace(/\n/g, '&lt;br&gt;');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Export et Reset fonctions</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function setupExport() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const exportBtn = document.getElementById('export-btn');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const resetBtn = document.getElementById('reset-btn');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>exportBtn.addEventListener('click', exportWebinarData);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>resetBtn.addEventListener('click', resetAllData);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function resetAllData() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const resetBtn = document.getElementById('reset-btn');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const loadingSpinner = document.getElementById('reset-loading');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// Confirmation inline</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const confirmDiv = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>confirmDiv.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>confirmDiv.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="bg-white rounded-lg p-6 max-w-md mx-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3 class="text-lg font-bold text-slate-800 mb-4"&gt;⚠️ Confirmer la réinitialisation&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p class="text-slate-600 mb-6"&gt;Cette action supprimera définitivement :&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;ul class="text-slate-600 mb-6 list-disc list-inside"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Toutes les cartes du chemin de fer&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Toutes les notes détaillées&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;li&gt;Les notes générales&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="flex gap-3 justify-end"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button id="cancel-reset" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg"&gt;Annuler&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button id="confirm-reset" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"&gt;Confirmer&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.body.appendChild(confirmDiv);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('cancel-reset').onclick = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>confirmDiv.remove();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('confirm-reset').onclick = async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>confirmDiv.remove();</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>loadingSpinner.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>resetBtn.disabled = true;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Supprimer tous les éléments un par un</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const deletePromises = items.map(item =&gt; window.dataSdk.delete(item));</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>await Promise.all(deletePromises);</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// Vider aussi les notes globales</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('global-notes').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('participants-count').value = '';</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showToast('Toutes les données ont été supprimées', 'success');</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>console.error('Erreur lors de la réinitialisation:', error);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showToast('Erreur lors de la réinitialisation', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} finally {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>loadingSpinner.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>resetBtn.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function exportWebinarData() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const loadingSpinner = document.getElementById('export-loading');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const exportBtn = document.getElementById('export-btn');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>loadingSpinner.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>exportBtn.disabled = true;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Générer le contenu texte simple</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const now = new Date();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const dateStr = now.toLocaleDateString('fr-FR');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const timeStr = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>let content = `EXPORT WEBINAIRE - AMELIE SILVERT\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>content += `Exporte le ${dateStr} a ${timeStr}\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>content += `========================================\n\n`;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Informations du webinaire</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const webinarName = document.getElementById('webinar-name').value;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const webinarDate = document.getElementById('webinar-date').value;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const participantsCount = document.getElementById('participants-count').value;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>content += `INFORMATIONS DU WEBINAIRE:\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>content += `---------------------------\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (webinarName) content += `Nom: ${webinarName}\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (webinarDate) content += `Date: ${new Date(webinarDate).toLocaleDateString('fr-FR')}\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (participantsCount) content += `Participants: ${participantsCount}\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>content += `\n`;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Séquence du webinaire</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const sequenceItems = items.filter(item =&gt; item.position &gt;= 1000 &amp;&amp; item.position &lt; 2000)</p>
+<p class="p1"><span class="Apple-converted-space">                                          </span>.sort((a, b) =&gt; a.position - b.position);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>content += `SEQUENCE DU WEBINAIRE:\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>content += `----------------------\n`;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (sequenceItems.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>sequenceItems.forEach((item, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>content += `${index + 1}. ${item.name}\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>if (item.notes &amp;&amp; item.notes.trim()) {</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>content += ` <span class="Apple-converted-space">  </span>Notes: ${item.notes}\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>content += `\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>content += `Aucune sequence definie\n\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Notes globales</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const globalNotes = document.getElementById('global-notes').value;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (globalNotes &amp;&amp; globalNotes.trim()) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>content += `NOTES GENERALES:\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>content += `----------------\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>content += `${globalNotes}\n\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p2"><br></p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>content += `========================================\n`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>content += `Concu par Amelie Silvert avec IA`;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Afficher directement dans une modal pour éviter les problèmes de téléchargement</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showExportModal(content);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error('Erreur export:', error);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Erreur lors de l\'export', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} finally {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>loadingSpinner.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>exportBtn.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showExportModal(content) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const modal = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>modal.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="bg-white rounded-lg max-w-4xl max-h-full overflow-hidden flex flex-col"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="p-4 border-b flex justify-between items-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;h3 class="text-lg font-bold"&gt;📄 Export Webinaire&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button id="close-modal" class="text-gray-500 hover:text-gray-700 text-xl"&gt;&amp;times;&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="p-4 overflow-auto flex-1"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;textarea readonly class="w-full h-96 p-3 border rounded font-mono text-sm" id="export-content"&gt;${content}&lt;/textarea&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="p-4 border-t flex gap-2 justify-end"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button id="copy-export" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"&gt;📋 Copier&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button id="select-all" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"&gt;✅ Tout sélectionner&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.body.appendChild(modal);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('close-modal').onclick = () =&gt; modal.remove();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('select-all').onclick = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('export-content').select();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Texte sélectionné ! Ctrl+C pour copier', 'success');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('copy-export').onclick = async () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>await navigator.clipboard.writeText(content);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showToast('📋 Copié dans le presse-papiers !', 'success');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} catch (e) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('export-content').select();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>showToast('Sélectionnez le texte et faites Ctrl+C', 'info');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>modal.onclick = (e) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (e.target === modal) modal.remove();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>showToast('📄 Export affiché dans la fenêtre', 'success');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Fonction utilitaire pour wrapper le texte</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function wrapText(ctx, text, maxWidth) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const words = text.split(' ');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const lines = [];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let currentLine = words[0];</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = 1; i &lt; words.length; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const word = words[i];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const width = ctx.measureText(currentLine + ' ' + word).width;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (width &lt; maxWidth) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>currentLine += ' ' + word;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>lines.push(currentLine);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>currentLine = word;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>lines.push(currentLine);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return lines;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function saveGlobalNotes() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const notesContent = document.getElementById('global-notes').value;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const loadingSpinner = document.getElementById('notes-loading');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const saveBtn = document.getElementById('save-notes-btn');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>loadingSpinner.classList.remove('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>saveBtn.disabled = true;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>let notesItem = items.find(item =&gt; item.type === 'global-notes');</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (notesItem) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>notesItem.notes = notesContent;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const result = await window.dataSdk.update(notesItem);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (!result.isOk) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>throw new Error('Update failed');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const newNotesItem = {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>id: 'global-notes',</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>type: 'global-notes',</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>name: 'Notes Globales',</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>icon: '📝',</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>position: 9998,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>notes: notesContent,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>webinar_type: '',</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>participants: 0,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>validated: false,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>created_at: new Date().toISOString()</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>};</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const result = await window.dataSdk.create(newNotesItem);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (!result.isOk) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>throw new Error('Create failed');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Notes sauvegardées', 'success');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Mettre à jour l'aperçu si visible</p>
+<p class="p1"><span class="Apple-converted-space">                </span>updateGlobalNotesDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showToast('Erreur lors de la sauvegarde des notes', 'error');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} finally {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>loadingSpinner.classList.add('hidden');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>saveBtn.disabled = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Fonction toast</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showToast(message, type = 'info') {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const toast = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>toast.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 transition-all duration-300 ${</p>
+<p class="p1"><span class="Apple-converted-space">                </span>type === 'success' ? 'bg-green-500' :<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>type === 'error' ? 'bg-red-500' : 'bg-blue-500'</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>toast.textContent = message;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.body.appendChild(toast);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>toast.style.opacity = '0';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>setTimeout(() =&gt; toast.remove(), 300);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}, 3000);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Initialisation</p>
+<p class="p1"><span class="Apple-converted-space">        </span>async function init() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Initialiser le Data SDK</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const initResult = await window.dataSdk.init(dataHandler);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (!initResult.isOk) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>console.error('Erreur d\'initialisation du Data SDK');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Initialiser l'Element SDK</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (window.elementSdk) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>await window.elementSdk.init({</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>defaultConfig,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>render,</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>mapToCapabilities: (config) =&gt; ({</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>recolorables: [</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>get: () =&gt; config.primary_color || defaultConfig.primary_color,</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>set: (value) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>config.primary_color = value;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>window.elementSdk.setConfig({ primary_color: value });</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>{</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>get: () =&gt; config.secondary_color || defaultConfig.secondary_color,</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>set: (value) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>config.secondary_color = value;</p>
+<p class="p1"><span class="Apple-converted-space">                                        </span>window.elementSdk.setConfig({ secondary_color: value });</p>
+<p class="p1"><span class="Apple-converted-space">                                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>],</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>borderables: [],</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>fontEditable: undefined,</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>fontSizeable: undefined</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>}),</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>mapToEditPanelValues: (config) =&gt; new Map([</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>['app_title', config.app_title || defaultConfig.app_title]</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>])</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Configuration des composants</p>
+<p class="p1"><span class="Apple-converted-space">                </span>setupTabs();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>setupDropZones();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>setupWebinarInfo();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>setupGlobalNotes();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>setupExport();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// Rendu initial</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderAvailableCards();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>await render(window.elementSdk?.config || defaultConfig);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (error) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error('Erreur d\'initialisation:', error);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// Démarrer l'application</p>
+<p class="p1"><span class="Apple-converted-space">        </span>init();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space"> </span>&lt;script&gt;(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9904dc6823826f0a',t:'MTc2MDc1NzIxOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&amp;&amp;(document.onreadystatechange=e,c())}}}})();&lt;/script&gt;&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
