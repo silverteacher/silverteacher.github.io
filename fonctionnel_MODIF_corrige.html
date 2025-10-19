@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flow BBB - Formation Expert 90min</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a7b 50%, #3a7ca5 100%);
+            color: #e8f1f5;
+            min-height: 100vh;
+            line-height: 1.7;
+            font-size: 18px;
+        }
+
+        /* PAGE D'ACCUEIL MYSTÉRIEUSE */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at center, #2c3e50 0%, #1a1a2e 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%235dade2' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-100vh); }
+        }
+
+        .welcome-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 800px;
+            padding: 40px;
+        }
+
+        .mystery-title {
+            font-size: clamp(32px, 8vw, 64px);
+            background: linear-gradient(45deg, #f39c12, #e74c3c, #9b59b6, #3498db);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 4s ease infinite;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .mystery-subtitle {
+            font-size: clamp(18px, 4vw, 24px);
+            color: #bdc3c7;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .enter-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 25px 50px;
+            font-size: 22px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        .enter-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(231, 76, 60, 0.6);
+        }
+
+        .teasing-bonus {
+            background: rgba(142, 68, 173, 0.2);
+            border: 2px solid #8e44ad;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .main-app {
+            display: none;
+        }
+
+        .main-app.active {
+            display: block;
+        }
+
+        /* STYLES PRINCIPAUX */
+        .terminal-header {
+            background: linear-gradient(135deg, #d97642 0%, #c45a2a 100%);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            font-size: clamp(20px, 5vw, 32px);
+            font-weight: bold;
+            border-bottom: 3px solid #5dade2;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 25px;
+        }
+
+        .progress-bar {
+            background: rgba(93, 173, 226, 0.15);
+            border: 2px solid #5dade2;
+            border-radius: 10px;
+            height: 45px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #27ae60 0%, #2ecc71 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 19px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(93, 173, 226, 0.3);
+            border-radius: 15px;
+            padding: 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #f39c12;
+            font-size: clamp(28px, 5vw, 42px);
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        h2 {
+            color: #5dade2;
+            font-size: clamp(24px, 4vw, 34px);
+            margin-top: 25px;
+            margin-bottom: 18px;
+        }
+
+        h3 {
+            color: #f39c12;
+            font-size: clamp(22px, 3.5vw, 28px);
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        p, li {
+            font-size: 19px;
+            line-height: 1.7;
+        }
+
+        .photo-embed {
+            width: 100%;
+            max-width: 600px;
+            margin: 25px auto;
+            display: block;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        .flow-box {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.25) 0%, rgba(142, 68, 173, 0.15) 100%);
+            border: 3px solid #9b59b6;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .flow-box h4 {
+            color: #9b59b6;
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .cas-formateur {
+            background: rgba(52, 152, 219, 0.2);
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .cas-formateur h4 {
+            color: #3498db;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .stagiaire-zombie {
+            background: linear-gradient(135deg, rgba(127, 140, 141, 0.25) 0%, rgba(95, 106, 106, 0.15) 100%);
+            border: 2px solid #7f8c8d;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .stagiaire-zombie h4 {
+            color: #95a5a6;
+            font-size: 24px;
+        }
+
+        .stagiaire-actif {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.25) 0%, rgba(39, 174, 96, 0.15) 100%);
+            border: 2px solid #27ae60;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .stagiaire-actif h4 {
+            color: #2ecc71;
+            font-size: 24px;
+        }
+
+        /* INCIDENTS */
+        .incident-card {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.3) 0%, rgba(192, 57, 43, 0.2) 100%);
+            border: 3px solid #e74c3c;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .incident-card h4 {
+            color: #e74c3c;
+            font-size: 28px;
+            margin-bottom: 18px;
+        }
+
+        .incident-card p {
+            font-size: 20px;
+        }
+
+        .incident-counter {
+            text-align: center;
+            font-size: 20px;
+            color: #f39c12;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .note-input {
+            width: 100%;
+            padding: 18px;
+            font-size: 20px;
+            border: 2px solid #e74c3c;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        .solution-box {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.3) 0%, rgba(39, 174, 96, 0.2) 100%);
+            border: 3px solid #27ae60;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 25px 0;
+            display: none;
+        }
+
+        .solution-box.active {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .solution-box h4 {
+            color: #2ecc71;
+            font-size: 26px;
+            margin-bottom: 18px;
+        }
+
+        .solution-box p {
+            font-size: 20px;
+        }
+
+        /* NAVIGATION COHÉRENTE - BOUTONS TOUJOURS À DROITE */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-right {
+            margin-left: auto;
+        }
+
+        .btn-nav {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-nav:hover {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            transform: translateY(-2px);
+        }
+
+        .btn-nav:disabled {
+            background: #7f8c8d;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .btn-incident {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            font-size: 19px;
+            padding: 18px 30px;
+        }
+
+        /* MODE ANIMATEUR ENRICHI */
+        .mode-animateur {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #9b59b6;
+            z-index: 1000;
+            max-width: 350px;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .mode-animateur.active {
+            display: block;
+        }
+
+        .mode-animateur h4 {
+            color: #9b59b6;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 1px solid #666;
+            padding-bottom: 10px;
+        }
+
+        .animateur-section {
+            margin-bottom: 20px;
+        }
+
+        .incident-btn, .bonus-btn {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin: 5px 0;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .bonus-btn {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        }
+
+        .incident-btn:hover, .bonus-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .incident-btn:disabled {
+            background: #7f8c8d;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        /* ROUE DES DÉFIS */
+        .wheel-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wheel-container.active {
+            display: flex;
+        }
+
+        .wheel-content {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .wheel {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            position: relative;
+            margin: 20px auto;
+            overflow: hidden;
+            border: 5px solid #fff;
+            cursor: pointer;
+        }
+
+        .wheel-segment {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #fff;
+            z-index: 10;
+        }
+
+        .challenge-display {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #f39c12;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 100px;
+        }
+
+        .wheel-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .malchance-card {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border: 4px solid #fff;
+            border-radius: 15px;
+            padding: 35px;
+            margin: 30px 0;
+            text-align: center;
+            animation: shake 0.5s infinite;
+            box-shadow: 0 0 40px rgba(231, 76, 60, 0.8);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-2deg); }
+            75% { transform: rotate(2deg); }
+        }
+
+        .malchance-card h4 {
+            color: #fff;
+            font-size: 32px;
+            margin-bottom: 18px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .bonus-blink {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            border: 4px solid #fff;
+            border-radius: 15px;
+            padding: 35px;
+            margin: 30px 0;
+            text-align: center;
+            animation: blink 1.5s infinite, glow 2s infinite;
+            box-shadow: 0 0 30px rgba(243, 156, 18, 0.6);
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 30px rgba(243, 156, 18, 0.6); }
+            50% { box-shadow: 0 0 50px rgba(243, 156, 18, 1); }
+        }
+
+        .bonus-blink h4 {
+            color: #fff;
+            font-size: 32px;
+            margin-bottom: 18px;
+        }
+
+        /* BON POINT BBB FENÊTRE VERTE */
+        .bon-point-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bon-point-popup.active {
+            display: flex;
+        }
+
+        .bon-point-content {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            border: 5px solid #fff;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 700px;
+            text-align: center;
+            animation: bounceIn 0.5s;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .bon-point-content h4 {
+            color: #fff;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .procedure-step {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid #fff;
+            padding: 18px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 19px;
+            color: #fff;
+            text-align: left;
+        }
+
+        /* MODAL VIDÉO */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .video-modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .video-modal iframe {
+            width: 800px;
+            height: 450px;
+            border-radius: 10px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .quiz-option {
+            background: rgba(41, 128, 185, 0.25);
+            border: 2px solid #5dade2;
+            border-radius: 10px;
+            padding: 22px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 19px;
+        }
+
+        .quiz-option:hover {
+            background: rgba(41, 128, 185, 0.4);
+            transform: translateX(8px);
+        }
+
+        .quiz-option.correct {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.5) 0%, rgba(39, 174, 96, 0.4) 100%);
+            border-color: #27ae60;
+            border-width: 3px;
+        }
+
+        .quiz-option.incorrect {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.5) 0%, rgba(192, 57, 43, 0.4) 100%);
+            border-color: #c0392b;
+            border-width: 3px;
+        }
+
+        .popup-chrono {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-chrono.active {
+            display: flex;
+        }
+
+        .popup-content {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            border: 5px solid #fff;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 700px;
+            text-align: center;
+        }
+
+        .chrono-timer {
+            font-size: 80px;
+            font-weight: bold;
+            color: #fff;
+            margin: 25px 0;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+        }
+
+        .chrono-input, .analysis-input {
+            width: 100%;
+            min-height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid #fff;
+            border-radius: 8px;
+            padding: 20px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 19px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 15px 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+        }
+
+        .btn-bonus {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            font-size: 24px;
+            padding: 22px 45px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .points-display {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px 30px;
+            border-radius: 10px;
+            border: 3px solid #f39c12;
+            z-index: 1000;
+        }
+
+        .points-number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #f39c12;
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        /* SUPER BONUS CANVA */
+        .super-bonus-card {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            border: 3px solid #fff;
+            border-radius: 15px;
+            padding: 35px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(142, 68, 173, 0.8);
+        }
+
+        .super-bonus-card h4 {
+            color: #fff;
+            font-size: 32px;
+            margin-bottom: 18px;
+        }
+
+        ul, ol { margin-left: 25px; margin-bottom: 18px; }
+        li { margin-bottom: 12px; }
+
+        @media (max-width: 768px) {
+            body { font-size: 16px; }
+            .container { padding: 15px; }
+            .card { padding: 25px; }
+            .chrono-timer { font-size: 60px; }
+            .mode-animateur { display: none !important; }
+            .nav-buttons { 
+                flex-direction: column; 
+                align-items: stretch; 
+            }
+            .nav-buttons .btn-nav {
+                justify-content: center;
+            }
+            .video-modal iframe {
+                width: 90vw;
+                height: 50vw;
+            }
+            .wheel {
+                width: 250px;
+                height: 250px;
+            }
+        }
+    
+/* --- Custom improvements requested --- */
+footer.site-footer{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(90deg,#0f1724 0%, rgba(15,23,36,0.85) 100%);
+    color: #cbd5e1;
+    padding: 10px 16px;
+    border-top: 2px solid rgba(243,156,18,0.12);
+    font-size: 14px;
+    text-align: right;
+    z-index: 2000;
+}
+.footer-credit { font-weight: 600; color: #f39c12; }
+/* Confetti canvas */
+#confetti-canvas{ position: fixed; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:15000; display:none;}
+/* Red moving call card */
+.red-call-card{
+    background: linear-gradient(135deg,#ff3b30 0%, #c0392b 100%);
+    border-radius: 12px;
+    padding: 18px;
+    color: white;
+    border: 3px solid rgba(255,255,255,0.18);
+    box-shadow: 0 10px 30px rgba(192,57,43,0.35);
+    max-width: 360px;
+    margin: 12px auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transform: translateX(0);
+    animation: callBounce 2.2s infinite ease-in-out;
+}
+.red-call-card img{ width:64px; height:64px; border-radius:8px; object-fit:cover; }
+/* small moving badge */
+.call-badge{
+    background: rgba(255,255,255,0.12);
+    padding:6px 10px;
+    border-radius: 999px;
+    font-weight:700;
+}
+@keyframes callBounce {
+    0% { transform: translateX(-8px) translateY(0) rotate(-1deg); }
+    25% { transform: translateX(6px) translateY(-4px) rotate(1deg); }
+    50% { transform: translateX(0px) translateY(0) rotate(0deg); }
+    75% { transform: translateX(6px) translateY(-2px) rotate(1deg); }
+    100% { transform: translateX(-8px) translateY(0) rotate(-1deg); }
+}
+/* Final recap box */
+.recap-box{
+    background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+    border-left: 4px solid #5dade2;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    font-size: 18px;
+    color: #dbeafe;
+}
+.recap-box h4{ color:#5dade2; margin-bottom:12px; }
+.recap-list li{ margin-bottom: 10px; }
+
+</style>
+</head>
+<body>
+    <!-- PAGE D'ACCUEIL MYSTÉRIEUSE -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="particles"></div>
+        <div class="welcome-content">
+            <h1 class="mystery-title">FLOW BBB MASTERY</h1>
+            <p class="mystery-subtitle">Une expérience immersive vous attend...</p>
+            <p style="margin-bottom: 30px; opacity: 0.8;">
+                Vous allez vivre une formation pas comme les autres. <br>
+                Êtes-vous prêt à maîtriser l'art du webinaire qui captive ?
+            </p>
+
+            <div class="teasing-bonus">
+                <h4 style="color: #8e44ad; margin-bottom: 15px;">🎁 Super Bonus Mystère</h4>
+                <p>Atteignez au moins <strong id="seuilBonus">400 points</strong> pour débloquer un <strong>bonus exclusif</strong> en fin de parcours.</p>
+                <p style="opacity: 0.8; font-size: 16px; margin-top: 10px;">Indice: c'est un outil pro prêt-à-l'emploi pour booster vos webinaires…</p>
+            </div>
+
+            <button class="enter-btn" onclick="enterExperience()">
+                ENTRER DANS L'EXPÉRIENCE
+            </button>
+        </div>
+    </div>
+
+    <!-- APPLICATION PRINCIPALE -->
+    <div class="main-app" id="mainApp">
+        <div class="terminal-header">
+            🌊 FLOW ET MAÎTRISE BBB<br>
+            Formation Expert Formateurs - 90 minutes
+        </div>
+
+        <div class="points-display">
+            ⭐ <span class="points-number" id="totalPoints">0</span> pts
+            <button onclick="toggleModeAnimateur()" style="background: #9b59b6; color: white; border: none; padding: 5px 10px; border-radius: 5px; margin-left: 10px; cursor: pointer; font-size: 12px;">
+                👨‍🏫 MODE
+            </button>
+        </div>
+
+        <!-- MODE ANIMATEUR ENRICHI -->
+        <div class="mode-animateur" id="modeAnimateur">
+            <h4>👨‍🏫 MODE ANIMATEUR</h4>
+
+            <div class="animateur-section">
+                <h5 style="color: #e74c3c; font-size: 16px; margin-bottom: 10px;">🚨 INCIDENTS TECHNIQUES</h5>
+                <button class="incident-btn" onclick="launchSingleIncident(1)" id="incBtn1">
+                    🚨 INCIDENT 1: Connexion
+                </button>
+                <button class="incident-btn" onclick="launchSingleIncident(2)" id="incBtn2">
+                    😡 INCIDENT 2: Stagiaire énervé
+                </button>
+                <button class="incident-btn" onclick="launchSingleIncident(3)" id="incBtn3">
+                    🏖️ INCIDENT 3: Écran maillot
+                </button>
+                <button class="incident-btn" onclick="launchSingleIncident(4)" id="incBtn4">
+                    😶 INCIDENT 4: Silence total
+                </button>
+                <button class="incident-btn" onclick="launchSingleIncident(5)" id="incBtn5">
+                    ⏰ INCIDENT 5: Dépassement temps
+                </button>
+            </div>
+
+            <div class="animateur-section">
+                <h5 style="color: #f39c12; font-size: 16px; margin-bottom: 10px;">🎁 BONUS</h5>
+                <button class="bonus-btn" onclick="showBonusVideo()">
+                    📹 Vidéo Culte Visio
+                </button>
+                <button class="bonus-btn" onclick="showWheel()">
+                    🎡 Roue des Défis
+                </button>
+            </div>
+
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #666; font-size: 12px; color: #ccc;">
+                Outils d'animation à votre disposition
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar">Étape 1/14</div>
+            </div>
+
+            <!-- BRISE-GLACE -->
+            <section id="briseglace" class="card">
+                <h1>❄️ Brise-glace</h1>
+
+                <img src="https://c.pxhere.com/photos/6e/9e/windshield_wiper_wiper_windshield_frost_ice-53292.jpg!d" alt="Pare-brise givré" class="photo-embed">
+
+                <div class="flow-box">
+                    <h4>🌊 QU'EST-CE QU'UN WEBINAIRE QUI A DU FLOW?</h4>
+                    <p style="font-size: 20px; margin: 15px 0;"><strong>Mihaly Csikszentmihalyi (1975, 1990)</strong> définit le flow comme un <strong>état d'immersion totale</strong> dans une activité où:</p>
+                    <ul style="font-size: 19px;">
+                        <li><strong>Défi et compétence s'équilibrent:</strong> Ni trop facile (ennui), ni trop difficile (anxiété)</li>
+                        <li><strong>Objectifs clairs:</strong> On sait où on va</li>
+                        <li><strong>Feedback immédiat:</strong> Retour instantané</li>
+                        <li><strong>Concentration totale:</strong> Perte de la notion du temps</li>
+                        <li><strong>Contrôle perçu:</strong> Sentiment de maîtrise</li>
+                    </ul>
+
+                    <p style="margin-top: 20px; font-size: 18px; font-style: italic; color: #9b59b6;">
+                        <strong>Référence:</strong> Csikszentmihalyi, M. (1990). <em>Flow: The Psychology of Optimal Experience</em>. Harper & Row.
+                    </p>
+                </div>
+
+                <h3>💬 Question:</h3>
+                <p style="font-size: 20px; margin: 15px 0;">En un mot, qu'est-ce qui fait qu'un webinaire décolle VS qu'il patine comme ce pare-brise givré?</p>
+
+                <input type="text" class="analysis-input" id="flowKeyword" placeholder="Votre mot-clé..." style="min-height: 60px;">
+
+                <div class="nav-buttons">
+                    <button class="btn-nav" disabled>
+                        ⬅️ Précédent
+                    </button>
+                    <button class="btn btn-success nav-right" onclick="validateBriseGlace()">
+                        VALIDER ➡️
+                    </button>
+                </div>
+            </section>
+
+            <!-- CAS D'ÉCOLE -->
+            <section id="cas1" class="card hidden">
+                <h1>🎮 Cas d'école: Analysez ces vraies formations</h1>
+
+                <div class="cas-formateur">
+                    <h4>CAS A: Émilie - Formatrice numérique (Académie Lyon)</h4>
+                    <p style="font-size: 19px;"><strong>Contexte:</strong> Formation "IA générative en classe" pour 32 enseignants 2nd degré. 2h BBB, 100% distanciel.</p>
+                    <p style="margin-top: 12px;"><strong>Animation:</strong> Émilie fait défiler 47 slides sur ChatGPT, Claude, Midjourney pendant 85 minutes. Questions à la fin. Aucune interaction BBB. Partage écran complet non-stop.</p>
+                    <p style="margin-top: 12px; color: #e74c3c;"><strong>Résultats:</strong> 18 déconnexions. Chat vide. "Très informatif mais passif" dans évaluations.</p>
+                </div>
+
+                <div class="stagiaire-actif">
+                    <h4>CAS B: Marc & Julie - Duo formateurs (INSPE Lille)</h4>
+                    <p style="font-size: 19px;"><strong>Contexte:</strong> "Différenciation pédagogique" pour 28 professeurs stagiaires. 90 min BBB hybride.</p>
+                    <p style="margin-top: 12px;"><strong>Animation:</strong> Alternance 8 min apport / 4 min activité BBB. Marc anime, Julie gère chat+sondages. Changement supports visuels toutes les 10 min. Sous-salles 15 min. Timer visible permanent.</p>
+                    <p style="margin-top: 12px; color: #2ecc71;"><strong>Résultats:</strong> 94% participation. 12 productions collaboratives. "Formation dynamique!" dans évaluations.</p>
+                </div>
+
+                <div class="stagiaire-zombie">
+                    <h4>CAS C: Pierre - Formateur maths (Académie Nantes)</h4>
+                    <p style="font-size: 19px;"><strong>Contexte:</strong> "Algorithmique Scratch" pour 25 profs collège. 2h BBB.</p>
+                    <p style="margin-top: 12px;"><strong>Animation:</strong> Pierre code en direct 45 min d'affilée. Partage son écran Scratch. Ne regarde jamais le chat BBB. Parle dans le vide. Zéro interaction prévue.</p>
+                    <p style="margin-top: 12px; color: #7f8c8d;"><strong>Résultats:</strong> "J'ai décroché au bout de 20 min." 14 caméras éteintes. Ennui généralisé.</p>
+                </div>
+
+                <h3>🧠 DÉFI:</h3>
+                <p style="font-size: 20px; margin: 15px 0;">Quel est LE FACTEUR décisif qui explique ces résultats opposés?</p>
+
+                <div class="quiz-option" onclick="checkAnswer('cas1', 1, true)">
+                    <strong>A)</strong> La durée des segments sans interaction. Marc/Julie: 8 min max VS Émilie/Pierre: 45+ min d'affilée.
+                </div>
+                <div class="quiz-option" onclick="checkAnswer('cas1', 2, false)">
+                    <strong>B)</strong> Le niveau des participants (stagiaires VS titulaires)
+                </div>
+                <div class="quiz-option" onclick="checkAnswer('cas1', 3, false)">
+                    <strong>C)</strong> La thématique de formation (pédagogie VS technique)
+                </div>
+                <div class="quiz-option" onclick="checkAnswer('cas1', 4, false)">
+                    <strong>D)</strong> Le nombre de participants (25 à 32)
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">
+                        ⬅️ Précédent
+                    </button>
+                    <div class="nav-right"></div>
+                </div>
+            </section>
+
+            <!-- GALERIE INCIDENTS - PAGE INTRO -->
+            <section id="incidents-intro" class="card hidden">
+                <h1>⚠️ Galerie des Incidents</h1>
+                <h2 style="text-align: center; color: #f39c12;">7 incidents à analyser</h2>
+
+                <div class="flow-box">
+                    <h4>🎯 VOTRE MISSION</h4>
+                    <p style="font-size: 20px;">Vous allez évaluer 7 incidents typiques de webinaires BBB. Pour chacun:</p>
+                    <ul style="font-size: 19px; margin-top: 15px;">
+                        <li>📝 Donnez une <strong>note de gravité sur 10</strong></li>
+                        <li>🔍 Découvrez la <strong>solution professionnelle</strong></li>
+                        <li>🏆 Débloquez des <strong>bons points BBB</strong></li>
+                    </ul>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">
+                        ⬅️ Précédent
+                    </button>
+                    <button class="btn btn-incident nav-right" onclick="showIncident(1)">
+                        🚨 COMMENCER L'ANALYSE ➡️
+                    </button>
+                </div>
+            </section>
+
+            <!-- INCIDENTS 1 à 7 -->
+            <section id="incident1" class="card hidden">
+                <div class="incident-counter">INCIDENT 1/7</div>
+
+                <div class="incident-card">
+                    <h4>💥 Panne de connexion</h4>
+                    <p>Minute 35, l'animateur disparaît. Écran figé 45 secondes. Participants attendent...</p>
+                    <p style="margin-top: 15px; font-size: 20px;"><strong>Votre note de gravité:</strong></p>
+                    <input type="number" class="note-input" min="0" max="10" placeholder="/10">
+                    <button class="btn" onclick="showSolution(1)" style="font-size: 19px;">VOIR LA SOLUTION</button>
+                </div>
+
+                <div class="solution-box" id="solution1">
+                    <h4>✅ SOLUTION PROFESSIONNELLE</h4>
+                    <p><strong>Gravité réelle: 9/10</strong> - Rupture totale du flow</p>
+                    <p style="margin-top: 15px;"><strong>Stratégie de prévention BBB:</strong></p>
+                    <ul style="font-size: 19px; margin-top: 10px;">
+                        <li>Désignez systématiquement un co-animateur avec rôle Modérateur BBB avant le début de session.</li>
+                        <li>Préparez une consigne pré-écrite dans les Notes partagées BBB: "Si panne animateur principal, Marc prend le relais et lance l'activité sondage de la slide 15."</li>
+                        <li>Configurez un support de secours sans partage d'écran (tableau blanc BBB + annotations préparées).</li>
+                    </ul>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">
+                        ⬅️ Précédent
+                    </button>
+                    <button class="btn-nav nav-right" onclick="showIncident(2)">
+                        Incident 2 ➡️
+                    </button>
+                </div>
+            </section>
+
+            <!-- Incidents 2-7 suivent le même pattern... -->
+            <!-- Pour la brevité, je montre juste la structure -->
+
+            <!-- PAUSE CAFÉ -->
+            
+            <!-- INCIDENT 2 -->
+            <section id="incident2" class="card hidden">
+                <div class="incident-counter">INCIDENT 2/7</div>
+                <div class="incident-card">
+                    <h4>😤 Stagiaire énervé</h4>
+                    <p>Minute 42, un stagiaire écrit dans le chat BBB: "C'est trop théorique, je vais partir." Il coupe sa caméra. Climat tendu.</p>
+                    <p style="margin-top: 15px; font-size: 20px;"><strong>Votre note de gravité:</strong></p>
+                    <input type="number" class="note-input" min="0" max="10" placeholder="/10">
+                    <button class="btn" onclick="showSolution(2)" style="font-size: 19px;">VOIR LA SOLUTION</button>
+                </div>
+                <div class="solution-box" id="solution2">
+                    <h4>✅ SOLUTION PROFESSIONNELLE</h4>
+                    <p><strong>Gravité réelle: 8/10</strong> - Risque de contagion émotionnelle</p>
+                    <ul style="font-size: 19px; margin-top: 10px;">
+                        <li>Réagissez IMMÉDIATEMENT par message privé BBB</li>
+                        <li>Changez de rythme vers la pratique</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #f39c12;"><strong>🏆 Bon point: "Gestion de crise"</strong></p>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">⬅️ Précédent</button>
+                    <button class="btn-nav nav-right" onclick="showIncident(3)">Incident 3 ➡️</button>
+                </div>
+            </section>
+
+            <!-- INCIDENT 3 -->
+            <section id="incident3" class="card hidden">
+                <div class="incident-counter">INCIDENT 3/7</div>
+                <div class="incident-card">
+                    <h4>📧 Écran maillot</h4>
+                    <p>Vous partagez votre écran. Les participants voient votre boîte mail personnelle.</p>
+                    <p style="margin-top: 15px; font-size: 20px;"><strong>Votre note de gravité:</strong></p>
+                    <input type="number" class="note-input" min="0" max="10" placeholder="/10">
+                    <button class="btn" onclick="showSolution(3)" style="font-size: 19px;">VOIR LA SOLUTION</button>
+                </div>
+                <div class="solution-box" id="solution3">
+                    <h4>✅ SOLUTION PROFESSIONNELLE</h4>
+                    <p><strong>Gravité réelle: 6/10</strong> - Moment gênant mais récupérable</p>
+                    <ul style="font-size: 19px; margin-top: 10px;">
+                        <li>Fermez tous les onglets AVANT</li>
+                        <li>Partagez "Une fenêtre" pas "Écran entier"</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #f39c12;"><strong>🏆 Bon point: "Partage zen"</strong></p>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">⬅️ Précédent</button>
+                    <button class="btn-nav nav-right" onclick="showIncident(4)">Incident 4 ➡️</button>
+                </div>
+            </section>
+
+            <!-- INCIDENT 4 -->
+            <section id="incident4" class="card hidden">
+                <div class="incident-counter">INCIDENT 4/7</div>
+                <div class="incident-card">
+                    <h4>🤐 Silence total</h4>
+                    <p>Vous demandez "Des questions?". Silence absolu 23 secondes. Malaise.</p>
+                    <p style="margin-top: 15px; font-size: 20px;"><strong>Votre note de gravité:</strong></p>
+                    <input type="number" class="note-input" min="0" max="10" placeholder="/10">
+                    <button class="btn" onclick="showSolution(4)" style="font-size: 19px;">VOIR LA SOLUTION</button>
+                </div>
+                <div class="solution-box" id="solution4">
+                    <h4>✅ SOLUTION PROFESSIONNELLE</h4>
+                    <p><strong>Gravité réelle: 5/10</strong> - Symptôme d'engagement faible</p>
+                    <ul style="font-size: 19px; margin-top: 10px;">
+                        <li>Posez des questions PRÉCISES avec sondages</li>
+                        <li>Ne demandez jamais "Des questions?" en fin</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #f39c12;"><strong>🏆 Bon point: "Questionnement"</strong></p>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">⬅️ Précédent</button>
+                    <button class="btn-nav nav-right" onclick="showIncident(5)">Incident 5 ➡️</button>
+                </div>
+            </section>
+
+            <!-- INCIDENT 5 -->
+            <section id="incident5" class="card hidden">
+                <div class="incident-counter">INCIDENT 5/7</div>
+                <div class="incident-card">
+                    <h4>⏰ Dépassement temps</h4>
+                    <p>Webinaire prévu 2h. Vous êtes à 1h52, il reste 6 slides. Participants partent.</p>
+                    <p style="margin-top: 15px; font-size: 20px;"><strong>Votre note de gravité:</strong></p>
+                    <input type="number" class="note-input" min="0" max="10" placeholder="/10">
+                    <button class="btn" onclick="showSolution(5)" style="font-size: 19px;">VOIR LA SOLUTION</button>
+                </div>
+                <div class="solution-box" id="solution5">
+                    <h4>✅ SOLUTION PROFESSIONNELLE</h4>
+                    <p><strong>Gravité réelle: 8/10</strong> - Perte de crédibilité</p>
+                    <ul style="font-size: 19px; margin-top: 10px;">
+                        <li>Affichez un timer visible</li>
+                        <li>Terminez TOUJOURS à l'heure</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #f39c12;"><strong>🏆 Bon point: "Timing"</strong></p>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">⬅️ Précédent</button>
+                    <button class="btn-nav nav-right" onclick="showIncident(6)">Incident 6 ➡️</button>
+                </div>
+            </section>
+
+            <!-- INCIDENT 6 -->
+            <section id="incident6" class="card hidden">
+                <div class="incident-counter">INCIDENT 6/7</div>
+                <div class="incident-card">
+                    <h4>😴 Fatigue visuelle</h4>
+                    <p>14 webcams éteintes. Chat: "Mes yeux fatiguent".</p>
+                    <p style="margin-top: 15px; font-size: 20px;"><strong>Votre note de gravité:</strong></p>
+                    <input type="number" class="note-input" min="0" max="10" placeholder="/10">
+                    <button class="btn" onclick="showSolution(6)" style="font-size: 19px;">VOIR LA SOLUTION</button>
+                </div>
+                <div class="solution-box" id="solution6">
+                    <h4>✅ SOLUTION PROFESSIONNELLE</h4>
+                    <p><strong>Gravité réelle: 6/10</strong> - Attention en chute</p>
+                    <ul style="font-size: 19px; margin-top: 10px;">
+                        <li>Changez de support toutes les 10-15min</li>
+                        <li>Lancez des sondages pour réactiver</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #f39c12;"><strong>🏆 Bon point: "Variété"</strong></p>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">⬅️ Précédent</button>
+                    <button class="btn-nav nav-right" onclick="showIncident(7)">Dernier incident ➡️</button>
+                </div>
+            </section>
+
+            <!-- INCIDENT 7 WITH BBC VIDEO AND LINK TO PAUSE CAFÉ -->
+            <section id="incident7" class="card hidden">
+                <div class="incident-counter">INCIDENT 7/7</div>
+                <div class="incident-card">
+                    <h4>💬 Chat BBB ignoré</h4>
+                    <p>12 messages s'accumulent. "Quelqu'un lit le chat??"</p>
+
+                    <div style="margin:20px 0; background:rgba(142,68,173,0.1); border:2px solid #8e44ad; border-radius:10px; padding:20px;">
+                        <h4 style="color:#8e44ad;">🎬 VIDÉO CULTE BBB</h4>
+                        <p style="margin:15px 0;">Le fail visio le plus célèbre :</p>
+                        <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:8px;">
+                            <iframe style="position:absolute; top:0; left:0; width:100%; height:100%;" 
+                                    src="https://www.youtube.com/embed/Mh4f9AYRCZY" 
+                                    frameborder="0" allowfullscreen>
+                            </iframe>
+                        </div>
+                        <p style="margin-top:10px; color:#95a5a6; font-size:16px;">BBC News - Mars 2017 - 50M vues</p>
+                    </div>
+
+                    <p style="margin-top:15px; font-size:20px;"><strong>Votre note de gravité:</strong></p>
+                    <input type="number" class="note-input" min="0" max="10" placeholder="/10">
+                    <button class="btn" onclick="showSolution(7)" style="font-size:19px;">VOIR LA SOLUTION</button>
+                </div>
+                <div class="solution-box" id="solution7">
+                    <h4>✅ SOLUTION PROFESSIONNELLE</h4>
+                    <p><strong>Gravité réelle: 7/10</strong> - Participants invisibles</p>
+                    <ul style="font-size:19px; margin-top:10px;">
+                        <li>Travaillez en binôme: un anime, l'autre gère le chat</li>
+                        <li>Valorisez le chat à voix haute</li>
+                    </ul>
+                    <p style="margin-top:15px; color:#f39c12;"><strong>🏆 Bon point: "Gardien du chat"</strong></p>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">⬅️ Précédent</button>
+                    <button class="btn-nav nav-right" onclick="nextSection()">☕ Pause café ➡️</button>
+                </div>
+            </section>
+
+<section id="pausecafe" class="card hidden">
+                <h1>☕ Pause Café - Minute 45</h1>
+
+                <img src="https://c.pxhere.com/photos/3a/f9/cappuccino_beverage_in_the_morning_do_the_job_art_pattern_relax_holidays-538747.jpg!d" alt="Cappuccino" class="photo-embed">
+
+                <div class="flow-box">
+                    <h4>⏸️ PAUSE STRATÉGIQUE</h4>
+                    <p style="font-size: 20px;">Après 45 minutes, le cerveau a besoin de consolider. Préparez toujours une diapo "PAUSE" avec photo + timer BBB 5 min.</p>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">
+                        ⬅️ Précédent
+                    </button>
+                    <button class="btn btn-success nav-right" onclick="nextSection('chat-technique')">
+                        ➡️ REPRENDRE
+                    </button>
+                </div>
+            </section>
+
+            <!-- CHAT TECHNIQUE (remplace carte chance) -->
+            <section id="chat-technique" class="card hidden">
+                <div class="bonus-blink">
+                    <h4>💭 PARTAGE COLLECTIF</h4>
+                    <p style="font-size: 22px; color: #fff; margin: 20px 0;">
+                        Une amie experte BBB devait témoigner mais elle est en déplacement...<br><br>
+                        <strong>📝 Écrivez dans le chat:</strong><br>
+                        Quelle serait VOTRE technique pour intégrer son témoignage à distance ?
+                    </p>
+                </div>
+
+                <div class="flow-box">
+                    <h4>💡 EXEMPLES D'INSPIRATION</h4>
+                    <ul style="font-size: 18px;">
+                        <li>Vidéo pré-enregistrée avec questions live</li>
+                        <li>Appel surprise si connexion permet</li>
+                        <li>Partage de ses slides + simulation Q/R</li>
+                        <li>Témoignage écrit lu par l'animateur</li>
+                    </ul>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">
+                        ⬅️ Précédent
+                    </button>
+                    <button class="btn btn-success nav-right" onclick="nextSection('malchance')">
+                        ➡️ SUIVANT
+                    </button>
+                </div>
+            </section>
+
+            <!-- CARTE MALCHANCE -->
+            <section id="malchance" class="card hidden">
+                <div class="malchance-card">
+                    <h4>☎️ CARTE MALCHANCE!</h4>
+                    <div class="red-call-card" role="button" tabindex="0">
+                        <img src="https://c.pxhere.com/photos/4d/16/iphone_phone_smartphone_mobile_apple-99033.jpg!d" alt="Téléphone">
+                        <div style="flex:1;">
+                            <div style="font-size:20px; font-weight:700;">Appel entrant: Numéro masqué</div>
+                            <div style="margin-top:6px; opacity:0.9;">Votre téléphone sonne en plein webinaire.</div>
+                        </div>
+                        <div class="call-badge">Gérer</div>
+                    </div>
+                    <p style="font-size: 24px; color: #fff; margin: 20px 0;">
+                        Que faites-vous ?
+                    </p>
+                </div>
+                <div class="nav-buttons">
+        <button class="btn-nav" onclick="previousSection()">
+            ⬅️ Précédent
+        </button>
+        <button class="btn btn-success nav-right" onclick="nextSection('bonus1')">
+            ➡️ CONTINUER
+        </button>
+    </div>
+</section>
+
+            <!-- BONUS 1 -->
+            <section id="bonus1" class="card hidden">
+                <div class="bonus-blink">
+                    <h4>🎁 BONUS 1 GAGNÉ!</h4>
+                    <p style="font-size: 24px; color: #fff; margin: 20px 0;">
+                        Outil professionnel de scénarisation webinaires BBB
+                    </p>
+                    <a href="https://silverteacher.github.io/outil-gestion-webinaires.html" target="_blank" class="btn btn-bonus" style="text-decoration: none; display: inline-block;">
+                        🚀 OUVRIR L'OUTIL
+                    </a>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">
+                        ⬅️ Précédent
+                    </button>
+                    <button class="btn btn-success nav-right" onclick="nextSection('bonus2')">
+                        ➡️ BONUS 2
+                    </button>
+                </div>
+            </section>
+
+            <!-- BONUS 2 -->
+            <section id="bonus2" class="card hidden">
+                <div class="bonus-blink">
+                    <h4>🎁 BONUS 2 GAGNÉ!</h4>
+                    <p style="font-size: 24px; color: #fff; margin: 20px 0;">
+                        Guide pratique BBB complet (Académie de Lille)
+                    </p>
+                    <a href="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2022/01/Guide-pratique-BBB.pdf" target="_blank" class="btn btn-bonus" style="text-decoration: none; display: inline-block;">
+                        📖 TÉLÉCHARGER
+                    </a>
+                </div>
+
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">
+                        ⬅️ Précédent
+                    </button>
+                    <button class="btn btn-success nav-right" onclick="showFinal()">
+                        ➡️ TERMINER
+                    </button>
+                </div>
+            </section>
+
+            <!-- FINAL AVEC SUPER BONUS -->
+            <section id="final" class="card hidden">
+                <h1>🎉 MAÎTRISE FLOW BBB!</h1>
+
+                <div class="flow-box">
+                    <h4>🏆 VOUS MAÎTRISEZ:</h4>
+                    <ul style="font-size: 20px;">
+                        <li>✅ Flow scientifique (Csikszentmihalyi)</li>
+                        <li>✅ Cas formateurs analysés</li>
+                        <li>✅ 7 incidents évalués + solutions</li>
+                        <li>✅ <span id="incidentsCount">0</span> incidents techniques résolus</li>
+                        <li>✅ Techniques d'animation collaboratives</li>
+                        <li>✅ <span id="bonPointsCount">0</span> bons points BBB débloqués</li>
+                        <li>✅ 2 bonus pro</li>
+                    </ul>
+                </div>
+
+                <p style="text-align: center; font-size: 36px; margin: 30px 0;">
+                    <strong>Score:</strong> <span id="finalScore" style="color: #f39c12;">0</span> pts
+                </p>
+
+                <!-- SUPER BONUS CANVA -->
+                <div class="super-bonus-card hidden" id="superBonus">
+                    <h4>🎉 SUPER BONUS DÉBLOQUÉ!</h4>
+                    <p style="font-size: 20px; color: #fff; margin: 20px 0;">
+                        Bravo ! Vous avez atteint le seuil. Voici votre accès privilégié :
+                    </p>
+                    <a class="btn btn-bonus" target="_blank" rel="noopener" href="https://www.canva.com/design/DAG2NeTyOVQ/vtbQJAw2EyfbUXXHGCk2FQ/edit?utm_content=DAG2NeTyOVQ&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton">
+                        🚀 OUVRIR LE SUPER BONUS CANVA
+                    </a>
+                </div>
+
+                
+                <div class="recap-box" id="recapStructure">
+                    <h4>Structure de l'application gamifiée — récapitulatif</h4>
+                    <ul class="recap-list">
+                        <li><strong>Fil rouge:</strong> Immersion progressive — segments courts, interactions fréquentes, co-animation.</li>
+                        <li><strong>Mécaniques:</strong> Points, incidents, roue de défis, bonus déblocables, chronos pour décisions rapides.</li>
+                        <li><strong>Rôles:</strong> Animateur principal, co-animateur modérateur, participants actifs (groupes).</li>
+                        <li><strong>Objectifs pédagogiques:</strong> Réduction du décrochage, renforcement collaboratif, acquisition de procédures BBB.</li>
+                        <li><strong>Ressources:</strong> Vidéos, outils téléchargeables, fiches 'bon point' à distribuer.</li>
+                    </ul>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn-nav" onclick="previousSection()">
+                        ⬅️ Précédent
+                    </button>
+                    <button class="btn btn-success nav-right" onclick="location.reload()">
+                        🔄 RECOMMENCER
+                    </button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- MODAL VIDÉO BONUS -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-content">
+            <button class="close-modal" onclick="closeVideo()">✕</button>
+            <iframe id="bonusVideo" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- ROUE DES DÉFIS -->
+    <div class="wheel-container" id="wheelContainer">
+        <div class="wheel-content">
+            <h2 style="color: #fff; margin-bottom: 20px;">🎡 ROUE DES DÉFIS</h2>
+
+            <div class="wheel" id="wheel" onclick="spinWheel()">
+                <div class="wheel-pointer"></div>
+                <!-- Les segments seront générés dynamiquement -->
+            </div>
+
+            <div class="challenge-display" id="challengeDisplay">
+                <p style="color: #f39c12; font-size: 18px; text-align: center;">Cliquez sur la roue pour défier un participant !</p>
+            </div>
+
+            <div class="wheel-actions">
+                <button class="btn btn-success" onclick="acceptChallenge()" id="acceptBtn" style="display: none;">
+                    JE PRENDS 💪
+                </button>
+                <button class="btn" onclick="passChallenge()" id="passBtn" style="display: none;">
+                    JE PASSE AU VOISIN ➡️
+                </button>
+                <button class="btn-nav" onclick="closeWheel()">
+                    FERMER
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POP-UP CHRONO INCIDENTS -->
+    <div class="popup-chrono" id="chronoPopup">
+        <div class="popup-content">
+            <h2 style="color: #fff; margin-bottom: 20px; font-size: 30px;">🚨 INCIDENT <span id="incidentNum">1</span>/5</h2>
+            <p style="color: #fff; font-size: 22px; margin-bottom: 20px;" id="chronoQuestion">Question...</p>
+            <div class="chrono-timer" id="chronoTimer">3:00</div>
+            <p style="color: #fff; font-size: 20px; margin-bottom: 15px;">Votre stratégie BBB complète:</p>
+            <textarea class="chrono-input" id="chronoInput" placeholder="Décrivez actions concrètes et phrases à dire..."></textarea>
+            <button class="btn btn-success" onclick="validateChrono()" style="font-size: 22px;">✓ VALIDER</button>
+            <p style="color: #fff; margin-top: 20px; font-size: 17px;">⚠️ Temps écoulé = -10 points</p>
+        </div>
+    </div>
+
+    <!-- POP-UP BON POINT BBB -->
+    <div class="bon-point-popup" id="bonPointPopup">
+        <div class="bon-point-content">
+            <h4 id="bonPointTitle">🏆 BON POINT BBB!</h4>
+            <div id="bonPointContent"></div>
+            <button class="btn btn-success" onclick="closeBonPoint()" style="font-size: 22px; margin-top: 20px;">✓ COMPRIS!</button>
+        </div>
+    </div>
+
+    <script>
+        let totalPoints = 0;
+        let chronoInterval = null;
+        let chronoSeconds = 180;
+        let bonPointsUnlocked = 0;
+        let incidentsResolved = 0;
+        let currentSectionId = 'briseglace';
+        let sectionHistory = ['briseglace'];
+
+        // Configuration du super bonus
+        const SCORE_MAX = 600;
+        const SEUIL_RATIO = 2/3;
+        const SEUIL_POINTS = Math.round(SCORE_MAX * SEUIL_RATIO);
+
+        const sectionOrder = [
+            'briseglace', 'cas1', 'incidents-intro', 
+            'incident1', 'incident2', 'incident3', 'incident4', 'incident5', 'incident6', 'incident7',
+            'pausecafe', 'chat-technique', 'malchance', 'bonus1', 'bonus2', 'final'
+        ];
+
+        // Données de la roue des défis
+        const wheelNames = [
+            'Amandine', 'Bruno', 'Christine', 'Delphine', 'Gilles', 'Jérôme', 
+            'Karine', 'Mélanie', 'Nadège', 'Nicolas', 'Paul-Marie', 'Sébastien',
+            'Séverine', 'Sophie', 'Stéphane', 'Ugo', 'Valéry'];
+
+        const challenges = [
+            "que faire quand la mayonnaise ne prend pas dans une visio et que vous avez tout essayé ?",
+            "quel est votre meilleur souvenir en visio ?",
+            "Quel est votre super-pouvoir d'animateur quand la technique vous lâche ?",
+            "Si votre webinaire était un film, lequel serait-ce ?",
+            "Quelle est la pire phrase que vous avez prononcée sans le vouloir pendant un micro resté ouvert ?",
+            "Quelle musique devrait se lancer automatiquement quand vous cliquez sur 'Démarrer la réunion' ?",
+            "Si votre public était un animal, lequel serait-il aujourd'hui ?",
+            "Que feriez-vous si un chat traverse l'écran d'un participant pendant votre présentation ?",
+            "Quelle fonctionnalité magique devrait exister dans BigBlueButton ?",
+            "Quelle est la 'bourde' d'animation que vous aimeriez pouvoir effacer de la mémoire collective ?",
+            "Si vous pouviez confier la modération à un personnage célèbre, qui choisiriez-vous ?",
+            "Quelle est votre astuce la plus improbable qui marche à chaque fois ?",
+            "Quelle serait la devise idéale des animateurs de webinaires ?"
+        ];
+
+        const chronoIncidents = [
+            "Connexion formateur coupée minute 35. Co-animateur absent. Que faites-vous avec les outils BBB pour maintenir l'engagement des 28 participants?",
+            "Un stagiaire écrit dans le chat public: 'Je ne comprends RIEN à ce que vous expliquez depuis 20 minutes!' Réaction immédiate?",
+            "Partage écran en cours: votre dossier 'Photos vacances maillot' apparaît en arrière-plan. Comment gérez-vous cette crise de crédibilité?",
+            "Vous posez une question au groupe → silence total pendant 25 secondes. Comment débloquez-vous la situation avec BBB?",
+            "Timer indique -5 min (dépassement). Il vous reste 8 slides importantes. Quelle action urgente avec les participants?"
+        ];
+
+        const bonPointsData = {
+            'cas1': {
+                title: "BON POINT BBB #1: Règle des segments courts",
+                steps: [
+                    "<strong>RÈGLE D'OR:</strong> Jamais plus de 12 min consécutives sans interaction BBB (seuil décrochage cognitif)",
+                    "<strong>ARSENAL BBB:</strong> Sondages express / Annotations tableau / Votes / Lever la main / Émojis réactions",
+                    "<strong>SUPPORTS VISUELS:</strong> Changez toutes les 3-4 étapes (slides → tableau → vidéo → sondage)",
+                    "<strong>RÉSULTAT:</strong> Attention soutenue = engagement continu et apprentissage efficace"
+                ]
+            },
+            'malchance': {
+                title: "BON POINT BBB #2: Co-animation fluide",
+                steps: [
+                    "<strong>PRÉPARATION:</strong> Toujours un co-animateur avec rôle Modérateur BBB actif",
+                    "<strong>SIGNAL CONVENU:</strong> Chat privé BBB 'GO' = passage main immédiat sans explication",
+                    "<strong>PHRASE TYPE:</strong> 'Marc/Julie prend le relais 30 secondes' (pas d'excuse ni justification)",
+                    "<strong>RÉSULTAT:</strong> Continuité parfaite = professionnalisme perçu par les participants"
+                ]
+            }
+        };
+
+        // Initialisation
+        function enterExperience() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('mainApp').classList.add('active');
+            updateProgress();
+
+            // Affichage du seuil bonus
+            const seuilEl = document.getElementById('seuilBonus');
+            if (seuilEl) seuilEl.textContent = SEUIL_POINTS + ' points';
+        }
+
+        // Mode animateur
+        function toggleModeAnimateur() {
+            const mode = document.getElementById('modeAnimateur');
+            mode.classList.toggle('active');
+        }
+
+        function launchSingleIncident(num) {
+            document.getElementById(`incBtn${num}`).disabled = true;
+            document.getElementById(`incBtn${num}`).style.opacity = '0.5';
+            showChronoWithIncident(num);
+        }
+
+        // Bonus vidéo
+        function showBonusVideo() {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('bonusVideo');
+            iframe.src = 'https://www.youtube.com/embed/IbKSShupNTE';
+            modal.classList.add('active');
+        }
+
+        function closeVideo() {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('bonusVideo');
+            iframe.src = '';
+            modal.classList.remove('active');
+        }
+
+        // Roue des défis
+        function createWheel() {
+            const wheel = document.getElementById('wheel');
+            wheel.innerHTML = '<div class="wheel-pointer"></div>';
+
+            const colors = ['#e74c3c', '#f39c12', '#27ae60', '#3498db', '#9b59b6', '#e67e22', '#2ecc71', '#34495e'];
+
+            wheelNames.forEach((name, index) => {
+                const segment = document.createElement('div');
+                segment.className = 'wheel-segment';
+                segment.textContent = name;
+                segment.style.background = colors[index % colors.length];
+                segment.style.transform = `rotate(${index * (360 / wheelNames.length)}deg)`;
+                wheel.appendChild(segment);
+            });
+        }
+
+        function showWheel() {
+            createWheel();
+            document.getElementById('wheelContainer').classList.add('active');
+        }
+
+        function closeWheel() {
+            document.getElementById('wheelContainer').classList.remove('active');
+        }
+
+        let isSpinning = false;
+        let currentRotation = 0;
+
+        function spinWheel() {
+            if (isSpinning) return;
+
+            isSpinning = true;
+            const wheel = document.getElementById('wheel');
+            const randomSpin = Math.random() * 1440 + 360; // 1-4 tours
+            currentRotation += randomSpin;
+
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+            wheel.style.transition = 'transform 3s cubic-bezier(0.25, 0.1, 0.25, 1)';
+            setTimeout(() => {
+                isSpinning = false;
+                const chosenName = wheelNames[Math.floor(Math.random() * wheelNames.length)];
+                const chosenChallenge = challenges[Math.floor(Math.random() * challenges.length)];
+                document.getElementById('challengeDisplay').innerHTML = `<p style="color:#fff;font-size:20px;">🎯 ${chosenName}, ${chosenChallenge}</p>`;
+                document.getElementById('acceptBtn').style.display = 'inline-block';
+                document.getElementById('passBtn').style.display = 'inline-block';
+            }, 3000);
+        }
+
+        function acceptChallenge() {
+            totalPoints += 20;
+            updatePoints();
+            closeWheel();
+        }
+
+        function passChallenge() {
+            closeWheel();
+        }
+
+        // Navigation entre sections
+        function nextSection(nextId = null) {
+            const current = document.getElementById(currentSectionId);
+            current.classList.add('hidden');
+
+            const currentIndex = sectionOrder.indexOf(currentSectionId);
+            const nextIndex = nextId ? sectionOrder.indexOf(nextId) : currentIndex + 1;
+            const nextSectionId = sectionOrder[nextIndex];
+
+            if (!nextSectionId) return;
+
+            currentSectionId = nextSectionId;
+            document.getElementById(currentSectionId).classList.remove('hidden');
+            updateProgress();
+        }
+
+        function previousSection() {
+            const current = document.getElementById(currentSectionId);
+            current.classList.add('hidden');
+
+            const currentIndex = sectionOrder.indexOf(currentSectionId);
+            const prevIndex = currentIndex > 0 ? currentIndex - 1 : 0;
+            currentSectionId = sectionOrder[prevIndex];
+
+            document.getElementById(currentSectionId).classList.remove('hidden');
+            updateProgress();
+        }
+
+        // Progression
+        function updateProgress() {
+            const progressBar = document.getElementById('progressBar');
+            const index = sectionOrder.indexOf(currentSectionId) + 1;
+            const total = sectionOrder.length;
+            const percent = (index / total) * 100;
+            progressBar.style.width = percent + '%';
+            progressBar.textContent = `Étape ${index}/${total}`;
+        }
+
+        // Validation Brise-glace
+        function validateBriseGlace() {
+            const input = document.getElementById('flowKeyword').value.trim();
+            if (input.length > 0) {
+                totalPoints += 50;
+                updatePoints();
+                nextSection();
+            } else {
+                alert('Veuillez entrer un mot-clé.');
+            }
+        }
+
+        // Gestion points
+        function updatePoints() {
+            document.getElementById('totalPoints').textContent = totalPoints;
+        }
+
+        // Quiz générique
+        function checkAnswer(sectionId, answerIndex, isCorrect) {
+            const options = document.querySelectorAll(`#${sectionId} .quiz-option`);
+            options.forEach(o => o.classList.remove('correct', 'incorrect'));
+            options[answerIndex - 1].classList.add(isCorrect ? 'correct' : 'incorrect');
+
+            if (isCorrect) {
+                totalPoints += 50;
+                bonPointsUnlocked++;
+                updatePoints();
+                if (bonPointsData[sectionId]) showBonPoint(sectionId);
+                setTimeout(() => nextSection(), 1500);
+            } else {
+                totalPoints -= 10;
+                updatePoints();
+            }
+        }
+
+        // Solutions incidents
+        function showSolution(num) {
+            const box = document.getElementById(`solution${num}`);
+            if (box) {
+                box.classList.add('active');
+                totalPoints += 30;
+                incidentsResolved++;
+                updatePoints();
+            }
+        }
+
+        // Affichage incidents
+        function showIncident(num) {
+            document.getElementById(currentSectionId).classList.add('hidden');
+            currentSectionId = 'incident' + num;
+            document.getElementById(currentSectionId).classList.remove('hidden');
+            updateProgress();
+        }
+
+        // Chrono incidents (simulateur)
+        function showChronoWithIncident(num) {
+            const popup = document.getElementById('chronoPopup');
+            document.getElementById('incidentNum').textContent = num;
+            document.getElementById('chronoQuestion').textContent = chronoIncidents[num - 1];
+            popup.classList.add('active');
+            chronoSeconds = 180;
+            updateChronoTimer();
+            chronoInterval = setInterval(() => {
+                chronoSeconds--;
+                updateChronoTimer();
+                if (chronoSeconds <= 0) {
+                    clearInterval(chronoInterval);
+                    popup.classList.remove('active');
+                    totalPoints -= 10;
+                    updatePoints();
+                }
+            }, 1000);
+        }
+
+        function updateChronoTimer() {
+            const minutes = Math.floor(chronoSeconds / 60);
+            const seconds = chronoSeconds % 60;
+            document.getElementById('chronoTimer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function validateChrono() {
+            clearInterval(chronoInterval);
+            document.getElementById('chronoPopup').classList.remove('active');
+            totalPoints += 40;
+            incidentsResolved++;
+            updatePoints();
+        }
+
+        // Bon points
+        function showBonPoint(sectionId) {
+            const popup = document.getElementById('bonPointPopup');
+            const data = bonPointsData[sectionId];
+            if (!data) return;
+            document.getElementById('bonPointTitle').innerHTML = data.title;
+            document.getElementById('bonPointContent').innerHTML = data.steps.map(s => `<div class='procedure-step'>${s}</div>`).join('');
+            popup.classList.add('active');
+        }
+
+        function closeBonPoint() {
+            document.getElementById('bonPointPopup').classList.remove('active');
+        }
+
+        // Final
+        function showFinal() {
+            document.getElementById(currentSectionId).classList.add('hidden');
+            currentSectionId = 'final';
+            document.getElementById('final').classList.remove('hidden');
+            updateProgress();
+            document.getElementById('finalScore').textContent = totalPoints;
+            document.getElementById('incidentsCount').textContent = incidentsResolved;
+            document.getElementById('bonPointsCount').textContent = bonPointsUnlocked;
+
+            if (totalPoints >= SEUIL_POINTS) {
+                document.getElementById('superBonus').classList.remove('hidden');
+            }
+            // lancer confettis sur la page finale
+            try{ if(typeof startConfetti === 'function') startConfetti(); }catch(e){}
+        }
+    </script>
+
+    <!-- Confetti canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        conçu par <span class="footer-credit">Améle Silvert</span>
+    </footer>
+
+    <script>
+    // Simple confetti implementation
+    (function(){
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let W, H, particles = [], raf=null;
+
+        function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function rand(min,max){ return Math.random()*(max-min)+min; }
+        function createParticles(count){
+            for(let i=0;i<count;i++){
+                particles.push({
+                    x: rand(0,W),
+                    y: rand(-H,0),
+                    r: rand(6,12),
+                    d: rand(1,10),
+                    color: `hsl(${Math.floor(rand(0,360))},70%,50%)`,
+                    tilt: rand(-0.1,0.1),
+                    tiltAngle: 0
+                });
+            }
+        }
+
+        function draw(){
+            ctx.clearRect(0,0,W,H);
+            particles.forEach(p=>{
+                p.tiltAngle += p.tilt;
+                p.y += Math.cos(p.d) + 2 + p.r/10;
+                p.x += Math.sin(p.d);
+                p.tilt = Math.sin(p.tiltAngle) * 0.2;
+                ctx.save();
+                ctx.fillStyle = p.color;
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.tilt);
+                ctx.fillRect(-p.r/2, -p.r/2, p.r, p.r*1.5);
+                ctx.restore();
+            });
+            particles = particles.filter(p => p.y < H + 50);
+            if(particles.length===0){ stopConfetti(); }
+        }
+
+        function loop(){ draw(); raf = requestAnimationFrame(loop); }
+
+        function startConfetti(){
+            particles = []; createParticles(120);
+            canvas.style.display = 'block';
+            if(!raf) loop();
+            setTimeout(()=>{ canvas.style.display='none'; }, 5000);
+        }
+        function stopConfetti(){ if(raf){ cancelAnimationFrame(raf); raf=null; } }
+
+        window.startConfetti = startConfetti;
+    })();
+    </script>
+
+</body>
+</html>
