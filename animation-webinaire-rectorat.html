@@ -1,0 +1,1528 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Console Animation - Formation Expert Formateur BBB</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --bg-dark: #0f172a;
+  --bg-panel: #1e293b;
+  --bg-card: #334155;
+  --accent: #3b82f6;
+  --accent-dark: #2563eb;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --purple: #8b5cf6;
+  --gold: #fbbf24;
+  --text: #f1f5f9;
+  --text-muted: #cbd5e1;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  height: 100vh;
+  gap: 0;
+}
+
+/* CONSOLE */
+.console {
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(59, 130, 246, 0.2);
+  overflow-y: auto;
+  padding: 24px;
+  box-shadow: 4px 0 40px rgba(0, 0, 0, 0.3);
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.console::-webkit-scrollbar {
+  width: 6px;
+}
+
+.console::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.console::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+.console-header {
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  padding: 24px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+}
+
+.console-header h1 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.score-display {
+  font-size: 48px;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.control-section {
+  background: rgba(51, 65, 85, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.control-section:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+.control-section h3 {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-console {
+  width: 100%;
+  padding: 14px 18px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-console::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn-console:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-console span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn-nav {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn-nav:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+}
+
+.btn-nav:active {
+  transform: translateY(-1px);
+}
+
+.btn-incident {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-incident:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+}
+
+.btn-incident:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-action {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.btn-action:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+}
+
+.btn-chance {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #000;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+}
+
+.btn-chance:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.5);
+}
+
+.btn-malchance {
+  background: linear-gradient(135deg, #64748b, #475569);
+  color: white;
+  box-shadow: 0 4px 15px rgba(100, 116, 139, 0.3);
+}
+
+.btn-malchance:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(100, 116, 139, 0.5);
+}
+
+.timer-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+}
+
+.timer-display {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--warning);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 2px;
+}
+
+.timer-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.timer-btn {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.timer-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+/* CONTENT AREA */
+.content-area {
+  background: linear-gradient(135deg, #1e3a5f 0%, #2d5a7b 50%, #3a7ca5 100%);
+  overflow-y: auto;
+  padding: 40px;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.content-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content-area::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 10px;
+}
+
+.content-section {
+  max-width: 1100px;
+  margin: 0 auto 40px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 40px;
+  display: none;
+  animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.content-section.active {
+  display: block;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.content-section h1 {
+  color: #fbbf24;
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 32px;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.content-section h2 {
+  color: var(--accent);
+  font-size: 32px;
+  font-weight: 700;
+  margin: 32px 0 20px;
+  letter-spacing: -0.3px;
+}
+
+.content-section h3 {
+  color: #fbbf24;
+  font-size: 26px;
+  font-weight: 600;
+  margin: 24px 0 16px;
+}
+
+.content-section h4 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 20px 0 12px;
+}
+
+.content-section p,
+.content-section li {
+  font-size: 17px;
+  line-height: 1.8;
+  margin-bottom: 16px;
+  color: var(--text-muted);
+}
+
+.content-section ul,
+.content-section ol {
+  margin-left: 28px;
+}
+
+.content-section strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.flow-box {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(124, 58, 237, 0.1));
+  border: 2px solid rgba(139, 92, 246, 0.4);
+  border-radius: 20px;
+  padding: 28px;
+  margin: 24px 0;
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+}
+
+.flow-box h4 {
+  color: var(--purple);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.success-box {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1));
+  border: 2px solid rgba(16, 185, 129, 0.4);
+  border-radius: 20px;
+  padding: 28px;
+  margin: 24px 0;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+}
+
+.success-box h4 {
+  color: var(--success);
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+/* ACCORDION */
+.accordion {
+  margin: 24px 0;
+}
+
+.accordion-item {
+  background: rgba(51, 65, 85, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.accordion-item:hover {
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.accordion-header {
+  background: rgba(239, 68, 68, 0.15);
+  padding: 20px 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.accordion-header:hover {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+.accordion-header h4 {
+  color: var(--danger);
+  font-size: 19px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.accordion-icon {
+  font-size: 20px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-item.active .accordion-icon {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0 24px;
+}
+
+.accordion-item.active .accordion-content {
+  max-height: 3000px;
+  padding: 24px;
+}
+
+.solution-box {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1));
+  border: 2px solid rgba(16, 185, 129, 0.4);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 20px 0;
+  display: none;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+}
+
+.solution-box.revealed {
+  display: block;
+  animation: slideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.solution-box h4 {
+  color: var(--success);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.btn-reveal {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 20px 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-reveal:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+}
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  margin: 24px 0;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+}
+
+canvas#confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* MODALS */
+.modal-incident,
+.modal-carte {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  place-items: center;
+}
+
+.modal-incident.active,
+.modal-carte.active {
+  display: grid;
+}
+
+.modal-incident-content,
+.carte-content {
+  background: linear-gradient(135deg, #334155, #1e293b);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  padding: 48px;
+  max-width: 700px;
+  text-align: center;
+  color: white;
+  animation: modalIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-incident-content {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+@keyframes modalIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-incident-content h3,
+.carte-content h3 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+
+.modal-incident-content p,
+.carte-content p {
+  font-size: 19px;
+  margin: 20px 0;
+  line-height: 1.6;
+}
+
+.chrono-timer {
+  font-size: 80px;
+  font-weight: 800;
+  margin: 24px 0;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  font-variant-numeric: tabular-nums;
+}
+
+.incident-input {
+  width: 100%;
+  min-height: 120px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  resize: vertical;
+  margin: 20px 0;
+  transition: all 0.3s ease;
+}
+
+.incident-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.incident-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-modal {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 16px 36px;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  margin: 12px 8px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-modal:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+}
+
+.carte-content.chance {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #000;
+}
+
+.carte-content.malchance {
+  background: linear-gradient(135deg, #64748b, #475569);
+  color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .console {
+    height: auto;
+    max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+  }
+
+  .content-section {
+    padding: 28px;
+  }
+
+  .content-section h1 {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 640px) {
+  .console {
+    padding: 16px;
+  }
+
+  .content-area {
+    padding: 20px;
+  }
+
+  .content-section {
+    padding: 20px;
+  }
+
+  .modal-incident-content,
+  .carte-content {
+    padding: 32px 24px;
+    margin: 20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div class="main-layout">
+  <!-- CONSOLE ANIMATEUR -->
+  <div class="console">
+    <div class="console-header">
+      <h1>🎙️ Console Animateur</h1>
+      <div class="score-display"><span id="totalPoints">0</span> pts</div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="control-section">
+      <h3>🧭 Navigation</h3>
+      <button class="btn-console btn-nav" onclick="goToSection('briseglace')">
+        <span>❄️ Brise-glace</span>
+      </button>
+      <button class="btn-console btn-nav" onclick="goToSection('cas')">
+        <span>🎮 Cas d'école</span>
+      </button>
+      <button class="btn-console btn-nav" onclick="goToSection('incidents')">
+        <span>⚠️ Galerie incidents</span>
+      </button>
+      <button class="btn-console btn-nav" onclick="goToSection('success')">
+        <span>✨ Success stories</span>
+      </button>
+      <button class="btn-console btn-nav" onclick="goToSection('pausecafe')">
+        <span>☕ Pause café</span>
+      </button>
+      <button class="btn-console btn-nav" onclick="goToSection('bonus')">
+        <span>🎁 Bonus</span>
+      </button>
+      <button class="btn-console btn-nav" onclick="goToSection('recap')">
+        <span>📋 Récapitulatif</span>
+      </button>
+    </div>
+
+    <!-- Chronomètre -->
+    <div class="control-section">
+      <h3>⏱️ Chronomètre 90'</h3>
+      <div class="timer-control">
+        <div class="timer-display" id="timerDisplay">90:00</div>
+        <div class="timer-btns">
+          <button class="timer-btn" id="startTimer">▶️</button>
+          <button class="timer-btn" id="pauseTimer">⏸️</button>
+          <button class="timer-btn" id="resetTimer">🔄</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 Incidents -->
+    <div class="control-section">
+      <h3>🚨 5 Incidents</h3>
+      <button class="btn-console btn-incident" onclick="launchIncident(1)" id="incBtn1">
+        <span>🌐 Incident 1</span><span>+40pts</span>
+      </button>
+      <button class="btn-console btn-incident" onclick="launchIncident(2)" id="incBtn2">
+        <span>⏰ Incident 2</span><span>+40pts</span>
+      </button>
+      <button class="btn-console btn-incident" onclick="launchIncident(3)" id="incBtn3">
+        <span>🖼️ Incident 3</span><span>+30pts</span>
+      </button>
+      <button class="btn-console btn-incident" onclick="launchIncident(4)" id="incBtn4">
+        <span>😤 Incident 4</span><span>+30pts</span>
+      </button>
+      <button class="btn-console btn-incident" onclick="launchIncident(5)" id="incBtn5">
+        <span>🤐 Incident 5</span><span>+40pts</span>
+      </button>
+    </div>
+
+    <!-- Cartes -->
+    <div class="control-section">
+      <h3>🃏 Cartes</h3>
+      <button class="btn-console btn-chance" onclick="showCarte('chance')">
+        <span>🍀 CARTE CHANCE</span>
+      </button>
+      <button class="btn-console btn-malchance" onclick="showCarte('malchance')">
+        <span>☠️ CARTE MALCHANCE</span>
+      </button>
+    </div>
+
+    <!-- Actions -->
+    <div class="control-section">
+      <h3>⚡ Actions</h3>
+      <button class="btn-console btn-action" onclick="addPoints(50, 'Action rapide')">
+        <span>+50 points</span>
+      </button>
+      <button class="btn-console btn-action" onclick="spawnConfetti(200)">
+        <span>🎊 Confettis</span>
+      </button>
+      <button class="btn-console btn-action" onclick="resetScore()">
+        <span>🔄 Reset</span>
+      </button>
+    </div>
+
+    <button class="btn-console btn-nav" onclick="downloadFile()" style="margin-top:20px;">
+      <span>⬇️ Télécharger console</span>
+    </button>
+  </div>
+
+  <!-- CONTENU -->
+  <div class="content-area">
+
+    <!-- BRISE-GLACE -->
+    <div id="briseglace" class="content-section active">
+      <h1>❄️ Brise-glace</h1>
+
+      <div class="flow-box">
+        <h4>🌊 QU'EST-CE QU'UN WEBINAIRE QUI A DU FLOW?</h4>
+        <p><strong>Mihaly Csikszentmihalyi (1975, 1990)</strong> définit le flow comme un état d'immersion totale où:</p>
+        <ul>
+          <li><strong>Défi et compétence s'équilibrent</strong></li>
+          <li><strong>Objectifs clairs</strong></li>
+          <li><strong>Feedback immédiat</strong></li>
+          <li><strong>Concentration totale</strong></li>
+          <li><strong>Contrôle perçu</strong></li>
+        </ul>
+      </div>
+
+      <h3>💬 Question au groupe:</h3>
+      <p>En un mot, qu'est-ce qui fait qu'un webinaire décolle plutôt que de patiner?</p>
+      <p style="background:rgba(59,130,246,0.2); padding:18px; border-radius:12px; border:2px solid var(--accent); margin-top:20px;">
+        <strong>👉 Répondez dans le tchat BBB</strong>
+      </p>
+    </div>
+
+    <!-- CAS D'ÉCOLE -->
+    <div id="cas" class="content-section">
+      <h1>🎮 Cas d'école</h1>
+
+      <div style="background:rgba(100,116,139,0.25); border:2px solid #64748b; border-radius:16px; padding:24px; margin:24px 0;">
+        <h4 style="color:#94a3b8;">CAS A: Émilie</h4>
+        <p>Formation IA pour 32 enseignants. 47 slides en 85 min. Aucune interaction BBB.</p>
+        <p style="color:#ef4444;"><strong>Résultat:</strong> 18 déconnexions, chat vide.</p>
+      </div>
+
+      <div style="background:rgba(16,185,129,0.25); border:2px solid #10b981; border-radius:16px; padding:24px; margin:24px 0;">
+        <h4 style="color:#10b981;">CAS B: Marc & Julie</h4>
+        <p>Duo formateurs. Alternance 8 min apport / 4 min activité BBB. Changement supports toutes les 10 min.</p>
+        <p style="color:#10b981;"><strong>Résultat:</strong> 94% participation, 12 productions collaboratives.</p>
+      </div>
+
+      <div style="background:rgba(16,185,129,0.25); border:2px solid #10b981; border-radius:16px; padding:24px; margin:24px 0;">
+        <h4 style="color:#10b981;">CAS C: Laura - Formatrice ludopédagogue (Académie Créteil)</h4>
+        <p><strong>Contexte:</strong> "Évaluer autrement" pour 24 profs collège. 90 min BBB format escape game pédagogique.</p>
+        <p><strong>Animation:</strong> Structure en 5 énigmes. Chaque résolution débloque une ressource. Breakout rooms 3 groupes de 8. Indices distillés dans le chat. Tableau blanc collaboratif pour mutualiser. Timer visible avec musique d'ambiance.</p>
+        <p style="color:#10b981;"><strong>Résultats:</strong> 98% engagement actif. Tous les groupes ont terminé. "C'était dingue, j'ai appris sans m'en rendre compte!"</p>
+      </div>
+
+      <div style="background:rgba(100,116,139,0.25); border:2px solid #64748b; border-radius:16px; padding:24px; margin:24px 0;">
+        <h4 style="color:#94a3b8;">CAS D: Vincent - Formateur storyteller (INSPE Bordeaux)</h4>
+        <p><strong>Contexte:</strong> "Neurosciences et apprentissage" pour 30 professeurs stagiaires. 2h BBB format webinaire-feuilleton.</p>
+        <p><strong>Animation:</strong> Structure narrative complexe en 3 "épisodes". Histoire d'un enseignant fictif confronté à différents défis. Slides très esthétiques. Interactions prévues mais noyées dans le storytelling élaboré.</p>
+        <p style="color:#94a3b8;"><strong>Résultats:</strong> "Trop compliqué à suivre", "on se perd dans l'histoire", 11 déconnexions. Contenu riche mais forme inadaptée.</p>
+      </div>
+
+      <h3>💡 Analyse comparative:</h3>
+      <p>Deux formats créatifs (Laura vs Vincent), deux résultats opposés. Qu'est-ce qui explique cette différence ?</p>
+
+      <button class="btn-reveal" onclick="revealSolution('solutionCasCD')">🔓 VOIR L'ANALYSE</button>
+
+      <div class="solution-box" id="solutionCasCD">
+        <h4>✅ ANALYSE DÉTAILLÉE</h4>
+        <p><strong>Ce qui a fonctionné chez Laura (escape game):</strong></p>
+        <ul>
+          <li><strong>Gamification claire</strong>: Objectif compréhensible dès le départ (résoudre 5 énigmes)</li>
+          <li><strong>Collaboration active</strong>: Breakout rooms avec rôles définis dans chaque groupe</li>
+          <li><strong>Rythme soutenu</strong>: Timer + progression visible = engagement maximum</li>
+          <li><strong>Apprentissage indirect</strong>: Les participants apprennent EN jouant, pas AVANT de jouer</li>
+        </ul>
+
+        <p style="margin-top:15px;"><strong>Ce qui a coincé chez Vincent (feuilleton):</strong></p>
+        <ul>
+          <li><strong>Complexité cognitive excessive</strong>: Suivre une narration + comprendre le contenu = surcharge</li>
+          <li><strong>Forme > Fond</strong>: Le storytelling a pris le dessus sur l'apprentissage</li>
+          <li><strong>Passivité induite</strong>: Les participants écoutent l'histoire au lieu d'agir</li>
+          <li><strong>Ambition narrative inadaptée</strong>: Un feuilleton nécessite plusieurs sessions, pas une seule</li>
+        </ul>
+
+        <p style="margin-top:15px;"><strong>La leçon BBB:</strong></p>
+        <p>Les formats créatifs fonctionnent quand ils SERVENT l'apprentissage, pas quand ils le REMPLACENT. Laura a utilisé le jeu comme VÉHICULE du contenu. Vincent a utilisé le contenu comme DÉCOR de l'histoire.</p>
+
+        <p style="margin-top:15px; font-weight:bold; color:#fbbf24;">Règle d'or: En webinaire, la PARTICIPATION bat toujours la NARRATION.</p>
+      </div>
+    </div>
+
+    <!-- GALERIE INCIDENTS -->
+    <div id="incidents" class="content-section">
+      <h1>⚠️ Galerie des Incidents</h1>
+
+      <div class="accordion">
+
+        <!-- Incident 1 -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h4>⏰ Le stagiaire en boucle temporelle</h4>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Situation:</strong> Un participant a manifestement un souci de micro. Il tente de parler, personne ne l'entend, alors il quitte la visio, revient, reparle, repart… trois, quatre, cinq fois. À chaque retour, il répète la même phrase : "Vous m'entendez, là ? Non ?". Pendant ce temps, le chat se remplit de messages d'encouragement et de compassion collective.</p>
+            <button class="btn-reveal" onclick="revealSolution('solution1')">🔓 VOIR LA SOLUTION</button>
+            <div class="solution-box" id="solution1">
+              <h4>✅ SOLUTION</h4>
+              <p><strong>Ce que l'animateur doit gérer:</strong></p>
+              <ul>
+                <li>Garder la concentration du groupe sans humilier la personne</li>
+                <li>Trouver une solution technique tout en poursuivant la séance</li>
+                <li>Préserver une atmosphère bienveillante, sans que la situation tourne au sketch permanent</li>
+              </ul>
+              <p style="margin-top:15px;"><strong>Actions concrètes BBB:</strong></p>
+              <ul>
+                <li>Message privé immédiat: "Essayez de couper/rallumer votre micro ou changez d'appareil"</li>
+                <li>Proposer le chat comme alternative temporaire</li>
+                <li>Continuer la session sans attendre, revenir vers la personne ensuite</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Incident 2 -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h4>🖼️ Le fond d'écran militant</h4>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Situation:</strong> Une participante partage son écran pour montrer une activité numérique… mais son fond d'écran affiche un slogan politique animé. Rien d'insultant, mais le message crée un petit malaise dans le groupe.</p>
+            <button class="btn-reveal" onclick="revealSolution('solution2')">🔓 VOIR LA SOLUTION</button>
+            <div class="solution-box" id="solution2">
+              <h4>✅ SOLUTION</h4>
+              <p><strong>Ce que l'animateur doit gérer:</strong></p>
+              <ul>
+                <li>Neutraliser la tension sans étouffer l'expression personnelle</li>
+                <li>Rappeler le cadre professionnel sans prendre parti</li>
+              </ul>
+              <p style="margin-top:15px;"><strong>Actions concrètes BBB:</strong></p>
+              <ul>
+                <li>Avec humour et légèreté : "Ah, fond d'écran expressif ! Pour la suite, on privilégie le contenu neutre"</li>
+                <li>Rappeler en chat: "Pensez à des fonds neutres lors de partages d'écran"</li>
+                <li>Passer rapidement au contenu pour dédramatiser</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Incident 3 -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h4>👻 Le participant fantôme</h4>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Situation:</strong> Un enseignant s'est connecté en avance, caméra coupée, micro coupé… et ne réagit à aucun appel. Après vingt minutes, il envoie dans le chat : "Je suis là depuis le début, j'écoute. C'est passionnant." Sauf qu'il n'est pas inscrit à la formation.</p>
+            <button class="btn-reveal" onclick="revealSolution('solution3')">🔓 VOIR LA SOLUTION</button>
+            <div class="solution-box" id="solution3">
+              <h4>✅ SOLUTION</h4>
+              <p><strong>Ce que l'animateur doit gérer:</strong></p>
+              <ul>
+                <li>Gérer la présence inattendue sans embarrasser la personne</li>
+                <li>Préserver la sécurité du groupe et le cadre administratif</li>
+              </ul>
+              <p style="margin-top:15px;"><strong>Actions concrètes BBB:</strong></p>
+              <ul>
+                <li>Message privé: "Ravi de votre intérêt ! Pourriez-vous vous inscrire officiellement pour les prochaines sessions ?"</li>
+                <li>Vérifier la liste des inscrits en début de session</li>
+                <li>Option: autoriser l'accès ponctuel mais demander inscription formelle</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Incident 4 -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h4>📊 Le duo d'écran rebelle</h4>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Situation:</strong> Deux collègues connectés depuis la même salle ont chacun leur micro ouvert. Un écho monstrueux envahit la visio. Tout le monde leur écrit dans le chat : "Un seul micro !!", mais ils ne lisent rien. L'animateur devient chef d'orchestre d'un concert cacophonique.</p>
+            <button class="btn-reveal" onclick="revealSolution('solution4')">🔓 VOIR LA SOLUTION</button>
+            <div class="solution-box" id="solution4">
+              <h4>✅ SOLUTION</h4>
+              <p><strong>Ce que l'animateur doit gérer:</strong></p>
+              <ul>
+                <li>Faire cesser l'écho sans agacer les participants</li>
+                <li>Reprendre la dynamique après la coupure</li>
+              </ul>
+              <p style="margin-top:15px;"><strong>Actions concrètes BBB:</strong></p>
+              <ul>
+                <li>Couper les micros des deux participants (droit modérateur BBB)</li>
+                <li>Message chat public: "@Nom1 et @Nom2 : un seul micro pour vous deux SVP"</li>
+                <li>Relancer avec humour: "Bon, on reprend sans orchestre philharmonique !"</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Incident 5 -->
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h4>🦖 Le moment d'intrusion poétique</h4>
+            <span class="accordion-icon">▼</span>
+          </div>
+          <div class="accordion-content">
+            <p><strong>Situation:</strong> Alors qu'un formateur parle d'évaluation par compétences, son enfant entre à l'écran déguisé en dinosaure et rugit avec conviction. Silence général, puis rires.</p>
+
+            <div style="margin:20px 0; background:rgba(139,92,246,0.15); border:2px solid #8b5cf6; border-radius:16px; padding:24px;">
+              <h4 style="color:#8b5cf6;">🎬 VIDÉO CULTE BBC</h4>
+              <p>Le fail visio le plus célèbre :</p>
+              <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/Mh4f9AYRCZY" frameborder="0" allowfullscreen></iframe>
+              </div>
+              <p style="color:#94a3b8; font-size:14px; margin-top:10px;">BBC News - Mars 2017 - 50M vues</p>
+            </div>
+
+            <button class="btn-reveal" onclick="revealSolution('solution5')">🔓 VOIR LA SOLUTION</button>
+            <div class="solution-box" id="solution5">
+              <h4>✅ SOLUTION</h4>
+              <p><strong>Ce que l'animateur doit gérer:</strong></p>
+              <ul>
+                <li>Garder la bienveillance et l'humour sans perdre la maîtrise du temps</li>
+                <li>Utiliser l'incident comme respiration collective</li>
+              </ul>
+              <p style="margin-top:15px;"><strong>Actions concrètes BBB:</strong></p>
+              <ul>
+                <li>Réagir avec humour: "Merci T-Rex pour cette intervention ! On reprend l'évaluation par compétences..."</li>
+                <li>Utiliser comme brise-glace improvisé: "Levez la main si vous avez aussi des T-Rex à la maison !"</li>
+                <li>Reprendre rapidement le fil pour ne pas perdre le timing</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SUCCESS STORIES -->
+    <div id="success" class="content-section">
+      <h1>✨ Success Stories</h1>
+
+      <div class="success-box">
+        <h4>🏆 MARIE: Variation parfaite</h4>
+        <p><strong>Défi:</strong> Webinaire 2h sur gestion de projet</p>
+        <p><strong>Solution:</strong> Variation toutes les 20 min</p>
+        <ul>
+          <li>⏱️ 0-20 min: Brise-glace Wooclap + présentation</li>
+          <li>⏱️ 20-40 min: Sondage → Breakout rooms</li>
+          <li>⏱️ 40-45 min: Énergizer quiz</li>
+          <li>⏱️ 45-65 min: Démo → Tableau blanc</li>
+          <li>⏱️ 65-90 min: Quiz récap → Plan d'action</li>
+        </ul>
+        <p style="color:#fbbf24; font-weight:bold;">🎉 Résultat: 95% satisfaction, ZÉRO décrochage</p>
+      </div>
+
+      <div class="success-box">
+        <h4>🏆 THOMAS: Chaos transformé</h4>
+        <p><strong>Défi:</strong> Chien qui aboie + enfant qui crie + camion poubelle</p>
+        <p><strong>Réaction:</strong> "Wow, on a le trio gagnant! Bonjour le chien, coucou le petit, bravo au camion!"</p>
+        <p style="color:#fbbf24; font-weight:bold;">🎉 Résultat: Tout le monde a ri, participation EXPLOSIVE après</p>
+      </div>
+
+      <div class="success-box">
+        <h4>🏆 SOPHIE: Partage sécurisé</h4>
+        <p><strong>Défi:</strong> Partage d'écran sans incident</p>
+        <p><strong>Solution:</strong></p>
+        <ul>
+          <li>Partage UNE fenêtre spécifique (PDF)</li>
+          <li>Bureau propre, notifications OFF</li>
+          <li>Fond d'écran neutre</li>
+        </ul>
+        <p style="color:#fbbf24; font-weight:bold;">🎉 Résultat: Présentation fluide, 100% professionnel</p>
+      </div>
+
+      <h2>💡 Points communs:</h2>
+      <ul>
+        <li><strong>Préparation</strong>: Anticiper les problèmes</li>
+        <li><strong>Adaptation</strong>: Rebondir avec humour</li>
+        <li><strong>Outils</strong>: Maîtriser BBB et alternatives</li>
+        <li><strong>Rythme</strong>: Variation toutes les 15-20 min</li>
+      </ul>
+    </div>
+
+    <!-- PAUSE CAFÉ -->
+    <div id="pausecafe" class="content-section">
+      <h1>☕ Pause Café - Minute 45</h1>
+
+      <div class="flow-box">
+        <h4>⏸️ PAUSE STRATÉGIQUE</h4>
+        <p>Après 45 minutes, le cerveau a besoin de consolider. Préparez toujours une diapo "PAUSE" avec timer BBB 5 min.</p>
+        <p style="margin-top:15px;"><strong>Pourquoi c'est essentiel:</strong></p>
+        <ul>
+          <li>Consolidation de la mémoire</li>
+          <li>Récupération de l'attention</li>
+          <li>Moment social (chat informel)</li>
+          <li>Préparation pour la suite</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BONUS -->
+    <div id="bonus" class="content-section">
+      <div style="background:linear-gradient(135deg, #f59e0b, #ea580c); border:4px solid rgba(255,255,255,0.3); border-radius:20px; padding:40px; text-align:center; box-shadow: 0 20px 60px rgba(245,158,11,0.3);">
+        <h1 style="color:white;">🎁 BONUS DÉBLOQUÉS</h1>
+        <p style="font-size:24px; color:white; margin:24px 0;">
+          Outils professionnels pour vos webinaires
+        </p>
+        <div style="margin:32px 0;">
+          <a href="https://silverteacher.github.io/outils-gestion-webinaires.html" target="_blank" class="btn-modal">
+            🚀 Outil Scénarisation
+          </a>
+          <a href="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2022/01/Guide-pratique-BBB.pdf" target="_blank" class="btn-modal" style="margin-left:10px;">
+            📖 Guide BBB PDF
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RÉCAPITULATIF -->
+    <div id="recap" class="content-section">
+      <h1>📋 Récapitulatif du Webinaire</h1>
+
+      <div class="flow-box">
+        <h4>🎯 CE QUE VOUS AVEZ APPRIS</h4>
+        <p><strong>1. THÉORIE DU FLOW</strong> (Csikszentmihalyi)</p>
+        <ul>
+          <li>Équilibre défi/compétence</li>
+          <li>Objectifs clairs + feedback immédiat</li>
+          <li>Application aux webinaires BBB</li>
+        </ul>
+
+        <p style="margin-top:20px;"><strong>2. CAS D'ÉCOLE ANALYSÉS</strong></p>
+        <ul>
+          <li>Émilie (échec): 47 slides sans interaction → 18 déconnexions</li>
+          <li>Marc & Julie (succès): Alternance 8/4 min → 94% participation</li>
+          <li>Laura (succès): Escape game pédagogique → 98% engagement</li>
+          <li>Vincent (échec): Feuilleton narratif → 11 déconnexions</li>
+        </ul>
+
+        <p style="margin-top:20px;"><strong>3. LES 5 INCIDENTS MAÎTRISÉS</strong></p>
+        <ul>
+          <li>⏰ Stagiaire en boucle temporelle → Message privé + chat alternatif</li>
+          <li>🖼️ Fond d'écran militant → Rappel neutre avec humour</li>
+          <li>👻 Participant fantôme → Vérification inscriptions + message privé</li>
+          <li>📊 Duo d'écran rebelle → Couper micros (modérateur BBB)</li>
+          <li>🦖 Intrusion poétique → Humour + respiration collective</li>
+        </ul>
+
+        <p style="margin-top:20px;"><strong>4. SUCCESS STORIES</strong></p>
+        <ul>
+          <li>Marie: 5 variations en 2h → 95% satisfaction</li>
+          <li>Thomas: Chaos → Humour → Participation explosive</li>
+          <li>Sophie: Partage sécurisé → 100% professionnel</li>
+        </ul>
+
+        <p style="margin-top:20px;"><strong>5. OUTILS ESSENTIELS</strong></p>
+        <ul>
+          <li>BigBlueButton (sondages, breakout, tableau blanc)</li>
+          <li>Wooclap (interactions gamifiées)</li>
+          <li>Genially / Canva (présentations interactives)</li>
+          <li>Miro (collaboration visuelle)</li>
+        </ul>
+      </div>
+
+      <h2>🎓 Compétences acquises</h2>
+      <div style="background:rgba(16,185,129,0.2); border:2px solid var(--success); border-radius:16px; padding:24px; margin:24px 0;">
+        <p style="color:#10b981; font-size:20px; margin-bottom:15px;"><strong>✅ Vous savez maintenant:</strong></p>
+        <ul>
+          <li>Scénariser selon position (début/milieu/fin)</li>
+          <li>Varier toutes les 15-20 minutes</li>
+          <li>Gérer incidents techniques avec plan B</li>
+          <li>Débloquer le silence avec questions structurées</li>
+          <li>Accueillir le chaos avec humour</li>
+          <li>Sécuriser partages d'écran</li>
+          <li>Analyser cas réels et success stories</li>
+          <li>Choisir des formats créatifs qui servent l'apprentissage</li>
+        </ul>
+      </div>
+
+      <h2>📚 Ressources scientifiques</h2>
+      <ul>
+        <li>Csikszentmihalyi - Flow: Psychology of Optimal Experience</li>
+        <li>Dehaene - Les 4 piliers de l'apprentissage</li>
+        <li>Mackworth - Courbe d'attention (1948)</li>
+        <li>Sweller - Théorie de la charge cognitive</li>
+      </ul>
+
+      <h2>🚀 Plan d'action post-formation</h2>
+      <ol>
+        <li><strong>Dans les 24h:</strong> Télécharger template et adapter au prochain webinaire</li>
+        <li><strong>Cette semaine:</strong> Tester UN outil (BBB sondages ou Wooclap)</li>
+        <li><strong>Dans le mois:</strong> Animer avec variation 15-20 min</li>
+        <li><strong>Long terme:</strong> Constituer bibliothèque de brise-glaces</li>
+      </ol>
+
+      <div style="background:linear-gradient(135deg, #fbbf24, #f59e0b); border:4px solid #ea580c; border-radius:20px; padding:32px; margin:32px 0; text-align:center; box-shadow: 0 20px 60px rgba(251,191,36,0.4);">
+        <h3 style="color:#000; font-size:32px; font-weight:800;">🏆 FÉLICITATIONS!</h3>
+        <p style="color:#000; font-size:20px; margin:24px 0;">
+          Score final: <strong id="finalScore">0</strong> points<br>
+          Incidents résolus: <strong id="finalIncidents">0</strong>/5
+        </p>
+        <p style="color:#000; font-size:17px;">
+          Vous maîtrisez maintenant la scénarisation de webinaires BBB!
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL INCIDENT -->
+<div class="modal-incident" id="incidentModal">
+  <div class="modal-incident-content">
+    <h3 id="incidentTitle">🚨 INCIDENT</h3>
+    <p id="incidentDescription">Description...</p>
+    <div class="chrono-timer" id="chronoDisplay">3:00</div>
+    <p>Votre stratégie BBB:</p>
+    <textarea class="incident-input" id="incidentInput" placeholder="Actions concrètes et phrases à dire..."></textarea>
+    <button class="btn-modal" onclick="validateIncident()">✓ VALIDER</button>
+    <button class="btn-modal" onclick="closeIncidentModal()" style="background:#64748b;">✕ ANNULER</button>
+  </div>
+</div>
+
+<!-- MODAL CARTE -->
+<div class="modal-carte" id="carteModal">
+  <div class="carte-content" id="carteContent">
+    <h3 id="carteTitle">CARTE</h3>
+    <p id="carteText"></p>
+    <textarea class="incident-input" id="carteInput" placeholder="Votre solution..." style="display:none;"></textarea>
+    <div id="carteButtons">
+      <button class="btn-modal" onclick="validateCarte()">✓ VALIDER RÉPONSE</button>
+      <button class="btn-modal" onclick="closeCarte()" style="background:#64748b;">✕ ANNULER</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// State
+let totalPoints = 0;
+let incidentsResolved = 0;
+let timer = null;
+let remaining = 90*60;
+let chronoTimer = null;
+let chronoSeconds = 180;
+let currentIncidentNum = 0;
+let currentCarteType = '';
+
+const incidentData = [
+  {
+    title: '🌐 INCIDENT 1: Connexion lente',
+    description: 'Alerte connexion lente, impossible d\'afficher le support. Les participants attendent... Que faites-vous avec BBB?'
+  },
+  {
+    title: '⏰ INCIDENT 2: Retardataire bavard',
+    description: 'Un stagiaire arrive en retard et pose des tas de questions dans le tchat. Comment gérez-vous la situation?'
+  },
+  {
+    title: '🖼️ INCIDENT 3: Partage écran trop rapide',
+    description: 'Partage d\'écran trop rapide, photos de famille révélées et après-midi à la plage. Comment réagissez-vous?'
+  },
+  {
+    title: '😤 INCIDENT 4: Stagiaire énervé',
+    description: 'Un stagiaire écrit dans le chat public BBB: "Je ne comprends RIEN à ce que vous expliquez depuis 20 minutes!" Comment réagissez-vous immédiatement?'
+  },
+  {
+    title: '🤐 INCIDENT 5: Silence total',
+    description: 'Vous posez une question au groupe → silence total pendant 25 secondes. Comment débloquez-vous la situation avec les outils BBB?'
+  }
+];
+
+// Navigation
+function goToSection(sectionId){
+  document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+  document.getElementById(sectionId).classList.add('active');
+}
+
+// Accordéon
+function toggleAccordion(header){
+  const item = header.parentElement;
+  const wasActive = item.classList.contains('active');
+  document.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('active'));
+  if(!wasActive){
+    item.classList.add('active');
+  }
+}
+
+// Révéler solution
+function revealSolution(solutionId){
+  const sol = document.getElementById(solutionId);
+  if(sol){
+    sol.classList.add('revealed');
+    event.target.style.display = 'none';
+  }
+}
+
+// Points
+function addPoints(pts, reason){
+  totalPoints += pts;
+  document.getElementById('totalPoints').textContent = totalPoints;
+  document.getElementById('finalScore').textContent = totalPoints;
+  if(pts > 0) spawnConfetti(100);
+}
+
+function resetScore(){
+  if(confirm('Réinitialiser le score?')){
+    totalPoints = 0;
+    incidentsResolved = 0;
+    document.getElementById('totalPoints').textContent = 0;
+    document.getElementById('finalScore').textContent = 0;
+    document.getElementById('finalIncidents').textContent = 0;
+    document.querySelectorAll('.btn-incident').forEach(btn => {
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    });
+    document.querySelectorAll('.solution-box').forEach(sol => {
+      sol.classList.remove('revealed');
+    });
+    document.querySelectorAll('.btn-reveal').forEach(btn => {
+      btn.style.display = 'block';
+    });
+  }
+}
+
+// Timer
+const timerDisplay = document.getElementById('timerDisplay');
+function updateTimer(){
+  const m = Math.floor(remaining/60).toString().padStart(2,'0');
+  const s = (remaining%60).toString().padStart(2,'0');
+  timerDisplay.textContent = m + ':' + s;
+}
+updateTimer();
+
+document.getElementById('startTimer').addEventListener('click', ()=>{
+  if(timer) return;
+  timer = setInterval(()=>{
+    remaining = Math.max(0, remaining - 1);
+    updateTimer();
+    if(remaining === 0){
+      clearInterval(timer);
+      timer = null;
+      spawnConfetti(200);
+    }
+  }, 1000);
+});
+
+document.getElementById('pauseTimer').addEventListener('click', ()=>{
+  if(timer){ clearInterval(timer); timer = null; }
+});
+
+document.getElementById('resetTimer').addEventListener('click', ()=>{
+  if(timer){ clearInterval(timer); timer = null; }
+  remaining = 90*60;
+  updateTimer();
+});
+
+// Incidents
+function launchIncident(num){
+  const btn = document.getElementById('incBtn' + num);
+  btn.disabled = true;
+  btn.style.opacity = '0.3';
+
+  currentIncidentNum = num;
+  const incident = incidentData[num - 1];
+  document.getElementById('incidentTitle').textContent = incident.title;
+  document.getElementById('incidentDescription').textContent = incident.description;
+  document.getElementById('incidentInput').value = '';
+
+  chronoSeconds = 180;
+  updateChronoDisplay();
+
+  document.getElementById('incidentModal').classList.add('active');
+
+  chronoTimer = setInterval(()=>{
+    chronoSeconds--;
+    updateChronoDisplay();
+    if(chronoSeconds <= 0){
+      clearInterval(chronoTimer);
+      closeIncidentModal();
+      addPoints(-10, 'Temps écoulé');
+    }
+  }, 1000);
+}
+
+function updateChronoDisplay(){
+  const m = Math.floor(chronoSeconds/60);
+  const s = chronoSeconds % 60;
+  document.getElementById('chronoDisplay').textContent = m + ':' + s.toString().padStart(2,'0');
+}
+
+function validateIncident(){
+  clearInterval(chronoTimer);
+  closeIncidentModal();
+  const pts = currentIncidentNum <= 2 ? 40 : (currentIncidentNum === 5 ? 40 : 30);
+  addPoints(pts, 'Incident résolu');
+  incidentsResolved++;
+  document.getElementById('finalIncidents').textContent = incidentsResolved;
+  spawnConfetti(150);
+}
+
+function closeIncidentModal(){
+  if(chronoTimer) clearInterval(chronoTimer);
+  document.getElementById('incidentModal').classList.remove('active');
+}
+
+// Cartes
+function showCarte(type){
+  currentCarteType = type;
+  const modal = document.getElementById('carteModal');
+  const content = document.getElementById('carteContent');
+  const title = document.getElementById('carteTitle');
+  const text = document.getElementById('carteText');
+  const input = document.getElementById('carteInput');
+  const buttons = document.getElementById('carteButtons');
+
+  input.style.display = 'block';
+  input.value = '';
+  buttons.style.display = 'block';
+
+  if(type === 'chance'){
+    content.className = 'carte-content chance';
+    title.textContent = '🍀 CARTE CHANCE';
+    text.textContent = 'Une amie experte en webinaire BBB propose de témoigner. Elle est en déplacement professionnel. Comment faites-vous pour l\'intégrer à votre webinaire ?';
+  } else {
+    content.className = 'carte-content malchance';
+    title.textContent = '☠️ CARTE MALCHANCE';
+    text.textContent = 'Vous animez la visio, votre téléphone sonne, numéro masqué. Que faites-vous ?';
+  }
+
+  modal.classList.add('active');
+}
+
+function validateCarte(){
+  const input = document.getElementById('carteInput');
+  const response = input.value.trim();
+
+  if(response.length > 10){
+    addPoints(20, 'Carte répondue');
+    if(currentCarteType === 'chance'){
+      spawnConfetti(120);
+    }
+    closeCarte();
+  } else {
+    alert('Réponse trop courte. Développez votre stratégie BBB.');
+  }
+}
+
+function closeCarte(){
+  document.getElementById('carteModal').classList.remove('active');
+}
+
+// Confetti
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+let confettiPieces = [];
+
+function resizeCanvas(){
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function spawnConfetti(n=150){
+  confettiPieces = [];
+  for(let i=0; i<n; i++){
+    confettiPieces.push({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * 200,
+      r: 2 + Math.random() * 4,
+      c: `hsl(${Math.random()*360}, 90%, 65%)`,
+      vy: 2 + Math.random() * 4,
+      vx: -2 + Math.random() * 4,
+      a: Math.random() * Math.PI * 2,
+      spin: -0.05 + Math.random() * 0.1
+    });
+  }
+  animateConfetti();
+}
+
+function animateConfetti(){
+  const id = requestAnimationFrame(animateConfetti);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  let alive = false;
+
+  for(const p of confettiPieces){
+    p.a += p.spin;
+    p.x += p.vx + Math.sin(p.a) * 0.8;
+    p.y += p.vy;
+    p.vy += 0.05;
+
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.a);
+    ctx.fillStyle = p.c;
+    ctx.fillRect(-p.r, -p.r, p.r*2, p.r*2);
+    ctx.restore();
+
+    if(p.y < canvas.height + 20) alive = true;
+  }
+
+  if(!alive) cancelAnimationFrame(id);
+}
+
+// Download
+function downloadFile(){
+  const doctype = '<!doctype html>\n';
+  const html = doctype + document.documentElement.outerHTML;
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'console_formation_expert_formateur_modern.html';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+</script>
+
+</body>
+</html>
