@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA en Éducation - Webinaire Interactif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .slide-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .wooclap-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            color: white;
+        }
+        .wooclap-btn {
+            background: white;
+            color: #667eea;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        .wooclap-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .case-card {
+            scroll-margin-top: 100px;
+        }
+        .nav-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        .hidden-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+            opacity: 0;
+        }
+        .hidden-content.revealed {
+            max-height: 3000px;
+            opacity: 1;
+        }
+        .presenter-panel {
+            position: fixed;
+            right: 20px;
+            top: 80px;
+            z-index: 200;
+            background: white;
+            border: 4px solid #9333ea;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 300px;
+        }
+        .incident-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(127, 29, 29, 0.95);
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        /* Roue de la Fortune */
+        .wheel-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .wheel-container {
+            position: relative;
+            width: 600px;
+            height: 600px;
+            margin: 20px auto;
+        }
+        .wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 15px solid gold;
+            position: relative;
+            transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.8), 0 0 100px rgba(255, 215, 0, 0.4);
+            background: #1a1a1a;
+        }
+        .wheel-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, gold, #FFD700);
+            border-radius: 50%;
+            border: 6px solid white;
+            box-shadow: 0 0 30px rgba(0,0,0,0.6);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        .wheel-pointer {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-top: 50px solid #ff0000;
+            z-index: 11;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.7));
+        }
+        .wheel-pointer::after {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -30px;
+            width: 60px;
+            height: 50px;
+            border: 3px solid white;
+            border-bottom: none;
+            border-left: none;
+            border-right: none;
+        }
+        .wheel-segment {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50%;
+            height: 50%;
+            transform-origin: 0% 0%;
+            clip-path: polygon(0 0, 100% 0, 0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 2px solid rgba(255,255,255,0.3);
+        }
+        .wheel-segment-label {
+            position: absolute;
+            top: 35%;
+            left: 55%;
+            transform: rotate(45deg);
+            font-size: 18px;
+            font-weight: 900;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.9), -1px -1px 0 rgba(0,0,0,0.5);
+            width: 120px;
+            text-align: center;
+            line-height: 1.2;
+            letter-spacing: 0.5px;
+        }
+        .spin-button {
+            background: linear-gradient(135deg, #FF6B6B, #FF0000);
+            color: white;
+            padding: 20px 50px;
+            border-radius: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4);
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+        }
+        .spin-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.6);
+        }
+        .spin-button:disabled {
+            background: gray;
+            cursor: not-allowed;
+            animation: none;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .wheel-result {
+            position: absolute;
+            bottom: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            padding: 25px 50px;
+            border-radius: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #1a1a1a;
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.6);
+            opacity: 0;
+            transition: opacity 0.5s;
+            border: 4px solid white;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+            animation: resultPulse 1.5s infinite;
+        }
+        .wheel-result.show {
+            opacity: 1;
+        }
+        @keyframes resultPulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.05); }
+        }
+        
+        /* Responsive pour mobiles */
+        @media (max-width: 768px) {
+            .wheel-container {
+                width: 400px;
+                height: 400px;
+            }
+            .wheel-center {
+                width: 70px;
+                height: 70px;
+                font-size: 30px;
+            }
+            .wheel-segment-label {
+                font-size: 14px;
+                width: 90px;
+            }
+            .wheel-segment-label div {
+                padding: 4px 8px !important;
+            }
+            .wheel-segment-label div div:first-child {
+                font-size: 18px !important;
+            }
+            .wheel-segment-label div div:last-child {
+                font-size: 12px !important;
+            }
+            .wheel-result {
+                font-size: 18px;
+                padding: 15px 30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .wheel-container {
+                width: 300px;
+                height: 300px;
+            }
+            .wheel-center {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            .wheel-segment-label {
+                font-size: 11px;
+                width: 70px;
+            }
+            .spin-button {
+                padding: 15px 35px;
+                font-size: 18px;
+            }
+        }
+        
+        /* Effet confettis */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 500;
+            animation: confetti-fall 3s linear forwards;
+        }
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+
+    <!-- Écran accueil -->
+    <div id="welcomeScreen" class="container mx-auto px-4 py-12">
+        <div class="max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl p-8">
+            <h1 class="text-4xl font-bold text-center text-indigo-900 mb-4">
+                🤖 IA en Éducation : Explorer pour Mieux Transmettre
+            </h1>
+            <p class="text-xl text-center text-gray-700 mb-8">
+                Webinaire interactif • 90 minutes • Bénéfices, Limites & Bons Usages
+            </p>
+
+            <!-- Section Objectifs -->
+            <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 mb-6">
+                <h2 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center">
+                    🎯 Objectifs de ce webinaire
+                </h2>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="bg-white p-4 rounded-lg">
+                        <div class="text-3xl mb-2">✅</div>
+                        <strong class="text-indigo-900">Analyser</strong>
+                        <p class="text-gray-600 text-sm mt-1">Les bénéfices et limites concrètes de l'IA avec démonstrations pratiques d'outils réels</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg">
+                        <div class="text-3xl mb-2">⚠️</div>
+                        <strong class="text-indigo-900">Identifier</strong>
+                        <p class="text-gray-600 text-sm mt-1">Les points de vigilance : droits des élèves, cadre juridique RGPD, impact environnemental</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg">
+                        <div class="text-3xl mb-2">🎓</div>
+                        <strong class="text-indigo-900">Transmettre</strong>
+                        <p class="text-gray-600 text-sm mt-1">Les bons usages aux élèves : esprit critique, créativité, pilotage de l'IA</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg">
+                        <div class="text-3xl mb-2">💡</div>
+                        <strong class="text-indigo-900">Expérimenter</strong>
+                        <p class="text-gray-600 text-sm mt-1">Avec des outils IA concrets : ChatGPT, Mistral, MagicSchool, détecteurs, etc.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Brainstorming Wooclap -->
+            <div class="wooclap-section mb-8 animate-fadeIn">
+                <div class="flex items-center mb-4">
+                    <span class="text-4xl mr-3">💡</span>
+                    <h2 class="text-3xl font-bold">Brainstorming : Qu'est-ce que l'IA pour vous ?</h2>
+                </div>
+                <p class="text-lg mb-2">
+                    <strong>⏱️ Activité interactive - 5 minutes</strong>
+                </p>
+                <p class="mb-4 text-white/90">
+                    Avant de commencer, partagez vos représentations de l'Intelligence Artificielle ! 
+                    Participez au brainstorming collectif sur Wooclap pour explorer ensemble ce que signifie l'IA aujourd'hui.
+                </p>
+                <div class="bg-white/20 rounded-lg p-4 mb-4">
+                    <p class="text-sm mb-2">✔ Quels mots vous viennent à l'esprit quand on parle d'IA ?</p>
+                    <p class="text-sm mb-2">✔ Quelles applications connaissez-vous ?</p>
+                    <p class="text-sm">✔ Quelles questions vous posez-vous sur l'IA en éducation ?</p>
+                </div>
+                <a href="https://app.wooclap.com/events/WEBIA2/live-session" 
+                   target="_blank" 
+                   class="wooclap-btn">
+                    🚀 Accéder au brainstorming Wooclap
+                </a>
+                <p class="text-sm mt-3 text-white/80">
+                    💬 Vos contributions seront affichées en direct et serviront de base à notre discussion
+                </p>
+            </div>
+
+            <!-- Format interactif -->
+            <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-6 mb-6">
+                <h2 class="text-2xl font-bold text-orange-800 mb-4">🎮 Format Interactif</h2>
+                <div class="space-y-3">
+                    <div class="flex items-start">
+                        <span class="text-2xl mr-3">📊</span>
+                        <div>
+                            <strong class="text-gray-800">12+ cas concrets</strong>
+                            <p class="text-gray-600 text-sm">Situations réelles avec démonstrations d'outils IA</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-2xl mr-3">🔗</span>
+                        <div>
+                            <strong class="text-gray-800">Liens vers outils</strong>
+                            <p class="text-gray-600 text-sm">Accès direct aux IA à tester : Mistral, GPTZero, MagicSchool, etc.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="text-2xl mr-3">🌱🌿🌳</span>
+                        <div>
+                            <strong class="text-gray-800">Niveaux de difficulté</strong>
+                            <p class="text-gray-600 text-sm">Débutant, Intermédiaire, Avancé - pour tous les profils</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Programme -->
+            <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">📅 Déroulé du webinaire</h2>
+                <div class="space-y-3 text-sm">
+                    <div class="flex">
+                        <span class="font-bold text-indigo-600 w-24">0-15 min</span>
+                        <span class="text-gray-700">Introduction + Brainstorming Wooclap + Choix parcours</span>
+                    </div>
+                    <div class="flex">
+                        <span class="font-bold text-indigo-600 w-24">15-60 min</span>
+                        <span class="text-gray-700">Exploration des cas concrets avec démonstrations IA</span>
+                    </div>
+                    <div class="flex">
+                        <span class="font-bold text-indigo-600 w-24">60-80 min</span>
+                        <span class="text-gray-700">Analyse d'incidents et débats collectifs</span>
+                    </div>
+                    <div class="flex">
+                        <span class="font-bold text-indigo-600 w-24">80-90 min</span>
+                        <span class="text-gray-700">Synthèse et plan d'action</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Choix du rôle -->
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
+                👥 Choisissez votre mode
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <button onclick="selectRole('enseignant')" 
+                    class="bg-gradient-to-br from-blue-500 to-blue-700 text-white p-8 rounded-xl hover:shadow-2xl transform hover:scale-105 transition-all">
+                    <div class="text-5xl mb-3">📚</div>
+                    <div class="text-2xl font-bold mb-2">Enseignants</div>
+                    <div class="text-sm opacity-90">Pédagogie & IA</div>
+                    <div class="text-xs mt-3 opacity-80">6 cas pratiques</div>
+                </button>
+
+                <button onclick="selectRole('cpe')" 
+                    class="bg-gradient-to-br from-green-500 to-green-700 text-white p-8 rounded-xl hover:shadow-2xl transform hover:scale-105 transition-all">
+                    <div class="text-5xl mb-3">🎯</div>
+                    <div class="text-2xl font-bold mb-2">CPE</div>
+                    <div class="text-sm opacity-90">Vie Scolaire & IA</div>
+                    <div class="text-xs mt-3 opacity-80">5 cas pratiques</div>
+                </button>
+
+                <button onclick="selectRole('chef')" 
+                    class="bg-gradient-to-br from-purple-500 to-purple-700 text-white p-8 rounded-xl hover:shadow-2xl transform hover:scale-105 transition-all">
+                    <div class="text-5xl mb-3">⚖️</div>
+                    <div class="text-2xl font-bold mb-2">Chefs d'Établissement</div>
+                    <div class="text-sm opacity-90">Stratégie & Conformité</div>
+                    <div class="text-xs mt-3 opacity-80">5 cas pratiques</div>
+                </button>
+
+                <button onclick="startPresenterMode()" 
+                    class="bg-gradient-to-br from-pink-500 to-rose-600 text-white p-8 rounded-xl hover:shadow-2xl transform hover:scale-105 transition-all border-4 border-yellow-400">
+                    <div class="text-5xl mb-3">🎬</div>
+                    <div class="text-2xl font-bold mb-2">Mode Animateur</div>
+                    <div class="text-sm opacity-90">Contrôle des incidents</div>
+                    <div class="text-xs mt-3 opacity-80">Pour l'animation du webinaire</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Écran principal avec tous les cas -->
+    <div id="mainScreen" class="hidden">
+        <!-- Navigation sticky -->
+        <div class="nav-sticky">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex justify-between items-center flex-wrap gap-4">
+                    <div>
+                        <h2 id="roleTitle" class="text-2xl font-bold text-indigo-900"></h2>
+                        <p class="text-gray-600 text-sm" id="roleSubtitle"></p>
+                    </div>
+                    <div class="flex gap-4 items-center">
+                        <button onclick="openWheel()" class="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white px-8 py-4 rounded-xl hover:shadow-2xl transform hover:scale-110 transition-all font-bold text-lg animate-pulse border-4 border-yellow-200">
+                            🎰 Roue de la Fortune 🎲
+                        </button>
+                        <button onclick="backToWelcome()" class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 font-bold">
+                            ← Retour
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container des cas -->
+        <div class="container mx-auto px-4 py-8">
+            <div id="casesContainer" class="max-w-6xl mx-auto space-y-6"></div>
+        </div>
+
+        <!-- Section Incidents (cachée initialement) -->
+        <div id="incidentsSection" class="container mx-auto px-4 py-8 hidden">
+            <div class="max-w-6xl mx-auto">
+                <div class="bg-red-50 border-4 border-red-500 rounded-2xl p-8 mb-8">
+                    <h2 class="text-3xl font-bold text-red-900 mb-4">🚨 Incidents & Débats</h2>
+                    <p class="text-gray-700 mb-6">Situations critiques pour animer les débats collectifs</p>
+                    <div id="incidentsContainer" class="space-y-6"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panneau Animateur -->
+    <div id="presenterPanel" class="presenter-panel hidden">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-purple-900 text-lg">🎬 Contrôles Animateur</h3>
+            <button onclick="closePresenterPanel()" class="text-gray-500 hover:text-gray-700 text-2xl">×</button>
+        </div>
+        
+        <div class="mb-4">
+            <label class="block text-sm font-bold text-gray-700 mb-2">Profil :</label>
+            <select id="presenterRoleSelect" onchange="changePresenterRole()" class="w-full p-2 border border-gray-300 rounded">
+                <option value="">-- Choisir --</option>
+                <option value="enseignant">📚 Enseignants</option>
+                <option value="cpe">🎯 CPE</option>
+                <option value="chef">⚖️ Chefs</option>
+            </select>
+        </div>
+
+        <div id="presenterCaseButtons" class="space-y-2 mb-4">
+            <!-- Boutons cas générés dynamiquement -->
+        </div>
+
+        <hr class="my-4 border-purple-300">
+
+        <div>
+            <h4 class="font-bold text-sm text-gray-700 mb-2">🚨 Incidents :</h4>
+            <div id="presenterIncidentButtons" class="space-y-2">
+                <!-- Boutons incidents générés dynamiquement -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Incident -->
+    <div id="incidentOverlay" class="incident-overlay hidden">
+        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-8">
+            <div class="flex justify-between items-start mb-6">
+                <h3 class="text-3xl font-bold text-red-900">🚨 INCIDENT EN COURS</h3>
+                <button onclick="closeIncident()" class="text-gray-500 hover:text-gray-700 text-3xl">×</button>
+            </div>
+            <div id="incidentContent"></div>
+        </div>
+    </div>
+
+    <!-- Roue de la Fortune -->
+    <div id="wheelOverlay" class="wheel-overlay hidden">
+        <div style="text-align: center; max-width: 1200px; width: 100%;">
+            <h2 class="text-6xl font-bold text-white mb-4 animate-fadeIn" style="text-shadow: 0 0 20px rgba(255,215,0,0.5);">
+                🎰 ROUE DE LA FORTUNE 🎰
+            </h2>
+            <p class="text-3xl text-yellow-300 mb-4 font-bold" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
+                Tournez la roue pour découvrir votre prochain cas !
+            </p>
+            
+            <!-- Compteur de progression -->
+            <div id="caseCounter" class="bg-gradient-to-r from-purple-600/40 to-pink-600/40 backdrop-blur-md rounded-xl p-4 mb-6 max-w-md mx-auto border-2 border-yellow-400"></div>
+            
+            <div class="wheel-container">
+                <div class="wheel-pointer"></div>
+                <div id="wheel" class="wheel"></div>
+                <div class="wheel-center">🎯</div>
+                <div id="wheelResult" class="wheel-result"></div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-8 max-w-2xl mx-auto" style="margin-top: 140px;">
+                <h3 class="text-2xl font-bold text-yellow-300 mb-4">📋 Légende des niveaux</h3>
+                <div class="grid grid-cols-3 gap-4 text-white text-lg">
+                    <div class="bg-green-600/30 rounded-lg p-3 border-2 border-green-400">
+                        <div class="text-3xl mb-1">🌱</div>
+                        <div class="font-bold">Débutant</div>
+                        <div class="text-sm opacity-80">Bases essentielles</div>
+                    </div>
+                    <div class="bg-blue-600/30 rounded-lg p-3 border-2 border-blue-400">
+                        <div class="text-3xl mb-1">🌿</div>
+                        <div class="font-bold">Intermédiaire</div>
+                        <div class="text-sm opacity-80">Approfondissement</div>
+                    </div>
+                    <div class="bg-purple-600/30 rounded-lg p-3 border-2 border-purple-400">
+                        <div class="text-3xl mb-1">🌳</div>
+                        <div class="font-bold">Avancé</div>
+                        <div class="text-sm opacity-80">Expertise</div>
+                    </div>
+                </div>
+                <div class="mt-4 bg-red-600/30 rounded-lg p-3 border-2 border-red-400">
+                    <div class="text-3xl mb-1">🔥</div>
+                    <div class="font-bold text-white">Expert / Situation complexe</div>
+                    <div class="text-sm text-white/80">Cas critiques et débats approfondis</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                <button id="spinButton" onclick="spinWheel()" class="spin-button">
+                    🎲 LANCER LA ROUE
+                </button>
+                <button onclick="resetWheel()" class="bg-orange-600 text-white px-8 py-4 rounded-lg hover:bg-orange-700 font-bold text-xl border-2 border-orange-300">
+                    🔄 Réinitialiser
+                </button>
+                <button onclick="closeWheel()" class="bg-gray-600 text-white px-8 py-4 rounded-lg hover:bg-gray-700 font-bold text-xl">
+                    ← Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = '';
+        let presenterMode = false;
+
+        const cardData = {
+            enseignant: [
+                {
+                    level: '🌱',
+                    slide: 'Diapo 1',
+                    title: 'ChatGPT a écrit mon cours... et alors ? 😅',
+                    scenario: 'Un enseignant utilise ChatGPT pour générer son cours de géographie sur le climat. Il copie-colle tel quel et distribue aux élèves. Le cours est bien structuré mais contient une date erronée sur les accords de Paris.',
+                    explanation: 'L\'IA peut générer des "hallucinations" - des informations fausses présentées avec assurance. Le vrai bénéfice : utiliser l\'IA comme assistant de préparation, pas comme rédacteur final. Toujours vérifier les faits, dates, chiffres.',
+                    demo: '💡 <strong>Démo avec ChatGPT :</strong> Ouvrez <a href="https://chat.openai.com" target="_blank" class="text-blue-600 underline">ChatGPT</a> et demandez "Combien de fois la France a-t-elle gagné la Coupe du Monde de football ?" puis "Qui était le président français en 1958 lors de la première victoire ?" Observez : l\'IA peut mélanger dates et événements !',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (5 min) :</strong><br>1. Ouvrez ChatGPT et posez ces questions pièges :<br>   • "Qui a inventé l\'imprimerie en Chine au 15ème siècle ?" (piège : imprimerie chinoise date du 11ème siècle)<br>   • "Cite 3 faits historiques sur Napoléon qui ne sont jamais arrivés"<br>   • "Quelle était la capitale de la France pendant le règne de Louis XIV ?" (piège : Paris, mais l\'IA pourrait dire Versailles)<br>2. <strong>Débrief :</strong> L\'IA génère du texte plausible basé sur des probabilités, pas sur la vérité<br>3. <strong>Principe :</strong> Toujours VÉRIFIER les faits avec des sources fiables',
+                    tools: '<strong>🛠️ Outils recommandés :</strong><br>• <a href="https://chat.mistral.ai" target="_blank" class="text-blue-600 underline">Mistral Le Chat</a> (français, RGPD, gratuit)<br>• <a href="https://magicschool.ai" target="_blank" class="text-blue-600 underline">MagicSchool AI</a> (spécialisé éducation)<br>• Vérification : Wikipedia, sources académiques',
+                    impact: '⚠️ Impact environnemental : 1 requête ChatGPT = 10x plus d\'énergie qu\'une recherche Google. Principe de sobriété numérique.'
+                },
+                {
+                    level: '🌿',
+                    slide: 'Diapo 2',
+                    title: 'Le détecteur anti-triche qui se trompe',
+                    scenario: 'Vous utilisez un détecteur de texte IA sur les dissertations. Il signale 85% d\'IA sur la copie d\'un excellent élève qui écrit de manière très structurée et formelle. L\'élève est accusé à tort.',
+                    explanation: 'Les détecteurs IA ont un taux de faux positifs de 20-40% ! Ils pénalisent les élèves avec un style formel ou les non-francophones. Sanctionner sur cette seule base = risque juridique (présomption d\'innocence). Le dialogue reste la meilleure approche.',
+                    demo: '💡 <strong>Démo choc avec GPTZero :</strong> Testez <a href="https://gptzero.me" target="_blank" class="text-blue-600 underline">GPTZero</a> ou <a href="https://zerogpt.com" target="_blank" class="text-blue-600 underline">ZeroGPT</a> avec un extrait de Molière ou Baudelaire → Résultat : souvent détecté comme "IA" ! 😄',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (7 min) :</strong><br>1. Copiez cet extrait de Molière dans GPTZero : "Il faut, parmi le monde, une vertu traitable ; À force de sagesse, on peut être blâmable"<br>2. Notez le score de détection IA<br>3. Maintenant, demandez à ChatGPT : "Écris 2 phrases simples sur l\'école" et testez le résultat<br>4. Générez un texte avec Mistral et testez aussi<br>5. <strong>Constat :</strong> Les faux positifs sont fréquents ! Jamais sanctionner sur cette seule base.',
+                    tools: '<strong>🛠️ Alternatives pédagogiques :</strong><br>• Évaluation orale (présentation + questions)<br>• Processus documenté (brouillons successifs)<br>• Sujets personnalisés (vécu de l\'élève)<br>• Projets créatifs (podcast, vidéo, débat)',
+                    impact: '⚖️ Vigilance juridique : Aucune sanction sans preuve tangible. Risque de recours administratif.'
+                },
+                {
+                    level: '🌳',
+                    slide: 'Diapo 3',
+                    title: 'IA pour différencier : révolution pédagogique ! 🚀',
+                    scenario: 'Vous avez 28 élèves avec 5 niveaux différents en maths. Vous utilisez une IA pour générer automatiquement 5 versions adaptées de chaque exercice en 2 minutes. Ce qui vous prenait 2 heures de préparation est maintenant quasi-instantané.',
+                    explanation: 'L\'IA permet une vraie révolution de la différenciation pédagogique ! Avant : 2h pour créer 3 versions max. Maintenant : 2 min pour 5 versions parfaitement adaptées. Le gain de temps est MASSIF et permet de se concentrer sur l\'accompagnement individuel.',
+                    demo: '💡 <strong>Démo rapide avec Mistral :</strong> Sur <a href="https://chat.mistral.ai" target="_blank" class="text-blue-600 underline">Mistral</a>, demandez "Crée 5 versions d\'un exercice de maths sur les fractions adaptées aux niveaux : très facile, facile, moyen, difficile, très difficile pour des 6èmes". Chronomètre : 2 min max !',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (10 min) :</strong><br>1. Ouvrez Mistral et lancez le chronomètre<br>2. Prompt : "Crée 3 versions d\'un exercice sur les accords du participe passé pour 4ème : version facile (5 phrases), version moyenne (7 phrases + piège), version difficile (10 phrases avec cas complexes). Donne aussi les corrections."<br>3. Temps écoulé ? Probablement moins de 2 minutes !<br>4. <strong>Réflexion :</strong> Combien de temps vous aurait pris cette tâche manuellement ? 30-45 min minimum<br>5. <strong>Gain :</strong> Ce temps libéré = accompagnement individualisé',
+                    tools: '<strong>🛠️ Outils gratuits pour différenciation :</strong><br>• <a href="https://chat.mistral.ai" target="_blank" class="text-blue-600 underline">Mistral Le Chat</a> - Français, gratuit, RGPD<br>• <a href="https://diffit.me" target="_blank" class="text-blue-600 underline">Diffit</a> - Adapte niveau de lecture<br>• <a href="https://magicschool.ai" target="_blank" class="text-blue-600 underline">MagicSchool</a> - Templates prêts<br>• <a href="https://educationcopilot.com" target="_blank" class="text-blue-600 underline">Education Copilot</a> - Exercices multiniveaux',
+                    impact: '📋 Gain temps 90% sur préparation → Investir dans accompagnement humain. Principe MEN : L\'IA augmente les capacités du prof.'
+                },
+                {
+                    level: '🌿',
+                    slide: 'Diapo 4',
+                    title: 'L\'IA écolo... vraiment ? 🌍',
+                    scenario: 'Votre classe de 25 élèves utilise une IA de création d\'images pour un projet artistique. Chaque élève génère 10 images. Un collègue engagé vous interpelle sur l\'empreinte carbone considérable.',
+                    explanation: 'Une image générée = 2,9 Wh. 250 images = ~725 Wh (charge 1-2 smartphones). ChatGPT-4 = 10-50x plus gourmand qu\'une recherche Google. Le principe de sobriété numérique du cadre MEN s\'applique : limiter requêtes inutiles, privilégier modèles légers.',
+                    demo: '💡 <strong>Calculer l\'impact :</strong> Utilisez <a href="https://comparia.beta.gouv.fr" target="_blank" class="text-blue-600 underline">Comparia (beta.gouv.fr)</a> pour comparer l\'empreinte environnementale des différents modèles d\'IA. Comparez ChatGPT-4 vs recherche Google vs image générée.',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (8 min) :</strong><br>1. Allez sur Comparia (outil officiel beta.gouv.fr)<br>2. Comparez l\'impact de : 1 recherche Google vs 1 requête ChatGPT vs 1 image DALL-E<br>3. <strong>Calcul projet classe :</strong> Si 25 élèves génèrent chacun 10 images IA = 250 images<br>4. Multipliez l\'impact d\'1 image × 250<br>5. <strong>Question éthique :</strong> Comment sensibiliser les élèves à la sobriété numérique ?<br>6. <strong>Principe :</strong> Utiliser l\'IA de façon ciblée et réfléchie, pas en rafale',
+                    tools: '<strong>🛠️ Gestes de sobriété numérique :</strong><br>• Utiliser modèles légers (Mistral Small vs GPT-4)<br>• Limiter longueur des prompts<br>• Stocker et réutiliser résultats pertinents<br>• Préférer texte à image quand suffisant<br>• Sensibiliser élèves : "Chaque requête a un coût écolo"',
+                    impact: '🌱 Cadre MEN : Principe de sobriété numérique obligatoire. Utilisez <a href="https://comparia.beta.gouv.fr" target="_blank" class="text-blue-600 underline">Comparia</a> pour mesurer l\'impact. Module pédagogique sur <a href="https://cafeia.org" target="_blank" class="text-blue-600 underline">cafeia.org</a>'
+                },
+                {
+                    level: '🔥',
+                    slide: 'Diapo 5',
+                    title: "📱 ChatGPT en plein contrôle - La triche en direct",
+                    scenario: "Pendant un contrôle écrit de 2h, vous circulez entre les rangs. Vous apercevez un élève de 1ère qui utilise discrètement son smartphone. En vous approchant, vous constatez qu'il est sur ChatGPT et tape sa question de dissertation en direct : 'Rédige une introduction sur les causes de la Révolution française'. L'élève vous voit, panique et ferme son téléphone.",
+                    explanation: "Situation de fraude caractérisée qui interroge nos modalités d'évaluation. Trois axes : <strong>1) Sanction éducative</strong> plutôt que punitive (refaire le devoir + recherche sur l'éthique), <strong>2) Dialogue individuel</strong> pour comprendre les raisons, <strong>3) Prévention collective</strong> en adaptant les évaluations (oraux, projets, questions personnalisées).",
+                    demo: "💡 <strong>Activité débat (10 min) :</strong> Posez à la classe : 'Quelle différence entre vérifier une date sur Wikipédia et faire rédiger son devoir par l'IA ?' Puis : 'Comment évaluer l'apprentissage réel plutôt que le résultat final ?'",
+                    casePratique: '🎯 <strong>CAS PRATIQUE (10 min) :</strong><br>1. <strong>Test en direct :</strong> Posez à ChatGPT une question de dissertation typique : "Rédigez une introduction de dissertation sur les causes de la Première Guerre mondiale"<br>2. <strong>Analyse :</strong> Observez la qualité, la structure, le niveau de langue<br>3. <strong>Détection :</strong> Pourriez-vous identifier ce texte comme généré par IA ?<br>4. <strong>Débat par groupes de 3-4 :</strong> Quelles modalités résistent à l\'IA ? Oral ? Projet progressif ?<br>5. <strong>Conclusion :</strong> L\'IA nous force à repenser nos évaluations vers plus d\'authenticité',
+                    tools: "<strong>🛠️ Outils et ressources :</strong><br>• <a href='https://gptzero.me' target='_blank' class='text-blue-600 underline'>GPTZero</a> (détecteur, limites à discuter)<br>• <a href='https://eduscol.education.fr/3810/charte-pour-l-education-la-citoyennete-et-au-numerique' target='_blank' class='text-blue-600 underline'>Charte Éducation au numérique</a><br>• Protocole anti-fraude : collecte téléphones, questions différenciées",
+                    impact: "⚖️ Fraude scolaire (article R511-13 Code éducation) : sanction possible mais obligation de proportionnalité. Privilégier l'entretien individuel."
+                },
+                {
+                    level: '🔥',
+                    slide: 'Diapo 6',
+                    title: "🎨 L'IA créative qui remplace l'imagination",
+                    scenario: "Projet : créer une affiche originale sur le développement durable. 3 semaines, insistance sur la créativité personnelle. Jour de rendu : 8 élèves sur 25 présentent des visuels époustouflants générés par Midjourney/DALL-E. Zéro croquis préparatoires. Les 17 autres élèves qui ont dessiné pendant des heures sont découragés.",
+                    explanation: "Dilemme pédagogique : <strong>POUR l'IA</strong> = démocratise la création visuelle, permet aux moins habiles de concrétiser leurs idées ; <strong>CONTRE</strong> = court-circuite le processus créatif, démotive les investis. <strong>Solution hybride :</strong> autoriser l'IA MAIS exiger documentation du processus (10 prompts testés, modifications manuelles).",
+                    demo: "💡 <strong>Démo gratuite :</strong> <a href='https://www.bing.com/images/create' target='_blank' class='text-blue-600 underline'>Bing Image Creator</a> (gratuit, DALL-E). Tapez 'affiche développement durable style minimaliste' puis 'affiche écologie dessin enfants'. Débat : qui est créateur ?",
+                    casePratique: "🎯 <strong>CAS PRATIQUE (12 min) :</strong><br>1. Ouvrez Bing Image Creator (gratuit, pas de compte nécessaire)<br>2. <strong>Essai 1 :</strong> Prompt simple : 'affiche sur le climat'<br>3. <strong>Essai 2 :</strong> Prompt détaillé : 'affiche pédagogique sur le réchauffement climatique, style minimaliste, couleurs bleu et vert, illustration pour collégiens'<br>4. <strong>Essai 3 :</strong> Changez un mot : remplacez 'minimaliste' par 'dessin animé'<br>5. <strong>Réflexion :</strong> Qui est l'auteur ? Celui qui écrit le prompt ou l\'IA ?<br>6. <strong>Pédagogie :</strong> Exiger dossier de 10 prompts testés + modifications manuelles",
+                    tools: "<strong>🛠️ Alternatives pédagogiques :</strong><br>• <a href='https://www.canva.com/fr_fr/education/' target='_blank' class='text-blue-600 underline'>Canva Éducation</a> (templates + IA raisonnée, gratuit)<br>• Grille évaluation : Originalité concept 40% + Démarche 30% + Technique 30%<br>• Consigne : 'IA autorisée si dossier de 10 essais + modifications perso'",
+                    impact: "🌍 1 image IA = charge 1 smartphone. Projet 25 élèves × 10 essais = impact carbone significatif. Principe de sobriété créative."
+                }
+            ],
+            cpe: [
+                {
+                    level: '🌱',
+                    slide: 'Diapo 7',
+                    title: 'L\'IA Coach d\'orientation : ami ou imposteur ?',
+                    scenario: 'Un élève de 3ème utilise une IA d\'orientation qui lui recommande "ingénieur informatique" basé uniquement sur ses bonnes notes en maths. Mais il vous confie sa passion pour le théâtre et la médiation culturelle.',
+                    explanation: 'Les IA d\'orientation reproduisent les biais sociétaux : elles sur-recommandent les métiers "prestigieux" et sous-estiment les soft skills, la créativité, les motivations profondes. Une IA ne capte pas l\'environnement familial, la personnalité, les passions.',
+                    demo: '💡 <strong>Test de biais avec ChatGPT :</strong> Testez avec <a href="https://chat.openai.com" target="_blank" class="text-blue-600 underline">ChatGPT</a> deux profils identiques en changeant uniquement le genre. Prompt 1 : "Je suis un garçon de 15 ans, bon en maths et en sciences. Quels métiers ?" Prompt 2 : Même chose avec "une fille". Comparez !',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (10 min) :</strong><br>1. Ouvrez ChatGPT ou Mistral<br>2. <strong>Test 1 - Biais de genre sur métiers :</strong><br>   • Prompt A : "Je suis un garçon de 15 ans, bon en maths et sciences, créatif. Quels métiers ?"<br>   • Prompt B : "Je suis une fille de 15 ans, bonne en maths et sciences, créative. Quels métiers ?"<br>   • Observer : ingénieur/développeur vs enseignante/infirmière ?<br>3. <strong>Test 2 - Métiers féminisés :</strong><br>   • Prompt C : "Je suis un garçon qui adore les enfants. Quels métiers ?"<br>   • Prompt D : "Je suis une fille qui adore les enfants. Quels métiers ?"<br>4. <strong>Analyse :</strong> Noter les stéréotypes<br>5. <strong>Conclusion :</strong> IA = aide mais jamais décisionnaire final',
+                    tools: '<strong>🛠️ Accompagner l\'usage des IA :</strong><br>• Grille analyse critique pour élèves<br>• Entretiens individuels post-IA<br>• <a href="https://inspire-orientation.org" target="_blank" class="text-blue-600 underline">Inspire</a> (officiel Éduc Nat)<br>• Guide ONISEP "Orientation et numérique"',
+                    impact: '⚖️ Principe d\'autonomie humaine : décisions impactant le parcours = toujours humaines. L\'IA propose, l\'élève dispose.'
+                },
+                {
+                    level: '🌿',
+                    slide: 'Diapo 8',
+                    title: 'ChatGPT Psychologue : la fausse bonne idée 😬',
+                    scenario: 'Un élève de 4ème en détresse émotionnelle se confie à ChatGPT sur ses pensées noires et son mal-être. L\'IA lui donne des conseils génériques. L\'élève vous montre fièrement la conversation.',
+                    explanation: 'ChatGPT n\'est PAS un professionnel de santé. Il peut donner des conseils génériques, mais ne détecte pas les signaux de détresse grave (risque suicidaire, harcèlement). Pas de suivi, pas de protocole de crise. L\'élève peut croire être "pris en charge" alors qu\'il ne l\'est pas.',
+                    demo: '💡 <strong>Test responsable :</strong> Sur <a href="https://chat.openai.com" target="_blank" class="text-blue-600 underline">ChatGPT</a>, testez "Je me sens très mal depuis plusieurs semaines". Observez : réponse générique, pas de détection de gravité.',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (8 min) :</strong><br>1. Ouvrez ChatGPT et testez ces 3 phrases :<br>   • "Je me sens stressé par l\'école"<br>   • "Je me sens mal depuis plusieurs semaines"<br>   • "Personne ne me comprend chez moi"<br>2. <strong>Analyse des réponses :</strong> L\'IA détecte-t-elle la gravité ? Propose-t-elle des ressources locales ?<br>3. <strong>Limite critique :</strong> Pas d\'alerte en cas de risque grave<br>4. <strong>Protocole CPE :</strong> Toujours orienter vers professionnels (infirmière, psy scolaire, CMP)',
+                    tools: '<strong>🛠️ Protocole CPE :</strong><br>• Valoriser démarche élève (chercher aide = courage)<br>• Expliquer limites IA (pas formée au soutien psy)<br>• Orienter vers : CPE, infirmière, psy scolaire, assistante sociale<br>• Numéros urgence : 3114 (suicide), 119 (enfance danger), 3018 (cyberharcèlement)',
+                    impact: '⚖️ Code éducation : devoir de protection et orientation vers professionnels qualifiés. L\'IA écoute, l\'humain aide vraiment.'
+                },
+                {
+                    level: '🌳',
+                    slide: 'Diapo 9',
+                    title: 'Prédire le décrochage avec l\'IA : miracle ou mirage ?',
+                    scenario: 'Un logiciel IA propose de prédire les élèves à risque de décrochage basé sur absences, notes et comportement. Il génère des alertes automatiques. Sur 30 alertes/mois, après analyse humaine, seulement 12 nécessitent vraiment un suivi approfondi.',
+                    explanation: 'L\'IA détecte des corrélations, pas des causalités. Un élève peut s\'absenter pour maladie (pas décrochage), avoir des notes en baisse temporairement. Le vrai bénéfice : libérer du temps administratif pour se concentrer sur l\'accompagnement humain qualitatif.',
+                    demo: '💡 <strong>Simulation Excel :</strong> Créez une formule : Si (Absences > 10) ET (Moyenne < 10) → Alerte. Testez avec profils : élève hospitalisé, sportif haut niveau, début décrochage masqué.',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (10 min) :</strong><br>1. Ouvrez Excel ou Google Sheets<br>2. Créez 3 colonnes : Nom | Absences | Moyenne<br>3. Formule dans colonne D : =SI(ET(B2>10;C2<10);"⚠️ ALERTE";"OK")<br>4. <strong>Testez avec ces profils :</strong><br>   • Léa : 15 absences, moyenne 8 → Alerte (vrai décrochage)<br>   • Tom : 12 absences, moyenne 14 → Alerte (mais sportif haut niveau)<br>   • Sarah : 18 absences, moyenne 11 → OK (mais hospitalisée 3 semaines)<br>5. <strong>Principe :</strong> L\'algorithme alerte, l\'humain ANALYSE le contexte',
+                    tools: '<strong>🛠️ Logiciels vie scolaire avec IA :</strong><br>• Pronote : Alertes absences configurables<br>• Vie Scolaire.net : Tableaux de bord décrochage<br>• Index Éducation : Suivi personnalisé<br>• Configurer seuils adaptés, croiser plusieurs indicateurs',
+                    impact: '📋 Principe d\'autonomie : L\'IA alerte, l\'humain analyse le contexte. Gain temps : 2-3h/semaine admin → accompagnement.'
+                },
+                {
+                    level: '🌱',
+                    slide: 'Diapo 10',
+                    title: 'IA pour communication parents : gain de temps ou déshumanisation ?',
+                    scenario: 'Vous utilisez une IA pour rédiger vos emails aux parents. Vous gagnez 5h/semaine. Mais certains parents se plaignent de messages "froids" et "standardisés" qui ne reflètent pas la situation unique de leur enfant.',
+                    explanation: 'L\'IA peut générer du contenu formel efficacement, mais manque de personnalisation émotionnelle. Risque : perte de la relation de confiance. Solution : utiliser l\'IA pour la structure de base, puis personnaliser avec détails humains spécifiques.',
+                    demo: '💡 <strong>Test pratique :</strong> Sur <a href="https://chat.mistral.ai" target="_blank" class="text-blue-600 underline">Mistral</a>, demandez de rédiger un email de convocation parent. Comparez avec votre style personnel. Identifiez ce qui manque.',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (8 min) :</strong><br>1. Ouvrez Mistral<br>2. Prompt : "Rédige un email de convocation pour un parent suite à 5 retards ce mois. Ton professionnel mais bienveillant."<br>3. <strong>Analyse du résultat :</strong> Structure claire ✓ Ton adapté ✓ Nom élève ✗ Empathie ✗ Détails concrets ✗<br>4. <strong>Amélioration :</strong> Reprendre et ajouter les éléments manquants<br>5. <strong>Bonne pratique :</strong> IA = structure, humain = personnalisation',
+                    tools: '<strong>🛠️ Bonnes pratiques :</strong><br>• IA = brouillon de structure<br>• Toujours ajouter détails personnels (prénom, situation spécifique)<br>• Relecture attentive ton et empathie<br>• Privilégier téléphone pour situations sensibles',
+                    impact: '📋 L\'IA libère du temps mais ne remplace pas la relation humaine. Utiliser le temps gagné pour entretiens qualitatifs.'
+                },
+                {
+                    level: '🔥',
+                    slide: 'Diapo 11',
+                    title: '⚡ Deep fake : la fausse vidéo du proviseur',
+                    scenario: 'Lundi matin. Une vidéo deep fake ultra-réaliste du chef d\'établissement circule sur les réseaux sociaux. Il y annonce : "Suite à un problème de chauffage, 3 jours de vacances exceptionnelles". À 8h : 300 élèves absents. Standard surchargé. Parents affolés.',
+                    explanation: 'Crise opérationnelle + opportunité éducative. Le deep fake pose des questions de désinformation, d\'usurpation d\'identité et de responsabilité pénale du créateur.',
+                    demo: '💡 <strong>Atelier deep fake :</strong> Montrez des exemples de deep fakes célèbres. Expliquez la technologie. Débat : blague vs délit, impact réel.',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (10 min) :</strong><br>1. <strong>Vidéo éducative :</strong> Cherchez sur YouTube : "deep fake Obama" ou "deep fake Tom Cruise"<br>2. <strong>Quiz interactif :</strong> Montrez 4 vidéos (2 vraies, 2 deep fakes). Les participants votent. Révélez les réponses<br>3. <strong>Débat en petits groupes (5 min) :</strong> Blague ou délit pénal ? Conséquences réelles ?<br>4. <strong>Protocole prévention :</strong> Toujours vérifier via canaux officiels (ENT, SMS établissement). Sensibiliser élèves à l\'éducation aux médias',
+                    tools: '<strong>🛠️ Gestion crise :</strong><br>• Communiqué officiel immédiat (SMS, ENT, réseaux)<br>• Appels familles absents<br>• Signalement plateformes + dépôt plainte<br>• Éducation médias : règles vérification, canaux officiels<br>• Responsabilité pénale créateur',
+                    impact: '⚖️ Usurpation d\'identité = délit pénal. Protocole établissement : toujours croiser sources officielles.'
+                }
+            ],
+            chef: [
+                {
+                    level: '🌱',
+                    slide: 'Diapo 12',
+                    title: 'Adopter une IA : mode ou nécessité ? 🤔',
+                    scenario: 'Un fournisseur EdTech vous démarche avec une IA de gestion administrative "révolutionnaire". Démo impressionnante. Coût : 8000€/an, formation nécessaire, hébergement non précisé.',
+                    explanation: 'Le cadre MEN (juin 2025) impose une grille d\'évaluation : Quel problème résout l\'IA ? Quelles alternatives ? Impact carbone ? Hébergement données (France/UE prioritaire) ? Formation équipes ? Coût total ?',
+                    demo: '💡 <strong>Grille officielle MEN :</strong> Téléchargez la grille sur <a href="https://eduscol.education.fr" target="_blank" class="text-blue-600 underline">Éduscol</a> (recherche "cadre usage IA"). Évaluez l\'outil selon les 7 critères obligatoires.',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (12 min) :</strong><br>1. <strong>Scénario :</strong> IA gestion emplois du temps : 8000€/an, "optimisation automatique"<br>2. <strong>Grille MEN (7 critères) :</strong><br>   ✓ Problème résolu ?<br>   ✓ Alternative existe ?<br>   ✓ Hébergement : France ? UE ? USA ?<br>   ✓ RGPD vérifié ?<br>   ✓ Formation équipe prévue ?<br>   ✓ Impact environnemental ?<br>   ✓ Période essai ?<br>3. <strong>Par groupes :</strong> Notez cet outil /10<br>4. <strong>Débat :</strong> Seuil minimum acceptable ?',
+                    tools: '<strong>🛠️ Ressources pour décideurs :</strong><br>• <a href="https://www.cnil.fr/fr/intelligence-artificielle" target="_blank" class="text-blue-600 underline">CNIL : Fiches IA et RGPD</a><br>• Réseau Canopé : Accompagnement transformation<br>• DANE académique : Conseil local<br>• Checklist : Consulter DPO, tester démo, vérifier hébergement UE',
+                    impact: '⚖️ Responsabilité chef d\'établissement : RGPD, obligation évaluation préalable, documentation registre des traitements.'
+                },
+                {
+                    level: '🌿',
+                    slide: 'Diapo 13',
+                    title: 'IA et données élèves : la bombe à retardement ⏰',
+                    scenario: 'Vous découvrez qu\'un enseignant a uploadé 80 copies d\'élèves (noms, prénoms, notes) sur ChatGPT pour correction automatique. Données hébergées USA. Aucune déclaration au DPO. Un parent découvre et menace de saisir la CNIL.',
+                    explanation: 'Données personnelles d\'élèves = données SENSIBLES (mineurs). Upload vers USA = transfert international illégal sans garanties RGPD. Le chef d\'établissement est RESPONSABLE du traitement. Sanction CNIL possible : jusqu\'à 20M€ ou 4% CA.',
+                    demo: '💡 <strong>Comparatif CGU :</strong> Consultez CGU de <a href="https://openai.com/policies/terms-of-use" target="_blank" class="text-blue-600 underline">ChatGPT</a> (serveurs USA, conservation 30j+) vs <a href="https://chat.mistral.ai" target="_blank" class="text-blue-600 underline">Mistral</a> (France/UE, conforme RGPD). Différence flagrante !',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (10 min) :</strong><br>1. Ouvrez 2 onglets : CGU ChatGPT et CGU Mistral<br>2. <strong>Comparez :</strong><br>   • Localisation serveurs : USA vs France/UE<br>   • Durée conservation : 30j+ vs conforme RGPD<br>   • Utilisation entraînement : oui vs opt-out<br>   • Transfert international : oui vs non<br>3. <strong>Quiz RGPD :</strong> Enseignant uploade 80 copies sur ChatGPT. Légal ? Non. Qui responsable ? Chef. Sanction ? Jusqu\'à 20M€<br>4. <strong>Action :</strong> Créer liste blanche outils validés DPO',
+                    tools: '<strong>🛠️ Protocole incident RGPD :</strong><br>1. Notification DPO immédiate<br>2. Évaluation risque pour personnes<br>3. Documentation registre violations<br>4. Notification CNIL sous 72h si risque élevé<br>5. Information parents<br>6. Formation équipes + procédure<br>• Guide CNIL : <a href="https://www.cnil.fr/fr/rgpd-passer-a-laction" target="_blank" class="text-blue-600 underline">RGPD passer à l\'action</a>',
+                    impact: '⚖️ RGPD art. 6 et 9 : interdiction traiter données enfants sans garanties. Créer "liste blanche" outils validés DPO.'
+                },
+                {
+                    level: '🌳',
+                    slide: 'Diapo 14',
+                    title: 'Préparer l\'établissement à l\'IA de 2030 🚀',
+                    scenario: 'Vous devez définir une stratégie IA à 5 ans pour le conseil d\'administration. Les IA de 2030 seront hyper-puissantes : avatars profs virtuels 24/7, tuteurs personnalisés adaptatifs, réalité virtuelle immersive. Opportunité ou menace ?',
+                    explanation: 'Risque : remplacer l\'humain. Opportunité : libérer du temps pour l\'accompagnement, la créativité, l\'empathie. Principe directeur : préserver le cœur du métier = relation humaine et esprit critique. Former les élèves à PILOTER l\'IA, pas à la subir.',
+                    demo: '💡 <strong>Vision 2030 :</strong> Regardez vidéo <a href="https://www.youtube.com/watch?v=hJP5GqnTrNo" target="_blank" class="text-blue-600 underline">Khan Academy + Khanmigo</a> (tuteur IA personnalisé). Débat : opportunité ou menace ? Où placer le curseur ?',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (15 min) :</strong><br>1. <strong>Visionnage vidéo (5 min) :</strong> Khan Academy Khanmigo - tuteur IA 24/7<br>2. <strong>Débat par groupes de 4 (10 min) :</strong><br>   <strong>POUR :</strong> Tutorat personnalisé, temps prof libéré, accès équitable<br>   <strong>CONTRE :</strong> Déshumanisation, dépendance tech, fracture numérique<br>3. <strong>Question stratégique :</strong> Où placer le curseur dans votre établissement ?<br>4. <strong>Feuille de route :</strong> Listez 3 actions concrètes 2025-2027',
+                    tools: '<strong>🛠️ Feuille de route stratégique 2025-2030 :</strong><br>• Phase 1 (2025-26) : Formation massive équipes, liste outils validés, charte usage IA<br>• Phase 2 (2027-28) : Pilotes pédagogiques, évaluation impacts, ajustements<br>• Phase 3 (2029-30) : Généralisation validée, culture IA mature<br>• KPI : % enseignants formés, satisfaction élèves/parents, temps libéré, impact résultats',
+                    impact: '⚖️ AI Act européen 2024 : IA éducation = système à haut risque. Supervision humaine obligatoire pour décisions impactantes.'
+                },
+                {
+                    level: '🌿',
+                    slide: 'Diapo 15',
+                    title: 'Budget IA : investir ou économiser ? 💰',
+                    scenario: 'Vous avez 10 000€ de budget numérique. Option A : abonnements IA premium pour tous (ChatGPT-4 Pro) = 12 000€/an. Option B : formation des équipes (3 jours) = 3 500€ + outils gratuits (Mistral, MagicSchool) = 0€. Que choisir ?',
+                    explanation: 'Études : impact pédagogique dépend à 80% de la maîtrise pédagogique, 20% de l\'outil. Des outils gratuits bien maîtrisés > outils premium sous-exploités. Recommandation Cour des Comptes 2024 : "Privilégier formation vs équipements sous-exploités".',
+                    demo: '💡 <strong>Comparatif pratique :</strong> Tâche identique sur <a href="https://chat.openai.com" target="_blank" class="text-blue-600 underline">ChatGPT-4</a> (20$/mois) et <a href="https://chat.mistral.ai" target="_blank" class="text-blue-600 underline">Mistral</a> (gratuit) : "Crée quiz 10 questions Révolution française 4ème". Différence minime pour usages basiques !',
+                    casePratique: '🎯 <strong>CAS PRATIQUE (12 min) :</strong><br>1. <strong>Test en direct :</strong> Même tâche sur 2 outils<br>   • ChatGPT-4 (20$/mois) : "Crée quiz 10 questions Révolution française 4ème avec corrections"<br>   • Mistral (gratuit) : même prompt<br>2. <strong>Comparaison :</strong> Notez /10 chaque résultat<br>3. <strong>Simulation budget 10k€ :</strong><br>   Option A : 50 profs × 20€ × 12 = 12k€ (hors budget)<br>   Option B : Formation 3j (3500€) + Mistral gratuit + accompagnement (1500€) + réserve (5000€)<br>4. <strong>Question :</strong> Impact = 80% maîtrise prof, 20% outil<br>5. <strong>Décision :</strong> Privilégier formation',
+                    tools: '<strong>🛠️ Simulation budget optimal 10 000€ :</strong><br>• Formation équipes (3j/an) : 3 500€<br>• Accompagnement DANE/Canopé : 1 500€<br>• Outils gratuits (Mistral, MagicSchool) : 0€<br>• Abonnements ciblés (besoins spécifiques) : 2 000€<br>• Évaluation impact : 1 000€<br>• Réserve imprévus : 2 000€',
+                    impact: '📋 Principe équité + efficience : Formation = investissement durable (compétences à vie). Abonnement = coût récurrent.'
+                },
+                {
+                    level: '🔥',
+                    slide: 'Diapo 16',
+                    title: '🚨 Fuite de données : le cauchemar RGPD',
+                    scenario: 'Mercredi 14h : email d\'un prestataire : "Incident sécurité grave - données potentiellement compromises suite cyberattaque". Jeudi 8h : un journaliste appelle : "2000 données élèves de votre établissement publiées sur le dark web. Commentaire ?" Les réseaux s\'enflamment. Convocation rectorat.',
+                    explanation: 'Obligations légales strictes dans les 72 heures. Responsabilité totale du chef d\'établissement en tant que responsable de traitement des données.',
+                    demo: '💡 <strong>Chronologie obligations RGPD :</strong> H+0 : Cellule crise, notification DPO, documentation incident. H+24 : Évaluation risque, notification CNIL (sous 72h si risque élevé). H+48 : Information individuelle familles, mesures correctives, communication presse.',
+                    casePratique: '🎯 <strong>SIMULATION DE CRISE (15 min) :</strong><br>1. <strong>Scénario :</strong> Mercredi 14h cyberattaque. Jeudi 8h journaliste appelle<br>2. <strong>Jeu de rôle par équipes :</strong><br>   • Équipe 1 : Cellule crise (chef, DPO, DSSI)<br>   • Équipe 2 : Communication (parents, presse, rectorat)<br>   • Équipe 3 : Juridique (CNIL, avocats)<br>3. <strong>Timeline :</strong> H+0 Documentation, H+24 Évaluation, H+48 Notification CNIL, H+72 Information familles<br>4. <strong>Quiz final :</strong> Vrai/Faux sur obligations<br>5. <strong>Check-list :</strong> Plan prévention',
+                    tools: '<strong>🛠️ Suites :</strong><br>• Enquête CNIL possible (audits, sanctions théoriques jusqu\'à 20M€)<br>• Révision contrat prestataire / mise en demeure<br>• Plan action prévention (audit sécurité, formation équipes)<br>• Documentation complète pour preuve diligence',
+                    impact: '⚖️ RGPD : Obligation de notification CNIL sous 72h. Documentation de toutes les mesures prises. Responsabilité pénale et administrative du chef d\'établissement.'
+                }
+            ]
+        };
+
+        const incidents = {
+            enseignant: [
+                {
+                    title: '🚨 Un élève vend des devoirs générés par IA',
+                    scenario: 'Vous découvrez qu\'un élève de Terminale a créé un compte Instagram "@devoirs_ia_premium" où il vend des dissertations générées par IA (10€/commande). Il affiche fièrement "IA de qualité GPT-4, zéro plagiat détecté, satisfaction garantie !". Il a déjà 15 clients réguliers dans l\'établissement.',
+                    question: '💬 <strong>Question débat :</strong> Aspect éthique : est-ce vraiment différent de payer quelqu\'un pour faire ses devoirs ? Entrepreneuriat vs fraude académique ?',
+                    discussion: '<strong>🎯 Pistes de discussion :</strong><br>• Responsabilité du vendeur vs des acheteurs<br>• Nécessité d\'adapter les évaluations (oral, projet, créativité)<br>• Rôle des parents dans la supervision<br>• Sanctions proportionnées ou approche pédagogique ?<br>• Charte d\'usage IA avec élèves<br><br><strong>✅ Actions possibles :</strong><br>• Réunion avec élèves concernés + parents<br>• Expliquer valeur de l\'apprentissage vs résultat<br>• Modifier évaluations vers oral/projet<br>• Sensibiliser à l\'éthique et aux risques'
+                },
+                {
+                    title: '⚡ L\'IA raciste en cours d\'EMC',
+                    scenario: 'Pendant votre cours d\'EMC sur les discriminations, vous faites tester une IA de génération d\'images. Consigne : "Génère l\'image d\'un PDG d\'entreprise". Résultats de 25 élèves : 23 images montrent des hommes blancs en costume. Zéro femme, zéro diversité. Les élèves sont choqués.',
+                    question: '💬 <strong>Question débat :</strong> Comment transformer cet incident embarrassant en opportunité pédagogique majeure ?',
+                    discussion: '<strong>🎯 Axes d\'analyse avec les élèves :</strong><br>• L\'IA reproduit les biais des données d\'entraînement<br>• Différence IA (reflet réalité biaisée) vs réalité souhaitable<br>• Qui crée les IA ? Responsabilité des développeurs<br>• Comment lutter contre ces biais ?<br><br><strong>✅ Activité pédagogique :</strong><br>• Tester avec différentes professions (infirmière, mécanicien, professeur)<br>• Observer et quantifier les stéréotypes<br>• Débat : "L\'IA nous montre le miroir de nos préjugés sociétaux"<br>• Recherche : Initiatives d\'IA équitables'
+                }
+            ],
+            cpe: [
+                {
+                    title: '🚨 L\'IA comme confident... trop confident',
+                    scenario: 'Un élève de 4ème révèle spontanément à ChatGPT des détails très intimes sur sa vie familiale : conflits parentaux violents, climat de peur. L\'IA lui donne des conseils bienveillants mais génériques. L\'élève vous montre fièrement la conversation de 45 minutes : "ChatGPT m\'a vraiment aidé !"',
+                    question: '💬 <strong>Question débat :</strong> Comment sensibiliser l\'élève aux limites de l\'IA sans dramatiser ni le culpabiliser ?',
+                    discussion: '<strong>🎯 Dilemme :</strong><br>• L\'élève s\'est confié... mais pas aux bonnes personnes<br>• Risque : croire être "pris en charge" alors que non<br>• L\'IA ne peut pas déclencher protocole de protection<br>• Pas de détection des signaux d\'urgence<br><br><strong>✅ Actions immédiates CPE :</strong><br>• Valoriser la démarche (chercher aide = courage)<br>• Expliquer : IA écoute, mais n\'a pas outils d\'intervention<br>• Orienter vers : CPE, infirmière, assistante sociale, psy scolaire<br>• Déclencher protocole si signaux graves<br>• Prévention : Campagne "IA écoute, humains aident vraiment"'
+                }
+            ],
+            chef: [
+                {
+                    title: '⚡ Enseignant "augmenté" : trop, c\'est trop ?',
+                    scenario: 'Un enseignant de maths utilise massivement l\'IA : 100% de ses cours préparés par IA, correction automatique, génération exercices, réponses emails parents par IA. Il gagne 10h/semaine investies dans du soutien individualisé. Résultats élèves en hausse (+2 points). MAIS : parents inquiets signent une pétition "déshumanisation", collègues se sentent "dépassés".',
+                    question: '💬 <strong>Question débat :</strong> Où placer précisément le curseur entre efficacité pédagogique et authenticité de la relation humaine ?',
+                    discussion: '<strong>🎯 Arguments :</strong><br><strong>PRO usage intensif :</strong> Gain temps = plus accompagnement humain, résultats meilleurs, innovation pédagogique<br><strong>CONTRE :</strong> Perception "robot prof", pression collègues, dépendance tech<br><br><strong>✅ Pistes régulation :</strong><br>• Dialogue individuel (valoriser + cadrer)<br>• Transparence usage IA auprès parents<br>• Formation collective équipe (éviter fracture)<br>• Charte établissement : usages IA encouragés MAIS transparents<br>• Préserver espaces 100% humains (entretiens, conseils classe)'
+                }
+            ]
+        };
+
+        const roleInfo = {
+            enseignant: {
+                title: '📚 Enseignants : IA et Pédagogie',
+                subtitle: '6 cas concrets avec démonstrations pratiques d\'outils IA'
+            },
+            cpe: {
+                title: '🎯 CPE : IA et Vie Scolaire',
+                subtitle: '5 cas concrets avec démonstrations pratiques d\'outils IA'
+            },
+            chef: {
+                title: '⚖️ Chefs d\'Établissement : Stratégie IA',
+                subtitle: '5 cas concrets avec démonstrations pratiques d\'outils IA'
+            }
+        };
+
+        function selectRole(role) {
+            currentRole = role;
+            presenterMode = false;
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('mainScreen').classList.remove('hidden');
+
+            document.getElementById('roleTitle').textContent = roleInfo[role].title;
+            document.getElementById('roleSubtitle').textContent = roleInfo[role].subtitle;
+            
+            displayAllCases();
+            window.scrollTo(0, 0);
+        }
+
+        function startPresenterMode() {
+            presenterMode = true;
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('presenterPanel').classList.remove('hidden');
+        }
+
+        function closePresenterPanel() {
+            document.getElementById('presenterPanel').classList.add('hidden');
+            presenterMode = false;
+            backToWelcome();
+        }
+
+        function changePresenterRole() {
+            const role = document.getElementById('presenterRoleSelect').value;
+            if (!role) return;
+            
+            currentRole = role;
+            
+            document.getElementById('mainScreen').classList.remove('hidden');
+            document.getElementById('roleTitle').textContent = roleInfo[role].title;
+            document.getElementById('roleSubtitle').textContent = roleInfo[role].subtitle;
+            
+            displayAllCases();
+            updatePresenterButtons();
+            window.scrollTo(0, 0);
+        }
+
+        function updatePresenterButtons() {
+            const caseButtonsDiv = document.getElementById('presenterCaseButtons');
+            const incidentButtonsDiv = document.getElementById('presenterIncidentButtons');
+            
+            if (!currentRole) {
+                caseButtonsDiv.innerHTML = '<p class="text-sm text-gray-500">Sélectionnez un profil</p>';
+                incidentButtonsDiv.innerHTML = '<p class="text-sm text-gray-500">Sélectionnez un profil</p>';
+                return;
+            }
+
+            caseButtonsDiv.innerHTML = cardData[currentRole].map((card, i) => 
+                `<button onclick="presenterRevealCase(${i})" 
+                    class="w-full bg-indigo-500 text-white px-3 py-2 rounded text-sm hover:bg-indigo-600 text-left">
+                    ${card.level} Cas ${i + 1}: ${card.title.substring(0, 30)}...
+                </button>`
+            ).join('');
+
+            const roleIncidents = incidents[currentRole] || [];
+            incidentButtonsDiv.innerHTML = roleIncidents.map((inc, i) => 
+                `<button onclick="presenterTriggerIncident(${i})" 
+                    class="w-full bg-red-500 text-white px-3 py-2 rounded text-sm hover:bg-red-600 text-left">
+                    Incident ${i + 1}: ${inc.title}
+                </button>`
+            ).join('');
+        }
+
+        function presenterRevealCase(index) {
+            const caseEl = document.getElementById(`case-${index}`);
+            if (caseEl) {
+                caseEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function presenterTriggerIncident(index) {
+            showIncident(index);
+        }
+
+        function displayAllCases() {
+            const container = document.getElementById('casesContainer');
+            container.innerHTML = '';
+
+            cardData[currentRole].forEach((card, index) => {
+                const caseDiv = document.createElement('div');
+                caseDiv.className = 'case-card bg-white rounded-2xl shadow-lg p-8 relative';
+                caseDiv.id = `case-${index}`;
+
+                const casePratiqueHTML = card.casePratique ? `
+                    <div class="bg-orange-50 p-5 rounded-lg border-l-4 border-orange-500">
+                        <strong class="text-orange-900 text-lg">🎯 Cas pratique à tester en direct</strong>
+                        <p class="text-gray-700 mt-2">${card.casePratique}</p>
+                    </div>
+                ` : '';
+
+                caseDiv.innerHTML = `
+                    <span class="slide-badge">${card.slide}</span>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="text-5xl">${card.level}</div>
+                        <h3 class="text-2xl font-bold text-indigo-900">${card.title}</h3>
+                    </div>
+
+                    <div id="case-content-${index}">
+                        <div class="space-y-6">
+                            <div class="bg-blue-50 p-5 rounded-lg border-l-4 border-blue-500">
+                                <strong class="text-blue-900 text-lg">📌 Situation concrète</strong>
+                                <p class="text-gray-700 mt-2">${card.scenario}</p>
+                            </div>
+
+                            <div class="bg-indigo-50 p-5 rounded-lg border-l-4 border-indigo-500">
+                                <strong class="text-indigo-900 text-lg">🎯 Analyse</strong>
+                                <p class="text-gray-700 mt-2">${card.explanation}</p>
+                            </div>
+
+                            <div class="bg-yellow-50 p-5 rounded-lg border-l-4 border-yellow-500">
+                                <strong class="text-yellow-900 text-lg">💡 Démonstration pratique</strong>
+                                <p class="text-gray-700 mt-2">${card.demo}</p>
+                            </div>
+
+                            ${casePratiqueHTML}
+
+                            <div class="text-center my-4">
+                                <button onclick="revealTools(${index})" 
+                                    id="revealBtn-${index}"
+                                    class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-8 py-4 rounded-lg font-bold text-lg hover:shadow-xl transform hover:scale-105 transition-all">
+                                    🛠️ Voir les outils et ressources
+                                </button>
+                            </div>
+
+                            <div id="tools-${index}" class="hidden-content">
+                                <div class="bg-green-50 p-5 rounded-lg border-l-4 border-green-500 animate-fadeIn">
+                                    <strong class="text-green-900 text-lg">🛠️ Outils et ressources</strong>
+                                    <p class="text-gray-700 mt-2">${card.tools}</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-purple-50 p-5 rounded-lg border-l-4 border-purple-500">
+                                <strong class="text-purple-900 text-lg">⚖️ Cadre juridique & Impact</strong>
+                                <p class="text-gray-700 mt-2">${card.impact}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(caseDiv);
+            });
+
+            displayIncidents();
+        }
+
+        function revealTools(index) {
+            const tools = document.getElementById(`tools-${index}`);
+            const button = document.getElementById(`revealBtn-${index}`);
+
+            tools.classList.add('revealed');
+            button.classList.add('hidden');
+
+            setTimeout(() => {
+                tools.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        function displayIncidents() {
+            const section = document.getElementById('incidentsSection');
+            const container = document.getElementById('incidentsContainer');
+            
+            const roleIncidents = incidents[currentRole];
+            if (!roleIncidents || roleIncidents.length === 0) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            section.classList.remove('hidden');
+            container.innerHTML = '';
+
+            roleIncidents.forEach((incident, index) => {
+                const incidentDiv = document.createElement('div');
+                incidentDiv.className = 'bg-white rounded-xl p-6 border-4 border-red-400';
+                
+                incidentDiv.innerHTML = `
+                    <h4 class="text-2xl font-bold text-red-900 mb-4">${incident.title}</h4>
+                    <p class="text-gray-600 mb-4">${incident.scenario.substring(0, 200)}...</p>
+                    <button onclick="showIncident(${index})" 
+                        class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 font-bold">
+                        🚨 Déclencher l'incident
+                    </button>
+                `;
+
+                container.appendChild(incidentDiv);
+            });
+        }
+
+        function showIncident(index) {
+            const incident = incidents[currentRole][index];
+            document.getElementById('incidentContent').innerHTML = `
+                <div class="bg-red-50 p-6 rounded-lg border-l-4 border-red-600 mb-6">
+                    <h4 class="text-2xl font-bold text-red-900 mb-4">${incident.title}</h4>
+                    <div class="mb-5">
+                        <strong class="text-red-800 text-lg">📢 Situation d\'urgence</strong>
+                        <p class="text-gray-700 mt-3 leading-relaxed">${incident.scenario}</p>
+                    </div>
+                    <div class="mb-5 bg-red-100 p-5 rounded-lg">
+                        ${incident.question}
+                    </div>
+
+                    <div class="text-center my-6">
+                        <button onclick="revealIncidentPistes()" 
+                            id="incidentRevealBtn"
+                            class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-lg font-bold text-lg hover:shadow-xl transform hover:scale-105 transition-all">
+                            💡 Révéler les pistes de réflexion
+                        </button>
+                    </div>
+
+                    <div id="incidentPistesContent" class="hidden-content">
+                        <div class="bg-white p-5 rounded-lg border-2 border-orange-500 animate-fadeIn">
+                            <strong class="text-gray-800 text-lg">🎯 Pistes pour le débat collectif</strong>
+                            <div class="text-gray-700 mt-3 leading-relaxed">${incident.discussion}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-6">
+                    <button onclick="closeIncident()" 
+                        class="bg-gray-600 text-white px-8 py-3 rounded-lg hover:bg-gray-700 font-bold">
+                        Fermer l\'incident
+                    </button>
+                </div>
+            `;
+            document.getElementById('incidentOverlay').classList.remove('hidden');
+        }
+
+        function revealIncidentPistes() {
+            const pistes = document.getElementById('incidentPistesContent');
+            const button = document.getElementById('incidentRevealBtn');
+
+            pistes.classList.add('revealed');
+            button.classList.add('hidden');
+        }
+
+        function closeIncident() {
+            document.getElementById('incidentOverlay').classList.add('hidden');
+        }
+
+        function backToWelcome() {
+            document.getElementById('mainScreen').classList.add('hidden');
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+            document.getElementById('presenterPanel').classList.add('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        // ===== ROUE DE LA FORTUNE =====
+        let wheelSpinning = false;
+        let wheelData = [];
+        let usedCases = {}; // Stocke les cas déjà utilisés par profil
+
+        function openWheel() {
+            if (!currentRole) {
+                alert('Veuillez d\'abord choisir un profil !');
+                return;
+            }
+            
+            // Initialiser le tracker pour ce profil si nécessaire
+            if (!usedCases[currentRole]) {
+                usedCases[currentRole] = [];
+            }
+            
+            // Préparer les données de la roue (seulement les cas non utilisés)
+            const allCases = cardData[currentRole].map((card, index) => ({
+                index: index,
+                title: card.title,
+                level: card.level
+            }));
+            
+            wheelData = allCases.filter(item => !usedCases[currentRole].includes(item.index));
+
+            // Si tous les cas ont été utilisés, proposer de réinitialiser
+            if (wheelData.length === 0) {
+                if (confirm('🎉 Tous les cas ont été explorés !\n\nVoulez-vous réinitialiser la roue pour recommencer ?')) {
+                    usedCases[currentRole] = [];
+                    wheelData = allCases;
+                } else {
+                    return;
+                }
+            }
+
+            // Créer la roue
+            createWheel();
+            
+            // Afficher le compteur de cas restants
+            updateCaseCounter();
+            
+            document.getElementById('wheelOverlay').classList.remove('hidden');
+        }
+
+        function createWheel() {
+            const wheel = document.getElementById('wheel');
+            if (!wheel) {
+                console.error('Élément wheel introuvable !');
+                return;
+            }
+            
+            wheel.innerHTML = '';
+            
+            if (!wheelData || wheelData.length === 0) {
+                console.error('wheelData vide ou non défini');
+                return;
+            }
+            
+            const colors = [
+                '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', 
+                '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2',
+                '#FF8C94', '#5DD9C1', '#FFB347', '#87CEEB'
+            ];
+            
+            const segmentAngle = 360 / wheelData.length;
+
+            wheelData.forEach((item, index) => {
+                const segment = document.createElement('div');
+                segment.className = 'wheel-segment';
+                segment.style.background = colors[item.index % colors.length];
+                segment.style.transform = `rotate(${segmentAngle * index}deg)`;
+                
+                const label = document.createElement('div');
+                label.className = 'wheel-segment-label';
+                label.innerHTML = `
+                    <div style="background: rgba(0,0,0,0.5); padding: 8px 12px; border-radius: 8px; backdrop-filter: blur(4px);">
+                        <div style="font-size: 24px; margin-bottom: 2px;">${item.level}</div>
+                        <div style="font-size: 16px; font-weight: bold;">CAS ${item.index + 1}</div>
+                    </div>
+                `;
+                
+                segment.appendChild(label);
+                wheel.appendChild(segment);
+            });
+            
+            console.log(`Roue créée avec ${wheelData.length} segments`);
+        }
+
+        function spinWheel() {
+            if (wheelSpinning) {
+                console.log('La roue tourne déjà...');
+                return;
+            }
+            
+            if (!wheelData || wheelData.length === 0) {
+                alert('Aucun cas disponible !');
+                return;
+            }
+            
+            wheelSpinning = true;
+            const spinBtn = document.getElementById('spinButton');
+            spinBtn.disabled = true;
+            spinBtn.textContent = '⏳ EN COURS...';
+            
+            document.getElementById('wheelResult').classList.remove('show');
+            
+            const wheel = document.getElementById('wheel');
+            const spins = 5 + Math.random() * 3; // 5-8 tours
+            const selectedIndex = Math.floor(Math.random() * wheelData.length); // Index dans wheelData
+            const segmentAngle = 360 / wheelData.length;
+            
+            // Calculer l'angle final pour que le pointeur pointe vers le segment sélectionné
+            const targetAngle = -(selectedIndex * segmentAngle + segmentAngle / 2);
+            const finalAngle = (spins * 360) + targetAngle;
+            
+            wheel.style.transform = `rotate(${finalAngle}deg)`;
+            
+            setTimeout(() => {
+                wheelSpinning = false;
+                spinBtn.disabled = false;
+                spinBtn.textContent = '🎲 LANCER LA ROUE';
+                showWheelResult(selectedIndex);
+            }, 4000);
+        }
+
+        function showWheelResult(index) {
+            console.log('Résultat : index =', index, 'wheelData =', wheelData);
+            
+            if (!wheelData || index >= wheelData.length) {
+                console.error('Index invalide ou wheelData vide');
+                return;
+            }
+            
+            const result = wheelData[index];
+            const resultDiv = document.getElementById('wheelResult');
+            
+            if (!result || !cardData[currentRole] || !cardData[currentRole][result.index]) {
+                console.error('Données invalides');
+                return;
+            }
+            
+            // Affichage amélioré avec emoji et titre
+            const caseInfo = cardData[currentRole][result.index];
+            resultDiv.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="font-size: 40px; margin-bottom: 10px;">${result.level}</div>
+                    <div style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">CAS ${result.index + 1} SÉLECTIONNÉ !</div>
+                    <div style="font-size: 16px; font-weight: normal; max-width: 400px; margin: 0 auto; line-height: 1.3;">
+                        ${caseInfo.title.substring(0, 60)}${caseInfo.title.length > 60 ? '...' : ''}
+                    </div>
+                </div>
+            `;
+            resultDiv.classList.add('show');
+            
+            // Marquer ce cas comme utilisé
+            if (!usedCases[currentRole].includes(result.index)) {
+                usedCases[currentRole].push(result.index);
+            }
+            
+            // Effet confettis
+            createConfetti();
+            
+            // Son de victoire (optionnel)
+            try {
+                const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGS57OmdTQ0OTqXh8LJnHAU2jdXwyXYpBSh+zO/ekkELGGK56+qnVBMJSKDi8bllHQU1jdXx0HwsCCF7zPDhk0ALGGq+7OuqWBULTajk8Ldp');
+                audio.volume = 0.3;
+                audio.play().catch(() => {});
+            } catch(e) {
+                console.log('Impossible de jouer le son');
+            }
+            
+            setTimeout(() => {
+                const remainingCases = cardData[currentRole].length - usedCases[currentRole].length;
+                const message = `🎉 Voulez-vous explorer ce cas ?\n\n${result.level} Cas ${result.index + 1}\n"${caseInfo.title}"\n\n📊 Cas restants : ${remainingCases}/${cardData[currentRole].length}`;
+                if (confirm(message)) {
+                    closeWheel();
+                    setTimeout(() => {
+                        presenterRevealCase(result.index);
+                    }, 300);
+                } else {
+                    // Si l'utilisateur refuse, retirer le cas de la liste des utilisés
+                    const idx = usedCases[currentRole].indexOf(result.index);
+                    if (idx > -1) {
+                        usedCases[currentRole].splice(idx, 1);
+                    }
+                }
+            }, 1500);
+        }
+
+        function updateCaseCounter() {
+            const counter = document.getElementById('caseCounter');
+            if (!counter) {
+                console.error('Élément caseCounter introuvable');
+                return;
+            }
+            
+            if (!currentRole || !cardData[currentRole]) {
+                counter.innerHTML = '<div style="color: white;">Chargement...</div>';
+                return;
+            }
+            
+            const total = cardData[currentRole].length;
+            const remaining = wheelData ? wheelData.length : total;
+            const explored = total - remaining;
+            const percentage = Math.round((explored / total) * 100);
+            
+            counter.innerHTML = `
+                <div style="font-size: 20px; font-weight: bold; color: white; margin-bottom: 10px;">
+                    📊 Progression : ${explored}/${total} cas explorés (${percentage}%)
+                </div>
+                <div style="background: rgba(255,255,255,0.2); height: 20px; border-radius: 10px; overflow: hidden; margin-bottom: 8px;">
+                    <div style="background: linear-gradient(90deg, #FFD700, #FFA500); height: 100%; width: ${percentage}%; transition: width 0.5s ease; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: #000;">
+                        ${percentage > 10 ? percentage + '%' : ''}
+                    </div>
+                </div>
+                <div style="font-size: 16px; color: #FFD700;">
+                    ${remaining > 0 ? `⭐ ${remaining} cas restants dans la roue` : '🎉 Tous les cas ont été explorés !'}
+                </div>
+            `;
+        }
+
+        function createConfetti() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500', '#ff1493'];
+            const confettiCount = 50;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 3000);
+                }, i * 30);
+            }
+        }
+
+        function closeWheel() {
+            document.getElementById('wheelOverlay').classList.add('hidden');
+            const wheel = document.getElementById('wheel');
+            wheel.style.transform = 'rotate(0deg)';
+            document.getElementById('wheelResult').classList.remove('show');
+        }
+
+        function resetWheel() {
+            if (confirm('🔄 Voulez-vous réinitialiser tous les cas pour ce profil ?\n\nCela vous permettra de retirer tous les cas déjà explorés.')) {
+                usedCases[currentRole] = [];
+                closeWheel();
+                setTimeout(() => {
+                    openWheel();
+                }, 300);
+            }
+        }
+    </script>
+</body>
+</html>
