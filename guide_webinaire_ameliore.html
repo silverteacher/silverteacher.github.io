@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Webinaire Interactif - Genially, Wooclap & PowerPoint</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Navigation fixe améliorée */
+        .navigation {
+            position: sticky;
+            top: 20px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 30px;
+            padding: 15px 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            margin-bottom: 30px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 2px solid transparent;
+            padding: 10px 20px;
+            margin: 5px 8px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        /* En-tête */
+        .header {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 3rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: #555;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Sections */
+        section {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 50px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        section h2 {
+            color: #2c3e50;
+            font-size: 2.2rem;
+            margin-bottom: 35px;
+            font-weight: 700;
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 15px;
+        }
+
+        section h3 {
+            color: #2c3e50;
+            font-size: 1.6rem;
+            margin: 30px 0 20px 0;
+            font-weight: 600;
+        }
+
+        section h4 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        /* Grilles */
+        .benefits-grid, .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 35px;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+            margin-top: 35px;
+        }
+
+        /* Cartes */
+        .benefit-card, .role-card, .example-card, .demo-card, .checklist-item, .script-item {
+            padding: 30px;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .benefit-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 6px solid #3498db;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.2);
+        }
+
+        .benefit-card h3 {
+            color: #2c3e50;
+            margin-bottom: 18px;
+            font-size: 1.4rem;
+        }
+
+        .benefit-card p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .example-card {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d5e9f0 100%);
+            border-left: 6px solid #27ae60;
+            margin-bottom: 30px;
+        }
+
+        .example-card h3 {
+            color: #27ae60;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+        }
+
+        .example-card p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 12px;
+            color: #444;
+        }
+
+        .example-card strong {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .role-card {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe69c 100%);
+            border-left: 6px solid #ffc107;
+        }
+
+        .role-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 193, 7, 0.2);
+        }
+
+        .role-card h4 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .role-card p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .checklist-item {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e0f2ff 100%);
+            border-left: 5px solid #007bff;
+            margin: 15px 0;
+        }
+
+        .checklist-item strong {
+            color: #007bff;
+            font-weight: 600;
+        }
+
+        .script-item {
+            background: white;
+            border-left: 5px solid #28a745;
+            margin: 15px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .script-item strong {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .scripts-section {
+            background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+
+        /* Boutons */
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin: 12px 8px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-success {
+            background: #27ae60;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-success:hover {
+            background: #229954;
+            box-shadow: 0 6px 18px rgba(39, 174, 96, 0.4);
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+            box-shadow: 0 6px 18px rgba(243, 156, 18, 0.4);
+        }
+
+        /* Section contact */
+        .contact-section {
+            text-align: center;
+            margin-top: 50px;
+            padding: 40px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border: 3px solid #3498db;
+        }
+
+        .contact-section p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            section {
+                padding: 30px 20px;
+            }
+
+            section h2 {
+                font-size: 1.8rem;
+            }
+
+            .navigation {
+                position: relative;
+                top: 0;
+            }
+
+            .nav-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+                margin: 3px 5px;
+            }
+
+            .benefits-grid, .roles-grid, .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Amélioration de la lisibilité */
+        p {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: #444;
+            margin-bottom: 15px;
+        }
+
+        strong {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* Scroll smooth */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Barres de défilement personnalisées */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3498db;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navigation" role="navigation" aria-label="Navigation principale">
+        <button class="nav-btn active" onclick="scrollToSection('benefits')" aria-label="Aller aux bénéfices">Bénéfices</button>
+        <button class="nav-btn" onclick="scrollToSection('examples')" aria-label="Aller aux exemples">Exemples</button>
+        <button class="nav-btn" onclick="scrollToSection('co-animation')" aria-label="Aller à la co-animation">Co-animation</button>
+        <button class="nav-btn" onclick="scrollToSection('checklist')" aria-label="Aller à la checklist">Checklist</button>
+    </nav>
+
+    <div class="container">
+        <header class="header fade-in">
+            <h1 id="main-title">BigBlueButton + Genially + Wooclap : Le Trio Gagnant</h1>
+            <p id="intro-text">Maximisez l'engagement de vos sessions BigBlueButton en combinant les sondages Wooclap et les contenus interactifs Genially. Découvrez comment orchestrer ces outils via partage d'écran et liens directs pour créer des expériences pédagogiques captivantes.</p>
+        </header>
+
+        <section id="benefits" class="fade-in" aria-labelledby="benefits-title">
+            <h2 id="benefits-title">Pourquoi Cette Combinaison Fonctionne dans BigBlueButton</h2>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <h3>BigBlueButton : La Base Stable</h3>
+                    <p>BBB offre audio, vidéo, chat et tableau blanc intégrés. Partage d'écran fluide, enregistrement automatique, salles de sous-groupes. Interface familière pour l'éducation avec gestion des droits et modération avancée.</p>
+                </div>
+                <div class="benefit-card">
+                    <h3>Genially : Contenu Interactif</h3>
+                    <p>Partagez votre écran BBB pour montrer des infographies cliquables, quiz interactifs et parcours gamifiés. Les participants suivent via leur navigateur pendant que vous naviguez en direct.</p>
+                </div>
+                <div class="benefit-card">
+                    <h3>Wooclap : Participation Live</h3>
+                    <p>Envoyez le lien Wooclap via chat BBB. Sondages instantanés, nuages de mots, quiz en temps réel. Résultats visibles par partage d'écran pour dynamiser l'interaction collective.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="examples" class="fade-in" aria-labelledby="examples-title">
+            <h2 id="examples-title">Exemples Pratiques avec BigBlueButton</h2>
+
+            <div class="example-card">
+                <h3>Formation "Transition Écologique" - 45 min, 30 participants</h3>
+                <p><strong>Démarrage BBB :</strong> Accueil en plénière, test audio/vidéo, partage du lien Wooclap via chat.</p>
+                <p><strong>Sondage Wooclap :</strong> "Votre priorité écologique ?" - Nuage de mots affiché via partage d'écran BBB.</p>
+                <p><strong>Contenu Genially :</strong> Infographie interactive partagée en plein écran. Navigation live par l'animateur.</p>
+                <p><strong>Synthèse BBB :</strong> Retour en audio, utilisation du tableau blanc pour noter les points-clés.</p>
+            </div>
+
+            <div class="example-card">
+                <h3>Cours de Langues - 60 min, 15 participants</h3>
+                <p><strong>Échauffement Wooclap :</strong> Quiz vocabulaire via lien chat BBB.</p>
+                <p><strong>Dialogue Genially :</strong> Scénarios interactifs présentés en partage d'écran.</p>
+                <p><strong>Pratique BBB :</strong> Salles de sous-groupes pour exercices oraux, retour en plénière.</p>
+            </div>
+        </section>
+
+        <section id="co-animation" class="fade-in" aria-labelledby="co-animation-title">
+            <h2 id="co-animation-title">Co-Animation dans BigBlueButton</h2>
+
+            <h3>Répartition des Rôles BBB</h3>
+            <div class="roles-grid">
+                <div class="role-card">
+                    <h4>Modérateur Principal</h4>
+                    <p>Gère l'audio/vidéo BBB. Contrôle le partage d'écran. Lance les salles de sous-groupes. Surveille les participants.</p>
+                </div>
+                <div class="role-card">
+                    <h4>Co-Animateur Contenu</h4>
+                    <p>Navigue dans Genially. Prépare les liens Wooclap. Gère le chat BBB. Anime le tableau blanc collaboratif.</p>
+                </div>
+                <div class="role-card">
+                    <h4>Support Technique</h4>
+                    <p>Surveille la qualité audio/vidéo. Aide les participants en difficulté. Gère les enregistrements. Prépare les liens de secours.</p>
+                </div>
+            </div>
+
+            <h3>Préparation BBB (5 min avant)</h3>
+            <div class="checklist-item">
+                <strong>Test BBB :</strong> Audio, vidéo, partage d'écran, chat fonctionnels. Liens Wooclap et Genially prêts.
+            </div>
+            <div class="checklist-item">
+                <strong>Coordination :</strong> "Je partage Genially, tu postes le lien Wooclap" - "OK, j'annonce dans le chat."
+            </div>
+
+            <h3>Scripts BBB</h3>
+            <div class="scripts-section">
+                <div class="script-item">
+                    <strong>Lancement Wooclap :</strong> "Lien sondage dans le chat - je partage les résultats dans 2 min"
+                </div>
+                <div class="script-item">
+                    <strong>Passage Genially :</strong> "Je partage mon écran - suivez la navigation en direct"
+                </div>
+                <div class="script-item">
+                    <strong>Sous-groupes :</strong> "Salles de 4 personnes - retour dans 10 min"
+                </div>
+            </div>
+
+            <h3>Solutions de Secours BBB</h3>
+            <div class="checklist-item">
+                <strong>Wooclap bloqué :</strong> Sondage via chat BBB ou tableau blanc collaboratif.
+            </div>
+            <div class="checklist-item">
+                <strong>Partage d'écran défaillant :</strong> Envoi des liens directs via chat, navigation individuelle.
+            </div>
+            <div class="checklist-item">
+                <strong>Audio coupé :</strong> Communication via chat, co-animateur prend le relais vocal.
+            </div>
+        </section>
+
+        <section id="checklist" class="fade-in" aria-labelledby="checklist-title">
+            <h2 id="checklist-title">Checklist BigBlueButton</h2>
+
+            <h3>Avant la Session</h3>
+            <div class="checklist-item">
+                <strong>Test BBB :</strong> Vérifier audio, vidéo, partage d'écran, chat, tableau blanc, salles de sous-groupes.
+            </div>
+            <div class="checklist-item">
+                <strong>Liens prêts :</strong> URLs Wooclap et Genially testées, accessibles sans compte participant.
+            </div>
+            <div class="checklist-item">
+                <strong>Droits modérateur :</strong> Co-animateurs avec permissions appropriées dans BBB.
+            </div>
+
+            <h3>Pendant la Session</h3>
+            <div class="checklist-item">
+                <strong>Partage d'écran :</strong> Genially en plein écran, navigation fluide, retour BBB facile.
+            </div>
+            <div class="checklist-item">
+                <strong>Chat actif :</strong> Liens Wooclap postés, questions surveillées, participants guidés.
+            </div>
+            <div class="checklist-item">
+                <strong>Enregistrement :</strong> Session BBB enregistrée si autorisé, participants informés.
+            </div>
+
+            <h3>Conformité RGPD</h3>
+            <div class="checklist-item">
+                <strong>Données BBB :</strong> Enregistrements sur serveurs institutionnels, durée de conservation définie.
+            </div>
+            <div class="checklist-item">
+                <strong>Wooclap anonyme :</strong> Code session (ex: 4829) pour lier les réponses sans identifiants personnels.
+            </div>
+            <div class="checklist-item">
+                <strong>Accessibilité :</strong> Sous-titres activés dans BBB, contrastes élevés, pauses régulières.
+            </div>
+
+            <div class="contact-section">
+                <p id="contact-info"><strong>Besoin d'accompagnement ?</strong><br>Contactez notre équipe pédagogique pour une formation personnalisée à l'orchestration de ces outils.</p>
+                <button class="btn btn-warning" onclick="showContactForm()">Demander un accompagnement</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Navigation fluide
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+
+                // Mise à jour des boutons actifs
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+                event.target.classList.add('active');
+            }
+        }
+
+        // Animation d'apparition au scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Formulaire de contact
+        function showContactForm() {
+            const contactSection = document.querySelector('.contact-section');
+
+            if (!document.getElementById('contact-form')) {
+                const formHTML = `
+                    <div id="contact-form" style="margin-top: 30px; padding: 30px; background: white; border-radius: 15px; border: 3px solid #3498db; box-shadow: 0 8px 20px rgba(0,0,0,0.1);">
+                        <h4 style="color: #2c3e50; margin-bottom: 25px; font-size: 1.5rem;">Demande d'accompagnement</h4>
+                        <form onsubmit="submitContactForm(event)">
+                            <label for="name" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Nom :</label>
+                            <input type="text" id="name" name="name" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem;">
+
+                            <label for="email" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Email :</label>
+                            <input type="email" id="email" name="email" required style="width: 100%; padding: 12px; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem;">
+
+                            <label for="message" style="display: block; margin-bottom: 8px; font-weight: 600; color: #2c3e50;">Message :</label>
+                            <textarea id="message" name="message" rows="5" required style="width: 100%; padding: 12px; margin-bottom: 25px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; resize: vertical;"></textarea>
+
+                            <button type="submit" class="btn btn-success">Envoyer la demande</button>
+                            <button type="button" class="btn" onclick="hideContactForm()">Annuler</button>
+                        </form>
+                    </div>
+                `;
+                contactSection.insertAdjacentHTML('beforeend', formHTML);
+            }
+        }
+
+        function submitContactForm(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Envoi en cours...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                form.innerHTML = `
+                    <div style="text-align: center; color: #27ae60; padding: 30px;">
+                        <h4 style="font-size: 1.8rem; margin-bottom: 15px;">✓ Demande envoyée avec succès !</h4>
+                        <p style="font-size: 1.2rem; margin-bottom: 25px;">Nous vous recontacterons dans les 48h.</p>
+                        <button class="btn" onclick="hideContactForm()">Fermer</button>
+                    </div>
+                `;
+            }, 1500);
+        }
+
+        function hideContactForm() {
+            const form = document.getElementById('contact-form');
+            if (form) {
+                form.remove();
+            }
+        }
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            animateOnScroll();
+        });
+
+        window.addEventListener('scroll', animateOnScroll);
+    </script>
+</body>
+</html>
