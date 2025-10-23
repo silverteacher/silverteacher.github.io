@@ -33,6 +33,12 @@
         .timer { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 1.5em; font-weight: bold; transition: all 0.3s; }
         .timer.warning { background: #ff6b6b; animation: shake 0.5s infinite; }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .creator-credit {
+            margin-top: 15px;
+            font-size: 0.9em;
+            opacity: 0.9;
+            font-style: italic;
+        }
         .question-timer { background: #ff6b6b; color: white; padding: 10px 20px; border-radius: 50px; font-size: 1.2em; font-weight: bold; display: inline-block; margin: 10px 0; }
         .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; background: rgba(102, 126, 234, 0.1); }
         .stat { text-align: center; padding: 15px; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
@@ -89,6 +95,18 @@
         .welcome-screen p { font-size: 1.2em; line-height: 1.9; margin-bottom: 20px; color: #555; }
         .welcome-screen ul { text-align: left; max-width: 700px; margin: 25px auto; font-size: 1.15em; line-height: 2.2; }
         .welcome-screen li { margin-bottom: 15px; }
+        .discussion-card {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
+            border-left: 6px solid #ffc107;
+            padding: 30px;
+            margin: 30px 0;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(255,193,7,0.2);
+        }
+        .discussion-card h3 { color: #856404; margin-bottom: 20px; font-size: 1.5em; }
+        .discussion-card p { line-height: 1.9; color: #333; font-size: 1.1em; margin-bottom: 15px; }
+        .discussion-card ul { margin: 20px 0; padding-left: 25px; }
+        .discussion-card li { margin: 12px 0; line-height: 1.7; font-size: 1.05em; }
         .incident-overlay {
             position: fixed;
             top: 0;
@@ -156,6 +174,7 @@
             <p style="font-size:1.1em">Formation interactive basée sur le Livret de Missions IA</p>
             <p style="font-size:0.95em;margin-top:10px;opacity:0.9">⚠️ Attention: Des incidents critiques peuvent survenir à tout moment!</p>
             <div class="timer" id="timer">⏱️ 30:00</div>
+            <div class="creator-credit">Créé avec ❤️ par Amélie Silvert</div>
         </div>
         <div class="stats">
             <div class="stat">
@@ -193,7 +212,12 @@
             {role:'cpe',question:'Lors d\'une campagne de prévention harcèlement, vous utilisez une IA pour générer des témoignages fictifs "réalistes". Un témoignage mentionne "Kevin, 14 ans, Marseille". Problème éthique?',choices:['Aucun, Kevin fictif','Acceptable si on précise "fictif"','Risque: élève réel peut être identifié, stigmatisé, rumeurs','Bon outil pédagogique immersion'],correct:2,points:30,justification:'Livret Mission 5 : Biais et éthique. Même fictif, prénom + âge + ville peut correspondre à élève réel. Risque identification, stigmatisation, rumeurs. Toujours utiliser cas génériques ou anonymisés (initiales, sans localisation).'},
             {role:'direction',question:'Vous préparez documents officiels pour Conseil d\'Administration avec ChatGPT (ordre du jour, compte-rendu). Un élu remarque 3 erreurs juridiques graves. Mesures correctives?',choices:['Minimiser, "détails mineurs"','Accuser ChatGPT publiquement','Retirer documents, vérifier conformité Code éducation, corriger, re-présenter avec mention vérification','Modifier discrètement sans informer'],correct:2,points:40,justification:'Livret Mission 5 : Responsabilité et hallucinations. Document officiel erroné = conséquences juridiques graves. Protocole: retrait immédiat, vérification complète conformité, correction, nouvelle présentation avec transparence sur vérification.'},
             {role:'enseignant',question:'Vous enseignez l\'anglais et souhaitez que vos 3ème utilisent ChatGPT pour s\'entraîner à la conversation orale. Quelle mise en œuvre respecte le cadre légal?',choices:['Demander création comptes individuels ChatGPT','Donner code compte ChatGPT perso','Projection collective en classe, vous contrôlez interactions','Laisser élèves s\'inscrire à domicile'],correct:2,points:30,justification:'Livret Mission 1 & 2 : Protection mineurs. Interdiction comptes individuels (<18 ans). Alternative conforme: projection collective, enseignant contrôle, pas de données élèves, ou outils académiques dédiés.'},
-            {role:'cpe',question:'Vous organisez une formation IA pour délégués de classe. Objectif: développer esprit critique. Quelle activité est la plus pertinente selon le Livret de Missions?',choices:['Montrer uniquement les dangers de l\'IA','Laisser délégués découvrir seuls','Interdire totalement usage IA','Atelier pratique: tester prompts, identifier biais, vérifier sources, reconnaître limites'],correct:3,points:30,justification:'Livret Mission 3 : Former à l\'usage éthique. Approche pratique efficace: ateliers avec techniques de prompt, identification biais, vérification sources, reconnaissance limites. Développe autonomie et esprit critique.'}
+            {role:'cpe',question:'Vous organisez une formation IA pour délégués de classe. Objectif: développer esprit critique. Quelle activité est la plus pertinente selon le Livret de Missions?',choices:['Montrer uniquement les dangers de l\'IA','Laisser délégués découvrir seuls','Interdire totalement usage IA','Atelier pratique: tester prompts, identifier biais, vérifier sources, reconnaître limites'],correct:3,points:30,justification:'Livret Mission 3 : Former à l\'usage éthique. Approche pratique efficace: ateliers avec techniques de prompt, identification biais, vérification sources, reconnaissance limites. Développe autonomie et esprit critique.'},
+            {role:'direction',question:'Vous êtes chef d\'établissement et mettez en place une gouvernance IA. Quelle structure est recommandée par le Livret de Missions?',choices:['Déléguer totalement aux enseignants volontaires','Ignorer le sujet jusqu\'à directives officielles','Cadre institutionnel: charte validée CA, formation équipes, référent IA, comité suivi régulier','Interdire toute utilisation IA dans l\'établissement'],correct:2,points:35,justification:'Livret Mission 3 : Gouvernance. Structure recommandée: cadre clair (charte CA), formation systématique, référent IA nommé, comité de suivi régulier, communication familles. Approche institutionnelle structurée.'}
+        ];
+        const discussions=[
+            {after:6,title:'💬 Temps d\'échange - L\'IA et les élèves',content:'<p><strong>Prenez 2 minutes pour échanger avec le groupe:</strong></p><ul><li>Comment sensibilisez-vous vos élèves à un usage critique et responsable de l\'IA?</li><li>Quelles activités pédagogiques avez-vous mises en place pour former les élèves?</li><li>Comment gérez-vous les cas d\'élèves utilisant l\'IA pour leurs devoirs?</li><li>Quelles ressources éducatives partagez-vous avec vos élèves sur l\'IA?</li></ul>'},
+            {after:12,title:'💬 Temps d\'échange - Gouvernance IA dans l\'établissement',content:'<p><strong>Prenez 2 minutes pour échanger avec le groupe:</strong></p><ul><li>Avez-vous élaboré une charte d\'usage de l\'IA dans votre établissement?</li><li>Comment organisez-vous la formation des équipes éducatives?</li><li>Qui est le référent IA dans votre structure? Quel est son rôle concret?</li><li>Comment impliquez-vous les parents et les élèves dans cette démarche?</li></ul>'}
         ];
         const incidents=[
             {title:'🚨 INCIDENT CRITIQUE - VIOLATION RGPD MAJEURE',description:'Un enseignant de mathématiques vient de copier-coller 20 copies d\'élèves de 4ème (avec noms complets, prénoms et notes) dans ChatGPT pour "gagner du temps dans les corrections". Les données sont maintenant sur des serveurs américains. Trois parents furieux vous contactent et menacent de saisir la CNIL.',question:'Quelle est votre réaction immédiate en tant que responsable d\'établissement?',choices:['Minimiser l\'incident: "C\'est une erreur isolée, ça n\'arrivera plus"','Attendre une éventuelle saisine de la CNIL avant d\'agir','Sanctionner immédiatement l\'enseignant sans autre démarche','Arrêt immédiat de la pratique + information DPO + CNIL si requis + familles concernées + formation urgente équipe'],correct:3,points:50,justification:'Livret Mission 1 - Protection des données: Il s\'agit d\'une violation grave du RGPD. Le protocole complet est obligatoire: arrêt immédiat de la pratique, information du DPO (Délégué à la Protection des Données), saisine CNIL si nécessaire, communication transparente aux familles, et formation urgente de toute l\'équipe sur la protection des données.'},
@@ -264,14 +288,15 @@
                 <div class="welcome-screen">
                     <h2>🚀 Bienvenue dans votre Mission IA!</h2>
                     <p><strong>Objectif:</strong> Maîtriser les 5 missions essentielles du Livret officiel de l'IA pour piloter efficacement l'usage de l'intelligence artificielle dans votre établissement scolaire.</p>
-                    <p><strong>Format de la formation:</strong> 15 questions de validation</p>
+                    <p><strong>Format de la formation:</strong> 15 questions + 5 incidents + 2 discussions</p>
                     <p><strong>Durée totale:</strong> 30 minutes chronomètrées</p>
                     <ul>
                         <li>✅ Répondez aux 15 questions pour valider vos connaissances</li>
-            
+                        <li>🚨 5 incidents critiques apparaissent toutes les 3 questions: gérez-les comme dans la réalité</li>
+                        <li>💬 2 temps d'échange collectifs (après Q6 et Q12) pour partager vos pratiques</li>
                         <li>📚 Ressources: <a href="https://eduscol.education.fr/4188/les-intelligences-artificielles-et-leurs-usages-en-education" target="_blank" style="color:#667eea;font-weight:bold">Guide officiel Éduscol</a></li>
                     </ul>
-                    <p style="margin-top:30px;font-weight:700;color:#dc3545;font-size:1.15em">⚠️ ATTENTION: Des surprises peuvent survenir... Restez vigilants!</p>
+                    <p style="margin-top:30px;font-weight:700;color:#dc3545;font-size:1.15em">⚠️ ATTENTION: Les incidents critiques apparaissent après chaque série de 3 questions. Restez vigilants!</p>
                     <button class="btn-primary" onclick="startFormation()">🎯 Démarrer la formation →</button>
                 </div>
             `;
@@ -291,6 +316,8 @@
                 triggerIncident(incidentIdx);
                 return;
             }
+            const disc=discussions.find(d=>d.after===currentIndex);
+            if(disc){showDiscussion(disc);return;}
             if(currentIndex<questions.length){showQuestion(currentIndex);}
             else{showCompletion();}
         }
@@ -342,6 +369,16 @@
             showNextContent();
         }
 
+        function showDiscussion(disc){
+            document.getElementById('mainContent').innerHTML=`
+                <div class="discussion-card">
+                    <h3>${disc.title}</h3>
+                    ${disc.content}
+                    <button class="btn-primary" onclick="nextQuestion()">Continuer la formation →</button>
+                </div>
+            `;
+        }
+
         function triggerIncident(idx){
             pauseTimer();
             stopQuestionTimer();
@@ -390,6 +427,10 @@
             showNextContent();
         }
 
+        function restartFormation(){
+            location.reload();
+        }
+
         function showCompletion(){
             pauseTimer();
             const dur=totalTime-remainingTime;
@@ -417,6 +458,7 @@
                             <div class="final-stat-value" style="font-size:2em">${perf}</div>
                         </div>
                     </div>
+                    <button class="btn-primary" onclick="restartFormation()" style="margin:30px 0">🔄 Recommencer la formation</button>
                     <div style="margin-top:50px;text-align:left;max-width:700px;margin-left:auto;margin-right:auto;background:rgba(102,126,234,0.1);padding:35px;border-radius:20px">
                         <h3 style="color:#667eea;margin-bottom:25px;font-size:1.6em">📚 Ressources officielles du Ministère:</h3>
                         <ul style="line-height:2.3;font-size:1.1em">
