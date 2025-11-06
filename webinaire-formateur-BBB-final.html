@@ -1189,6 +1189,16 @@ textarea.practice-input {
   letter-spacing: 1px;
 }
 
+#finalRank {
+  font-size: 32px;
+}
+
+@media (max-width: 768px) {
+  #finalRank {
+    font-size: 24px;
+  }
+}
+
 /* CONFETTI CANVAS */
 #confetti {
   position: fixed;
@@ -1252,8 +1262,6 @@ textarea.practice-input {
   height: 300px;
   margin: 40px 0;
 }
-
-
 
 .flow-label {
   position: absolute;
@@ -1676,7 +1684,7 @@ textarea.practice-input {
         </div>
       </div>
       <div class="incident-status" id="incidentStatus">
-        🎲 Les incidents se déclencheront automatiquement...
+        🎲 7 incidents se déclencheront régulièrement pendant la session
       </div>
     </div>
 
@@ -1726,15 +1734,6 @@ textarea.practice-input {
       </button>
     </div>
 
-    <!-- TÉLÉCHARGEMENT -->
-    <div class="control-section">
-      <h3>💾 SAUVEGARDER</h3>
-      <button class="btn-console btn-action" onclick="downloadFile()">
-        <span>📥 Télécharger la Console</span>
-        <span>↓</span>
-      </button>
-    </div>
-
     <!-- CRÉDIT -->
     <div style="margin-top: 40px; padding: 20px; text-align: center; color: var(--text-muted); font-size: 14px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
       <p style="margin: 0;">Créé avec <span style="color: #ef4444; font-size: 16px;">❤️</span> par <strong style="color: var(--accent);">Amélie Silvert</strong></p>
@@ -1768,12 +1767,12 @@ textarea.practice-input {
         <div class="feature-item">
           <div class="feature-icon">🚨</div>
           <h3>Incidents Automatiques</h3>
-          <p>7 incidents techniques et personnels se déclenchent aléatoirement pendant la session. Carte rouge vif !</p>
+          <p>7 incidents techniques et personnels se déclenchent régulièrement pendant la session (environ 1 toutes les 12 minutes).</p>
         </div>
         <div class="feature-item">
           <div class="feature-icon">⏱️</div>
           <h3>Gestion du temps</h3>
-          <p>Vous disposez de 90 minutes et de 3 minutes par incident automatique pour réagir efficacement.</p>
+          <p>Vous disposez de 90 minutes. Les incidents se déclenchent régulièrement, avec 3 minutes par incident pour réagir.</p>
         </div>
         <div class="feature-item">
           <div class="feature-icon">🎯</div>
@@ -1784,7 +1783,7 @@ textarea.practice-input {
 
       <div class="success-box">
         <h3>🚀 Pour commencer</h3>
-        <p><strong>Lancez le chronomètre de 90 minutes</strong> dans la console de gauche. Les incidents automatiques se déclencheront à des moments aléatoires. Explorez d'abord le récit de Sophie pour vous préparer ! Bonne formation !</p>
+        <p><strong>Lancez le chronomètre de 90 minutes</strong> dans la console de gauche. Les incidents se déclencheront régulièrement pendant la session (environ 1 toutes les 12 minutes). Explorez d'abord le récit de Sophie pour vous préparer ! Bonne formation !</p>
       </div>
     </section>
     <!-- SECTION BRISE-GLACE -->
@@ -2351,190 +2350,8 @@ textarea.practice-input {
 </div>
 
 <!-- SCRIPTS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-
-// ========== POST-ITS INTERACTIFS ==========
-let postitCounter = 0;
-let draggedElement = null;
-let offsetX = 0;
-let offsetY = 0;
-
-function addPostIt() {
-  postitCounter++;
-
-  const postit = document.createElement('div');
-  postit.className = 'postit';
-  postit.id = `postit-${postitCounter}`;
-  postit.contentEditable = 'true';
-  postit.textContent = 'Cliquez pour écrire...';
-
-  // Couleur aléatoire
-  const colors = ['#fef08a', '#fed7aa', '#fecaca', '#d9f99d', '#bfdbfe'];
-  postit.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-  // Rotation légère
-  const rotation = (Math.random() - 0.5) * 6;
-  postit.style.transform = `rotate(${rotation}deg)`;
-
-  // Position dans la zone
-  const zone = document.getElementById('postitZone');
-  if (zone) {
-    const zoneRect = zone.getBoundingClientRect();
-    postit.style.left = `${20 + (postitCounter % 5) * 140}px`;
-    postit.style.top = `${20 + Math.floor((postitCounter - 1) / 5) * 140}px`;
-  }
-
-  postit.draggable = true;
-  document.getElementById('postitZone').appendChild(postit);
-
-  // Events pour le drag
-  postit.addEventListener('mousedown', startDrag);
-  postit.addEventListener('touchstart', startDrag);
-}
-
-function deletePostIt(id) {
-  const postit = document.getElementById(id);
-  if (postit) {
-    postit.style.animation = 'fadeOut 0.3s ease';
-    setTimeout(() => postit.remove(), 300);
-  }
-}
-
-function startDrag(e) {
-  e.preventDefault();
-  draggedElement = e.target.closest('.postit');
-  if (!draggedElement) return;
-
-  draggedElement.classList.add('dragging');
-
-  const rect = draggedElement.getBoundingClientRect();
-  const clientX = e.clientX || e.touches[0].clientX;
-  const clientY = e.clientY || e.touches[0].clientY;
-
-  offsetX = clientX - rect.left;
-  offsetY = clientY - rect.top;
-
-  document.addEventListener('mousemove', drag);
-  document.addEventListener('touchmove', drag);
-  document.addEventListener('mouseup', stopDrag);
-  document.addEventListener('touchend', stopDrag);
-}
-
-function drag(e) {
-  if (!draggedElement) return;
-
-  const clientX = e.clientX || e.touches[0].clientX;
-  const clientY = e.clientY || e.touches[0].clientY;
-
-  draggedElement.style.left = `${clientX - offsetX}px`;
-  draggedElement.style.top = `${clientY - offsetY}px`;
-}
-
-function stopDrag() {
-  if (draggedElement) {
-    draggedElement.classList.remove('dragging');
-    draggedElement = null;
-  }
-
-  document.removeEventListener('mousemove', drag);
-  document.removeEventListener('touchmove', drag);
-  document.removeEventListener('mouseup', stopDrag);
-  document.removeEventListener('touchend', stopDrag);
-}
-
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
-
-// ========== POST-ITS INTERACTIFS ==========
-let postitCounter = 0;
-let draggedElement = null;
-let offsetX = 0;
-let offsetY = 0;
-
-function addPostIt() {
-  postitCounter++;
-
-  const postit = document.createElement('div');
-  postit.className = 'postit';
-  postit.id = `postit-${postitCounter}`;
-  postit.contentEditable = 'true';
-  postit.textContent = 'Cliquez pour écrire...';
-
-  // Couleur aléatoire
-  const colors = ['#fef08a', '#fed7aa', '#fecaca', '#d9f99d', '#bfdbfe'];
-  postit.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-  // Rotation légère
-  const rotation = (Math.random() - 0.5) * 6;
-  postit.style.transform = `rotate(${rotation}deg)`;
-
-  // Position dans la zone
-  const zone = document.getElementById('postitZone');
-  if (zone) {
-    const zoneRect = zone.getBoundingClientRect();
-    postit.style.left = `${20 + (postitCounter % 5) * 140}px`;
-    postit.style.top = `${20 + Math.floor((postitCounter - 1) / 5) * 140}px`;
-  }
-
-  postit.draggable = true;
-  document.getElementById('postitZone').appendChild(postit);
-
-  // Events pour le drag
-  postit.addEventListener('mousedown', startDrag);
-  postit.addEventListener('touchstart', startDrag);
-}
-
-function deletePostIt(id) {
-  const postit = document.getElementById(id);
-  if (postit) {
-    postit.style.animation = 'fadeOut 0.3s ease';
-    setTimeout(() => postit.remove(), 300);
-  }
-}
-
-function startDrag(e) {
-  e.preventDefault();
-  draggedElement = e.target.closest('.postit');
-  if (!draggedElement) return;
-
-  draggedElement.classList.add('dragging');
-
-  const rect = draggedElement.getBoundingClientRect();
-  const clientX = e.clientX || e.touches[0].clientX;
-  const clientY = e.clientY || e.touches[0].clientY;
-
-  offsetX = clientX - rect.left;
-  offsetY = clientY - rect.top;
-
-  document.addEventListener('mousemove', drag);
-  document.addEventListener('touchmove', drag);
-  document.addEventListener('mouseup', stopDrag);
-  document.addEventListener('touchend', stopDrag);
-}
-
-function drag(e) {
-  if (!draggedElement) return;
-
-  const clientX = e.clientX || e.touches[0].clientX;
-  const clientY = e.clientY || e.touches[0].clientY;
-
-  draggedElement.style.left = `${clientX - offsetX}px`;
-  draggedElement.style.top = `${clientY - offsetY}px`;
-}
-
-function stopDrag() {
-  if (draggedElement) {
-    draggedElement.classList.remove('dragging');
-    draggedElement = null;
-  }
-
-  document.removeEventListener('mousemove', drag);
-  document.removeEventListener('touchmove', drag);
-  document.removeEventListener('mouseup', stopDrag);
-  document.removeEventListener('touchend', stopDrag);
-}
-
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <script>
 // DONNÉES DES 7 INCIDENTS AUTOMATIQUES (différents du récit de Sophie)
@@ -2663,7 +2480,7 @@ let timer = null;
 let remaining = 90 * 60;
 let chronoTimer = null;
 let chronoSeconds = 180;
-let revealIndex = 2; // sophie1 est déjà révélé au chargement
+let revealIndex = 2;
 let mediaRecorder = null;
 let audioChunks = [];
 let recordedBlob = null;
@@ -2797,7 +2614,7 @@ document.getElementById('startTimer').addEventListener('click', ()=>{
     }
   }, 1000);
   
-  document.getElementById('incidentStatus').innerHTML = '🎲 <strong>Incidents et cartes activés !</strong> Restez vigilant...';
+  document.getElementById('incidentStatus').innerHTML = '🎲 <strong>Incidents activés !</strong> Restez vigilant...';
   document.getElementById('incidentStatus').classList.add('active');
 });
 
@@ -2819,11 +2636,12 @@ document.getElementById('resetTimer').addEventListener('click', ()=>{
   usedIncidents = [];
   usedCartesChance = [];
   usedCartesMalchance = [];
-  document.getElementById('incidentStatus').innerHTML = '🎲 Les incidents et cartes se déclencheront automatiquement...';
+  document.getElementById('incidentStatus').innerHTML = '🎲 7 incidents se déclencheront régulièrement pendant la session';
   document.getElementById('incidentStatus').classList.remove('active');
 });
 
-// PLANIFICATION DES ÉVÉNEMENTS (7 incidents + 14 cartes)
+// ========== FONCTION FINALE : 7 INCIDENTS RÉPARTIS RÉGULIÈREMENT ==========
+// PLANIFICATION DES ÉVÉNEMENTS (7 incidents répartis uniformément)
 function scheduleRandomIncidents(){
   incidentScheduled = [];
   cartesScheduled = [];
@@ -2831,68 +2649,36 @@ function scheduleRandomIncidents(){
   usedCartesChance = [];
   usedCartesMalchance = [];
   
-  // Créer tous les timestamps de 5 en 5 minutes (18 timestamps sur 90 minutes)
-  // On va en utiliser 21 au total : 7 incidents + 7 cartes chance + 7 cartes malchance
-  const allTimestamps = [];
-  for (let i = 5; i <= 85; i += 4) { // De 5 à 85 minutes, tous les 4 minutes
-    allTimestamps.push(i * 60);
-  }
+  // Répartir les 7 incidents régulièrement sur 90 minutes
+  // Intervalle : 90 minutes / 7 incidents ≈ 12-13 minutes entre chaque
+  const timestamps = [
+    10 * 60,  // 10 minutes
+    22 * 60,  // 22 minutes
+    34 * 60,  // 34 minutes
+    46 * 60,  // 46 minutes
+    58 * 60,  // 58 minutes
+    70 * 60,  // 70 minutes
+    82 * 60   // 82 minutes
+  ];
   
-  // Mélanger tous les timestamps
-  for(let i = allTimestamps.length - 1; i > 0; i--){
+  // Créer les indices d'incidents dans un ordre aléatoire
+  const incidentIndices = [0, 1, 2, 3, 4, 5, 6];
+  for(let i = incidentIndices.length - 1; i > 0; i--){
     const j = Math.floor(Math.random() * (i + 1));
-    [allTimestamps[i], allTimestamps[j]] = [allTimestamps[j], allTimestamps[i]];
+    [incidentIndices[i], incidentIndices[j]] = [incidentIndices[j], incidentIndices[i]];
   }
   
-  // Prendre les 21 premiers timestamps mélangés
-  const selectedTimestamps = allTimestamps.slice(0, 21);
-  selectedTimestamps.sort((a, b) => a - b); // Trier par ordre chronologique
-  
-  // Créer un tableau d'événements : 7 incidents, 7 cartes chance, 7 cartes malchance
-  const events = [];
-  
-  // Ajouter les incidents (indices 0-6)
+  // Assigner les timestamps aux incidents
   for (let i = 0; i < 7; i++) {
-    events.push({ type: 'incident', index: i });
+    incidentScheduled.push({
+      triggerAt: timestamps[i],
+      incidentIndex: incidentIndices[i]
+    });
   }
   
-  // Ajouter les cartes chance
-  for (let i = 0; i < 7; i++) {
-    events.push({ type: 'chance' });
-  }
-  
-  // Ajouter les cartes malchance
-  for (let i = 0; i < 7; i++) {
-    events.push({ type: 'malchance' });
-  }
-  
-  // Mélanger tous les événements
-  for(let i = events.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1));
-    [events[i], events[j]] = [events[j], events[i]];
-  }
-  
-  // Assigner les timestamps aux événements
-  for (let i = 0; i < events.length; i++) {
-    const event = events[i];
-    const timestamp = selectedTimestamps[i];
-    
-    if (event.type === 'incident') {
-      incidentScheduled.push({
-        triggerAt: timestamp,
-        incidentIndex: event.index
-      });
-    } else {
-      cartesScheduled.push({
-        triggerAt: timestamp,
-        carteType: event.type
-      });
-    }
-  }
-  
-  console.log('7 incidents automatiques planifiés:', incidentScheduled);
-  console.log('14 cartes automatiques planifiées:', cartesScheduled);
+  console.log('✅ 7 incidents répartis régulièrement:', incidentScheduled);
 }
+// ========== FIN DE LA FONCTION FINALE ==========
 
 function checkScheduledIncidents(){
   const elapsed = (90 * 60) - remaining; // Temps ÉCOULÉ depuis le début
@@ -2903,15 +2689,6 @@ function checkScheduledIncidents(){
     if(elapsed >= scheduled.triggerAt){
       launchIncidentAuto(scheduled.incidentIndex);
       incidentScheduled.splice(i, 1);
-    }
-  }
-  
-  // Vérifier les cartes automatiques
-  for(let i = cartesScheduled.length - 1; i >= 0; i--){
-    const scheduled = cartesScheduled[i];
-    if(elapsed >= scheduled.triggerAt){
-      showCarteAuto(scheduled.carteType);
-      cartesScheduled.splice(i, 1);
     }
   }
 }
@@ -3024,41 +2801,11 @@ function closeIncidentModal(){
   }
   
   if(incidentScheduled.length > 0){
-    document.getElementById('incidentStatus').innerHTML = '🎲 Restez vigilant, d\'autres incidents et cartes peuvent survenir...';
+    document.getElementById('incidentStatus').innerHTML = '🎲 Restez vigilant, d\'autres incidents peuvent survenir...';
   } else {
     document.getElementById('incidentStatus').innerHTML = '✅ Tous les incidents ont été traités';
     document.getElementById('incidentStatus').classList.remove('active');
   }
-}
-
-// Son "ding" agréable pour la carte chance
-function playDingSound(){
-  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  
-  // Créer une série de notes pour un "ding" agréable
-  const notes = [
-    { freq: 800, time: 0, duration: 0.15 },
-    { freq: 1200, time: 0.1, duration: 0.2 }
-  ];
-  
-  notes.forEach(note => {
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    
-    oscillator.frequency.value = note.freq;
-    oscillator.type = 'sine';
-    
-    // Envelope pour un son doux
-    gainNode.gain.setValueAtTime(0, audioContext.currentTime + note.time);
-    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + note.time + 0.01);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + note.time + note.duration);
-    
-    oscillator.start(audioContext.currentTime + note.time);
-    oscillator.stop(audioContext.currentTime + note.time + note.duration);
-  });
 }
 
 // Sons pour les cartes automatiques
@@ -3560,20 +3307,6 @@ function animateConfetti(){
 }
 
 // Download
-function downloadFile(){
-  const doctype = '<!doctype html>\n';
-  const html = doctype + document.documentElement.outerHTML;
-  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'console_formation_expert_formateur_v4_final.html';
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
 // Auto-reveal first timeline event on load
 window.addEventListener('load', () => {
   const event1 = document.getElementById('sophie1');
