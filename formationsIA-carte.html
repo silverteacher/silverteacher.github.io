@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formations IA - Académie de Lille</title>
+    <meta name="description" content="Carte interactive des formations sur l'intelligence artificielle dans l'Académie de Lille">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         * {
@@ -24,6 +25,21 @@
             margin: 0 auto;
         }
 
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #0093E9;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
         .header {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
@@ -38,11 +54,11 @@
             color: white;
             font-size: 2.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .info-banner {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             padding: 15px 20px;
             border-radius: 12px;
             margin-top: 20px;
@@ -51,15 +67,26 @@
             align-items: center;
             gap: 10px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            color: #2c3e50;
         }
 
         .info-banner::before {
             content: "ℹ️";
             font-size: 1.5em;
+            flex-shrink: 0;
         }
 
         .search-container {
             margin-top: 20px;
+        }
+
+        .search-label {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
         }
 
         .search-box {
@@ -74,13 +101,14 @@
         }
 
         .search-box:focus {
-            outline: none;
+            outline: 3px solid #0093E9;
+            outline-offset: 2px;
             border-color: #0093E9;
             box-shadow: 0 4px 20px rgba(0, 147, 233, 0.3);
         }
 
         .search-box::placeholder {
-            color: #999;
+            color: #666;
         }
 
         .content-wrapper {
@@ -105,6 +133,7 @@
             color: white;
             margin-bottom: 20px;
             font-size: 1.5em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
 
         .formation-card {
@@ -124,9 +153,14 @@
             border-color: #0093E9;
         }
 
+        .formation-card:focus {
+            outline: 3px solid #0093E9;
+            outline-offset: 2px;
+        }
+
         .formation-card.active {
             border-color: #80D0C7;
-            background: rgba(128, 208, 199, 0.1);
+            background: rgba(255, 255, 255, 0.98);
         }
 
         .formation-card.hidden {
@@ -146,14 +180,14 @@
 
         .formation-title {
             font-weight: bold;
-            color: #2c3e50;
+            color: #1a252f;
             margin-bottom: 10px;
             font-size: 1.1em;
             line-height: 1.4;
         }
 
         .session-item {
-            background: rgba(0, 147, 233, 0.1);
+            background: rgba(0, 147, 233, 0.15);
             padding: 10px;
             border-radius: 8px;
             margin-top: 10px;
@@ -161,14 +195,14 @@
         }
 
         .session-date {
-            color: #0093E9;
+            color: #006bb3;
             font-weight: bold;
             display: block;
             margin-bottom: 5px;
         }
 
         .session-lieu {
-            color: #555;
+            color: #333;
             display: block;
             margin-bottom: 5px;
         }
@@ -183,11 +217,17 @@
             border-radius: 8px;
             font-size: 0.85em;
             transition: all 0.3s ease;
+            font-weight: 600;
         }
 
         .session-link:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 15px rgba(0, 147, 233, 0.4);
+        }
+
+        .session-link:focus {
+            outline: 3px solid #1a252f;
+            outline-offset: 2px;
         }
 
         .map-container {
@@ -220,7 +260,7 @@
 
         .popup-title {
             font-weight: bold;
-            color: #0093E9;
+            color: #006bb3;
             font-size: 1.1em;
             margin-bottom: 10px;
             padding-bottom: 10px;
@@ -240,7 +280,7 @@
         }
 
         .popup-date {
-            color: #80D0C7;
+            color: #006bb3;
             font-weight: bold;
             display: block;
             margin-bottom: 5px;
@@ -256,10 +296,16 @@
             border-radius: 8px;
             font-size: 0.9em;
             transition: all 0.3s ease;
+            font-weight: 600;
         }
 
         .popup-link:hover {
             transform: scale(1.05);
+        }
+
+        .popup-link:focus {
+            outline: 3px solid #1a252f;
+            outline-offset: 2px;
         }
 
         .legend {
@@ -273,7 +319,7 @@
         .legend-title {
             font-weight: bold;
             margin-bottom: 10px;
-            color: #0093E9;
+            color: #006bb3;
         }
 
         .legend-item {
@@ -282,6 +328,7 @@
             gap: 10px;
             margin: 5px 0;
             font-size: 0.85em;
+            color: #333;
         }
 
         .legend-icon {
@@ -297,9 +344,17 @@
             color: white;
             text-align: center;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Media Queries pour le responsive */
+        @media (max-width: 1200px) {
+            .content-wrapper {
+                grid-template-columns: 320px 1fr;
+            }
         }
 
         @media (max-width: 1024px) {
@@ -309,6 +364,7 @@
 
             .sidebar {
                 max-height: 400px;
+                margin-bottom: 20px;
             }
 
             .map-container {
@@ -320,9 +376,9 @@
             }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 15px;
             }
 
             .header {
@@ -330,15 +386,104 @@
             }
 
             h1 {
-                font-size: 1.5em;
+                font-size: 1.8em;
             }
 
             .map-container {
-                height: 400px;
+                height: 450px;
+            }
+
+            .sidebar {
+                max-height: 350px;
+            }
+
+            .formation-card {
+                padding: 15px;
+            }
+
+            .legend {
+                font-size: 0.9em;
+                padding: 12px;
             }
         }
 
-        .sidebar::-webkit-scrollbar {
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .info-banner {
+                font-size: 0.9em;
+                padding: 12px 15px;
+            }
+
+            .search-box {
+                padding: 12px 15px;
+                font-size: 0.95em;
+            }
+
+            .map-container {
+                height: 350px;
+                padding: 15px;
+            }
+
+            .sidebar {
+                padding: 20px;
+                max-height: 300px;
+            }
+
+            .sidebar h2 {
+                font-size: 1.3em;
+            }
+
+            .formation-card {
+                padding: 15px;
+            }
+
+            .formation-title {
+                font-size: 1em;
+            }
+
+            .session-item {
+                font-size: 0.85em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.3em;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+
+            .formation-code {
+                font-size: 0.8em;
+                padding: 4px 10px;
+            }
+        }
+
+        /* Amélioration accessibilité - mode sombre */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Scrollbars */
+        .sidebar::-webkit-scrollbar,
+        .popup-sessions-container::-webkit-scrollbar {
             width: 8px;
         }
 
@@ -372,29 +517,39 @@
     </style>
 </head>
 <body>
+    <a href="#map" class="skip-link">Aller à la carte</a>
+    
     <div class="container">
-        <div class="header">
+        <header class="header">
             <h1>🎓 Formations IA - Académie de Lille</h1>
-            <div class="info-banner">
+            <div class="info-banner" role="status" aria-live="polite">
                 Cette carte affiche toutes les sessions de formation en présentiel. Cliquez sur les marqueurs pour plus de détails et accéder aux liens d'inscription.
             </div>
             <div class="search-container">
-                <input type="text" id="search-input" class="search-box" placeholder="🔍 Rechercher une formation, un lieu, une date...">
+                <label for="search-input" class="search-label">Rechercher une formation</label>
+                <input 
+                    type="search" 
+                    id="search-input" 
+                    class="search-box" 
+                    placeholder="🔍 Rechercher une formation, un lieu, une date..."
+                    aria-label="Rechercher parmi les formations disponibles"
+                    autocomplete="off"
+                >
             </div>
-        </div>
+        </header>
 
         <div class="content-wrapper">
-            <div class="sidebar">
+            <aside class="sidebar" role="complementary" aria-label="Liste des formations">
                 <h2>📚 Formations disponibles</h2>
-                <div id="formations-list"></div>
-                <div id="no-results" class="no-results" style="display: none;">
+                <div id="formations-list" role="list"></div>
+                <div id="no-results" class="no-results" style="display: none;" role="status" aria-live="polite">
                     Aucune formation ne correspond à votre recherche.
                 </div>
-            </div>
+            </aside>
 
-            <div class="map-container">
-                <div id="map"></div>
-            </div>
+            <main class="map-container">
+                <div id="map" role="application" aria-label="Carte interactive des formations"></div>
+            </main>
         </div>
     </div>
 
@@ -486,7 +641,7 @@
                 }
             ];
 
-            // Grouper les sessions par lieu pour créer des marqueurs avec toutes les sessions
+            // Grouper les sessions par lieu
             const locationGroups = {};
             
             formations.forEach(formation => {
@@ -514,11 +669,10 @@
                 maxZoom: 18
             }).addTo(map);
 
-            // Création des marqueurs avec toutes les sessions par lieu
+            // Création des marqueurs
             const markers = [];
 
             Object.values(locationGroups).forEach(location => {
-                // Icône avec le nombre de sessions
                 const icon = L.divIcon({
                     className: 'custom-marker',
                     html: `<div style="
@@ -539,19 +693,18 @@
                     iconAnchor: [17, 17]
                 });
 
-                // Créer le contenu du popup avec toutes les sessions
                 let popupContent = `<div style="max-width: 350px;">`;
-                popupContent += `<div style="font-weight: bold; font-size: 1.2em; margin-bottom: 15px; color: #0093E9;">📍 ${location.ville}</div>`;
+                popupContent += `<div style="font-weight: bold; font-size: 1.2em; margin-bottom: 15px; color: #006bb3;">📍 ${location.ville}</div>`;
                 popupContent += `<div class="popup-sessions-container">`;
                 
                 location.sessions.forEach(item => {
                     popupContent += `
                         <div class="popup-session">
                             <div class="popup-title">${item.formation.code}</div>
-                            <div style="font-weight: bold; margin-bottom: 8px; font-size: 0.95em;">${item.formation.titre}</div>
+                            <div style="font-weight: bold; margin-bottom: 8px; font-size: 0.95em; color: #1a252f;">${item.formation.titre}</div>
                             <div class="popup-date">📅 ${item.session.date}</div>
-                            <div style="color: #555; margin-bottom: 8px;">📍 ${item.session.lieu}</div>
-                            <a href="${item.session.lien}" target="_blank" class="popup-link">
+                            <div style="color: #333; margin-bottom: 8px;">📍 ${item.session.lieu}</div>
+                            <a href="${item.session.lien}" target="_blank" rel="noopener noreferrer" class="popup-link" aria-label="S'inscrire à ${item.formation.code} le ${item.session.date}">
                                 S'inscrire →
                             </a>
                         </div>
@@ -577,28 +730,29 @@
             formations.forEach((formation, index) => {
                 const card = document.createElement('div');
                 card.className = 'formation-card';
+                card.setAttribute('role', 'listitem');
+                card.setAttribute('tabindex', '0');
+                card.setAttribute('aria-label', `Formation ${formation.code}: ${formation.titre}`);
                 card.dataset.searchText = `${formation.code} ${formation.titre} ${formation.sessions.map(s => `${s.lieu} ${s.ville} ${s.date}`).join(' ')}`.toLowerCase();
                 
                 card.innerHTML = `
-                    <div class="formation-code">${formation.code}</div>
+                    <div class="formation-code" aria-hidden="true">${formation.code}</div>
                     <div class="formation-title">${formation.titre}</div>
                     ${formation.sessions.map(session => `
                         <div class="session-item">
                             <span class="session-date">📅 ${session.date}</span>
                             <span class="session-lieu">📍 ${session.lieu} - ${session.ville}</span>
-                            <a href="${session.lien}" target="_blank" class="session-link" onclick="event.stopPropagation()">
+                            <a href="${session.lien}" target="_blank" rel="noopener noreferrer" class="session-link" onclick="event.stopPropagation()" aria-label="S'inscrire à la session du ${session.date} à ${session.lieu}">
                                 S'inscrire →
                             </a>
                         </div>
                     `).join('')}
                 `;
 
-                card.addEventListener('click', () => {
-                    // Zoom sur la première session de cette formation
+                const handleCardClick = () => {
                     const firstSession = formation.sessions[0];
                     map.setView(firstSession.coords, 12);
                     
-                    // Trouver et ouvrir le marqueur correspondant
                     const matchingMarker = markers.find(m => 
                         m.location.coords[0] === firstSession.coords[0] &&
                         m.location.coords[1] === firstSession.coords[1]
@@ -607,9 +761,16 @@
                         matchingMarker.marker.openPopup();
                     }
 
-                    // Highlight de la carte
                     document.querySelectorAll('.formation-card').forEach(c => c.classList.remove('active'));
                     card.classList.add('active');
+                };
+
+                card.addEventListener('click', handleCardClick);
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        handleCardClick();
+                    }
                 });
 
                 listContainer.appendChild(card);
@@ -634,7 +795,6 @@
                     }
                 });
 
-                // Afficher le message "aucun résultat"
                 if (visibleCount === 0 && searchTerm !== '') {
                     noResults.style.display = 'block';
                 } else {
@@ -642,15 +802,17 @@
                 }
             });
 
-            // Ajout de la légende avec noms abrégés
+            // Légende avec noms abrégés
             const legend = L.control({ position: 'bottomright' });
             legend.onAdd = function() {
                 const div = L.DomUtil.create('div', 'legend');
+                div.setAttribute('role', 'region');
+                div.setAttribute('aria-label', 'Légende des formations');
                 div.innerHTML = `
                     <div class="legend-title">Formations</div>
                     ${formations.map(f => `
                         <div class="legend-item">
-                            <span class="legend-icon" style="background: ${f.color}"></span>
+                            <span class="legend-icon" style="background: ${f.color}" aria-hidden="true"></span>
                             <span>${f.nomAbrege}</span>
                         </div>
                     `).join('')}
