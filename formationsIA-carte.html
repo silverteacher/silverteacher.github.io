@@ -514,6 +514,40 @@
             background: rgba(0, 147, 233, 0.3);
             border-radius: 10px;
         }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9em;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .footer a:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .footer a:focus {
+            outline: 2px solid white;
+            outline-offset: 2px;
+        }
+
+        @media (max-width: 640px) {
+            .footer {
+                font-size: 0.85em;
+                padding: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -551,6 +585,10 @@
                 <div id="map" role="application" aria-label="Carte interactive des formations"></div>
             </main>
         </div>
+
+        <footer class="footer">
+            Application créée par <a href="mailto:amelie.silvert@region-academique-hdf.fr">Amélie Silvert</a> à l'aide de l'IA
+        </footer>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
