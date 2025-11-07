@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formations IA - Académie de Lille</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle at center, #80D0C7 0%, #0093E9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-banner {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            border-left: 4px solid #0093E9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-banner::before {
+            content: "ℹ️";
+            font-size: 1.5em;
+        }
+
+        .search-container {
+            margin-top: 20px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1em;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #0093E9;
+            box-shadow: 0 4px 20px rgba(0, 147, 233, 0.3);
+        }
+
+        .search-box::placeholder {
+            color: #999;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-height: 700px;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .formation-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .formation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border-color: #0093E9;
+        }
+
+        .formation-card.active {
+            border-color: #80D0C7;
+            background: rgba(128, 208, 199, 0.1);
+        }
+
+        .formation-card.hidden {
+            display: none;
+        }
+
+        .formation-code {
+            display: inline-block;
+            background: linear-gradient(135deg, #0093E9, #80D0C7);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .formation-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+
+        .session-item {
+            background: rgba(0, 147, 233, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .session-date {
+            color: #0093E9;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .session-lieu {
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .session-link {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #0093E9, #80D0C7);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+        }
+
+        .session-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0, 147, 233, 0.4);
+        }
+
+        .map-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            height: 700px;
+        }
+
+        #map {
+            height: 100%;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-popup .leaflet-popup-content-wrapper {
+            border-radius: 15px;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .custom-popup .leaflet-popup-content {
+            margin: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .popup-title {
+            font-weight: bold;
+            color: #0093E9;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #0093E9;
+        }
+
+        .popup-sessions-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .popup-session {
+            background: rgba(0, 147, 233, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+
+        .popup-date {
+            color: #80D0C7;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .popup-link {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #0093E9, #80D0C7);
+            color: white !important;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .popup-link:hover {
+            transform: scale(1.05);
+        }
+
+        .legend {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            line-height: 1.8;
+        }
+
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #0093E9;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 5px 0;
+            font-size: 0.85em;
+        }
+
+        .legend-icon {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        .no-results {
+            color: white;
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                max-height: 400px;
+            }
+
+            .map-container {
+                height: 500px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .map-container {
+                height: 400px;
+            }
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .popup-sessions-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .popup-sessions-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+
+        .popup-sessions-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 147, 233, 0.3);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Formations IA - Académie de Lille</h1>
+            <div class="info-banner">
+                Cette carte affiche toutes les sessions de formation en présentiel. Cliquez sur les marqueurs pour plus de détails et accéder aux liens d'inscription.
+            </div>
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-box" placeholder="🔍 Rechercher une formation, un lieu, une date...">
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="sidebar">
+                <h2>📚 Formations disponibles</h2>
+                <div id="formations-list"></div>
+                <div id="no-results" class="no-results" style="display: none;">
+                    Aucune formation ne correspond à votre recherche.
+                </div>
+            </div>
+
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        window.onload = function() {
+            // Données des formations
+            const formations = [
+                {
+                    code: "NUME04.A",
+                    titre: "DÉCOUVRIR ALGORITHMES ET COMPRENDRE IA",
+                    nomAbrege: "Algorithmes & IA",
+                    color: "#FF6B6B",
+                    sessions: [
+                        {
+                            lieu: "Lycée Guy Mollet",
+                            ville: "Arras",
+                            date: "14 janvier 2026",
+                            coords: [50.2919, 2.7767],
+                            lien: "https://eduline.ac-lille.fr/sofia-fmo-acad//default/session/preregistrationadd/globalSessionId/28991/tab/trainee/pill/individualTrainingPlan/infos/102570|03|S1|2026-01-14_14:00:00|2026-01-14_17:00:00"
+                        }
+                    ]
+                },
+                {
+                    code: "NUME04.C",
+                    titre: "TIRER PARTI DU POTENTIEL CRÉATIF DE L'IA GÉNÉRATIVE",
+                    nomAbrege: "Potentiel créatif IA",
+                    color: "#4ECDC4",
+                    sessions: [
+                        {
+                            lieu: "Collège Paul Verlaine",
+                            ville: "Lille",
+                            date: "10 décembre 2025",
+                            coords: [50.6292, 3.0573],
+                            lien: "https://eduline.ac-lille.fr/sofia-fmo-acad//default/session/preregistrationadd/globalSessionId/29275/tab/trainee/pill/individualTrainingPlan/infos/102571|02|S1|2025-12-10_13:30:00|2025-12-10_16:30:00"
+                        },
+                        {
+                            lieu: "LYPSO",
+                            ville: "Saint-Omer",
+                            date: "07 janvier 2026",
+                            coords: [50.7486, 2.2539],
+                            lien: "https://eduline.ac-lille.fr/sofia-fmo-acad//default/session/preregistrationadd/globalSessionId/29277/tab/trainee/pill/individualTrainingPlan/infos/102572|02|S1|2026-01-07_13:30:00|2026-01-07_16:30:00"
+                        },
+                        {
+                            lieu: "Lycée Guy Mollet",
+                            ville: "Arras",
+                            date: "28 janvier 2026",
+                            coords: [50.2919, 2.7767],
+                            lien: "https://eduline.ac-lille.fr/sofia-fmo-acad//default/session/preregistrationadd/globalSessionId/29938/tab/trainee/pill/individualTrainingPlan/infos/102572|03|S1|2026-01-28_14:00:00|2026-01-28_17:00:00"
+                        }
+                    ]
+                },
+                {
+                    code: "NUME04.D",
+                    titre: "LE TRAVAIL PERSONNEL À L'ÈRE DE L'IA",
+                    nomAbrege: "Travail personnel & IA",
+                    color: "#95E1D3",
+                    sessions: [
+                        {
+                            lieu: "LYPSO",
+                            ville: "Saint-Omer",
+                            date: "04 février 2026",
+                            coords: [50.7486, 2.2539],
+                            lien: "https://eduline.ac-lille.fr/sofia-fmo-acad//default/session/preregistrationadd/globalSessionId/29279/tab/trainee/pill/individualTrainingPlan/infos/102573|02|S1|2026-02-04_13:30:00|2026-02-04_16:30:00"
+                        },
+                        {
+                            lieu: "Lycée Guy Mollet",
+                            ville: "Arras",
+                            date: "04 mars 2026",
+                            coords: [50.2919, 2.7767],
+                            lien: "https://eduline.ac-lille.fr/sofia-fmo-acad//default/session/preregistrationadd/globalSessionId/29939/tab/trainee/pill/individualTrainingPlan/infos/102573|03|S1|2026-03-04_14:00:00|2026-03-04_17:00:00"
+                        }
+                    ]
+                },
+                {
+                    code: "NUME04.E",
+                    titre: "CRÉER AVEC LES IA GÉNÉRATIVES",
+                    nomAbrege: "Créer avec l'IA",
+                    color: "#F38181",
+                    sessions: [
+                        {
+                            lieu: "LYPSO",
+                            ville: "Saint-Omer",
+                            date: "10 décembre 2025",
+                            coords: [50.7486, 2.2539],
+                            lien: "https://eduline.ac-lille.fr/sofia-fmo-acad//default/session/preregistrationadd/globalSessionId/29275/tab/trainee/pill/individualTrainingPlan/infos/102571|02|S1|2025-12-10_13:30:00|2025-12-10_16:30:00"
+                        }
+                    ]
+                }
+            ];
+
+            // Grouper les sessions par lieu pour créer des marqueurs avec toutes les sessions
+            const locationGroups = {};
+            
+            formations.forEach(formation => {
+                formation.sessions.forEach(session => {
+                    const key = `${session.coords[0]},${session.coords[1]}`;
+                    if (!locationGroups[key]) {
+                        locationGroups[key] = {
+                            coords: session.coords,
+                            ville: session.ville,
+                            sessions: []
+                        };
+                    }
+                    locationGroups[key].sessions.push({
+                        formation: formation,
+                        session: session
+                    });
+                });
+            });
+
+            // Initialisation de la carte
+            const map = L.map('map').setView([50.45, 2.85], 9);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 18
+            }).addTo(map);
+
+            // Création des marqueurs avec toutes les sessions par lieu
+            const markers = [];
+
+            Object.values(locationGroups).forEach(location => {
+                // Icône avec le nombre de sessions
+                const icon = L.divIcon({
+                    className: 'custom-marker',
+                    html: `<div style="
+                        width: 35px; 
+                        height: 35px; 
+                        background: linear-gradient(135deg, #0093E9, #80D0C7); 
+                        border: 3px solid white;
+                        border-radius: 50%;
+                        box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 14px;
+                        font-weight: bold;
+                        color: white;
+                    ">${location.sessions.length}</div>`,
+                    iconSize: [35, 35],
+                    iconAnchor: [17, 17]
+                });
+
+                // Créer le contenu du popup avec toutes les sessions
+                let popupContent = `<div style="max-width: 350px;">`;
+                popupContent += `<div style="font-weight: bold; font-size: 1.2em; margin-bottom: 15px; color: #0093E9;">📍 ${location.ville}</div>`;
+                popupContent += `<div class="popup-sessions-container">`;
+                
+                location.sessions.forEach(item => {
+                    popupContent += `
+                        <div class="popup-session">
+                            <div class="popup-title">${item.formation.code}</div>
+                            <div style="font-weight: bold; margin-bottom: 8px; font-size: 0.95em;">${item.formation.titre}</div>
+                            <div class="popup-date">📅 ${item.session.date}</div>
+                            <div style="color: #555; margin-bottom: 8px;">📍 ${item.session.lieu}</div>
+                            <a href="${item.session.lien}" target="_blank" class="popup-link">
+                                S'inscrire →
+                            </a>
+                        </div>
+                    `;
+                });
+                
+                popupContent += `</div></div>`;
+
+                const marker = L.marker(location.coords, { icon: icon })
+                    .bindPopup(popupContent, {
+                        className: 'custom-popup',
+                        maxWidth: 400,
+                        maxHeight: 400
+                    })
+                    .addTo(map);
+
+                markers.push({ marker, location });
+            });
+
+            // Affichage de la liste des formations
+            const listContainer = document.getElementById('formations-list');
+            
+            formations.forEach((formation, index) => {
+                const card = document.createElement('div');
+                card.className = 'formation-card';
+                card.dataset.searchText = `${formation.code} ${formation.titre} ${formation.sessions.map(s => `${s.lieu} ${s.ville} ${s.date}`).join(' ')}`.toLowerCase();
+                
+                card.innerHTML = `
+                    <div class="formation-code">${formation.code}</div>
+                    <div class="formation-title">${formation.titre}</div>
+                    ${formation.sessions.map(session => `
+                        <div class="session-item">
+                            <span class="session-date">📅 ${session.date}</span>
+                            <span class="session-lieu">📍 ${session.lieu} - ${session.ville}</span>
+                            <a href="${session.lien}" target="_blank" class="session-link" onclick="event.stopPropagation()">
+                                S'inscrire →
+                            </a>
+                        </div>
+                    `).join('')}
+                `;
+
+                card.addEventListener('click', () => {
+                    // Zoom sur la première session de cette formation
+                    const firstSession = formation.sessions[0];
+                    map.setView(firstSession.coords, 12);
+                    
+                    // Trouver et ouvrir le marqueur correspondant
+                    const matchingMarker = markers.find(m => 
+                        m.location.coords[0] === firstSession.coords[0] &&
+                        m.location.coords[1] === firstSession.coords[1]
+                    );
+                    if (matchingMarker) {
+                        matchingMarker.marker.openPopup();
+                    }
+
+                    // Highlight de la carte
+                    document.querySelectorAll('.formation-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                });
+
+                listContainer.appendChild(card);
+            });
+
+            // Moteur de recherche
+            const searchInput = document.getElementById('search-input');
+            const noResults = document.getElementById('no-results');
+            
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                const cards = document.querySelectorAll('.formation-card');
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+                    const searchText = card.dataset.searchText;
+                    if (searchText.includes(searchTerm)) {
+                        card.classList.remove('hidden');
+                        visibleCount++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                // Afficher le message "aucun résultat"
+                if (visibleCount === 0 && searchTerm !== '') {
+                    noResults.style.display = 'block';
+                } else {
+                    noResults.style.display = 'none';
+                }
+            });
+
+            // Ajout de la légende avec noms abrégés
+            const legend = L.control({ position: 'bottomright' });
+            legend.onAdd = function() {
+                const div = L.DomUtil.create('div', 'legend');
+                div.innerHTML = `
+                    <div class="legend-title">Formations</div>
+                    ${formations.map(f => `
+                        <div class="legend-item">
+                            <span class="legend-icon" style="background: ${f.color}"></span>
+                            <span>${f.nomAbrege}</span>
+                        </div>
+                    `).join('')}
+                `;
+                return div;
+            };
+            legend.addTo(map);
+        };
+    </script>
+</body>
+</html>
