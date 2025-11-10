@@ -346,6 +346,26 @@
             box-shadow: 0 10px 40px rgba(74, 85, 104, 0.3);
         }
 
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #718096;
+            font-size: 0.95em;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: #2d3748;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #4a5568;
+            text-decoration: underline;
+        }
+
         .hidden {
             display: none;
         }
@@ -399,14 +419,14 @@
 
             <div id="quizContainer"></div>
         </div>
-    </div>
-    <!-- Signature améliorée -->
-<footer class="text-center py-8 text-slate-500">
-    <p class="text-base">
-        Conçu par <strong class="text-slate-700"><a href="mailto:amelie.silvert@region-academique-hdf.fr">Amélie Silvert</a></strong> à l'aide de l'IA
-    </p>
-</footer>
 
+        <!-- Signature améliorée -->
+        <footer>
+            <p>
+                Conçu par <strong><a href="mailto:amelie.silvert@region-academique-hdf.fr">Amélie Silvert</a></strong> à l'aide de l'IA
+            </p>
+        </footer>
+    </div>
 
     <script>
         const questions = [
