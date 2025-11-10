@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Énigme 1 - Les données</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        @page {
+            size: A4;
+            margin: 15mm;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: white;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .enigme-num {
+            background: white;
+            color: #667eea;
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            line-height: 50px;
+            font-weight: bold;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .instruction {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        .instruction-title {
+            font-weight: bold;
+            color: #856404;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin: 30px 0;
+            transition: opacity 0.3s;
+        }
+        
+        .data-grid.shuffling {
+            opacity: 0.3;
+        }
+        
+        /* Effet flip pour les cartes */
+        .card-container {
+            perspective: 1000px;
+            height: 170px;
+            transition: transform 0.3s;
+        }
+        
+        .card-container.shake {
+            animation: shake 0.5s;
+        }
+        
+        .card-container.highlight-hint {
+            animation: glow 1s ease-in-out 3;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        @keyframes glow {
+            0%, 100% { 
+                box-shadow: 0 0 5px #51cf66;
+            }
+            50% { 
+                box-shadow: 0 0 20px #51cf66, 0 0 30px #51cf66;
+            }
+        }
+        
+        .data-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        
+        .card-container.flipped .data-card {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .card-front {
+            background: #f8f9fa;
+            border: 3px solid #667eea;
+        }
+        
+        .card-back {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: rotateY(180deg);
+            border: 3px solid #764ba2;
+        }
+        
+        .card-back.invalid {
+            background: #e74c3c;
+        }
+        
+        .card-back.personal-data {
+            background: #ff6b6b;
+            border: 3px solid #c92a2a;
+        }
+        
+        .data-label {
+            font-size: 13px;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .data-value {
+            font-size: 20px;
+            color: #333;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+        .data-category {
+            font-size: 11px;
+            color: #764ba2;
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+        
+        .revealed-number {
+            font-size: 56px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .revealed-text {
+            font-size: 13px;
+            margin-top: 8px;
+            line-height: 1.3;
+        }
+        
+        .click-hint {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .error-counter {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .error-counter.visible {
+            display: block;
+        }
+        
+        .shuffle-warning {
+            background: #ff6b6b;
+            color: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+            animation: pulse 0.5s;
+        }
+        
+        .shuffle-warning.visible {
+            display: block;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .hints-container {
+            margin-top: 20px;
+        }
+        
+        .hint-box {
+            background: #d3f9d8;
+            border-left: 5px solid #51cf66;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .hint-box.visible {
+            display: block;
+        }
+        
+        .hint-box .hint-title {
+            font-weight: bold;
+            color: #2b8a3e;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .hint-box .hint-text {
+            color: #333;
+            font-size: 14px;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hint {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .answer-zone {
+            background: #e8f4f8;
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        .answer-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .answer-instruction {
+            text-align: center;
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 25px;
+        }
+        .answer-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .answer-input {
+            width: 70px;
+            height: 70px;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            background: white;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+        .answer-input:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+        }
+        .answer-input.correct {
+            border-color: #51cf66;
+            background: #d3f9d8;
+        }
+        .answer-input.incorrect {
+            border-color: #e74c3c;
+            background: #ffe0e0;
+        }
+        .position-label {
+            text-align: center;
+            font-size: 12px;
+            color: #667eea;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .validate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        .validate-btn:hover {
+            transform: scale(1.05);
+        }
+        .validate-btn:active {
+            transform: scale(0.95);
+        }
+        .result-message {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+        }
+        .result-message.success {
+            background: #d3f9d8;
+            color: #2b8a3e;
+            border: 3px solid #51cf66;
+            display: block;
+        }
+        .result-message.error {
+            background: #ffe0e0;
+            color: #c92a2a;
+            border: 3px solid #e74c3c;
+            display: block;
+        }
+        @media print {
+            body {
+                padding: 0;
+            }
+            .validate-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="enigme-num">1</div>
+        <h1>Les données</h1>
+        <p>Trier et comprendre l'importance des données pour une IA</p>
+    </div>
+
+    <div class="instruction">
+        <div class="instruction-title">📋 Mission</div>
+        <p>Une intelligence artificielle ne peut fonctionner sans données de qualité. Voici 20 données mélangées sur l'éducation. Certaines sont utiles pour entraîner une IA éducative, d'autres sont incorrectes, inutiles ou <strong style="color: #c92a2a;">protégées par le RGPD</strong>.</p>
+        <p style="margin-top: 10px;"><strong>Votre objectif :</strong> Identifiez les 5 données VALIDES et UTILES. Cliquez sur chaque carte pour la retourner et découvrir si elle contient un chiffre. Attention aux données personnelles !</p>
+        <p style="margin-top: 10px; color: #e74c3c; font-weight: bold;">⚠️ Attention : Après 3 erreurs consécutives, les cartes se mélangent ET un indice apparaît !</p>
+    </div>
+
+    <div class="click-hint">
+        👆 Cliquez sur les cartes pour les retourner et découvrir les chiffres cachés !
+    </div>
+
+    <div id="errorCounter" class="error-counter">
+        ❌ Erreurs consécutives : <span id="errorCount">0</span>/3
+    </div>
+
+    <div id="shuffleWarning" class="shuffle-warning">
+        🔄 Les cartes ont été mélangées ! Un nouvel indice apparaît ci-dessous.
+    </div>
+
+    <div class="hints-container">
+        <div id="hint1" class="hint-box">
+            <div class="hint-title">💡 Indice 1 : RGPD et données personnelles</div>
+            <div class="hint-text">Évitez toutes les <strong>données personnelles sensibles</strong> protégées par le RGPD : régime alimentaire, date de naissance, inscriptions sportives, adresse, numéro de téléphone, photos individuelles. Ces données ne peuvent PAS être utilisées pour entraîner une IA sans consentement. Cherchez uniquement des <strong>données agrégées et anonymes</strong>.</div>
+        </div>
+        
+        <div id="hint2" class="hint-box">
+            <div class="hint-title">💡 Indice 2 : Catégories valides</div>
+            <div class="hint-text">Les données valides concernent uniquement : <strong>résultats scolaires globaux</strong> (taux de réussite DNB, passage en classe supérieure), <strong>organisation</strong> (taille classe, temps récréation) et <strong>indicateurs sociaux publics</strong> (IPS). Tout le reste est soit non pertinent, soit interdit.</div>
+        </div>
+        
+        <div id="hint3" class="hint-box">
+            <div class="hint-title">💡 Indice 3 : Lettres des bonnes cartes</div>
+            <div class="hint-text">Les 5 données valides sont les cartes : <strong>E, C, G, K, A</strong>. Cherchez-les dans la grille mélangée !</div>
+        </div>
+        
+        <div id="hint4" class="hint-box">
+            <div class="hint-title">💡 Indice 4 : Ordre des chiffres</div>
+            <div class="hint-text">L'ordre du code final est : <strong>E (1ère) → C (2ème) → G (3ème) → K (4ème) → A (5ème)</strong>. Cliquez dans cet ordre pour découvrir le code !</div>
+        </div>
+        
+        <div id="hint5" class="hint-box">
+            <div class="hint-title">✨ Indice 5 : Localisation visuelle</div>
+            <div class="hint-text">Les bonnes cartes vont briller maintenant ! Regardez les cartes qui s'illuminent en vert.</div>
+        </div>
+    </div>
+
+    <div id="dataGrid" class="data-grid">
+        <!-- Les cartes seront générées par JavaScript -->
+    </div>
+
+    <div class="hint">
+        💡 <strong>Rappel RGPD :</strong> Les données personnelles identifiables (régimes alimentaires, dates de naissance, inscriptions individuelles, adresses, contacts) sont protégées. Seules les données agrégées, anonymes et publiques peuvent être utilisées pour l'IA éducative.
+    </div>
+
+    <div class="answer-zone">
+        <div class="answer-title">🔢 Notez votre code à 5 chiffres</div>
+        <div class="answer-instruction">
+            Inscrivez les 5 chiffres découverts dans l'ordre de leur position
+        </div>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <div style="font-weight: bold; color: #667eea; margin-bottom: 10px;">Code final :</div>
+            <div class="answer-boxes" style="margin-bottom: 10px;">
+                <input type="text" class="answer-input" id="digit1" maxlength="1" placeholder="?" />
+                <input type="text" class="answer-input" id="digit2" maxlength="1" placeholder="?" />
+                <input type="text" class="answer-input" id="digit3" maxlength="1" placeholder="?" />
+                <input type="text" class="answer-input" id="digit4" maxlength="1" placeholder="?" />
+                <input type="text" class="answer-input" id="digit5" maxlength="1" placeholder="?" />
+            </div>
+            <div style="display: flex; justify-content: center; gap: 20px;">
+                <div class="position-label">1ère</div>
+                <div class="position-label">2ème</div>
+                <div class="position-label">3ème</div>
+                <div class="position-label">4ème</div>
+                <div class="position-label">5ème</div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="validate-btn" onclick="validateCode()">✓ Valider le code</button>
+        </div>
+
+        <div id="resultMessage" class="result-message"></div>
+    </div>
+
+    <script>
+        // Données des cartes - 20 cartes au total
+        const cardsData = [
+            // 5 CARTES VALIDES
+            { label: 'A', value: '92%', category: 'Taux réussite DNB', valid: true, number: '5', position: '5ème' },
+            { label: 'C', value: '28 élèves', category: 'Taille classe moyenne', valid: true, number: '3', position: '2ème' },
+            { label: 'E', value: '85%', category: 'Taux passage 2nde', valid: true, number: '0', position: '1ère' },
+            { label: 'G', value: '15 min', category: 'Temps récréation', valid: true, number: '7', position: '3ème' },
+            { label: 'K', value: 'IPS 105', category: 'Indice position sociale', valid: true, number: '9', position: '4ème' },
+            
+            // DONNÉES PERSONNELLES SENSIBLES (RGPD)
+            { label: 'P', value: '12/05/2010', category: 'Date de naissance', valid: false, personal: true },
+            { label: 'Q', value: 'Sans gluten', category: 'Régime alimentaire', valid: false, personal: true },
+            { label: 'R', value: 'Inscrit', category: 'Inscription UNSS', valid: false, personal: true },
+            { label: 'S', value: '15 rue Pasteur', category: 'Adresse domicile', valid: false, personal: true },
+            { label: 'T', value: '06 12 34 56 78', category: 'Téléphone parent', valid: false, personal: true },
+            
+            // DONNÉES NON PERTINENTES
+            { label: 'B', value: 'Banane', category: 'Fruit préféré', valid: false },
+            { label: 'D', value: 'Bleu', category: 'Couleur du ciel', valid: false },
+            { label: 'F', value: 'Chat', category: 'Animal domestique', valid: false },
+            { label: 'H', value: 'Rouge', category: 'Couleur voiture', valid: false },
+            { label: 'I', value: 'Pizza', category: 'Plat cantine', valid: false },
+            { label: 'J', value: '42 minutes', category: 'Durée trajet bus', valid: false },
+            { label: 'L', value: 'Noir', category: 'Couleur tableau', valid: false },
+            { label: 'M', value: 'Football', category: 'Sport populaire', valid: false },
+            { label: 'N', value: 'Soleil', category: 'Météo', valid: false },
+            { label: 'O', value: 'Chien', category: 'Race préférée', valid: false }
+        ];
+
+        let errorCount = 0;
+        let currentHintLevel = 0;
+        let currentCards = [...cardsData];
+        const maxHints = 5;
+
+        function createCard(card, index) {
+            const backClass = card.personal ? 'personal-data' : (card.valid ? '' : 'invalid');
+            const backIcon = card.personal ? '🔒' : (card.valid ? card.number : '❌');
+            const backText = card.personal 
+                ? 'DONNÉE PERSONNELLE<br>Protégée par le RGPD' 
+                : (card.valid ? '✓ Donnée valide<br>' + card.position + ' position' : 'Donnée non pertinente<br>pour une IA éducative');
+            
+            return `
+                <div class="card-container" data-valid="${card.valid}" data-label="${card.label}" data-index="${index}" onclick="flipCard(this)">
+                    <div class="data-card">
+                        <div class="card-front">
+                            <div class="data-label">Donnée ${card.label}</div>
+                            <div class="data-value">${card.value}</div>
+                            <div class="data-category">${card.category}</div>
+                        </div>
+                        <div class="card-back ${backClass}">
+                            <div class="revealed-number">${backIcon}</div>
+                            <div class="revealed-text">${backText}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function renderCards() {
+            const grid = document.getElementById('dataGrid');
+            grid.innerHTML = currentCards.map((card, index) => createCard(card, index)).join('');
+        }
+
+        function showHint(level) {
+            const hint = document.getElementById(`hint${level}`);
+            if (hint) {
+                hint.classList.add('visible');
+                
+                // Si c'est l'indice 5, faire briller les bonnes cartes
+                if (level === 5) {
+                    setTimeout(() => {
+                        const validCards = document.querySelectorAll('.card-container[data-valid="true"]');
+                        validCards.forEach(card => {
+                            card.classList.add('highlight-hint');
+                        });
+                    }, 100);
+                }
+            }
+        }
+
+        function resetAndShuffle() {
+            const grid = document.getElementById('dataGrid');
+            grid.classList.add('shuffling');
+            
+            setTimeout(() => {
+                // Mélanger les cartes
+                currentCards = shuffleArray(cardsData);
+                renderCards();
+                
+                // Afficher un nouvel indice
+                if (currentHintLevel < maxHints) {
+                    currentHintLevel++;
+                    showHint(currentHintLevel);
+                }
+                
+                // Réinitialiser le compteur d'erreurs
+                errorCount = 0;
+                updateErrorCounter();
+                
+                // Afficher le message de mélange
+                const warning = document.getElementById('shuffleWarning');
+                warning.classList.add('visible');
+                setTimeout(() => {
+                    warning.classList.remove('visible');
+                }, 3000);
+                
+                grid.classList.remove('shuffling');
+            }, 500);
+        }
+
+        function updateErrorCounter() {
+            const counter = document.getElementById('errorCount');
+            const counterDiv = document.getElementById('errorCounter');
+            counter.textContent = errorCount;
+            
+            if (errorCount > 0) {
+                counterDiv.classList.add('visible');
+            } else {
+                counterDiv.classList.remove('visible');
+            }
+        }
+
+        function flipCard(container) {
+            // Si la carte est déjà retournée, ne rien faire
+            if (container.classList.contains('flipped')) {
+                return;
+            }
+            
+            container.classList.toggle('flipped');
+            
+            const isValid = container.getAttribute('data-valid') === 'true';
+            
+            if (!isValid) {
+                errorCount++;
+                updateErrorCounter();
+                container.classList.add('shake');
+                setTimeout(() => container.classList.remove('shake'), 500);
+                
+                // Après 3 erreurs : mélanger ET afficher indice
+                if (errorCount >= 3) {
+                    setTimeout(() => {
+                        resetAndShuffle();
+                    }, 1000);
+                }
+            } else {
+                // Réinitialiser le compteur si on trouve une bonne carte
+                errorCount = 0;
+                updateErrorCounter();
+            }
+        }
+        
+        // Passage automatique au champ suivant
+        const inputs = document.querySelectorAll('.answer-input');
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', function() {
+                if (this.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+            
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        function validateCode() {
+            const correctCode = ['0', '3', '7', '9', '5'];
+            const userCode = [
+                document.getElementById('digit1').value,
+                document.getElementById('digit2').value,
+                document.getElementById('digit3').value,
+                document.getElementById('digit4').value,
+                document.getElementById('digit5').value
+            ];
+            
+            const resultMessage = document.getElementById('resultMessage');
+            let allCorrect = true;
+            
+            inputs.forEach((input, index) => {
+                input.classList.remove('correct', 'incorrect');
+                if (userCode[index] === correctCode[index]) {
+                    input.classList.add('correct');
+                } else {
+                    input.classList.add('incorrect');
+                    allCorrect = false;
+                }
+            });
+            
+            if (allCorrect) {
+                resultMessage.className = 'result-message success';
+                resultMessage.innerHTML = '🎉 OUI ! Bravo, le code est correct !<br>Vous avez réussi l\'énigme 1 : Les données';
+            } else {
+                resultMessage.className = 'result-message error';
+                resultMessage.innerHTML = '❌ NON ! Le code n\'est pas correct.<br>Retournez les cartes pour vérifier les chiffres et leur position.';
+            }
+        }
+
+        // Initialiser les cartes au chargement (déjà mélangées)
+        currentCards = shuffleArray(cardsData);
+        renderCards();
+    </script>
+</body>
+</html>
