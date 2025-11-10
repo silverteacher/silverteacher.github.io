@@ -5,477 +5,800 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mission IA Établissement 2025</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-                        url('https://images.unsplash.com/photo-1.727434032773e+12-af3cd98375ba?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2832') center/cover fixed;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1.727434032773e12-af3cd98375ba?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2832') center/cover fixed;
             min-height: 100vh;
             padding: 20px;
         }
+
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
             backdrop-filter: blur(10px);
         }
+
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
             color: white;
             padding: 30px;
             text-align: center;
         }
-        .header h1 { font-size: 2em; margin-bottom: 10px; animation: pulse 2s ease-in-out infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
-        .timer { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin-top: 20px; font-size: 1.5em; font-weight: bold; transition: all 0.3s; }
-        .timer.warning { background: #ff6b6b; animation: shake 0.5s infinite; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        .creator-credit {
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .timer {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
             margin-top: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .timer-label {
+            opacity: 0.9;
+        }
+
+        .timer-value {
+            background: rgba(255,255,255,0.3);
+            padding: 8px 20px;
+            border-radius: 8px;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .score-board {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(74, 85, 104, 0.3);
+        }
+
+        .score-item {
+            flex: 1;
+        }
+
+        .score-item .label {
             font-size: 0.9em;
             opacity: 0.9;
-            font-style: italic;
+            margin-bottom: 5px;
         }
-        .question-timer { background: #ff6b6b; color: white; padding: 10px 20px; border-radius: 50px; font-size: 1.2em; font-weight: bold; display: inline-block; margin: 10px 0; }
-        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; background: rgba(102, 126, 234, 0.1); }
-        .stat { text-align: center; padding: 15px; background: white; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .stat-label { font-size: 0.9em; color: #666; margin-bottom: 5px; }
-        .stat-value { font-size: 2em; font-weight: bold; color: #667eea; }
-        .content { padding: 30px; }
-        .role-badge { display: inline-block; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 8px 20px; border-radius: 50px; font-size: 0.9em; font-weight: bold; margin-bottom: 15px; }
-        .question { font-size: 1.3em; font-weight: 600; margin-bottom: 25px; color: #2c3e50; line-height: 1.6; }
-        .choices { display: grid; gap: 15px; margin: 20px 0; }
-        .choice {
-            padding: 18px 25px;
+
+        .score-item .value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .question-card {
             background: white;
-            border: 3px solid #e0e0e0;
+            padding: 30px;
             border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1.05em;
-            line-height: 1.5;
-        }
-        .choice:hover { transform: translateX(8px); border-color: #667eea; box-shadow: 0 5px 20px rgba(102,126,234,0.3); }
-        .choice.selected { background: #667eea; color: white; border-color: #667eea; transform: translateX(8px); }
-        .choice.correct { background: #4CAF50; color: white; border-color: #4CAF50; animation: correctPulse 0.5s; }
-        .choice.incorrect { background: #f44336; color: white; border-color: #f44336; animation: shake 0.5s; }
-        @keyframes correctPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .feedback {
-            margin-top: 25px;
-            padding: 25px;
-            border-radius: 15px;
-            font-size: 1.1em;
-            line-height: 1.8;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
             animation: slideIn 0.5s ease;
         }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-        .feedback.correct { background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-left: 5px solid #4CAF50; color: #155724; }
-        .feedback.incorrect { background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); border-left: 5px solid #f44336; color: #721c24; }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-card h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .choice-btn {
+            background: #f7fafc;
+            border: 2px solid #cbd5e0;
+            padding: 18px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 1em;
+            font-weight: 500;
+            color: #2d3748;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .choice-btn:hover {
+            transform: translateX(10px);
+            border-color: #4a5568;
+            background: #edf2f7;
+            box-shadow: 0 4px 12px rgba(74, 85, 104, 0.15);
+        }
+
+        .choice-btn.correct {
+            background: #c6f6d5;
+            border-color: #38a169;
+            animation: correctPulse 0.6s ease;
+        }
+
+        .choice-btn.incorrect {
+            background: #fed7d7;
+            border-color: #e53e3e;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .feedback.correct {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 2px solid #38a169;
+        }
+
+        .feedback.incorrect {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 2px solid #e53e3e;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
             color: white;
             border: none;
-            padding: 15px 35px;
-            font-size: 1.2em;
-            border-radius: 50px;
+            padding: 15px 40px;
+            border-radius: 25px;
             cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
             margin-top: 20px;
             transition: all 0.3s ease;
-            font-weight: 600;
-            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+            box-shadow: 0 4px 12px rgba(74, 85, 104, 0.3);
         }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(102,126,234,0.6); }
-        .btn-primary:disabled { background: #ccc; cursor: not-allowed; transform: none; opacity: 0.6; }
-        .hidden { display: none !important; }
-        .welcome-screen { text-align: center; padding: 30px; }
-        .welcome-screen h2 { color: #667eea; font-size: 2.5em; margin-bottom: 25px; }
-        .welcome-screen p { font-size: 1.2em; line-height: 1.9; margin-bottom: 20px; color: #555; }
-        .welcome-screen ul { text-align: left; max-width: 700px; margin: 25px auto; font-size: 1.15em; line-height: 2.2; }
-        .welcome-screen li { margin-bottom: 15px; }
-        .discussion-card {
-            background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
-            border-left: 6px solid #ffc107;
-            padding: 30px;
-            margin: 30px 0;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(255,193,7,0.2);
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 85, 104, 0.4);
         }
-        .discussion-card h3 { color: #856404; margin-bottom: 20px; font-size: 1.5em; }
-        .discussion-card p { line-height: 1.9; color: #333; font-size: 1.1em; margin-bottom: 15px; }
-        .discussion-card ul { margin: 20px 0; padding-left: 25px; }
-        .discussion-card li { margin: 12px 0; line-height: 1.7; font-size: 1.05em; }
+
         .incident-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.95);
-            display: none;
-            z-index: 1000;
-            align-items: center;
+            background: rgba(0,0,0,0.85);
+            display: flex;
             justify-content: center;
-            animation: fadeIn 0.3s;
-            overflow-y: auto;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
             padding: 20px;
         }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .incident-overlay.show { display: flex; }
-        .incident-popup {
+
+        .incident-card {
             background: white;
-            border-radius: 25px;
-            padding: 45px;
-            max-width: 750px;
-            width: 90%;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 25px 70px rgba(0,0,0,0.6);
-            animation: incidentPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            margin: auto;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+            animation: slideUp 0.5s ease;
+            border-top: 8px solid #e53e3e;
         }
-        @keyframes incidentPop { from { transform: scale(0.7) rotate(-10deg); opacity: 0; } to { transform: scale(1) rotate(0); opacity: 1; } }
-        .incident-popup h3 { color: #dc3545; font-size: 2.2em; margin-bottom: 25px; text-align: center; animation: pulse 1s infinite; }
-        .incident-popup .description {
-            background: #fff3cd;
-            border-left: 6px solid #ffc107;
-            padding: 25px;
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .incident-card h2 {
+            color: #e53e3e;
             margin-bottom: 25px;
-            font-size: 1.15em;
-            line-height: 1.8;
+            font-size: 1.8em;
+            text-align: center;
+        }
+
+        .incident-card .incident-description {
+            background: #fef5e7;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 5px solid #d69e2e;
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #744210;
+        }
+
+        .incident-card .incident-question {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            padding: 15px;
+            background: #edf2f7;
             border-radius: 10px;
         }
-        .incident-popup .question { font-size: 1.4em; font-weight: 600; margin-bottom: 25px; color: #2c3e50; }
-        .completion-screen { text-align: center; padding: 50px 30px; }
-        .completion-screen h2 { color: #4CAF50; font-size: 3em; margin-bottom: 30px; animation: pulse 2s infinite; }
-        .final-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
+
+        .exchange-section {
+            background: #e6f7ff;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border: 2px solid #91caff;
         }
-        .final-stat {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .exchange-section h3 {
+            color: #003a70;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .exchange-section p {
+            color: #0050b3;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .exchange-section ul {
+            text-align: left;
+            margin: 20px 0;
+            padding-left: 25px;
+        }
+
+        .exchange-section li {
+            margin: 12px 0;
+            line-height: 1.7;
+            font-size: 1.05em;
+            color: #002c8c;
+        }
+
+        .final-score {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .final-score h2 {
+            font-size: 2.5em;
+            color: #4a5568;
+            margin-bottom: 30px;
+        }
+
+        .final-score .score-display {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
             color: white;
-            padding: 35px;
+            padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(102,126,234,0.4);
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(74, 85, 104, 0.3);
         }
-        .final-stat-label { font-size: 1.1em; opacity: 0.95; margin-bottom: 15px; }
-        .final-stat-value { font-size: 3em; font-weight: bold; }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            .score-board {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎯 Mission IA Établissement 2025</h1>
-            <p style="font-size:1.1em">Formation interactive basée sur le Livret de Missions IA</p>
-            <p style="font-size:0.95em;margin-top:10px;opacity:0.9">⚠️ Attention: Des incidents critiques peuvent survenir à tout moment!</p>
-            <div class="timer" id="timer">⏱️ 30:00</div>
-            <div class="creator-credit">Créé avec ❤️ par Amélie Silvert</div>
-        </div>
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-label">Score</div>
-                <div class="stat-value" id="scoreDisplay">0</div>
-            </div>
-            <div class="stat">
-                <div class="stat-label">Question</div>
-                <div class="stat-value" id="questionDisplay">0/15</div>
-            </div>
-            <div class="stat">
-                <div class="stat-label">Incidents</div>
-                <div class="stat-value" id="incidentDisplay">0</div>
+            <h1>🎓 Mission IA Établissement 2025</h1>
+            <p>Quiz interactif avec incidents critiques</p>
+            <div class="timer">
+                <span class="timer-label">⏱️ Temps restant:</span>
+                <span class="timer-value" id="timerDisplay">20:00</span>
             </div>
         </div>
-        <div class="content" id="mainContent"></div>
+
+        <div class="content">
+            <div class="score-board">
+                <div class="score-item">
+                    <div class="label">📊 Score</div>
+                    <div class="value" id="scoreDisplay">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="label">✅ Bonnes réponses</div>
+                    <div class="value" id="correctDisplay">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="label">❌ Erreurs</div>
+                    <div class="value" id="incorrectDisplay">0</div>
+                </div>
+                <div class="score-item">
+                    <div class="label">📝 Question</div>
+                    <div class="value"><span id="currentDisplay">0</span>/<span id="totalDisplay">20</span></div>
+                </div>
+            </div>
+
+            <div id="quizContainer"></div>
+        </div>
     </div>
-    <div class="incident-overlay" id="incidentOverlay">
-        <div class="incident-popup" id="incidentPopup"></div>
-    </div>
-    <audio id="alertSound" src="data:audio/wav;base64,UklGRhYAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" preload="auto"></audio>
-    <audio id="successSound" src="data:audio/wav;base64,UklGRhYAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=" preload="auto"></audio>
+
     <script>
-        const questions=[
-            {role:'enseignant',question:'Vous êtes enseignant de français en 3ème et préparez une séquence sur l\'argumentation. Vous souhaitez utiliser ChatGPT pour créer une grille d\'évaluation. Quelle approche respecte le RGPD?',choices:['Copier copie de Lucas avec nom pour correction perso','Demander: "Crée une grille pour texte argumentatif 3ème avec critères cohérence et expression"','Créer compte ChatGPT pour chaque élève','Envoyer toutes copies avec noms'],correct:1,points:25,justification:'Livret Mission 1 : Protection des données. Seule la réponse 2 respecte le RGPD: critères génériques sans données élève. Les autres violent le RGPD en transmettant données nominatives.'},
-            {role:'enseignant',question:'Vous enseignez les mathématiques en 6ème et créez des exercices différenciés sur les fractions pour 3 niveaux. Comment utiliser l\'IA de manière appropriée?',choices:['Copier liste élèves avec niveau dans ChatGPT','Demander aux élèves de créer un compte Mistral','Envoyer évaluations avec noms et notes','Mistral: "Crée 5 versions fractions: facile à difficile"'],correct:3,points:25,justification:'Livret Mission 1. Seule la réponse 4 est conforme. IA assistant avec niveaux génériques, attribution manuelle. Les autres violent le RGPD ou obligent des mineurs à créer des comptes.'},
-            {role:'enseignant',question:'Un élève de 1ère remet un excellent devoir de philosophie. Le style est inhabituel, vous soupçonnez l\'utilisation de ChatGPT. Comment gérer cette situation professionnellement?',choices:['Utiliser un détecteur IA immédiatement, zéro si >80%','Utiliser plusieurs détecteurs et croiser les résultats','Confisquer les appareils et exiger une preuve','Organiser un entretien pédagogique, évaluation orale, analyser le style'],correct:3,points:30,justification:'Livret Mission 4 : Devoirs et évaluation. Les détecteurs sont peu fiables avec de nombreux faux positifs. Ne jamais sanctionner uniquement sur cette base. Bonne pratique: entretien individuel, évaluation orale, analyse du style.'},
-            {role:'enseignant',question:'Vous préparez un cours de SVT sur l\'impact environnemental du numérique pour une classe de 2nde. Quelle ressource serait inappropriée selon le cadre du MEN?',choices:['Comparia pour mesurer l\'empreinte carbone','Impact écologique serveurs et datacenters','Comparaison empreinte requête IA vs recherche Google','"L\'IA est 100% virtuelle donc écologique"'],correct:3,points:25,justification:'Livret Mission 2 : Éduquer. Affirmer que l\'IA est écologique car virtuelle est faux et dangereux. Ignore consommation énergétique massive serveurs, datacenters, refroidissement.'},
-            {role:'cpe',question:'Vous êtes CPE. 15 élèves de 3ème utilisent ChatGPT comme "confident" pour problèmes personnels, harcèlement, anxiété. Parents inquiets. Quelle intervention?',choices:['Féliciter initiative élèves autonomie émotionnelle','Ne rien faire, vie privée élèves','Alerter sur risques, orienter vers infirmière, psy EN, AS','Demander accès conversations pour évaluer gravité'],correct:2,points:30,justification:'Livret Mission 1 : Risque psychologique majeur. ChatGPT n\'a aucune formation, collecte données sensibles, peut donner conseils dangereux. Orienter vers professionnels: infirmière, psychologue EN, assistante sociale.'},
-            {role:'cpe',question:'Enseignant impose aux élèves de 4ème (13-14 ans) de créer un compte ChatGPT pour faire des recherches. 28 élèves concernés. Parents vous contactent inquiets. Quelle action?',choices:['Laisser faire, décision pédagogique enseignant','Rassurer parents, surveiller usage','Attendre plainte formelle parents','Informer chef établissement, faire stopper, proposer alternative conforme'],correct:3,points:30,justification:'Livret Mission 1 : Strictement interdit. Violation RGPD, CGU ChatGPT imposent 18 ans, protection mineurs. Action immédiate: informer direction, stopper la pratique, alternative projection collective ou outils académiques.'},
-            {role:'direction',question:'Vous êtes chef d\'établissement. Enseignant de mathématiques a copié 20 copies de 4ème avec noms, notes dans ChatGPT pour analyse. Données sur serveurs US. Parents menacent CNIL. Réaction?',choices:['Minimiser incident, "erreur isolée"','Sanctionner enseignant immédiatement','Attendre saisine CNIL avant agir','Arrêt immédiat, informer DPO, CNIL si requis, familles, formation urgente équipe'],correct:3,points:50,justification:'Livret Mission 1 : Violation grave RGPD. Protocole complet obligatoire: arrêt immédiat pratique, information DPO et CNIL si nécessaire, communication familles, formation urgente sur protection données.'},
-            {role:'direction',question:'Vous élaborez une charte d\'usage de l\'IA pour votre établissement. Vous utilisez ChatGPT pour rédiger les aspects juridiques. Avant de présenter au CA, quelle étape est indispensable?',choices:['Présenter directement, ChatGPT est fiable','Corriger uniquement orthographe et grammaire','Demander avis collègues informellement','Vérification complète avec Code éducation, textes officiels, relecture juriste ou IEN'],correct:3,points:35,justification:'Livret Mission 5 : Hallucinations et fiabilité. Document juridique avec erreurs = conséquences graves. Vérification obligatoire: Code éducation, textes officiels, relecture par personnes compétentes (juriste, IEN, référent académique).'},
-            {role:'direction',question:'Détecteur de contenu IA indique 97% IA sur devoir de Malik. Conseil de discipline prononce 0/20 + avertissement. Parents contestent avec avocat. Vous devez rectifier. Action?',choices:['Annuler sanction, organiser entretien pédagogique, proposer évaluation orale','Maintenir décision, jurisprudence détecteurs','Utiliser 3 autres détecteurs pour confirmer','Exiger que l\'élève prouve son innocence'],correct:0,points:50,justification:'Livret Mission 4 : Détecteurs IA. Peu fiables, faux positifs massifs (élèves francophones, handicaps). JAMAIS sanctionner uniquement sur cette base. Annuler, entretien, évaluation orale alternative.'},
-            {role:'enseignant',question:'Vous créez une évaluation d\'histoire sur la Révolution française pour vos 4ème. Vous demandez à Copilot de générer le contenu. Quelle pratique est la plus rigoureuse?',choices:['Utiliser tel quel, Copilot est fiable','Croiser avec un autre IA (ChatGPT)','Vérifier seulement si élève signale erreur','Vérifier chaque date, événement, nom avec sources historiques fiables'],correct:3,points:25,justification:'Livret Mission 5 : Hallucinations IA. L\'IA peut inventer dates, événements, citations. Pour contenu pédagogique: vérification systématique avec sources fiables (manuels validés, sites académiques, ouvrages référence).'},
-            {role:'cpe',question:'Lors d\'une campagne de prévention harcèlement, vous utilisez une IA pour générer des témoignages fictifs "réalistes". Un témoignage mentionne "Kevin, 14 ans, Marseille". Problème éthique?',choices:['Aucun, Kevin fictif','Acceptable si on précise "fictif"','Risque: élève réel peut être identifié, stigmatisé, rumeurs','Bon outil pédagogique immersion'],correct:2,points:30,justification:'Livret Mission 5 : Biais et éthique. Même fictif, prénom + âge + ville peut correspondre à élève réel. Risque identification, stigmatisation, rumeurs. Toujours utiliser cas génériques ou anonymisés (initiales, sans localisation).'},
-            {role:'direction',question:'Vous préparez documents officiels pour Conseil d\'Administration avec ChatGPT (ordre du jour, compte-rendu). Un élu remarque 3 erreurs juridiques graves. Mesures correctives?',choices:['Minimiser, "détails mineurs"','Accuser ChatGPT publiquement','Retirer documents, vérifier conformité Code éducation, corriger, re-présenter avec mention vérification','Modifier discrètement sans informer'],correct:2,points:40,justification:'Livret Mission 5 : Responsabilité et hallucinations. Document officiel erroné = conséquences juridiques graves. Protocole: retrait immédiat, vérification complète conformité, correction, nouvelle présentation avec transparence sur vérification.'},
-            {role:'enseignant',question:'Vous enseignez l\'anglais et souhaitez que vos 3ème utilisent ChatGPT pour s\'entraîner à la conversation orale. Quelle mise en œuvre respecte le cadre légal?',choices:['Demander création comptes individuels ChatGPT','Donner code compte ChatGPT perso','Projection collective en classe, vous contrôlez interactions','Laisser élèves s\'inscrire à domicile'],correct:2,points:30,justification:'Livret Mission 1 & 2 : Protection mineurs. Interdiction comptes individuels (<18 ans). Alternative conforme: projection collective, enseignant contrôle, pas de données élèves, ou outils académiques dédiés.'},
-            {role:'cpe',question:'Vous organisez une formation IA pour délégués de classe. Objectif: développer esprit critique. Quelle activité est la plus pertinente selon le Livret de Missions?',choices:['Montrer uniquement les dangers de l\'IA','Laisser délégués découvrir seuls','Interdire totalement usage IA','Atelier pratique: tester prompts, identifier biais, vérifier sources, reconnaître limites'],correct:3,points:30,justification:'Livret Mission 3 : Former à l\'usage éthique. Approche pratique efficace: ateliers avec techniques de prompt, identification biais, vérification sources, reconnaissance limites. Développe autonomie et esprit critique.'},
-            {role:'direction',question:'Vous êtes chef d\'établissement et mettez en place une gouvernance IA. Quelle structure est recommandée par le Livret de Missions?',choices:['Déléguer totalement aux enseignants volontaires','Ignorer le sujet jusqu\'à directives officielles','Cadre institutionnel: charte validée CA, formation équipes, référent IA, comité suivi régulier','Interdire toute utilisation IA dans l\'établissement'],correct:2,points:35,justification:'Livret Mission 3 : Gouvernance. Structure recommandée: cadre clair (charte CA), formation systématique, référent IA nommé, comité de suivi régulier, communication familles. Approche institutionnelle structurée.'}
-        ];
-        const discussions=[
-            {after:6,title:'💬 Temps d\'échange - L\'IA et les élèves',content:'<p><strong>Prenez 2 minutes pour échanger avec le groupe:</strong></p><ul><li>Comment sensibilisez-vous vos élèves à un usage critique et responsable de l\'IA?</li><li>Quelles activités pédagogiques avez-vous mises en place pour former les élèves?</li><li>Comment gérez-vous les cas d\'élèves utilisant l\'IA pour leurs devoirs?</li><li>Quelles ressources éducatives partagez-vous avec vos élèves sur l\'IA?</li></ul>'},
-            {after:12,title:'💬 Temps d\'échange - Gouvernance IA dans l\'établissement',content:'<p><strong>Prenez 2 minutes pour échanger avec le groupe:</strong></p><ul><li>Avez-vous élaboré une charte d\'usage de l\'IA dans votre établissement?</li><li>Comment organisez-vous la formation des équipes éducatives?</li><li>Qui est le référent IA dans votre structure? Quel est son rôle concret?</li><li>Comment impliquez-vous les parents et les élèves dans cette démarche?</li></ul>'}
-        ];
-        const incidents=[
-            {title:'🚨 INCIDENT CRITIQUE - VIOLATION RGPD MAJEURE',description:'Un enseignant de mathématiques vient de copier-coller 20 copies d\'élèves de 4ème (avec noms complets, prénoms et notes) dans ChatGPT pour "gagner du temps dans les corrections". Les données sont maintenant sur des serveurs américains. Trois parents furieux vous contactent et menacent de saisir la CNIL.',question:'Quelle est votre réaction immédiate en tant que responsable d\'établissement?',choices:['Minimiser l\'incident: "C\'est une erreur isolée, ça n\'arrivera plus"','Attendre une éventuelle saisine de la CNIL avant d\'agir','Sanctionner immédiatement l\'enseignant sans autre démarche','Arrêt immédiat de la pratique + information DPO + CNIL si requis + familles concernées + formation urgente équipe'],correct:3,points:50,justification:'Livret Mission 1 - Protection des données: Il s\'agit d\'une violation grave du RGPD. Le protocole complet est obligatoire: arrêt immédiat de la pratique, information du DPO (Délégué à la Protection des Données), saisine CNIL si nécessaire, communication transparente aux familles, et formation urgente de toute l\'équipe sur la protection des données.'},
-            {title:'🚨 INCIDENT CRITIQUE - COMPTES MINEURS ILLÉGAUX',description:'Vous découvrez qu\'un enseignant de SVT a imposé à ses 28 élèves de 4ème (âgés de 13-14 ans) de créer un compte ChatGPT individuel pour faire des "recherches personnalisées" sur l\'environnement. Les élèves ont fourni emails et données personnelles. Parents inquiets vous contactent.',question:'Quelle action d\'urgence menez-vous?',choices:['Laisser faire: c\'est une décision pédagogique de l\'enseignant','Attendre de voir si ça pose vraiment problème','Informer immédiatement le chef d\'établissement, faire stopper, proposer alternative conforme (projection collective ou outil académique)','Rassurer les parents: "C\'est pour leur bien"'],correct:2,points:45,justification:'Livret Mission 1 - Protection mineurs: C\'est strictement interdit. Les CGU de ChatGPT imposent un âge minimum de 18 ans (ou 13 ans avec accord parental explicite et vérifiable, rarement applicable en établissement). Violation du RGPD et de la protection des mineurs. Action immédiate obligatoire: informer la direction, faire stopper la pratique, proposer alternative conforme (projection collective contrôlée ou outils académiques validés).'},
-            {title:'🚨 INCIDENT CRITIQUE - IA COMME CONFIDENT PSY',description:'Vous êtes CPE. Vous découvrez que 15 élèves de 2nde utilisent régulièrement ChatGPT comme "confident psychologique" pour des problèmes intimes: harcèlement, anxiété, pensées noires, conflits familiaux. Ils lui font totalement confiance et suivent ses conseils. L\'infirmière scolaire vous alerte.',question:'Comment gérez-vous cette situation délicate?',choices:['Féliciter les élèves pour leur initiative et autonomie émotionnelle','Alerter immédiatement sur les risques psychologiques + orienter vers professionnels (infirmière, psy EN, AS, CPE)','Ne rien faire: c\'est leur vie privée','Demander à voir les conversations pour évaluer la gravité'],correct:1,points:45,justification:'Livret Mission 1 - Risques psychologiques: C\'est un risque psychologique majeur. ChatGPT n\'a AUCUNE formation psychologique, collecte des données sensibles, et peut donner des conseils dangereux voire mortels (notamment sur des sujets comme le suicide). Il faut immédiatement alerter les élèves sur ces risques et les orienter vers les professionnels compétents: infirmière scolaire, psychologue de l\'Éducation Nationale, assistante sociale, CPE.'},
-            {title:'🚨 INCIDENT CRITIQUE - DÉTECTEUR IA INJUSTE',description:'Un détecteur de contenu IA (GPTZero) indique "97% probabilité IA" sur le devoir de philosophie de Malik, élève sérieux de Terminale. Le conseil de discipline prononce un 0/20 + avertissement. Les parents contestent avec avocat: Malik est francophone non-natif, son style est naturellement "atypique". Vous devez rectifier d\'urgence.',question:'Quelle décision prenez-vous pour rectifier cette injustice?',choices:['Annuler la sanction + organiser entretien pédagogique + proposer évaluation orale de rattrapage','Maintenir la décision: le détecteur fait jurisprudence','Utiliser 3 autres détecteurs pour confirmer ou infirmer','Exiger que l\'élève prouve son innocence par lui-même'],correct:0,points:50,justification:'Livret Mission 4 - Détecteurs IA: Les détecteurs de contenu IA sont peu fiables avec de très nombreux faux positifs, notamment pour les élèves francophones non-natifs, élèves avec troubles dys, ou styles d\'écriture atypiques. Il ne faut JAMAIS sanctionner un élève uniquement sur la base d\'un détecteur. La bonne pratique: annuler immédiatement la sanction injuste, organiser un entretien pédagogique individuel, proposer une évaluation orale alternative, analyser le processus de travail.'},
-            {title:'🚨 INCIDENT CRITIQUE - CHARTE NON VÉRIFIÉE',description:'Vous avez élaboré une charte d\'usage de ChatGPT pour votre établissement en utilisant... ChatGPT pour rédiger les aspects juridiques. Elle a été votée au Conseil d\'Administration. Un avocat parent d\'élève remarque 3 erreurs juridiques graves concernant le RGPD et la responsabilité de l\'établissement.',question:'Quelles mesures correctives d\'urgence prenez-vous?',choices:['Minimiser: "Ce sont des détails, ça ira"','Retirer immédiatement la charte + vérifier conformité Code éducation + corriger avec expert + re-présenter au CA','Accuser publiquement ChatGPT de l\'erreur','Modifier discrètement le document sans en informer personne'],correct:1,points:40,justification:'Livret Mission 5 - Hallucinations et responsabilité: Un document officiel juridiquement erroné peut avoir des conséquences graves (responsabilité établissement, nullité décisions, contentieux). Protocole obligatoire: retrait immédiat du document, vérification complète de la conformité avec le Code de l\'éducation et textes officiels, correction avec expert juridique ou IEN, nouvelle présentation transparente au CA avec mention de la vérification effectuée.'}
+        const questions = [
+            {question: 'Quelle est la première règle d\'or du cadre d\'usage de l\'IA en établissement?', choices: ['Toujours utiliser l\'IA pour gagner du temps', 'Jamais de données personnelles dans les IA grand public', 'Former tous les élèves dès le CP', 'Utiliser uniquement ChatGPT'], correct: 1, points: 10, livret: 'Livret de mission - Protection des données'},
+            {question: 'À partir de quel niveau les élèves peuvent-ils manipuler des IA génératives de manière encadrée?', choices: ['CP', '6ème', '4ème', 'Terminale'], correct: 2, points: 10, livret: 'Livret de mission - Usage pédagogique selon les niveaux'},
+            {question: 'Que doit faire un enseignant qui utilise l\'IA pour préparer un support de cours?', choices: ['Le distribuer directement aux élèves', 'Signaler systématiquement l\'utilisation de l\'IA et vérifier le contenu', 'Ne rien dire pour garder le secret professionnel', 'Demander l\'autorisation au rectorat'], correct: 1, points: 10, livret: 'Livret de mission - Transparence et responsabilité'},
+            {question: 'Pourquoi les détecteurs de contenu IA sont-ils déconseillés pour sanctionner les élèves?', choices: ['Ils sont trop chers', 'Ils ont un taux d\'erreur élevé avec de nombreux faux positifs', 'Ils sont interdits par la loi', 'Ils fonctionnent trop lentement'], correct: 1, points: 10, livret: 'Livret de mission - Devoirs et évaluation'},
+            {question: 'Quelle est la consommation énergétique d\'une requête IA par rapport à une recherche web classique?', choices: ['Identique', '2 fois plus', '10 fois plus', '100 fois plus'], correct: 2, points: 10, livret: 'Livret de mission - Impact environnemental'},
+            {question: 'Un enseignant peut-il demander à ses élèves de 4ème de créer un compte ChatGPT personnel?', choices: ['Oui, sans restriction', 'Oui, avec accord parental', 'Non, c\'est interdit (CGU imposent 13 ans minimum avec accord parental vérifiable)', 'Oui, si c\'est pour un projet pédagogique'], correct: 2, points: 10, livret: 'Livret de mission - Protection des mineurs'},
+            {question: 'Que doit faire un CPE qui utilise ChatGPT pour rédiger une charte de vie scolaire?', choices: ['Le diffuser immédiatement', 'Vérifier, adapter, valider avec l\'équipe et mentionner l\'usage de l\'IA', 'Le garder secret', 'Demander à l\'IA de le vérifier'], correct: 1, points: 10, livret: 'Livret de mission - Transparence et responsabilité'},
+            {question: 'Dans quel cas l\'usage de l\'IA est-il justifié selon le principe de frugalité?', choices: ['Pour chercher une définition simple', 'Pour créer 20 exercices différenciés sur 3 niveaux', 'Pour toutes les tâches quotidiennes', 'Jamais'], correct: 1, points: 10, livret: 'Livret de mission - Principe de frugalité'},
+            {question: 'Que risque un établissement qui utilise ChatGPT pour prendre des décisions d\'orientation automatiques?', choices: ['Rien du tout', 'Une amende mineure', 'Violation du RGPD et responsabilité juridique', 'Des félicitations pour l\'innovation'], correct: 2, points: 10, livret: 'Livret de mission - Responsabilité juridique'},
+            {question: 'Comment un enseignant de SVT doit-il utiliser ChatGPT pour préparer un cours sur la photosynthèse?', choices: ['Projeter directement la réponse de l\'IA sans vérification', 'Générer, vérifier avec manuels et ressources scientifiques, corriger, puis mentionner l\'usage', 'Ne jamais utiliser l\'IA en SVT', 'Demander aux élèves de vérifier'], correct: 1, points: 10, livret: 'Livret de mission - Vérification des contenus'},
+            {question: 'Quel est l\'âge minimum requis par les CGU de ChatGPT?', choices: ['10 ans', '13 ans (avec consentement parental jusqu\'à 18 ans)', '16 ans', '18 ans'], correct: 1, points: 10, livret: 'Livret de mission - Protection des mineurs'},
+            {question: 'Un chef d\'établissement peut-il utiliser l\'IA pour traduire des documents pour familles allophones?', choices: ['Non, c\'est interdit', 'Oui, si le document ne contient pas de données sensibles et est vérifié', 'Oui, sans restriction', 'Seulement avec Google Translate'], correct: 1, points: 10, livret: 'Livret de mission - Usage professionnel'},
+            {question: 'Quelle est la bonne pratique si un élève est suspecté d\'avoir utilisé l\'IA pour un devoir?', choices: ['Le sanctionner immédiatement avec un 0/20', 'Utiliser un détecteur d\'IA comme preuve', 'Organiser un entretien pédagogique et une évaluation orale complémentaire', 'L\'exclure de l\'établissement'], correct: 2, points: 10, livret: 'Livret de mission - Devoirs et évaluation'},
+            {question: 'Dans quel contexte un enseignant peut-il copier-coller des copies d\'élèves dans ChatGPT?', choices: ['Pour gagner du temps dans les corrections', 'Si les parents sont d\'accord', 'Jamais - c\'est une violation grave du RGPD', 'Uniquement pendant les vacances'], correct: 2, points: 10, livret: 'Livret de mission - Protection des données'},
+            {question: 'Que doit faire un établissement qui découvre qu\'une charte rédigée par IA contient des erreurs juridiques?', choices: ['Minimiser l\'erreur', 'Retirer immédiatement, vérifier avec expert, corriger et re-présenter au CA', 'Accuser ChatGPT publiquement', 'Modifier discrètement'], correct: 1, points: 10, livret: 'Livret de mission - Responsabilité et vérification'},
+            {question: 'À quelle fréquence la formation à l\'IA doit-elle être renouvelée?', choices: ['Une fois suffit', 'Tous les 5 ans', 'En continu car évolution constante', 'Jamais'], correct: 2, points: 10, livret: 'Livret de mission - Formation continue'},
+            {question: 'Quelle plateforme est recommandée pour la formation obligatoire aux IA en 4ème?', choices: ['ChatGPT', 'Pix', 'Facebook', 'TikTok'], correct: 1, points: 10, livret: 'Livret de mission - Formation Pix IA'},
+            {question: 'Un enseignant spécialisé ULIS peut-il utiliser l\'IA pour adapter un texte en FALC?', choices: ['Non, c\'est interdit', 'Oui, s\'il vérifie et ajuste selon les besoins spécifiques de ses élèves', 'Oui, sans vérification', 'Uniquement avec autorisation médicale'], correct: 1, points: 10, livret: 'Livret de mission - Adaptation pédagogique'},
+            {question: 'Que doit faire un CPE qui découvre que des élèves utilisent ChatGPT comme confident psychologique?', choices: ['Les féliciter pour leur autonomie', 'Alerter sur les risques et orienter vers professionnels (infirmière, psy EN, AS)', 'Ne rien faire', 'Consulter leurs conversations'], correct: 1, points: 10, livret: 'Livret de mission - Risques psychologiques'},
+            {question: 'Quelle est la meilleure approche pour une dissertation à la maison à l\'ère de l\'IA?', choices: ['Interdire l\'IA sans adapter l\'exercice', 'Autoriser l\'IA pour la recherche, demander un journal de bord et évaluer principalement à l\'oral', 'Faire confiance aux élèves', 'Utiliser un détecteur d\'IA'], correct: 1, points: 10, livret: 'Livret de mission - Adaptation des évaluations'}
         ];
 
-        let currentIndex=0,score=0,incidentCount=0,answered=false,totalTime=1800,remainingTime=1800,timerInterval,questionStartTime,questionTimerInterval;
-        let questionsAnswered=0,incidentsTriggered=new Set(),availableIncidents=[0,1,2,3,4];
+        const discussions = [
+            {
+                after: 6,
+                title: '💬 Temps d\'échange - L\'IA et les élèves',
+                content: '<p><strong>Prenez 2 minutes pour échanger avec le groupe:</strong></p><ul><li>Comment sensibilisez-vous vos élèves à un usage critique et responsable de l\'IA?</li><li>Quelles activités pédagogiques avez-vous mises en place pour former les élèves?</li><li>Comment gérez-vous les cas d\'élèves utilisant l\'IA pour leurs devoirs?</li><li>Quelles ressources éducatives partagez-vous avec vos élèves sur l\'IA?</li></ul>'
+            },
+            {
+                after: 12,
+                title: '💬 Temps d\'échange - Gouvernance IA dans l\'établissement',
+                content: '<p><strong>Prenez 2 minutes pour échanger avec le groupe:</strong></p><ul><li>Avez-vous élaboré une charte d\'usage de l\'IA dans votre établissement?</li><li>Comment organisez-vous la formation des équipes éducatives?</li><li>Qui est le référent IA dans votre structure? Quel est son rôle concret?</li><li>Comment impliquez-vous les parents et les élèves dans cette démarche?</li></ul>'
+            }
+        ];
 
-        function startTimer(){
-            timerInterval=setInterval(()=>{
-                remainingTime--;
-                updateTimerDisplay();
-                if(remainingTime<=300)document.getElementById('timer').classList.add('warning');
-                if(remainingTime<=0){
+        const incidents = [
+            {
+                title: '📚 BON USAGE - Enseignante de français créative',
+                description: 'Marie, enseignante de français en 3ème, souhaite créer une grille d\'évaluation pour une rédaction argumentative sur les réseaux sociaux. Elle hésite entre copier-coller la copie de Lucas (avec son nom) pour obtenir une correction personnalisée, ou demander une grille générique à ChatGPT.',
+                question: 'Quelle approche Marie doit-elle adopter?',
+                choices: [
+                    'Copier-coller la copie de Lucas avec son nom - c\'est plus efficace',
+                    'Demander à ChatGPT: "Crée une grille d\'évaluation pour un texte argumentatif niveau 3e sur les réseaux sociaux avec critères de cohérence, argumentation et expression écrite"',
+                    'Ne pas utiliser l\'IA du tout',
+                    'Demander aux élèves de créer eux-mêmes la grille avec ChatGPT'
+                ],
+                correct: 1,
+                points: 40,
+                justification: '✅ Livret de mission - Protection des données: Marie adopte la BONNE pratique. Elle utilise ChatGPT avec des données génériques (niveau, type de texte, compétences) sans aucune donnée personnelle d\'élève. C\'est l\'exemple concret recommandé dans le livret pour un usage conforme et efficace de l\'IA.'
+            },
+            {
+                title: '⚠️ MAUVAIS USAGE - CPE et document non vérifié',
+                description: 'Thomas, CPE, a rédigé un projet de charte de vie scolaire avec ChatGPT. Il trouve le texte parfait et s\'apprête à le distribuer directement aux élèves et familles sans validation ni mention de l\'outil utilisé.',
+                question: 'Que devrait faire Thomas?',
+                choices: [
+                    'Distribuer le texte immédiatement - il a l\'air bien rédigé',
+                    'Demander à ChatGPT de vérifier lui-même le document',
+                    'Ajouter en bas: "Document élaboré avec ChatGPT, revu et validé par l\'équipe de vie scolaire et présenté au CA" après vérification',
+                    'Garder secret l\'usage de l\'IA'
+                ],
+                correct: 2,
+                points: 45,
+                justification: '❌ Livret de mission - Transparence: Thomas fait une ERREUR. Il doit obligatoirement: 1) Mentionner l\'usage de l\'IA 2) Faire vérifier et adapter par l\'équipe 3) Valider en CA. Distribuer un document généré par IA sans validation ni transparence viole le principe de responsabilité.'
+            },
+            {
+                title: '🔴 INCIDENT CRITIQUE - Enseignant SVT et comptes mineurs',
+                description: 'Vous êtes chef d\'établissement. Un enseignant de SVT a imposé à ses 28 élèves de 4ème (13-14 ans) de créer un compte ChatGPT individuel pour faire des "recherches personnalisées" sur l\'environnement. Les élèves ont fourni emails et données personnelles. Cinq parents furieux vous contactent.',
+                question: 'Quelle action d\'urgence menez-vous?',
+                choices: [
+                    'Laisser faire - c\'est une décision pédagogique de l\'enseignant',
+                    'Rassurer les parents: "C\'est pour le bien de leurs enfants"',
+                    'Faire stopper immédiatement, informer que les CGU imposent 13 ans avec accord parental vérifiable, proposer alternative conforme (projection collective ou outil académique)',
+                    'Attendre de voir si ça pose vraiment problème'
+                ],
+                correct: 2,
+                points: 50,
+                justification: '🔴 Livret de mission - Protection mineurs: C\'est STRICTEMENT INTERDIT sans accord parental explicite et vérifiable. Les CGU de ChatGPT imposent 13 ans minimum avec consentement parental jusqu\'à 18 ans. Violation du RGPD et protection des mineurs. Action immédiate obligatoire: arrêt, information direction, alternative conforme.'
+            },
+            {
+                title: '✅ BON USAGE - Professeure d\'histoire et évaluation adaptée',
+                description: 'Léa, enseignante d\'histoire-géo en Terminale, donne une dissertation sur Camus. Elle sait que les élèves peuvent utiliser l\'IA. Elle hésite entre simplement interdire l\'IA, ou autoriser l\'IA pour le plan à condition que les élèves reformulent, ajoutent leurs analyses personnelles et citent leurs sources.',
+                question: 'Quelle approche Léa doit-elle privilégier?',
+                choices: [
+                    'Interdire totalement l\'IA sans adaptation',
+                    'Laisser faire sans cadre - ils sont autonomes',
+                    'Autoriser l\'IA pour générer un plan, exiger reformulation complète, analyses personnelles et citations de sources vérifiées',
+                    'Utiliser un détecteur d\'IA pour surveiller'
+                ],
+                correct: 2,
+                points: 40,
+                justification: '✅ Livret de mission - Usage lycée et évaluation: Léa adopte la BONNE pratique pour le lycée. Elle définit un cadre explicite, autorise l\'IA pour une phase précise (plan), exige appropriation et travail personnel. C\'est l\'exemple concret recommandé dans le livret pour adapter les évaluations.'
+            },
+            {
+                title: '🌍 BON USAGE - Chef d\'établissement et frugalité',
+                description: 'Ahmed, chef d\'établissement, doit faire une synthèse d\'une réunion de direction de 2h30. Il hésite entre: 1) Utiliser un outil de transcription automatique puis demander à l\'IA de structurer les idées qu\'il vérifiera et complétera (sans données élèves identifiables), ou 2) Tout taper manuellement.',
+                question: 'Quelle approche est conforme au principe de frugalité et d\'usage justifié?',
+                choices: [
+                    'Tout taper manuellement - ne jamais utiliser l\'IA',
+                    'Utiliser la transcription automatique + IA pour structurer, puis vérifier et adapter (sans données sensibles)',
+                    'Demander à l\'IA de tout faire automatiquement',
+                    'Utiliser ChatGPT même avec des échanges sur situations individuelles d\'élèves'
+                ],
+                correct: 1,
+                points: 45,
+                justification: '✅ Livret de mission - Frugalité et usage professionnel: Ahmed fait un BON usage. Il y a une vraie plus-value (gain de temps important sur tâche administrative répétitive), il supervise humainement, vérifie et n\'inclut pas de données sensibles. C\'est l\'exemple concret recommandé pour les chefs d\'établissement.'
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let correctCount = 0;
+        let incorrectCount = 0;
+        let answered = false;
+        let timeRemaining = 1200;
+        let timerInterval;
+        let incidentShown = [false, false, false, false, false];
+        let discussionShown = [false, false];
+
+        const quizContainer = document.getElementById('quizContainer');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const correctDisplay = document.getElementById('correctDisplay');
+        const incorrectDisplay = document.getElementById('incorrectDisplay');
+        const currentDisplay = document.getElementById('currentDisplay');
+        const totalDisplay = document.getElementById('totalDisplay');
+        const timerDisplay = document.getElementById('timerDisplay');
+
+        totalDisplay.textContent = questions.length;
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                if (timeRemaining <= 0) {
                     clearInterval(timerInterval);
-                    showCompletion();
+                    endQuiz();
                 }
-            },1000);
+            }, 1000);
         }
 
-        function pauseTimer(){
-            if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
-        }
+        function showIncident(incidentIndex) {
+            const incident = incidents[incidentIndex];
+            incidentShown[incidentIndex] = true;
 
-        function resumeTimer(){
-            if(!timerInterval&&remainingTime>0)startTimer();
-        }
-
-        function updateTimerDisplay(){
-            const m=Math.floor(remainingTime/60),s=remainingTime%60;
-            document.getElementById('timer').textContent=`⏱️ ${m}:${s.toString().padStart(2,'0')}`;
-        }
-
-        function startQuestionTimer(){
-            questionStartTime=Date.now();
-            const timerEl=document.createElement('div');
-            timerEl.id='questionTimer';
-            timerEl.className='question-timer';
-            timerEl.textContent='⏱️ 0s';
-            const questionEl=document.querySelector('.question');
-            if(questionEl)questionEl.before(timerEl);
-            questionTimerInterval=setInterval(()=>{
-                const elapsed=Math.floor((Date.now()-questionStartTime)/1000);
-                const el=document.getElementById('questionTimer');
-                if(el)el.textContent=`⏱️ ${elapsed}s`;
-            },1000);
-        }
-
-        function stopQuestionTimer(){
-            if(questionTimerInterval){clearInterval(questionTimerInterval);questionTimerInterval=null;}
-        }
-
-        function updateStats(){
-            document.getElementById('scoreDisplay').textContent=score;
-            document.getElementById('questionDisplay').textContent=`${Math.min(currentIndex,questions.length)}/${questions.length}`;
-            document.getElementById('incidentDisplay').textContent=incidentCount;
-        }
-
-        function playAlertSound(){document.getElementById('alertSound').play().catch(()=>{});}
-        function playSuccessSound(){document.getElementById('successSound').play().catch(()=>{});}
-
-        function showWelcome(){
-            document.getElementById('mainContent').innerHTML=`
-                <div class="welcome-screen">
-                    <h2>🚀 Bienvenue dans votre Mission IA!</h2>
-                    <p><strong>Objectif:</strong> Maîtriser les 5 missions essentielles du Livret officiel de l'IA pour piloter efficacement l'usage de l'intelligence artificielle dans votre établissement scolaire.</p>
-                    <p><strong>Format de la formation:</strong> 15 questions + 5 incidents + 2 discussions</p>
-                    <p><strong>Durée totale:</strong> 30 minutes chronomètrées</p>
-                    <ul>
-                        <li>✅ Répondez aux 15 questions pour valider vos connaissances</li>
-                        <li>🚨 5 incidents critiques apparaissent toutes les 3 questions: gérez-les comme dans la réalité</li>
-                        <li>💬 2 temps d'échange collectifs (après Q6 et Q12) pour partager vos pratiques</li>
-                        <li>📚 Ressources: <a href="https://eduscol.education.fr/4188/les-intelligences-artificielles-et-leurs-usages-en-education" target="_blank" style="color:#667eea;font-weight:bold">Guide officiel Éduscol</a></li>
-                    </ul>
-                    <p style="margin-top:30px;font-weight:700;color:#dc3545;font-size:1.15em">⚠️ ATTENTION: Les incidents critiques apparaissent après chaque série de 3 questions. Restez vigilants!</p>
-                    <button class="btn-primary" onclick="startFormation()">🎯 Démarrer la formation →</button>
+            const overlay = document.createElement('div');
+            overlay.className = 'incident-overlay';
+            overlay.innerHTML = `
+                <div class="incident-card">
+                    <h2>${incident.title}</h2>
+                    <div class="incident-description">
+                        ${incident.description}
+                    </div>
+                    <div class="incident-question">
+                        ❓ ${incident.question}
+                    </div>
+                    <div class="choices">
+                        ${incident.choices.map((choice, index) => `
+                            <button class="choice-btn incident-choice" data-index="${index}">
+                                ${choice}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="incidentFeedback"></div>
                 </div>
             `;
+            document.body.appendChild(overlay);
+
+            const choiceButtons = overlay.querySelectorAll('.incident-choice');
+            choiceButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const chosenIndex = parseInt(this.getAttribute('data-index'));
+                    handleIncidentChoice(chosenIndex, incident.correct, incident.points, incident.justification, this);
+                });
+            });
         }
 
-        function startFormation(){
-            startTimer();
-            showNextContent();
+        function handleIncidentChoice(chosen, correct, points, justification, button) {
+            const buttons = button.parentElement.querySelectorAll('.choice-btn');
+            buttons.forEach((btn, index) => {
+                btn.disabled = true;
+                if (index === correct) {
+                    btn.classList.add('correct');
+                } else if (btn === button && chosen !== correct) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            const feedbackDiv = document.getElementById('incidentFeedback');
+            if (chosen === correct) {
+                score += points;
+                correctCount++;
+                feedbackDiv.innerHTML = `
+                    <div class="feedback correct">
+                        <h3>✅ Excellente décision!</h3>
+                        <p><strong>+${points} points</strong></p>
+                        <p>${justification}</p>
+                        <button class="next-btn" id="continueBtn">Continuer le quiz</button>
+                    </div>
+                `;
+            } else {
+                incorrectCount++;
+                feedbackDiv.innerHTML = `
+                    <div class="feedback incorrect">
+                        <h3>❌ Attention - Décision non conforme</h3>
+                        <p><strong>0 point</strong></p>
+                        <p>${justification}</p>
+                        <button class="next-btn" id="continueBtn">Continuer le quiz</button>
+                    </div>
+                `;
+            }
+
+            document.getElementById('continueBtn').addEventListener('click', function() {
+                const overlay = document.querySelector('.incident-overlay');
+                if (overlay) {
+                    overlay.remove();
+                }
+                showQuestion();
+            });
+            updateScoreBoard();
         }
 
-        function showNextContent(){
-            if(questionsAnswered>0 && questionsAnswered%3===0 && availableIncidents.length>0 && !incidentsTriggered.has(questionsAnswered)){
-                incidentsTriggered.add(questionsAnswered);
-                const randomIdx=Math.floor(Math.random()*availableIncidents.length);
-                const incidentIdx=availableIncidents[randomIdx];
-                availableIncidents.splice(randomIdx,1);
-                triggerIncident(incidentIdx);
+        function showDiscussion(discussionIndex) {
+            const disc = discussions[discussionIndex];
+            discussionShown[discussionIndex] = true;
+
+            const exchangeDiv = document.createElement('div');
+            exchangeDiv.className = 'exchange-section';
+            exchangeDiv.innerHTML = `
+                <h3>${disc.title}</h3>
+                ${disc.content}
+                <button class="next-btn" id="exchangeBtn">Continuer</button>
+            `;
+            quizContainer.innerHTML = '';
+            quizContainer.appendChild(exchangeDiv);
+
+            document.getElementById('exchangeBtn').addEventListener('click', function() {
+                showQuestion();
+            });
+        }
+
+        function showQuestion() {
+            if (currentQuestion >= questions.length) {
+                endQuiz();
                 return;
             }
-            const disc=discussions.find(d=>d.after===currentIndex);
-            if(disc){showDiscussion(disc);return;}
-            if(currentIndex<questions.length){showQuestion(currentIndex);}
-            else{showCompletion();}
-        }
 
-        function showQuestion(idx){
-            answered=false;
-            const q=questions[idx];
-            document.getElementById('mainContent').innerHTML=`
-                <div class="question-section">
-                    <span class="role-badge">${q.role.toUpperCase()}</span>
-                    <div class="question">${q.question}</div>
-                    <div class="choices">
-                        ${q.choices.map((c,i)=>`<div class="choice" onclick="selectChoice(${i})">${c}</div>`).join('')}
-                    </div>
-                    <div class="feedback hidden" id="feedback"></div>
-                    <button class="btn-primary hidden" id="nextBtn" onclick="nextQuestion()">Question suivante →</button>
-                </div>
-            `;
-            startQuestionTimer();
-        }
-
-        function selectChoice(choiceIdx){
-            if(answered)return;
-            answered=true;
-            stopQuestionTimer();
-            questionsAnswered++;
-            const q=questions[currentIndex];
-            const choices=document.querySelectorAll('.choice');
-            const fb=document.getElementById('feedback');
-            const btn=document.getElementById('nextBtn');
-            choices[choiceIdx].classList.add(choiceIdx===q.correct?'correct':'incorrect');
-            if(choiceIdx===q.correct){
-                score+=q.points;
-                fb.className='feedback correct';
-                fb.innerHTML=`<strong>✅ Excellente réponse!</strong><br><br>${q.justification}`;
-                playSuccessSound();
-            }else{
-                choices[q.correct].classList.add('correct');
-                fb.className='feedback incorrect';
-                fb.innerHTML=`<strong>❌ Réponse incorrecte.</strong><br><br>${q.justification}`;
+            // Vérifier d'abord les discussions (après Q6 et Q12)
+            if (currentQuestion === 6 && !discussionShown[0]) {
+                showDiscussion(0);
+                return;
             }
-            fb.classList.remove('hidden');
-            btn.classList.remove('hidden');
-            updateStats();
-        }
+            if (currentQuestion === 12 && !discussionShown[1]) {
+                showDiscussion(1);
+                return;
+            }
 
-        function nextQuestion(){
-            currentIndex++;
-            showNextContent();
-        }
+            // Puis vérifier les incidents (après Q3, Q6, Q9, Q12, Q15)
+            if (currentQuestion === 3 && !incidentShown[0]) {
+                showIncident(0);
+                return;
+            }
+            if (currentQuestion === 6 && !incidentShown[1] && discussionShown[0]) {
+                showIncident(1);
+                return;
+            }
+            if (currentQuestion === 9 && !incidentShown[2]) {
+                showIncident(2);
+                return;
+            }
+            if (currentQuestion === 12 && !incidentShown[3] && discussionShown[1]) {
+                showIncident(3);
+                return;
+            }
+            if (currentQuestion === 15 && !incidentShown[4]) {
+                showIncident(4);
+                return;
+            }
 
-        function showDiscussion(disc){
-            document.getElementById('mainContent').innerHTML=`
-                <div class="discussion-card">
-                    <h3>${disc.title}</h3>
-                    ${disc.content}
-                    <button class="btn-primary" onclick="nextQuestion()">Continuer la formation →</button>
-                </div>
-            `;
-        }
+            answered = false;
+            const q = questions[currentQuestion];
+            currentDisplay.textContent = currentQuestion + 1;
 
-        function triggerIncident(idx){
-            pauseTimer();
-            stopQuestionTimer();
-            playAlertSound();
-            incidentCount++;
-            updateStats();
-            const inc=incidents[idx];
-            document.getElementById('incidentPopup').innerHTML=`
-                <h3>${inc.title}</h3>
-                <div class="description">${inc.description}</div>
-                <div class="question">${inc.question}</div>
+            const questionCard = document.createElement('div');
+            questionCard.className = 'question-card';
+            questionCard.innerHTML = `
+                <h2>Question ${currentQuestion + 1}: ${q.question}</h2>
                 <div class="choices">
-                    ${inc.choices.map((c,i)=>`<div class="choice" onclick="selectIncidentChoice(${idx},${i})">${c}</div>`).join('')}
+                    ${q.choices.map((choice, index) => `
+                        <button class="choice-btn" onclick="checkAnswer(${index})" id="choice${index}">
+                            ${choice}
+                        </button>
+                    `).join('')}
                 </div>
-                <div class="feedback hidden" id="incidentFeedback"></div>
-                <button class="btn-primary hidden" id="continueIncidentBtn" onclick="continueAfterIncident()">Reprendre la formation →</button>
+                <div id="feedback"></div>
             `;
-            document.getElementById('incidentOverlay').classList.add('show');
+
+            quizContainer.innerHTML = '';
+            quizContainer.appendChild(questionCard);
         }
 
-        function selectIncidentChoice(incIdx,choiceIdx){
-            const inc=incidents[incIdx];
-            const choices=document.querySelectorAll('#incidentPopup .choice');
-            const fb=document.getElementById('incidentFeedback');
-            const btn=document.getElementById('continueIncidentBtn');
-            choices.forEach(c=>c.style.pointerEvents='none');
-            choices[choiceIdx].classList.add(choiceIdx===inc.correct?'correct':'incorrect');
-            if(choiceIdx===inc.correct){
-                score+=inc.points;
-                fb.className='feedback correct';
-                fb.innerHTML=`<strong>✅ Excellente gestion de crise!</strong><br><br>${inc.justification}`;
-                playSuccessSound();
-            }else{
-                choices[inc.correct].classList.add('correct');
-                fb.className='feedback incorrect';
-                fb.innerHTML=`<strong>❌ Gestion inappropriée.</strong><br><br>${inc.justification}`;
+        function checkAnswer(chosen) {
+            if (answered) return;
+            answered = true;
+
+            const q = questions[currentQuestion];
+            const buttons = document.querySelectorAll('.choice-btn');
+
+            buttons.forEach((btn, index) => {
+                btn.disabled = true;
+                if (index === q.correct) {
+                    btn.classList.add('correct');
+                } else if (index === chosen) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            const feedbackDiv = document.getElementById('feedback');
+            if (chosen === q.correct) {
+                score += q.points;
+                correctCount++;
+                feedbackDiv.innerHTML = `
+                    <div class="feedback correct">
+                        <h3>✅ Bravo! Bonne réponse</h3>
+                        <p><strong>+${q.points} points</strong></p>
+                        <p><em>${q.livret}</em></p>
+                        <button class="next-btn" onclick="nextQuestion()">Question suivante</button>
+                    </div>
+                `;
+            } else {
+                incorrectCount++;
+                feedbackDiv.innerHTML = `
+                    <div class="feedback incorrect">
+                        <h3>❌ Incorrect</h3>
+                        <p>La bonne réponse était: <strong>${q.choices[q.correct]}</strong></p>
+                        <p><em>${q.livret}</em></p>
+                        <button class="next-btn" onclick="nextQuestion()">Question suivante</button>
+                    </div>
+                `;
             }
-            fb.classList.remove('hidden');
-            btn.classList.remove('hidden');
-            updateStats();
+
+            updateScoreBoard();
         }
 
-        function continueAfterIncident(){
-            document.getElementById('incidentOverlay').classList.remove('show');
-            resumeTimer();
-            showNextContent();
+        function nextQuestion() {
+            currentQuestion++;
+            showQuestion();
         }
 
-        function restartFormation(){
-            location.reload();
+        function updateScoreBoard() {
+            scoreDisplay.textContent = score;
+            correctDisplay.textContent = correctCount;
+            incorrectDisplay.textContent = incorrectCount;
         }
 
-        function showCompletion(){
-            pauseTimer();
-            const dur=totalTime-remainingTime;
-            const m=Math.floor(dur/60),s=dur%60;
-            let perf='Satisfaisant';
-            if(score>=450)perf='Exceptionnel 🌟';
-            else if(score>=400)perf='Excellent';
-            else if(score>=300)perf='Très bien';
-            else if(score>=200)perf='Bien';
-            document.getElementById('mainContent').innerHTML=`
-                <div class="completion-screen">
-                    <h2>🎉 Mission Accomplie!</h2>
-                    <p style="font-size:1.3em;margin:25px 0;line-height:1.7">Félicitations! Vous avez terminé avec succès la formation complète sur le pilotage de l'intelligence artificielle dans l'établissement scolaire.</p>
-                    <div class="final-stats">
-                        <div class="final-stat">
-                            <div class="final-stat-label">Score final</div>
-                            <div class="final-stat-value">${score}</div>
-                        </div>
-                        <div class="final-stat">
-                            <div class="final-stat-label">Temps écoulé</div>
-                            <div class="final-stat-value">${m}:${s.toString().padStart(2,'0')}</div>
-                        </div>
-                        <div class="final-stat">
-                            <div class="final-stat-label">Performance</div>
-                            <div class="final-stat-value" style="font-size:2em">${perf}</div>
-                        </div>
+        function endQuiz() {
+            clearInterval(timerInterval);
+            const totalPossible = questions.reduce((sum, q) => sum + q.points, 0) + incidents.reduce((sum, i) => sum + i.points, 0);
+            const percentage = Math.round((score / totalPossible) * 100);
+
+            let message = '';
+            let emoji = '';
+            if (percentage >= 90) {
+                message = 'Expert certifié! Vous maîtrisez parfaitement le cadre d\'usage de l\'IA en établissement.';
+                emoji = '🏆';
+            } else if (percentage >= 75) {
+                message = 'Très bon niveau! Vous avez une excellente compréhension des bonnes pratiques.';
+                emoji = '⭐';
+            } else if (percentage >= 60) {
+                message = 'Bon niveau! Continuez à vous former sur les usages responsables de l\'IA.';
+                emoji = '👍';
+            } else {
+                message = 'Niveau à améliorer. Nous vous recommandons de suivre une formation complémentaire.';
+                emoji = '📚';
+            }
+
+            quizContainer.innerHTML = `
+                <div class="final-score">
+                    <h2>${emoji} Quiz terminé!</h2>
+                    <div class="score-display">
+                        ${score} / ${totalPossible} points
+                        <div style="font-size: 0.5em; margin-top: 10px;">${percentage}%</div>
                     </div>
-                    <button class="btn-primary" onclick="restartFormation()" style="margin:30px 0">🔄 Recommencer la formation</button>
-                    <div style="margin-top:50px;text-align:left;max-width:700px;margin-left:auto;margin-right:auto;background:rgba(102,126,234,0.1);padding:35px;border-radius:20px">
-                        <h3 style="color:#667eea;margin-bottom:25px;font-size:1.6em">📚 Ressources officielles du Ministère:</h3>
-                        <ul style="line-height:2.3;font-size:1.1em">
-                            <li>📥 <a href="https://eduscol.education.fr/4188/les-intelligences-artificielles-et-leurs-usages-en-education" target="_blank" style="color:#667eea;font-weight:bold">Guide complet sur l'IA en éducation (Éduscol)</a></li>
-                            <li>👥 Organisez un temps de formation collective avec vos équipes éducatives</li>
-                            <li>📋 Élaborez votre charte d'usage de l'IA spécifique à votre établissement</li>
-                            <li>🎯 Nommez un référent IA et mettez en place un comité de suivi régulier</li>
-                            <li>🤝 Partagez vos pratiques et retours d'expérience avec les autres établissements</li>
-                            <li>👨‍👩‍👧‍👦 Impliquez les parents et les élèves dans la démarche de gouvernance IA</li>
-                        </ul>
+                    <div class="feedback correct" style="margin: 20px 0;">
+                        <h3>${message}</h3>
+                        <p><strong>Bonnes réponses:</strong> ${correctCount}</p>
+                        <p><strong>Erreurs:</strong> ${incorrectCount}</p>
                     </div>
+                    <button class="next-btn" onclick="location.reload()">Recommencer le quiz</button>
                 </div>
             `;
         }
 
-        updateStats();
-        showWelcome();
+        startTimer();
+        showQuestion();
     </script>
 </body>
 </html>
