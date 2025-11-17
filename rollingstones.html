@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Défi Rolling Stones - Lettre B</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1a1a1a;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('stones.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.35;
+            filter: grayscale(20%);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 60px 40px;
+            background: rgba(255, 255, 255, 0.90);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 100%;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .trophy {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #d32f2f;
+            margin-bottom: 20px;
+            font-weight: bold;
+            line-height: 1.2;
+        }
+
+        .letter {
+            display: inline-block;
+            font-size: 120px;
+            font-weight: bold;
+            color: #8b1a1a;
+            margin: 30px 0;
+            padding: 20px;
+            border: 5px solid #d32f2f;
+            border-radius: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .message {
+            font-size: 1.4em;
+            color: #333;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+
+        .highlight {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .note {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(211, 47, 47, 0.1);
+            border-radius: 15px;
+            font-size: 1.1em;
+            color: #555;
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        @media screen and (max-width: 768px) {
+            body { padding: 15px; }
+            .container { padding: 40px 30px; }
+            .trophy { font-size: 60px; }
+            h1 { font-size: 2em; }
+            .letter { font-size: 100px; }
+            .message { font-size: 1.2em; }
+        }
+
+        @media screen and (max-width: 480px) {
+            body { padding: 10px; }
+            .container { padding: 30px 20px; }
+            .trophy { font-size: 50px; }
+            h1 { font-size: 1.6em; }
+            .letter { font-size: 80px; }
+            .message { font-size: 1.1em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="trophy">🏆</div>
+        <h1>Bravo équipe Rolling Stones !</h1>
+        
+        <div class="message">
+            Vous avez débloqué la lettre
+        </div>
+        
+        <div class="letter">B</div>
+        
+        <div class="note">
+            <strong class="highlight">Gardez-la précieusement</strong> pour le grand rassemblement final !
+        </div>
+    </div>
+</body>
+</html>
