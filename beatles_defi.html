@@ -13,17 +13,18 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
+            padding: 20px;
         }
 
         .background-image {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -45,7 +46,7 @@
             border-radius: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             max-width: 600px;
-            margin: 20px;
+            width: 100%;
             animation: fadeInUp 0.8s ease-out;
         }
 
@@ -80,6 +81,7 @@
             color: #667eea;
             margin-bottom: 20px;
             font-weight: bold;
+            line-height: 1.2;
         }
 
         .letter {
@@ -127,6 +129,50 @@
             font-size: 1.1em;
             color: #555;
             font-style: italic;
+            line-height: 1.5;
+        }
+
+        /* Tablettes */
+        @media screen and (max-width: 768px) {
+            body { padding: 15px; }
+            .container { padding: 40px 30px; border-radius: 25px; }
+            .trophy { font-size: 60px; margin-bottom: 15px; }
+            h1 { font-size: 2em; margin-bottom: 15px; }
+            .letter { font-size: 100px; padding: 15px; margin: 20px 0; border-width: 4px; }
+            .message { font-size: 1.2em; margin-top: 15px; }
+            .note { margin-top: 25px; padding: 15px; font-size: 1em; }
+        }
+
+        /* Mobiles */
+        @media screen and (max-width: 480px) {
+            body { padding: 10px; }
+            .container { padding: 30px 20px; border-radius: 20px; }
+            .trophy { font-size: 50px; margin-bottom: 10px; }
+            h1 { font-size: 1.6em; margin-bottom: 12px; }
+            .letter { font-size: 80px; padding: 12px; margin: 15px 0; border-width: 3px; }
+            .message { font-size: 1.1em; margin-top: 12px; }
+            .note { margin-top: 20px; padding: 12px; font-size: 0.95em; }
+        }
+
+        /* Petits mobiles */
+        @media screen and (max-width: 360px) {
+            .container { padding: 25px 15px; }
+            .trophy { font-size: 45px; }
+            h1 { font-size: 1.4em; }
+            .letter { font-size: 70px; padding: 10px; }
+            .message { font-size: 1em; }
+            .note { font-size: 0.9em; }
+        }
+
+        /* Mode paysage mobile */
+        @media screen and (max-height: 600px) and (orientation: landscape) {
+            body { padding: 10px; }
+            .container { padding: 20px; max-width: 500px; }
+            .trophy { font-size: 40px; margin-bottom: 10px; }
+            h1 { font-size: 1.5em; margin-bottom: 10px; }
+            .letter { font-size: 60px; padding: 10px; margin: 10px 0; }
+            .message { font-size: 1em; margin-top: 10px; }
+            .note { margin-top: 15px; padding: 10px; font-size: 0.85em; }
         }
     </style>
 </head>
