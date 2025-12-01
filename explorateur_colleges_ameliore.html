@@ -1,0 +1,1378 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<title>Explorateur Collèges — DRANE Hauts-de-France</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+/* Design moderne avec glassmorphisme et gradients */
+:root{
+  --primary:#3b82f6;
+  --primary-dark:#2563eb;
+  --secondary:#8b5cf6;
+  --accent:#06b6d4;
+  --bg-start:#f0f9ff;
+  --bg-end:#e0f2fe;
+  --glass-bg:rgba(255,255,255,0.75);
+  --glass-border:rgba(255,255,255,0.4);
+  --shadow:rgba(30,58,138,0.12);
+  --text-main:#0f172a;
+  --text-muted:#64748b;
+  --success:#10b981;
+}
+
+* { box-sizing:border-box; }
+
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  margin:0;
+  background:linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+  min-height:100vh;
+  color:var(--text-main);
+}
+
+/* Header avec glassmorphisme */
+.header{
+  background:var(--glass-bg);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--glass-border);
+  padding:20px 24px;
+  box-shadow:0 4px 16px var(--shadow);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.header-content{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:16px;
+}
+
+.logo-title{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logo{
+  width:48px;
+  height:48px;
+  background:linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-weight:700;
+  font-size:20px;
+  box-shadow:0 4px 12px rgba(59,130,246,0.3);
+}
+
+.title-block h1{
+  margin:0;
+  font-size:24px;
+  font-weight:700;
+  background:linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.title-block p{
+  margin:4px 0 0 0;
+  font-size:13px;
+  color:var(--text-muted);
+}
+
+/* Container principal */
+.main-container{
+  display:flex;
+  gap:20px;
+  padding:20px;
+  align-items:flex-start;
+}
+
+/* Zone gauche */
+.left-panel{
+  width:340px;
+  min-width:340px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+/* Cartes glass */
+.glass-card{
+  background:var(--glass-bg);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-radius:16px;
+  border:1px solid var(--glass-border);
+  padding:20px;
+  box-shadow:0 8px 24px var(--shadow);
+}
+
+.card-title{
+  font-size:16px;
+  font-weight:600;
+  margin:0 0 12px 0;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.card-title::before{
+  content:'';
+  display:inline-block;
+  width:4px;
+  height:20px;
+  background:linear-gradient(180deg, var(--primary), var(--secondary));
+  border-radius:2px;
+}
+
+/* Upload zone */
+.upload-zone{
+  border:2px dashed rgba(59,130,246,0.3);
+  border-radius:12px;
+  padding:24px;
+  text-align:center;
+  cursor:pointer;
+  transition:all 0.3s ease;
+  background:rgba(255,255,255,0.5);
+}
+
+.upload-zone:hover{
+  border-color:var(--primary);
+  background:rgba(59,130,246,0.05);
+  transform:translateY(-2px);
+}
+
+.upload-zone.active{
+  border-color:var(--success);
+  background:rgba(16,185,129,0.05);
+}
+
+.upload-icon{
+  font-size:32px;
+  margin-bottom:8px;
+}
+
+/* Inputs et filtres */
+.filter-group{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:12px;
+}
+
+.input-field, .select-field{
+  width:100%;
+  padding:10px 12px;
+  border:1px solid rgba(59,130,246,0.2);
+  border-radius:8px;
+  font-size:14px;
+  background:rgba(255,255,255,0.8);
+  transition:all 0.2s ease;
+}
+
+.input-field:focus, .select-field:focus{
+  outline:none;
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(59,130,246,0.1);
+}
+
+.filter-row{
+  display:flex;
+  gap:8px;
+}
+
+/* Boutons */
+.btn{
+  padding:10px 16px;
+  border-radius:8px;
+  border:none;
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all 0.2s ease;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+
+.btn-primary{
+  background:linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color:white;
+  box-shadow:0 4px 12px rgba(59,130,246,0.3);
+}
+
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 16px rgba(59,130,246,0.4);
+}
+
+.btn-secondary{
+  background:rgba(59,130,246,0.1);
+  color:var(--primary);
+  border:1px solid rgba(59,130,246,0.2);
+}
+
+.btn-secondary:hover{
+  background:rgba(59,130,246,0.15);
+}
+
+.btn-small{
+  padding:6px 12px;
+  font-size:13px;
+}
+
+/* Liste virtualisée */
+.list-container{
+  margin-top:12px;
+  height:500px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  border-radius:8px;
+  background:rgba(255,255,255,0.5);
+  border:1px solid rgba(59,130,246,0.1);
+}
+
+.list-item{
+  padding:12px;
+  border-bottom:1px solid rgba(59,130,246,0.08);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  transition:background 0.2s ease;
+}
+
+.list-item:hover{
+  background:rgba(59,130,246,0.05);
+}
+
+.list-item input[type="checkbox"]{
+  width:18px;
+  height:18px;
+  cursor:pointer;
+}
+
+.list-item-content{
+  flex:1;
+  min-width:0;
+}
+
+.list-item-name{
+  font-weight:500;
+  font-size:14px;
+  color:var(--text-main);
+  margin-bottom:2px;
+}
+
+.list-item-meta{
+  font-size:12px;
+  color:var(--text-muted);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Zone droite */
+.right-panel{
+  flex:1;
+  min-width:600px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+/* KPIs */
+.kpi-container{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+  gap:16px;
+}
+
+.kpi-card{
+  background:linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+  backdrop-filter:blur(8px);
+  padding:20px;
+  border-radius:12px;
+  border:1px solid var(--glass-border);
+  box-shadow:0 4px 12px var(--shadow);
+}
+
+.kpi-label{
+  font-size:13px;
+  color:var(--text-muted);
+  margin-bottom:8px;
+}
+
+.kpi-value{
+  font-size:28px;
+  font-weight:700;
+  background:linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* Graphiques */
+.chart-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(450px, 1fr));
+  gap:20px;
+}
+
+.chart-card{
+  background:var(--glass-bg);
+  backdrop-filter:blur(12px);
+  padding:20px;
+  border-radius:16px;
+  border:1px solid var(--glass-border);
+  box-shadow:0 8px 24px var(--shadow);
+}
+
+.chart-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+}
+
+.chart-title{
+  font-size:15px;
+  font-weight:600;
+  color:var(--text-main);
+}
+
+.chart-export{
+  background:rgba(59,130,246,0.1);
+  border:none;
+  border-radius:6px;
+  padding:6px 10px;
+  cursor:pointer;
+  font-size:12px;
+  color:var(--primary);
+}
+
+.chart-export:hover{
+  background:rgba(59,130,246,0.2);
+}
+
+canvas{
+  max-width:100%;
+  height:auto;
+}
+
+/* Export buttons */
+.export-toolbar{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar{
+  width:8px;
+  height:8px;
+}
+
+::-webkit-scrollbar-track{
+  background:rgba(59,130,246,0.05);
+  border-radius:4px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:rgba(59,130,246,0.3);
+  border-radius:4px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:rgba(59,130,246,0.5);
+}
+
+/* Responsive */
+@media (max-width: 1200px){
+  .main-container{
+    flex-direction:column;
+  }
+  .left-panel{
+    width:100%;
+    min-width:auto;
+  }
+  .right-panel{
+    min-width:auto;
+  }
+  .chart-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* Loading spinner */
+.spinner{
+  border:3px solid rgba(59,130,246,0.1);
+  border-top:3px solid var(--primary);
+  border-radius:50%;
+  width:24px;
+  height:24px;
+  animation:spin 0.8s linear infinite;
+  display:inline-block;
+}
+
+@keyframes spin{
+  0%{ transform:rotate(0deg); }
+  100%{ transform:rotate(360deg); }
+}
+
+.small-text{
+  font-size:12px;
+  color:var(--text-muted);
+  margin-top:8px;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:6px;
+  font-size:11px;
+  font-weight:500;
+  background:rgba(59,130,246,0.1);
+  color:var(--primary);
+  margin-left:6px;
+}
+
+.stats-detail{
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid rgba(59,130,246,0.1);
+  font-size:13px;
+  color:var(--text-muted);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-content">
+    <div class="logo-title">
+      <div class="logo">DC</div>
+      <div class="title-block">
+        <h1>Explorateur de Collèges</h1>
+        <p>DRANE Hauts-de-France — Analyse locale des usages numériques</p>
+      </div>
+    </div>
+    <div class="export-toolbar">
+      <button id="exportPDF" class="btn btn-primary btn-small">📄 Export PDF</button>
+      <button id="exportCSV" class="btn btn-secondary btn-small">📊 Export CSV</button>
+      <button id="copyClipboard" class="btn btn-secondary btn-small">📋 Copier</button>
+    </div>
+  </div>
+</div>
+
+<div class="main-container">
+  <!-- Panel gauche -->
+  <div class="left-panel">
+    <!-- Upload -->
+    <div class="glass-card">
+      <h3 class="card-title">Charger les données</h3>
+      <div class="upload-zone" id="uploadZone">
+        <div class="upload-icon">📁</div>
+        <div id="uploadText"><strong>Déposer le fichier CSV</strong><br>ou cliquer pour sélectionner</div>
+        <input type="file" id="fileInput" accept=".csv" style="display:none">
+      </div>
+      <div class="small-text">
+        ⚙️ UAI pris dans la colonne 2 (index 1)<br>
+        📦 Séparateur : virgule ou point-virgule
+      </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="glass-card">
+      <h3 class="card-title">Filtres avancés</h3>
+      <div class="filter-group">
+        <input type="text" id="searchInput" class="input-field" placeholder="🔍 Rechercher nom, UAI, ville...">
+        
+        <select id="usageFilter" class="select-field">
+          <option value="">📱 Tous les usages</option>
+        </select>
+
+        <div class="filter-row">
+          <input type="number" id="minUsers" class="input-field" placeholder="Min utilisateurs" style="flex:1">
+          <input type="number" id="maxUsers" class="input-field" placeholder="Max utilisateurs" style="flex:1">
+        </div>
+
+        <select id="cityFilter" class="select-field">
+          <option value="">🏙️ Toutes les villes</option>
+        </select>
+
+        <button id="applyFilters" class="btn btn-primary">Appliquer les filtres</button>
+        <button id="resetFilters" class="btn btn-secondary">Réinitialiser</button>
+      </div>
+
+      <div class="stats-detail">
+        <div>Affichés : <strong id="displayedCount">0</strong></div>
+        <div>Sélectionnés : <strong id="selectedCount">0</strong></div>
+      </div>
+
+      <div style="margin-top:12px; display:flex; gap:8px;">
+        <button id="selectAllBtn" class="btn btn-secondary btn-small">☑️ Tout sélectionner</button>
+        <button id="clearAllBtn" class="btn btn-secondary btn-small">❌ Tout décocher</button>
+      </div>
+    </div>
+
+    <!-- Liste virtualisée -->
+    <div class="glass-card" style="flex:1;">
+      <h3 class="card-title">Établissements</h3>
+      <div class="list-container" id="listContainer"></div>
+    </div>
+  </div>
+
+  <!-- Panel droite -->
+  <div class="right-panel">
+    <!-- KPIs -->
+    <div class="kpi-container">
+      <div class="kpi-card">
+        <div class="kpi-label">📚 Établissements</div>
+        <div class="kpi-value" id="kpiEtabs">—</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">👥 Total utilisateurs</div>
+        <div class="kpi-value" id="kpiUsers">—</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">📱 Usages distincts</div>
+        <div class="kpi-value" id="kpiApps">—</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">📊 Moyenne utilisateurs</div>
+        <div class="kpi-value" id="kpiAvg">—</div>
+      </div>
+    </div>
+
+    <!-- Section Vue d'ensemble -->
+    <div class="glass-card">
+      <h3 class="card-title">Vue d'ensemble</h3>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">📱 Usages pédagogiques</span>
+            <button class="chart-export" onclick="exportChart('usageChart')">⬇️ PNG</button>
+          </div>
+          <canvas id="usageChart" width="400" height="300"></canvas>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">🏙️ Répartition géographique</span>
+            <button class="chart-export" onclick="exportChart('geoChart')">⬇️ PNG</button>
+          </div>
+          <canvas id="geoChart" width="400" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Analyse -->
+    <div class="glass-card">
+      <h3 class="card-title">Analyse approfondie</h3>
+      <div class="chart-grid">
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">🏆 Top 10 établissements</span>
+            <button class="chart-export" onclick="exportChart('top10Chart')">⬇️ PNG</button>
+          </div>
+          <canvas id="top10Chart" width="400" height="300"></canvas>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">📈 Corrélation usages/utilisateurs</span>
+            <button class="chart-export" onclick="exportChart('scatterChart')">⬇️ PNG</button>
+          </div>
+          <canvas id="scatterChart" width="400" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistiques moyennes/médianes -->
+    <div class="glass-card">
+      <h3 class="card-title">📊 Statistiques descriptives</h3>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:16px;">
+        <div>
+          <div class="kpi-label">Moyenne utilisateurs</div>
+          <div class="kpi-value" style="font-size:20px" id="statMean">—</div>
+        </div>
+        <div>
+          <div class="kpi-label">Médiane utilisateurs</div>
+          <div class="kpi-value" style="font-size:20px" id="statMedian">—</div>
+        </div>
+        <div>
+          <div class="kpi-label">Écart-type</div>
+          <div class="kpi-value" style="font-size:20px" id="statStd">—</div>
+        </div>
+        <div>
+          <div class="kpi-label">Moyenne usages/étab</div>
+          <div class="kpi-value" style="font-size:20px" id="statAvgApps">—</div>
+        </div>
+      </div>
+      <canvas id="statsLineChart" width="800" height="250" style="margin-top:20px;"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Libraries externes pour PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+// ========== ÉTAT GLOBAL ==========
+let allRecords = [];
+let filteredRecords = [];
+let selectedUAIs = new Set();
+let allUsages = new Set();
+let allCities = new Set();
+
+// ========== PARSING CSV ==========
+function detectSeparator(text) {
+  const sample = text.slice(0, 2000);
+  const semicolons = (sample.match(/;/g) || []).length;
+  const commas = (sample.match(/,/g) || []).length;
+  return semicolons > commas ? ';' : ',';
+}
+
+function parseCSV(text) {
+  text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  const sep = detectSeparator(text);
+  const lines = text.split('\n').filter(l => l.trim());
+  
+  const rows = lines.map(line => {
+    const cells = [];
+    let current = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      if (char === '"') {
+        if (inQuotes && line[i + 1] === '"') {
+          current += '"';
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (char === sep && !inQuotes) {
+        cells.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    cells.push(current.trim());
+    return cells;
+  });
+  
+  return rows;
+}
+
+// ========== NORMALISATION ==========
+function normalizeRecords(rows) {
+  if (rows.length === 0) return [];
+  
+  // Détection header
+  let startIndex = 0;
+  const firstRow = rows[0].join(' ').toLowerCase();
+  if (firstRow.includes('nom') || firstRow.includes('uai') || firstRow.includes('ville')) {
+    startIndex = 1;
+  }
+  
+  const records = [];
+  allUsages.clear();
+  allCities.clear();
+  
+  for (let i = startIndex; i < rows.length; i++) {
+    const row = rows[i];
+    if (row.every(c => !c)) continue;
+    
+    const uai = (row[1] || '').toString().trim();
+    const name = (row[0] || '').toString().trim();
+    const city = (row[3] || row[2] || '').toString().trim();
+    const applications = (row[4] || row[2] || '').toString().trim();
+    const users = parseInt((row[5] || row[6] || '0').toString().replace(/\s/g, '')) || 0;
+    
+    if (city) allCities.add(city);
+    
+    // Parse applications
+    const appsList = applications.split(/[;,]/).map(a => a.trim()).filter(Boolean);
+    appsList.forEach(app => allUsages.add(app));
+    
+    records.push({
+      uai,
+      name,
+      city,
+      applications: appsList,
+      applicationsStr: applications,
+      users,
+      usageCount: appsList.length
+    });
+  }
+  
+  return records;
+}
+
+// ========== UPLOAD FICHIER ==========
+const uploadZone = document.getElementById('uploadZone');
+const fileInput = document.getElementById('fileInput');
+const uploadText = document.getElementById('uploadText');
+
+uploadZone.addEventListener('click', () => fileInput.click());
+uploadZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  uploadZone.style.borderColor = 'var(--primary)';
+});
+uploadZone.addEventListener('dragleave', () => {
+  uploadZone.style.borderColor = 'rgba(59,130,246,0.3)';
+});
+uploadZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  uploadZone.style.borderColor = 'rgba(59,130,246,0.3)';
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+});
+
+function handleFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const rows = parseCSV(e.target.result);
+    allRecords = normalizeRecords(rows);
+    filteredRecords = [...allRecords];
+    
+    uploadZone.classList.add('active');
+    uploadText.innerHTML = `<strong>✅ ${file.name}</strong><br>${allRecords.length} établissements chargés`;
+    
+    populateFilters();
+    applyFilters();
+    updateCharts();
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+// ========== FILTRES ==========
+function populateFilters() {
+  // Usage filter
+  const usageFilter = document.getElementById('usageFilter');
+  usageFilter.innerHTML = '<option value="">📱 Tous les usages</option>';
+  Array.from(allUsages).sort().forEach(usage => {
+    const opt = document.createElement('option');
+    opt.value = usage;
+    opt.textContent = usage;
+    usageFilter.appendChild(opt);
+  });
+  
+  // City filter
+  const cityFilter = document.getElementById('cityFilter');
+  cityFilter.innerHTML = '<option value="">🏙️ Toutes les villes</option>';
+  Array.from(allCities).sort().forEach(city => {
+    const opt = document.createElement('option');
+    opt.value = city;
+    opt.textContent = city;
+    cityFilter.appendChild(opt);
+  });
+}
+
+document.getElementById('applyFilters').addEventListener('click', applyFilters);
+document.getElementById('resetFilters').addEventListener('click', () => {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('usageFilter').value = '';
+  document.getElementById('minUsers').value = '';
+  document.getElementById('maxUsers').value = '';
+  document.getElementById('cityFilter').value = '';
+  applyFilters();
+});
+
+document.getElementById('searchInput').addEventListener('input', applyFilters);
+
+function applyFilters() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const usage = document.getElementById('usageFilter').value;
+  const minUsers = parseInt(document.getElementById('minUsers').value) || 0;
+  const maxUsers = parseInt(document.getElementById('maxUsers').value) || Infinity;
+  const city = document.getElementById('cityFilter').value;
+  
+  filteredRecords = allRecords.filter(rec => {
+    const matchSearch = !search || 
+      rec.name.toLowerCase().includes(search) ||
+      rec.uai.toLowerCase().includes(search) ||
+      rec.city.toLowerCase().includes(search);
+    
+    const matchUsage = !usage || rec.applications.includes(usage);
+    const matchUsers = rec.users >= minUsers && rec.users <= maxUsers;
+    const matchCity = !city || rec.city === city;
+    
+    return matchSearch && matchUsage && matchUsers && matchCity;
+  });
+  
+  renderList();
+  updateStats();
+}
+
+// ========== LISTE VIRTUALISÉE ==========
+function renderList() {
+  const container = document.getElementById('listContainer');
+  container.innerHTML = '';
+  
+  document.getElementById('displayedCount').textContent = filteredRecords.length;
+  
+  filteredRecords.forEach((rec, idx) => {
+    const item = document.createElement('div');
+    item.className = 'list-item';
+    
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = selectedUAIs.has(rec.uai);
+    checkbox.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        selectedUAIs.add(rec.uai);
+      } else {
+        selectedUAIs.delete(rec.uai);
+      }
+      updateStats();
+      updateCharts();
+    });
+    
+    const content = document.createElement('div');
+    content.className = 'list-item-content';
+    content.innerHTML = `
+      <div class="list-item-name">${rec.name || rec.uai}</div>
+      <div class="list-item-meta">${rec.uai} • ${rec.city} • ${rec.users} users • ${rec.usageCount} usages</div>
+    `;
+    
+    item.appendChild(checkbox);
+    item.appendChild(content);
+    
+    item.addEventListener('click', (e) => {
+      if (e.target.tagName !== 'INPUT') {
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event('change'));
+      }
+    });
+    
+    container.appendChild(item);
+  });
+}
+
+document.getElementById('selectAllBtn').addEventListener('click', () => {
+  filteredRecords.forEach(rec => selectedUAIs.add(rec.uai));
+  renderList();
+  updateStats();
+  updateCharts();
+});
+
+document.getElementById('clearAllBtn').addEventListener('click', () => {
+  selectedUAIs.clear();
+  renderList();
+  updateStats();
+  updateCharts();
+});
+
+// ========== STATS & KPIs ==========
+function updateStats() {
+  const selected = allRecords.filter(r => selectedUAIs.has(r.uai));
+  const dataSet = selected.length > 0 ? selected : filteredRecords;
+  
+  document.getElementById('selectedCount').textContent = selectedUAIs.size;
+  document.getElementById('kpiEtabs').textContent = dataSet.length;
+  
+  const totalUsers = dataSet.reduce((sum, r) => sum + r.users, 0);
+  document.getElementById('kpiUsers').textContent = totalUsers.toLocaleString();
+  
+  const allApps = new Set();
+  dataSet.forEach(r => r.applications.forEach(a => allApps.add(a)));
+  document.getElementById('kpiApps').textContent = allApps.size;
+  
+  const avgUsers = dataSet.length > 0 ? Math.round(totalUsers / dataSet.length) : 0;
+  document.getElementById('kpiAvg').textContent = avgUsers;
+  
+  // Statistiques descriptives
+  const usersList = dataSet.map(r => r.users).sort((a, b) => a - b);
+  const mean = usersList.length > 0 ? usersList.reduce((a, b) => a + b, 0) / usersList.length : 0;
+  const median = usersList.length > 0 ? usersList[Math.floor(usersList.length / 2)] : 0;
+  const variance = usersList.length > 0 ? usersList.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / usersList.length : 0;
+  const std = Math.sqrt(variance);
+  const avgApps = dataSet.length > 0 ? dataSet.reduce((sum, r) => sum + r.usageCount, 0) / dataSet.length : 0;
+  
+  document.getElementById('statMean').textContent = Math.round(mean);
+  document.getElementById('statMedian').textContent = Math.round(median);
+  document.getElementById('statStd').textContent = Math.round(std);
+  document.getElementById('statAvgApps').textContent = avgApps.toFixed(1);
+}
+
+// ========== GRAPHIQUES ==========
+function updateCharts() {
+  const selected = allRecords.filter(r => selectedUAIs.has(r.uai));
+  const dataSet = selected.length > 0 ? selected : filteredRecords;
+  
+  drawUsageChart(dataSet);
+  drawGeoChart(dataSet);
+  drawTop10Chart(dataSet);
+  drawScatterChart(dataSet);
+  drawStatsLineChart(dataSet);
+}
+
+// Graphique usages
+function drawUsageChart(data) {
+  const usageCount = {};
+  data.forEach(r => {
+    r.applications.forEach(app => {
+      usageCount[app] = (usageCount[app] || 0) + 1;
+    });
+  });
+  
+  const sorted = Object.entries(usageCount).sort((a, b) => b[1] - a[1]).slice(0, 30);
+  
+  const canvas = document.getElementById('usageChart');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  if (sorted.length === 0) return;
+  
+  const padding = 50;
+  const chartWidth = canvas.width - padding * 2;
+  const chartHeight = canvas.height - padding * 2;
+  const barWidth = chartWidth / sorted.length * 0.8;
+  const maxValue = Math.max(...sorted.map(s => s[1]));
+  
+  // Axes
+  ctx.strokeStyle = '#e2e8f0';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = padding + (chartHeight * i / 5);
+    ctx.beginPath();
+    ctx.moveTo(padding, y);
+    ctx.lineTo(canvas.width - padding, y);
+    ctx.stroke();
+    
+    const value = Math.round(maxValue * (1 - i / 5));
+    ctx.fillStyle = '#64748b';
+    ctx.font = '11px Inter';
+    ctx.textAlign = 'right';
+    ctx.fillText(value, padding - 5, y + 4);
+  }
+  
+  // Barres
+  sorted.forEach((item, i) => {
+    const x = padding + (i * chartWidth / sorted.length) + (chartWidth / sorted.length - barWidth) / 2;
+    const barHeight = (item[1] / maxValue) * chartHeight;
+    const y = padding + chartHeight - barHeight;
+    
+    const gradient = ctx.createLinearGradient(x, y, x, y + barHeight);
+    gradient.addColorStop(0, '#3b82f6');
+    gradient.addColorStop(1, '#8b5cf6');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x, y, barWidth, barHeight);
+    
+    // Labels
+    ctx.save();
+    ctx.translate(x + barWidth / 2, canvas.height - padding + 10);
+    ctx.rotate(-Math.PI / 4);
+    ctx.fillStyle = '#0f172a';
+    ctx.font = '10px Inter';
+    ctx.textAlign = 'right';
+    ctx.fillText(item[0].substring(0, 20), 0, 0);
+    ctx.restore();
+  });
+}
+
+// Graphique géographique
+function drawGeoChart(data) {
+  const cityCount = {};
+  data.forEach(r => {
+    if (r.city) {
+      cityCount[r.city] = (cityCount[r.city] || 0) + 1;
+    }
+  });
+  
+  const sorted = Object.entries(cityCount).sort((a, b) => b[1] - a[1]).slice(0, 20);
+  
+  const canvas = document.getElementById('geoChart');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  if (sorted.length === 0) return;
+  
+  const padding = 50;
+  const chartWidth = canvas.width - padding * 2;
+  const chartHeight = canvas.height - padding * 2;
+  const barWidth = chartWidth / sorted.length * 0.8;
+  const maxValue = Math.max(...sorted.map(s => s[1]));
+  
+  // Axes
+  ctx.strokeStyle = '#e2e8f0';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = padding + (chartHeight * i / 5);
+    ctx.beginPath();
+    ctx.moveTo(padding, y);
+    ctx.lineTo(canvas.width - padding, y);
+    ctx.stroke();
+    
+    const value = Math.round(maxValue * (1 - i / 5));
+    ctx.fillStyle = '#64748b';
+    ctx.font = '11px Inter';
+    ctx.textAlign = 'right';
+    ctx.fillText(value, padding - 5, y + 4);
+  }
+  
+  // Barres
+  sorted.forEach((item, i) => {
+    const x = padding + (i * chartWidth / sorted.length) + (chartWidth / sorted.length - barWidth) / 2;
+    const barHeight = (item[1] / maxValue) * chartHeight;
+    const y = padding + chartHeight - barHeight;
+    
+    const gradient = ctx.createLinearGradient(x, y, x, y + barHeight);
+    gradient.addColorStop(0, '#06b6d4');
+    gradient.addColorStop(1, '#3b82f6');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x, y, barWidth, barHeight);
+    
+    // Labels
+    ctx.save();
+    ctx.translate(x + barWidth / 2, canvas.height - padding + 10);
+    ctx.rotate(-Math.PI / 4);
+    ctx.fillStyle = '#0f172a';
+    ctx.font = '10px Inter';
+    ctx.textAlign = 'right';
+    ctx.fillText(item[0].substring(0, 15), 0, 0);
+    ctx.restore();
+  });
+}
+
+// Top 10
+function drawTop10Chart(data) {
+  const sorted = [...data].sort((a, b) => b.users - a.users).slice(0, 10);
+  
+  const canvas = document.getElementById('top10Chart');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  if (sorted.length === 0) return;
+  
+  const padding = 50;
+  const chartWidth = canvas.width - padding * 2;
+  const chartHeight = canvas.height - padding * 2;
+  const barHeight = chartHeight / sorted.length * 0.8;
+  const maxValue = Math.max(...sorted.map(s => s.users));
+  
+  sorted.forEach((item, i) => {
+    const y = padding + (i * chartHeight / sorted.length) + (chartHeight / sorted.length - barHeight) / 2;
+    const barWidth = (item.users / maxValue) * chartWidth;
+    
+    const gradient = ctx.createLinearGradient(padding, y, padding + barWidth, y);
+    gradient.addColorStop(0, '#10b981');
+    gradient.addColorStop(1, '#3b82f6');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(padding, y, barWidth, barHeight);
+    
+    // Label établissement
+    ctx.fillStyle = '#0f172a';
+    ctx.font = '11px Inter';
+    ctx.textAlign = 'right';
+    ctx.fillText(item.name.substring(0, 25), padding - 5, y + barHeight / 2 + 4);
+    
+    // Valeur
+    ctx.textAlign = 'left';
+    ctx.fillText(item.users, padding + barWidth + 5, y + barHeight / 2 + 4);
+  });
+}
+
+// Scatter plot
+function drawScatterChart(data) {
+  const canvas = document.getElementById('scatterChart');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  if (data.length === 0) return;
+  
+  const padding = 50;
+  const chartWidth = canvas.width - padding * 2;
+  const chartHeight = canvas.height - padding * 2;
+  
+  const maxUsers = Math.max(...data.map(r => r.users));
+  const maxUsages = Math.max(...data.map(r => r.usageCount));
+  
+  // Axes
+  ctx.strokeStyle = '#e2e8f0';
+  ctx.lineWidth = 1;
+  
+  // Grille verticale
+  for (let i = 0; i <= 5; i++) {
+    const x = padding + (chartWidth * i / 5);
+    ctx.beginPath();
+    ctx.moveTo(x, padding);
+    ctx.lineTo(x, canvas.height - padding);
+    ctx.stroke();
+    
+    const value = Math.round(maxUsages * i / 5);
+    ctx.fillStyle = '#64748b';
+    ctx.font = '11px Inter';
+    ctx.textAlign = 'center';
+    ctx.fillText(value, x, canvas.height - padding + 20);
+  }
+  
+  // Grille horizontale
+  for (let i = 0; i <= 5; i++) {
+    const y = padding + (chartHeight * i / 5);
+    ctx.beginPath();
+    ctx.moveTo(padding, y);
+    ctx.lineTo(canvas.width - padding, y);
+    ctx.stroke();
+    
+    const value = Math.round(maxUsers * (1 - i / 5));
+    ctx.fillStyle = '#64748b';
+    ctx.font = '11px Inter';
+    ctx.textAlign = 'right';
+    ctx.fillText(value, padding - 5, y + 4);
+  }
+  
+  // Points (bulles)
+  data.forEach(item => {
+    const x = padding + (item.usageCount / maxUsages) * chartWidth;
+    const y = padding + chartHeight - (item.users / maxUsers) * chartHeight;
+    const radius = Math.max(3, Math.min(15, item.usageCount * 2));
+    
+    const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+    gradient.addColorStop(0, 'rgba(139, 92, 246, 0.8)');
+    gradient.addColorStop(1, 'rgba(59, 130, 246, 0.4)');
+    
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+    
+    ctx.strokeStyle = '#3b82f6';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  });
+  
+  // Labels axes
+  ctx.fillStyle = '#0f172a';
+  ctx.font = 'bold 12px Inter';
+  ctx.textAlign = 'center';
+  ctx.fillText('Nombre d\'usages', canvas.width / 2, canvas.height - 5);
+  
+  ctx.save();
+  ctx.translate(15, canvas.height / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText('Nombre d\'utilisateurs', 0, 0);
+  ctx.restore();
+}
+
+// Graphique ligne stats
+function drawStatsLineChart(data) {
+  const canvas = document.getElementById('statsLineChart');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  if (data.length === 0) return;
+  
+  const usersList = data.map(r => r.users).sort((a, b) => a - b);
+  const mean = usersList.reduce((a, b) => a + b, 0) / usersList.length;
+  const median = usersList[Math.floor(usersList.length / 2)];
+  
+  const padding = 50;
+  const chartWidth = canvas.width - padding * 2;
+  const chartHeight = canvas.height - padding * 2;
+  const maxValue = Math.max(...usersList);
+  
+  // Axes
+  ctx.strokeStyle = '#e2e8f0';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = padding + (chartHeight * i / 5);
+    ctx.beginPath();
+    ctx.moveTo(padding, y);
+    ctx.lineTo(canvas.width - padding, y);
+    ctx.stroke();
+    
+    const value = Math.round(maxValue * (1 - i / 5));
+    ctx.fillStyle = '#64748b';
+    ctx.font = '11px Inter';
+    ctx.textAlign = 'right';
+    ctx.fillText(value, padding - 5, y + 4);
+  }
+  
+  // Courbe des utilisateurs
+  ctx.beginPath();
+  ctx.strokeStyle = '#3b82f6';
+  ctx.lineWidth = 2;
+  usersList.forEach((val, i) => {
+    const x = padding + (i / usersList.length) * chartWidth;
+    const y = padding + chartHeight - (val / maxValue) * chartHeight;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  
+  // Ligne moyenne
+  const meanY = padding + chartHeight - (mean / maxValue) * chartHeight;
+  ctx.strokeStyle = '#10b981';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([5, 5]);
+  ctx.beginPath();
+  ctx.moveTo(padding, meanY);
+  ctx.lineTo(canvas.width - padding, meanY);
+  ctx.stroke();
+  
+  // Ligne médiane
+  const medianY = padding + chartHeight - (median / maxValue) * chartHeight;
+  ctx.strokeStyle = '#f59e0b';
+  ctx.setLineDash([5, 5]);
+  ctx.beginPath();
+  ctx.moveTo(padding, medianY);
+  ctx.lineTo(canvas.width - padding, medianY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  
+  // Légende
+  ctx.font = 'bold 11px Inter';
+  ctx.fillStyle = '#3b82f6';
+  ctx.fillText('Distribution', padding + 10, padding - 10);
+  ctx.fillStyle = '#10b981';
+  ctx.fillText(`Moyenne: ${Math.round(mean)}`, padding + 100, padding - 10);
+  ctx.fillStyle = '#f59e0b';
+  ctx.fillText(`Médiane: ${Math.round(median)}`, padding + 220, padding - 10);
+}
+
+// ========== EXPORT PNG ==========
+function exportChart(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  const link = document.createElement('a');
+  link.download = `${canvasId}_${Date.now()}.png`;
+  link.href = canvas.toDataURL();
+  link.click();
+}
+
+// ========== EXPORT CSV ==========
+document.getElementById('exportCSV').addEventListener('click', () => {
+  const selected = allRecords.filter(r => selectedUAIs.has(r.uai));
+  const dataSet = selected.length > 0 ? selected : filteredRecords;
+  
+  const headers = ['UAI', 'Nom', 'Ville', 'Utilisateurs', 'Nombre usages', 'Applications'];
+  const rows = dataSet.map(r => [
+    r.uai,
+    r.name,
+    r.city,
+    r.users,
+    r.usageCount,
+    r.applicationsStr
+  ]);
+  
+  const csv = [headers, ...rows].map(row => 
+    row.map(cell => `"${cell}"`).join(',')
+  ).join('\n');
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `export_colleges_${Date.now()}.csv`;
+  link.click();
+});
+
+// ========== COPIE CLIPBOARD ==========
+document.getElementById('copyClipboard').addEventListener('click', async () => {
+  const selected = allRecords.filter(r => selectedUAIs.has(r.uai));
+  const dataSet = selected.length > 0 ? selected : filteredRecords;
+  
+  const text = dataSet.map(r => 
+    `${r.name} (${r.uai}) - ${r.city} - ${r.users} utilisateurs - ${r.usageCount} usages`
+  ).join('\n');
+  
+  try {
+    await navigator.clipboard.writeText(text);
+    alert('✅ Données copiées dans le presse-papier !');
+  } catch (err) {
+    alert('❌ Erreur lors de la copie');
+  }
+});
+
+// ========== EXPORT PDF ==========
+document.getElementById('exportPDF').addEventListener('click', async () => {
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  
+  // Page 1 - Titre et stats
+  pdf.setFontSize(20);
+  pdf.setTextColor(59, 130, 246);
+  pdf.text('Rapport d\'analyse - Collèges', 105, 20, { align: 'center' });
+  
+  pdf.setFontSize(12);
+  pdf.setTextColor(0, 0, 0);
+  pdf.text('DRANE Hauts-de-France', 105, 28, { align: 'center' });
+  pdf.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`, 105, 35, { align: 'center' });
+  
+  const selected = allRecords.filter(r => selectedUAIs.has(r.uai));
+  const dataSet = selected.length > 0 ? selected : filteredRecords;
+  
+  const totalUsers = dataSet.reduce((sum, r) => sum + r.users, 0);
+  const allApps = new Set();
+  dataSet.forEach(r => r.applications.forEach(a => allApps.add(a)));
+  
+  pdf.setFontSize(10);
+  let y = 50;
+  pdf.text(`📚 Établissements analysés: ${dataSet.length}`, 20, y);
+  y += 7;
+  pdf.text(`👥 Total utilisateurs: ${totalUsers.toLocaleString()}`, 20, y);
+  y += 7;
+  pdf.text(`📱 Usages distincts: ${allApps.size}`, 20, y);
+  y += 7;
+  pdf.text(`📊 Moyenne utilisateurs/étab: ${Math.round(totalUsers / dataSet.length)}`, 20, y);
+  
+  // Capture graphiques
+  y = 80;
+  const charts = ['usageChart', 'geoChart', 'top10Chart', 'scatterChart'];
+  
+  for (let i = 0; i < charts.length; i++) {
+    const canvas = document.getElementById(charts[i]);
+    const imgData = canvas.toDataURL('image/png');
+    
+    if (y > 200) {
+      pdf.addPage();
+      y = 20;
+    }
+    
+    pdf.addImage(imgData, 'PNG', 15, y, 180, 70);
+    y += 80;
+  }
+  
+  // Page finale - Liste établissements
+  if (dataSet.length <= 50) {
+    pdf.addPage();
+    pdf.setFontSize(14);
+    pdf.text('Liste des établissements', 105, 15, { align: 'center' });
+    
+    pdf.setFontSize(9);
+    y = 25;
+    dataSet.forEach((r, i) => {
+      if (y > 280) {
+        pdf.addPage();
+        y = 15;
+      }
+      pdf.text(`${i + 1}. ${r.name} (${r.uai}) - ${r.city} - ${r.users} users`, 15, y);
+      y += 6;
+    });
+  }
+  
+  pdf.save(`rapport_colleges_${Date.now()}.pdf`);
+  alert('✅ PDF généré avec succès !');
+});
+
+// ========== INIT ==========
+updateStats();
+</script>
+
+</body>
+</html>
