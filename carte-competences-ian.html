@@ -32,11 +32,11 @@
             background: var(--bg);
             color: var(--text);
             padding: 40px 20px;
-            line-height: 1.6;
+            line-height: 1.8;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
@@ -46,67 +46,146 @@
         }
 
         .header h1 {
-            font-size: 36px;
+            font-size: 48px;
             font-weight: 700;
             color: var(--primary);
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .header p {
             color: var(--text-light);
-            font-size: 16px;
+            font-size: 20px;
+        }
+
+        /* Profil personnalisé */
+        .profile-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .profile-photo {
+            width: 200px;
+            height: 200px;
+            border-radius: 16px;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .profile-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .profile-field label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-field input {
+            font-family: 'Outfit', sans-serif;
+            font-size: 18px;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        .profile-field input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
         }
 
         .map-container {
             display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 24px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
             margin-bottom: 40px;
-        }
-
-        .center-card {
-            grid-column: 5 / 9;
-            grid-row: 2 / 4;
         }
 
         .card {
             background: var(--card);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            padding: 36px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             border: 2px solid var(--border);
             transition: all 0.3s ease;
             position: relative;
         }
 
         .card:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
             transform: translateY(-2px);
         }
 
         .card-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--border);
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--border);
         }
 
         .card-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 28px;
             font-weight: 700;
             color: white;
+            flex-shrink: 0;
         }
 
         .card-title {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: 600;
             color: var(--text);
         }
@@ -117,48 +196,97 @@
         }
 
         .card-content li {
-            padding: 8px 0;
-            padding-left: 24px;
-            position: relative;
-            font-size: 14px;
-            line-height: 1.5;
-            color: var(--text-light);
+            padding: 14px 0;
+            display: flex;
+            align-items: start;
+            gap: 16px;
+            font-size: 17px;
+            line-height: 1.6;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
         }
 
-        .card-content li::before {
-            content: "→";
+        .card-content li:last-child {
+            border-bottom: none;
+        }
+
+        /* Checkboxes personnalisées */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--primary);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:checked::after {
+            content: "✓";
             position: absolute;
-            left: 0;
-            color: var(--primary);
-            font-weight: 600;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .checkbox-wrapper input[type="checkbox"]:hover {
+            border-color: var(--secondary);
+            transform: scale(1.1);
+        }
+
+        .item-text {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .card-content li.checked .item-text {
+            color: var(--text-light);
+            text-decoration: line-through;
         }
 
         .note-area {
-            margin-top: 16px;
-            padding-top: 16px;
+            margin-top: 24px;
+            padding-top: 24px;
             border-top: 2px dashed var(--border);
         }
 
         .note-area label {
             display: block;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--text-light);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .note-area textarea {
             width: 100%;
-            min-height: 80px;
-            padding: 12px;
+            min-height: 120px;
+            padding: 16px;
             border: 2px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             font-family: 'Outfit', sans-serif;
-            font-size: 14px;
+            font-size: 16px;
             resize: vertical;
             transition: border-color 0.3s ease;
+            line-height: 1.6;
         }
 
         .note-area textarea:focus {
@@ -171,6 +299,7 @@
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
             border: none;
+            grid-column: 1 / -1;
         }
 
         .center-card .card-header {
@@ -179,7 +308,7 @@
 
         .center-card .card-title {
             color: white;
-            font-size: 24px;
+            font-size: 28px;
         }
 
         .center-card .card-content {
@@ -188,10 +317,20 @@
 
         .center-card .card-content li {
             color: rgba(255, 255, 255, 0.95);
+            border-bottom-color: rgba(255, 255, 255, 0.15);
         }
 
-        .center-card .card-content li::before {
-            color: white;
+        .center-card .checkbox-wrapper input[type="checkbox"] {
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .center-card .checkbox-wrapper input[type="checkbox"]:checked {
+            background: white;
+            border-color: white;
+        }
+
+        .center-card .checkbox-wrapper input[type="checkbox"]:checked::after {
+            color: var(--primary);
         }
 
         .center-card .note-area {
@@ -217,32 +356,6 @@
             border-color: rgba(255, 255, 255, 0.4);
         }
 
-        /* Positionnements spécifiques */
-        .academie-card {
-            grid-column: 1 / 5;
-            grid-row: 1 / 3;
-        }
-
-        .national-card {
-            grid-column: 9 / 13;
-            grid-row: 1 / 3;
-        }
-
-        .ressources-card {
-            grid-column: 1 / 5;
-            grid-row: 3 / 5;
-        }
-
-        .outils-card {
-            grid-column: 9 / 13;
-            grid-row: 3 / 5;
-        }
-
-        .reseau-card {
-            grid-column: 4 / 10;
-            grid-row: 5 / 6;
-        }
-
         /* Couleurs des icônes */
         .icon-primary { background: var(--primary); }
         .icon-secondary { background: var(--secondary); }
@@ -250,37 +363,53 @@
         .icon-success { background: var(--success); }
         .icon-warning { background: var(--warning); }
 
-        /* Connexions visuelles */
-        .connector {
-            position: absolute;
-            background: var(--border);
-            z-index: -1;
+        .progress-bar {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
         }
 
-        .connector-h {
-            height: 2px;
+        .progress-label {
+            font-size: 14px;
+            margin-bottom: 10px;
+            opacity: 0.9;
         }
 
-        .connector-v {
-            width: 2px;
+        .progress-track {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 6px;
+            transition: width 0.5s ease;
         }
 
         .buttons {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             justify-content: center;
-            margin-top: 40px;
+            margin-top: 50px;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 12px 28px;
+            padding: 16px 36px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-family: 'Outfit', sans-serif;
-            font-size: 15px;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .btn-primary {
@@ -291,7 +420,7 @@
         .btn-primary:hover {
             background: #1d4ed8;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
         }
 
         .btn-secondary {
@@ -316,22 +445,25 @@
                 box-shadow: none;
                 page-break-inside: avoid;
             }
+            .profile-section {
+                page-break-inside: avoid;
+            }
         }
 
         @media (max-width: 1200px) {
             .map-container {
                 grid-template-columns: 1fr;
-                gap: 20px;
+                gap: 24px;
             }
 
-            .center-card,
-            .academie-card,
-            .national-card,
-            .ressources-card,
-            .outils-card,
-            .reseau-card {
-                grid-column: 1 / -1;
-                grid-row: auto;
+            .profile-section {
+                grid-template-columns: 1fr;
+                text-align: center;
+                justify-items: center;
+            }
+
+            .profile-stats {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -343,6 +475,43 @@
             <p>Interlocuteur académique pour le numérique</p>
         </div>
 
+        <!-- Section Profil -->
+        <div class="profile-section">
+            <img src="http://silverteacher.github.io/307ce493-b254-4b2d-8ba4-d12c080d6651.jpg" alt="Photo de profil" class="profile-photo" id="profilePhoto">
+            
+            <div class="profile-info">
+                <div class="profile-field">
+                    <label>Nom et prénom</label>
+                    <input type="text" id="fullName" placeholder="Entrez votre nom complet">
+                </div>
+                
+                <div class="profile-field">
+                    <label>Discipline</label>
+                    <input type="text" id="discipline" placeholder="Ex: Mathématiques, Français, Histoire-Géographie...">
+                </div>
+                
+                <div class="profile-field">
+                    <label>Académie</label>
+                    <input type="text" id="academie" placeholder="Ex: Lille, Paris, Lyon...">
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-box">
+                        <span class="stat-number" id="completionRate">0%</span>
+                        <span class="stat-label">Progression</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number" id="checkedCount">0</span>
+                        <span class="stat-label">Compétences cochées</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number" id="totalCount">25</span>
+                        <span class="stat-label">Total compétences</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="map-container">
             <!-- Carte centrale IAN -->
             <div class="card center-card">
@@ -352,16 +521,47 @@
                 </div>
                 <div class="card-content">
                     <ul>
-                        <li>Enseignant expert disciplinaire</li>
-                        <li>Membre d'un réseau national de 450+ enseignants</li>
-                        <li>13 réseaux académiques, 18 disciplines représentées</li>
-                        <li>Travail en lien avec l'inspection générale</li>
-                        <li>Relais DNE auprès des DAN et inspecteurs territoriaux</li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Enseignant expert disciplinaire</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Membre d'un réseau national de 450+ enseignants</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">13 réseaux académiques, 18 disciplines représentées</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Travail en lien avec l'inspection générale</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Relais DNE auprès des DAN et inspecteurs territoriaux</span>
+                        </li>
                     </ul>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-label">Profil complété</div>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="centerProgress" style="width: 0%"></div>
+                    </div>
                 </div>
                 <div class="note-area">
                     <label>Notes personnelles</label>
-                    <textarea placeholder="Ajoutez vos notes ici..."></textarea>
+                    <textarea placeholder="Ajoutez vos notes sur votre profil IAN..."></textarea>
                 </div>
             </div>
 
@@ -373,16 +573,41 @@
                 </div>
                 <div class="card-content">
                     <ul>
-                        <li>Porter les orientations de la stratégie nationale pour le numérique éducatif</li>
-                        <li>Faire connaître les ressources numériques éducatives</li>
-                        <li>Associé aux manifestations académiques</li>
-                        <li>Repérer les pratiques innovantes dans sa discipline</li>
-                        <li>Coordonner et accompagner la publication de scénarios</li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Porter les orientations de la stratégie nationale pour le numérique éducatif</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Faire connaître les ressources numériques éducatives</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Associé aux manifestations académiques</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Repérer les pratiques innovantes dans sa discipline</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Coordonner et accompagner la publication de scénarios</span>
+                        </li>
                     </ul>
                 </div>
                 <div class="note-area">
                     <label>Annotations</label>
-                    <textarea placeholder="Vos observations..."></textarea>
+                    <textarea placeholder="Vos observations sur les missions académiques..."></textarea>
                 </div>
             </div>
 
@@ -394,16 +619,41 @@
                 </div>
                 <div class="card-content">
                     <ul>
-                        <li>Organiser la mutualisation des pratiques via Édubase</li>
-                        <li>Valoriser des projets académiques</li>
-                        <li>Contribuer aux sites disciplinaires éduscol</li>
-                        <li>Alimenter les lettres ÉduNum</li>
-                        <li>Participer aux comptes Twitter disciplinaires</li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Organiser la mutualisation des pratiques via Édubase</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Valoriser des projets académiques</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Contribuer aux sites disciplinaires éduscol</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Alimenter les lettres ÉduNum</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Participer aux comptes Twitter disciplinaires</span>
+                        </li>
                     </ul>
                 </div>
                 <div class="note-area">
                     <label>Annotations</label>
-                    <textarea placeholder="Vos observations..."></textarea>
+                    <textarea placeholder="Vos observations sur les missions nationales..."></textarea>
                 </div>
             </div>
 
@@ -415,16 +665,41 @@
                 </div>
                 <div class="card-content">
                     <ul>
-                        <li>Lumni Enseignement</li>
-                        <li>Banques de ressources numériques éducatives (BRNE)</li>
-                        <li>Contenus d'accompagnement Édubase</li>
-                        <li>Lettres ÉduNum disciplinaires</li>
-                        <li>Projets développés par la DNE</li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Lumni Enseignement</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Banques de ressources numériques éducatives (BRNE)</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Contenus d'accompagnement Édubase</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Lettres ÉduNum disciplinaires</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Projets développés par la DNE</span>
+                        </li>
                     </ul>
                 </div>
                 <div class="note-area">
                     <label>Annotations</label>
-                    <textarea placeholder="Ressources à ajouter..."></textarea>
+                    <textarea placeholder="Ressources à ajouter ou observations..."></textarea>
                 </div>
             </div>
 
@@ -436,16 +711,41 @@
                 </div>
                 <div class="card-content">
                     <ul>
-                        <li>Édubase : mutualisation des scénarios pédagogiques</li>
-                        <li>Sites disciplinaires éduscol</li>
-                        <li>Lettres ÉduNum</li>
-                        <li>Comptes Twitter disciplinaires</li>
-                        <li>Espace académique disciplinaire</li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Édubase : mutualisation des scénarios pédagogiques</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Sites disciplinaires éduscol</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Lettres ÉduNum</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Comptes Twitter disciplinaires</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Espace académique disciplinaire</span>
+                        </li>
                     </ul>
                 </div>
                 <div class="note-area">
                     <label>Annotations</label>
-                    <textarea placeholder="Outils complémentaires..."></textarea>
+                    <textarea placeholder="Outils complémentaires ou remarques..."></textarea>
                 </div>
             </div>
 
@@ -457,54 +757,170 @@
                 </div>
                 <div class="card-content">
                     <ul>
-                        <li>33 experts DNE animant le réseau national</li>
-                        <li>Lien avec la direction du numérique pour l'éducation (DNE)</li>
-                        <li>Collaboration avec les délégués académiques au numérique (DAN)</li>
-                        <li>Travail avec l'inspection générale et les inspecteurs territoriaux</li>
-                        <li>Coordination avec les autres IAN de l'académie</li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">33 experts DNE animant le réseau national</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Lien avec la direction du numérique pour l'éducation (DNE)</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Collaboration avec les délégués académiques au numérique (DAN)</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Travail avec l'inspection générale et les inspecteurs territoriaux</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">Coordination avec les autres IAN de l'académie</span>
+                        </li>
                     </ul>
                 </div>
                 <div class="note-area">
                     <label>Annotations</label>
-                    <textarea placeholder="Contacts et collaborations..."></textarea>
+                    <textarea placeholder="Contacts et collaborations à noter..."></textarea>
                 </div>
             </div>
         </div>
 
         <div class="buttons">
-            <button class="btn btn-primary" onclick="window.print()">📄 Imprimer la carte</button>
-            <button class="btn btn-secondary" onclick="saveNotes()">💾 Sauvegarder les notes</button>
+            <button class="btn btn-primary" onclick="window.print()">📄 Imprimer la carte complète</button>
+            <button class="btn btn-secondary" onclick="saveNotes()">💾 Sauvegarder</button>
+            <button class="btn btn-secondary" onclick="resetAll()">🔄 Réinitialiser</button>
         </div>
     </div>
 
     <script>
-        // Sauvegarder les notes dans le localStorage
+        // Éléments du profil
+        const fullNameInput = document.getElementById('fullName');
+        const disciplineInput = document.getElementById('discipline');
+        const academieInput = document.getElementById('academie');
+        
+        // Compteurs
+        const completionRate = document.getElementById('completionRate');
+        const checkedCount = document.getElementById('checkedCount');
+        const totalCount = document.getElementById('totalCount');
+        
+        // Toutes les checkboxes
+        const checkboxes = document.querySelectorAll('.competence-check');
         const textareas = document.querySelectorAll('textarea');
         
-        // Charger les notes sauvegardées
-        textareas.forEach((textarea, index) => {
-            const savedNote = localStorage.getItem(`note-${index}`);
-            if (savedNote) {
-                textarea.value = savedNote;
+        // Mettre à jour le nombre total
+        totalCount.textContent = checkboxes.length;
+        
+        // Charger les données sauvegardées
+        function loadSavedData() {
+            // Charger le profil
+            fullNameInput.value = localStorage.getItem('ian-fullName') || '';
+            disciplineInput.value = localStorage.getItem('ian-discipline') || '';
+            academieInput.value = localStorage.getItem('ian-academie') || '';
+            
+            // Charger les checkboxes
+            checkboxes.forEach((checkbox, index) => {
+                const saved = localStorage.getItem(`checkbox-${index}`);
+                if (saved === 'true') {
+                    checkbox.checked = true;
+                    checkbox.closest('li').classList.add('checked');
+                }
+            });
+            
+            // Charger les notes
+            textareas.forEach((textarea, index) => {
+                const savedNote = localStorage.getItem(`note-${index}`);
+                if (savedNote) {
+                    textarea.value = savedNote;
+                }
+            });
+            
+            updateProgress();
+        }
+        
+        // Mettre à jour les statistiques de progression
+        function updateProgress() {
+            const checked = document.querySelectorAll('.competence-check:checked').length;
+            const percentage = Math.round((checked / checkboxes.length) * 100);
+            
+            checkedCount.textContent = checked;
+            completionRate.textContent = percentage + '%';
+            
+            // Mettre à jour la barre de progression dans la carte centrale
+            const centerProgress = document.getElementById('centerProgress');
+            if (centerProgress) {
+                // Calculer le pourcentage pour la carte centrale (5 items)
+                const centerCheckboxes = document.querySelectorAll('.center-card .competence-check');
+                const centerChecked = document.querySelectorAll('.center-card .competence-check:checked').length;
+                const centerPercentage = Math.round((centerChecked / centerCheckboxes.length) * 100);
+                centerProgress.style.width = centerPercentage + '%';
             }
-
-            // Auto-save pendant la saisie
-            textarea.addEventListener('input', () => {
-                localStorage.setItem(`note-${index}`, textarea.value);
+        }
+        
+        // Gestion des checkboxes
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.addEventListener('change', function() {
+                const li = this.closest('li');
+                if (this.checked) {
+                    li.classList.add('checked');
+                } else {
+                    li.classList.remove('checked');
+                }
+                localStorage.setItem(`checkbox-${index}`, this.checked);
+                updateProgress();
             });
         });
-
-        function saveNotes() {
-            alert('✅ Vos notes ont été sauvegardées automatiquement !');
-        }
-
-        // Ajuster la hauteur des textareas automatiquement
-        textareas.forEach(textarea => {
+        
+        // Permettre de cliquer sur le texte pour cocher
+        document.querySelectorAll('.item-text').forEach(text => {
+            text.addEventListener('click', function() {
+                const checkbox = this.closest('li').querySelector('input[type="checkbox"]');
+                checkbox.click();
+            });
+        });
+        
+        // Auto-save pour les champs de profil
+        [fullNameInput, disciplineInput, academieInput].forEach(input => {
+            input.addEventListener('input', function() {
+                localStorage.setItem(`ian-${this.id}`, this.value);
+            });
+        });
+        
+        // Auto-save pour les textareas
+        textareas.forEach((textarea, index) => {
             textarea.addEventListener('input', function() {
+                localStorage.setItem(`note-${index}`, textarea.value);
+                // Ajuster la hauteur automatiquement
                 this.style.height = 'auto';
                 this.style.height = this.scrollHeight + 'px';
             });
         });
+        
+        // Fonction de sauvegarde manuelle
+        function saveNotes() {
+            alert('✅ Toutes vos données ont été sauvegardées automatiquement !');
+        }
+        
+        // Fonction de réinitialisation
+        function resetAll() {
+            if (confirm('⚠️ Êtes-vous sûr de vouloir réinitialiser toutes les données ? Cette action est irréversible.')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+        
+        // Charger les données au démarrage
+        loadSavedData();
     </script>
 </body>
 </html>
