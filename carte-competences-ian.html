@@ -253,11 +253,19 @@
         .item-text {
             flex: 1;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         .card-content li.checked .item-text {
-            color: var(--text-light);
-            text-decoration: line-through;
+            background: linear-gradient(120deg, rgba(37, 99, 235, 0.08) 0%, rgba(124, 58, 237, 0.08) 100%);
+            padding: 4px 8px;
+            border-radius: 6px;
+            color: var(--text);
+        }
+
+        .center-card .card-content li.checked .item-text {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
         }
 
         .note-area {
@@ -489,11 +497,6 @@
                     <label>Discipline</label>
                     <input type="text" id="discipline" placeholder="Ex: Mathématiques, Français, Histoire-Géographie...">
                 </div>
-                
-                <div class="profile-field">
-                    <label>Académie</label>
-                    <input type="text" id="academie" placeholder="Ex: Lille, Paris, Lyon...">
-                </div>
 
                 <div class="profile-stats">
                     <div class="stat-box">
@@ -543,13 +546,7 @@
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">Travail en lien avec l'inspection générale</span>
-                        </li>
-                        <li>
-                            <div class="checkbox-wrapper">
-                                <input type="checkbox" class="competence-check">
-                            </div>
-                            <span class="item-text">Relais DNE auprès des DAN et inspecteurs territoriaux</span>
+                            <span class="item-text">Travail en lien avec les inspecteurs</span>
                         </li>
                     </ul>
                 </div>
@@ -601,7 +598,7 @@
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">Coordonner et accompagner la publication de scénarios</span>
+                            <span class="item-text">Coordonner et accompagner la publication de scénarios ou d'aide sous forme de tutoriel</span>
                         </li>
                     </ul>
                 </div>
@@ -647,7 +644,7 @@
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">Participer aux comptes Twitter disciplinaires</span>
+                            <span class="item-text">Alimenter le fil de comptes sur les réseaux (Tchap, Instagram, Linked-in ou autres)</span>
                         </li>
                     </ul>
                 </div>
@@ -715,31 +712,25 @@
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">Édubase : mutualisation des scénarios pédagogiques</span>
-                        </li>
-                        <li>
-                            <div class="checkbox-wrapper">
-                                <input type="checkbox" class="competence-check">
-                            </div>
                             <span class="item-text">Sites disciplinaires éduscol</span>
                         </li>
                         <li>
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">Lettres ÉduNum</span>
+                            <span class="item-text">Sites disciplinaires académiques</span>
                         </li>
                         <li>
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">Comptes Twitter disciplinaires</span>
+                            <span class="item-text">Portails de ressources disciplinaires</span>
                         </li>
                         <li>
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">Espace académique disciplinaire</span>
+                            <span class="item-text">Espaces de mutualisation disciplinaire</span>
                         </li>
                     </ul>
                 </div>
@@ -749,11 +740,23 @@
                 </div>
             </div>
 
-            <!-- Réseau et collaboration -->
-            <div class="card reseau-card">
+            <!-- Autres compétences -->
+            <div class="card">
                 <div class="card-header">
-                    <div class="card-icon icon-secondary">🤝</div>
-                    <div class="card-title">Réseau et collaboration</div>
+                    <div class="card-icon icon-secondary">✨</div>
+                    <div class="card-title">D'autres compétences à signaler</div>
+                </div>
+                <div class="note-area" style="margin-top: 0; padding-top: 0; border-top: none;">
+                    <label>Compétences supplémentaires</label>
+                    <textarea placeholder="Décrivez ici d'autres compétences que vous souhaitez partager..." style="min-height: 180px;"></textarea>
+                </div>
+            </div>
+
+            <!-- Groupes de travail -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-accent">💡</div>
+                    <div class="card-title">Proposition de groupes de travail</div>
                 </div>
                 <div class="card-content">
                     <ul>
@@ -761,37 +764,43 @@
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">33 experts DNE animant le réseau national</span>
+                            <span class="item-text">ENT</span>
                         </li>
                         <li>
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">Lien avec la direction du numérique pour l'éducation (DNE)</span>
+                            <span class="item-text">Vibe coding</span>
                         </li>
                         <li>
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">Collaboration avec les délégués académiques au numérique (DAN)</span>
+                            <span class="item-text">L'oral</span>
                         </li>
                         <li>
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">Travail avec l'inspection générale et les inspecteurs territoriaux</span>
+                            <span class="item-text">Les ressources de l'ENT</span>
                         </li>
                         <li>
                             <div class="checkbox-wrapper">
                                 <input type="checkbox" class="competence-check">
                             </div>
-                            <span class="item-text">Coordination avec les autres IAN de l'académie</span>
+                            <span class="item-text">Les EBEP</span>
+                        </li>
+                        <li>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" class="competence-check">
+                            </div>
+                            <span class="item-text">La forge des communs numériques</span>
                         </li>
                     </ul>
                 </div>
                 <div class="note-area">
-                    <label>Annotations</label>
-                    <textarea placeholder="Contacts et collaborations à noter..."></textarea>
+                    <label>Idées de travail en binôme</label>
+                    <textarea placeholder="Proposez ici des idées de collaboration ou de travail en binôme..."></textarea>
                 </div>
             </div>
         </div>
@@ -807,7 +816,6 @@
         // Éléments du profil
         const fullNameInput = document.getElementById('fullName');
         const disciplineInput = document.getElementById('discipline');
-        const academieInput = document.getElementById('academie');
         
         // Compteurs
         const completionRate = document.getElementById('completionRate');
@@ -826,7 +834,6 @@
             // Charger le profil
             fullNameInput.value = localStorage.getItem('ian-fullName') || '';
             disciplineInput.value = localStorage.getItem('ian-discipline') || '';
-            academieInput.value = localStorage.getItem('ian-academie') || '';
             
             // Charger les checkboxes
             checkboxes.forEach((checkbox, index) => {
@@ -890,7 +897,7 @@
         });
         
         // Auto-save pour les champs de profil
-        [fullNameInput, disciplineInput, academieInput].forEach(input => {
+        [fullNameInput, disciplineInput].forEach(input => {
             input.addEventListener('input', function() {
                 localStorage.setItem(`ian-${this.id}`, this.value);
             });
