@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte des compétences - IAN</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .header p {
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        .map-container {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .center-card {
+            grid-column: 5 / 9;
+            grid-row: 2 / 4;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .card-content ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .card-content li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-light);
+        }
+
+        .card-content li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .note-area {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 2px dashed var(--border);
+        }
+
+        .note-area label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .note-area textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .note-area textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Carte centrale IAN */
+        .center-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+        }
+
+        .center-card .card-header {
+            border-bottom-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .center-card .card-title {
+            color: white;
+            font-size: 24px;
+        }
+
+        .center-card .card-content {
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .center-card .card-content li {
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .center-card .card-content li::before {
+            color: white;
+        }
+
+        .center-card .note-area {
+            border-top-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .center-card .note-area label {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .center-card .note-area textarea {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .center-card .note-area textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .center-card .note-area textarea:focus {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Positionnements spécifiques */
+        .academie-card {
+            grid-column: 1 / 5;
+            grid-row: 1 / 3;
+        }
+
+        .national-card {
+            grid-column: 9 / 13;
+            grid-row: 1 / 3;
+        }
+
+        .ressources-card {
+            grid-column: 1 / 5;
+            grid-row: 3 / 5;
+        }
+
+        .outils-card {
+            grid-column: 9 / 13;
+            grid-row: 3 / 5;
+        }
+
+        .reseau-card {
+            grid-column: 4 / 10;
+            grid-row: 5 / 6;
+        }
+
+        /* Couleurs des icônes */
+        .icon-primary { background: var(--primary); }
+        .icon-secondary { background: var(--secondary); }
+        .icon-accent { background: var(--accent); }
+        .icon-success { background: var(--success); }
+        .icon-warning { background: var(--warning); }
+
+        /* Connexions visuelles */
+        .connector {
+            position: absolute;
+            background: var(--border);
+            z-index: -1;
+        }
+
+        .connector-h {
+            height: 2px;
+        }
+
+        .connector-v {
+            width: 2px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .buttons {
+                display: none;
+            }
+            .card {
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .map-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .center-card,
+            .academie-card,
+            .national-card,
+            .ressources-card,
+            .outils-card,
+            .reseau-card {
+                grid-column: 1 / -1;
+                grid-row: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Carte des compétences - IAN</h1>
+            <p>Interlocuteur académique pour le numérique</p>
+        </div>
+
+        <div class="map-container">
+            <!-- Carte centrale IAN -->
+            <div class="card center-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: rgba(255,255,255,0.2);">IAN</div>
+                    <div class="card-title">Profil et positionnement</div>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>Enseignant expert disciplinaire</li>
+                        <li>Membre d'un réseau national de 450+ enseignants</li>
+                        <li>13 réseaux académiques, 18 disciplines représentées</li>
+                        <li>Travail en lien avec l'inspection générale</li>
+                        <li>Relais DNE auprès des DAN et inspecteurs territoriaux</li>
+                    </ul>
+                </div>
+                <div class="note-area">
+                    <label>Notes personnelles</label>
+                    <textarea placeholder="Ajoutez vos notes ici..."></textarea>
+                </div>
+            </div>
+
+            <!-- Missions en académie -->
+            <div class="card academie-card">
+                <div class="card-header">
+                    <div class="card-icon icon-accent">🎯</div>
+                    <div class="card-title">Missions en académie</div>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>Porter les orientations de la stratégie nationale pour le numérique éducatif</li>
+                        <li>Faire connaître les ressources numériques éducatives</li>
+                        <li>Associé aux manifestations académiques</li>
+                        <li>Repérer les pratiques innovantes dans sa discipline</li>
+                        <li>Coordonner et accompagner la publication de scénarios</li>
+                    </ul>
+                </div>
+                <div class="note-area">
+                    <label>Annotations</label>
+                    <textarea placeholder="Vos observations..."></textarea>
+                </div>
+            </div>
+
+            <!-- Missions au niveau national -->
+            <div class="card national-card">
+                <div class="card-header">
+                    <div class="card-icon icon-primary">🌐</div>
+                    <div class="card-title">Missions au niveau national</div>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>Organiser la mutualisation des pratiques via Édubase</li>
+                        <li>Valoriser des projets académiques</li>
+                        <li>Contribuer aux sites disciplinaires éduscol</li>
+                        <li>Alimenter les lettres ÉduNum</li>
+                        <li>Participer aux comptes Twitter disciplinaires</li>
+                    </ul>
+                </div>
+                <div class="note-area">
+                    <label>Annotations</label>
+                    <textarea placeholder="Vos observations..."></textarea>
+                </div>
+            </div>
+
+            <!-- Ressources mobilisées -->
+            <div class="card ressources-card">
+                <div class="card-header">
+                    <div class="card-icon icon-success">📚</div>
+                    <div class="card-title">Ressources mobilisées</div>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>Lumni Enseignement</li>
+                        <li>Banques de ressources numériques éducatives (BRNE)</li>
+                        <li>Contenus d'accompagnement Édubase</li>
+                        <li>Lettres ÉduNum disciplinaires</li>
+                        <li>Projets développés par la DNE</li>
+                    </ul>
+                </div>
+                <div class="note-area">
+                    <label>Annotations</label>
+                    <textarea placeholder="Ressources à ajouter..."></textarea>
+                </div>
+            </div>
+
+            <!-- Outils de diffusion -->
+            <div class="card outils-card">
+                <div class="card-header">
+                    <div class="card-icon icon-warning">🛠️</div>
+                    <div class="card-title">Outils de diffusion</div>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>Édubase : mutualisation des scénarios pédagogiques</li>
+                        <li>Sites disciplinaires éduscol</li>
+                        <li>Lettres ÉduNum</li>
+                        <li>Comptes Twitter disciplinaires</li>
+                        <li>Espace académique disciplinaire</li>
+                    </ul>
+                </div>
+                <div class="note-area">
+                    <label>Annotations</label>
+                    <textarea placeholder="Outils complémentaires..."></textarea>
+                </div>
+            </div>
+
+            <!-- Réseau et collaboration -->
+            <div class="card reseau-card">
+                <div class="card-header">
+                    <div class="card-icon icon-secondary">🤝</div>
+                    <div class="card-title">Réseau et collaboration</div>
+                </div>
+                <div class="card-content">
+                    <ul>
+                        <li>33 experts DNE animant le réseau national</li>
+                        <li>Lien avec la direction du numérique pour l'éducation (DNE)</li>
+                        <li>Collaboration avec les délégués académiques au numérique (DAN)</li>
+                        <li>Travail avec l'inspection générale et les inspecteurs territoriaux</li>
+                        <li>Coordination avec les autres IAN de l'académie</li>
+                    </ul>
+                </div>
+                <div class="note-area">
+                    <label>Annotations</label>
+                    <textarea placeholder="Contacts et collaborations..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-primary" onclick="window.print()">📄 Imprimer la carte</button>
+            <button class="btn btn-secondary" onclick="saveNotes()">💾 Sauvegarder les notes</button>
+        </div>
+    </div>
+
+    <script>
+        // Sauvegarder les notes dans le localStorage
+        const textareas = document.querySelectorAll('textarea');
+        
+        // Charger les notes sauvegardées
+        textareas.forEach((textarea, index) => {
+            const savedNote = localStorage.getItem(`note-${index}`);
+            if (savedNote) {
+                textarea.value = savedNote;
+            }
+
+            // Auto-save pendant la saisie
+            textarea.addEventListener('input', () => {
+                localStorage.setItem(`note-${index}`, textarea.value);
+            });
+        });
+
+        function saveNotes() {
+            alert('✅ Vos notes ont été sauvegardées automatiquement !');
+        }
+
+        // Ajuster la hauteur des textareas automatiquement
+        textareas.forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            });
+        });
+    </script>
+</body>
+</html>
