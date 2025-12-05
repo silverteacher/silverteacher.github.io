@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide pour les étudiants : Dois-je utiliser l'IA ?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1f4d 0%, #2d3561 100%);
+            color: white;
+            padding: 20px 15px;
+        }
+        
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #1e2550 0%, #2a3166 100%);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo-box {
+            border: 4px solid #4ecdc4;
+            padding: 20px 30px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a8e0 100%);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+        
+        .logo-box h2 {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #ffffff 0%, #e0f7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .main-title {
+            flex: 1;
+            text-align: right;
+            margin-left: 30px;
+        }
+        
+        .main-title h1 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        
+        .main-title .highlight {
+            background: linear-gradient(135deg, #4ecdc4 0%, #44a8e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .question-section {
+            text-align: center;
+            margin: 30px 0 20px 0;
+        }
+        
+        .question-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .question-section .subtext {
+            color: #4ecdc4;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        .flow-container {
+            position: relative;
+            margin: 30px 0;
+        }
+        
+        .options-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .option-wrapper {
+            flex: 1;
+            max-width: 180px;
+            position: relative;
+        }
+        
+        .option-card {
+            background: linear-gradient(135deg, #4ecdc4 0%, #3db8b0 100%);
+            padding: 20px 12px;
+            border-radius: 25px;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+        
+        .option-card p {
+            color: #1a1f4d;
+            font-weight: 700;
+            font-size: 13px;
+            line-height: 1.3;
+        }
+        
+        .arrow-down {
+            width: 4px;
+            height: 30px;
+            background: white;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid white;
+        }
+        
+        .arrow-merge {
+            position: relative;
+            height: 30px;
+            margin: 0 auto;
+        }
+        
+        .arrow-merge-left {
+            width: 4px;
+            height: 15px;
+            background: white;
+            position: absolute;
+            left: 20%;
+        }
+        
+        .arrow-merge-right {
+            width: 4px;
+            height: 15px;
+            background: white;
+            position: absolute;
+            right: 20%;
+        }
+        
+        .arrow-horizontal {
+            height: 4px;
+            background: white;
+            position: absolute;
+            top: 15px;
+            left: 20%;
+            right: 20%;
+        }
+        
+        .arrow-center {
+            width: 4px;
+            height: 15px;
+            background: white;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 15px;
+        }
+        
+        .arrow-center::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid white;
+        }
+        
+        .response-box {
+            background: linear-gradient(135deg, #4ecdc4 0%, #3db8b0 100%);
+            padding: 15px 35px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 26px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+            color: #1a1f4d;
+            margin: 15px auto;
+            max-width: fit-content;
+        }
+        
+        .flow-step {
+            background: linear-gradient(135deg, #4ecdc4 0%, #3db8b0 100%);
+            padding: 20px 25px;
+            border-radius: 25px;
+            margin: 15px auto;
+            max-width: 520px;
+            color: #1a1f4d;
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+        
+        .flow-branches {
+            display: flex;
+            gap: 30px;
+            margin-top: 60px;
+            position: relative;
+        }
+        
+        .branch-left, .branch-right {
+            flex: 1;
+        }
+        
+        .sidebar {
+            background: rgba(30, 37, 80, 0.6);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border-left: 5px solid #4ecdc4;
+        }
+        
+        .sidebar h3 {
+            color: #4ecdc4;
+            font-size: 22px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .vocab-item {
+            margin-bottom: 15px;
+        }
+        
+        .vocab-item h4 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+        
+        .vocab-item p {
+            color: #c0d0e8;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #4ecdc4;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-box">
+                <h2>IA pour l'Éducation</h2>
+            </div>
+            <div class="main-title">
+                <h1>GUIDE POUR LES ÉTUDIANTS :<br>
+                <span class="highlight">DOIS-JE UTILISER L'IA ?</span></h1>
+            </div>
+        </div>
+        
+        <div class="question-section">
+            <h2>Pourquoi voulez-vous utiliser un</h2>
+            <h2>Chatbot IA ? <span class="subtext">Je veux qu'il...</span></h2>
+        </div>
+        
+        <div class="flow-container">
+            <!-- Row of options -->
+            <div class="options-row">
+                <div class="option-wrapper">
+                    <div class="option-card">
+                        <p>M'AIDE À DÉMARRER UN DEVOIR</p>
+                    </div>
+                </div>
+                <div class="option-wrapper">
+                    <div class="option-card">
+                        <p>M'AIDE À AMÉLIORER CE QUE J'AI DÉJÀ FAIT</p>
+                    </div>
+                </div>
+                <div class="option-wrapper">
+                    <div class="option-card">
+                        <p>EXPLIQUE UNE IDÉE EN TERMES PLUS SIMPLES OU D'UNE MANIÈRE DIFFÉRENTE</p>
+                    </div>
+                </div>
+                <div class="option-wrapper">
+                    <div class="option-card">
+                        <p>M'AIDE AVEC MES RECHERCHES ET À TROUVER DES FAITS, CITATIONS OU RESSOURCES</p>
+                    </div>
+                </div>
+                <div class="option-wrapper">
+                    <div class="option-card">
+                        <p>TERMINE COMPLÈTEMENT UN DEVOIR POUR MOI</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Arrows merging from options to responses -->
+            <div style="display: flex; justify-content: space-around; position: relative; margin-bottom: 20px;">
+                <!-- Left group (options 1-3) merging to YES -->
+                <div style="flex: 1; position: relative;">
+                    <div style="width: 4px; height: 30px; background: white; margin: 0 auto;"></div>
+                    <div style="width: 4px; height: 30px; background: white; margin: 0 auto; position: relative;">
+                        <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid white;"></div>
+                    </div>
+                </div>
+                
+                <!-- Middle option merging to YES, but -->
+                <div style="flex: 1; position: relative;">
+                    <div style="width: 4px; height: 60px; background: white; margin: 0 auto; position: relative;">
+                        <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid white;"></div>
+                    </div>
+                </div>
+                
+                <!-- Right option to NO -->
+                <div style="flex: 1; position: relative;">
+                    <div style="width: 4px; height: 30px; background: white; margin: 0 auto; position: relative;">
+                        <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid white;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Response buttons -->
+            <div style="display: flex; justify-content: space-around; gap: 40px; margin-bottom: 20px;">
+                <div class="response-box" style="flex: 1; max-width: 200px;">OUI</div>
+                <div class="response-box" style="flex: 1; max-width: 220px;">OUI, mais</div>
+                <div class="response-box" style="flex: 1; max-width: 200px;">NON</div>
+            </div>
+            
+            <!-- Arrows down from responses -->
+            <div style="display: flex; justify-content: space-around; gap: 40px; margin-bottom: 20px;">
+                <div style="flex: 1; max-width: 200px;">
+                    <div style="width: 4px; height: 30px; background: white; margin: 0 auto; position: relative;">
+                        <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid white;"></div>
+                    </div>
+                </div>
+                <div style="flex: 1; max-width: 220px;">
+                    <div style="width: 4px; height: 30px; background: white; margin: 0 auto; position: relative;">
+                        <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid white;"></div>
+                    </div>
+                </div>
+                <div style="flex: 1; max-width: 200px;">
+                    <div style="width: 4px; height: 30px; background: white; margin: 0 auto; position: relative;">
+                        <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid white;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Next steps -->
+            <div style="display: flex; justify-content: space-around; gap: 40px; margin-bottom: 30px;">
+                <!-- Left path -->
+                <div style="flex: 1; max-width: 200px;">
+                    <div class="flow-step" style="max-width: 100%;">
+                        DEMANDEZ À VOTRE ENSEIGNANT ET VÉRIFIEZ VOTRE MANUEL POUR VOUS ASSURER QUE C'EST ACCEPTABLE
+                    </div>
+                    <div style="width: 4px; height: 30px; background: white; margin: 0 auto; position: relative;">
+                        <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid white;"></div>
+                    </div>
+                    <div class="flow-step" style="max-width: 100%;">
+                        UTILISEZ UN OUTIL D'IA APPROPRIÉ ET SUIVEZ VOTRE TRAVAIL
+                    </div>
+                    <div style="width: 4px; height: 30px; background: white; margin: 0 auto; position: relative;">
+                        <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid white;"></div>
+                    </div>
+                    <div class="flow-step" style="max-width: 100%;">
+                        VÉRIFIEZ DEUX FOIS VOTRE TRAVAIL POUR LES HALLUCINATIONS ET LES BIAIS
+                    </div>
+                    <div style="width: 4px; height: 30px; background: white; margin: 0 auto; position: relative;">
+                        <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid white;"></div>
+                    </div>
+                    <div class="flow-step" style="max-width: 100%;">
+                        CITEZ L'UTILISATION DE L'OUTIL ET DÉCRIVEZ COMMENT VOUS L'AVEZ UTILISÉ
+                    </div>
+                </div>
+                
+                <!-- Middle path -->
+                <div style="flex: 1; max-width: 220px;">
+                    <div class="flow-step" style="max-width: 100%;">
+                        UTILISEZ UN OUTIL DE RECHERCHE GÉNÉRATIVE COMME PERPLEXITY POUR RÉDUIRE LES INEXACTITUDES
+                    </div>
+                    <div style="width: 4px; height: 30px; background: white; margin: 0 auto; position: relative;">
+                        <div style="position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid white;"></div>
+                    </div>
+                    <div class="flow-step" style="max-width: 100%;">
+                        VÉRIFIEZ AVEC DES SOURCES D'INFORMATION CONNUES
+                    </div>
+                </div>
+                
+                <!-- Right path -->
+                <div style="flex: 1; max-width: 200px;">
+                    <div class="flow-step" style="max-width: 100%;">
+                        SI L'IA FAIT LE TRAVAIL POUR VOUS, VOUS MANQUEZ L'APPRENTISSAGE - ESSAYEZ UNE AUTRE APPROCHE
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <h3>VOCABULAIRE CLÉ</h3>
+            
+            <div class="vocab-item">
+                <h4>HALLUCINATION :</h4>
+                <p>Lorsque les outils d'IA générative fournissent des informations incorrectes ou inventées.</p>
+            </div>
+            
+            <div class="vocab-item">
+                <h4>BIAIS :</h4>
+                <p>Les outils d'IA générative sont entraînés sur des données provenant d'Internet qui ne sont pas toujours justes ou équilibrées.</p>
+            </div>
+            
+            <div class="vocab-item">
+                <h4>CITER L'IA :</h4>
+                <p>Lorsque vous citez l'IA, indiquez le nom de l'outil ou des outils, comment vous l'avez utilisé et la date d'utilisation.</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>V3 (Mis à jour le 5/2/24)</strong> aiforeducation.io</p>
+        </div>
+    </div>
+</body>
+</html>
