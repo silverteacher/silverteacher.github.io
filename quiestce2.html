@@ -3,95 +3,501 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qui est-ce ?</title>
+    <title>Journée de l'Innovation Numérique - Ateliers</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f0f8ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
         }
-        h1 {
-            text-align: center;
-            color: #0066cc;
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2025/12/project-management-7440746_1920.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            opacity: 0.15;
+            z-index: 0;
         }
+
         .container {
-            display: flex;
-            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
         }
-        .names, .info {
-            flex: 1;
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            gap: 2rem;
+            align-items: start;
         }
-        button {
-            display: block;
+
+        .image-frame {
+            position: sticky;
+            top: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .image-frame img {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 5px;
-            background-color: #e6f2ff;
-            border: none;
-            border-radius: 3px;
+            height: auto;
+            border-radius: 12px;
+            display: block;
+        }
+
+        .workshops-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .workshop-item {
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .workshop-item:hover {
+            box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .workshop-header {
+            padding: 1.25rem 1.5rem;
             cursor: pointer;
-            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
         }
-        button:hover {
-            background-color: #cce5ff;
+
+        .workshop-header:hover {
+            background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
         }
-        #personInfo {
-            display: none;
+
+        .workshop-header.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .workshop-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .workshop-icon svg {
+            width: 20px;
+            height: 20px;
+            color: #667eea;
+        }
+
+        .workshop-header.active .workshop-icon svg {
+            color: white;
+        }
+
+        .workshop-title-container {
+            flex: 1;
+        }
+
+        .workshop-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.25rem;
+        }
+
+        .workshop-header.active .workshop-title {
+            color: white;
+        }
+
+        .workshop-gauge {
+            font-size: 0.85rem;
+            color: #718096;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .workshop-gauge svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .workshop-header.active .workshop-gauge {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .chevron {
+            transition: transform 0.3s ease;
+            color: #667eea;
+        }
+
+        .workshop-header.active .chevron {
+            transform: rotate(180deg);
+            color: white;
+        }
+
+        .workshop-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            background: white;
+        }
+
+        .workshop-content.active {
+            max-height: 500px;
+            padding: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .content-text {
+            color: #4a5568;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        .content-empty {
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        .inscription-container {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .inscription-button {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .inscription-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .inscription-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .image-frame {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .workshop-header {
+                padding: 1rem;
+            }
+
+            .workshop-title {
+                font-size: 1rem;
+            }
+
+            .inscription-container {
+                justify-content: center;
+            }
+
+            .inscription-button {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Qui est-ce ?</h1>
-    <div class="container">
-        <div class="names">
-            <h2>Noms</h2>
-            <button onclick="showInfo('Delphine CHIOCCI', 'Collège International Carnot- Lille', ['Histoire-Géographie', 'ENT', 'Eléa'])">Delphine CHIOCCI</button>
-            <button onclick="showInfo('Ugo LEENHARDT', 'Lycée André Malraux', ['SII', 'ENT', 'FABLAB', 'Micro:bit', 'Yes We Code'])">Ugo LEENHARDT</button>
-            <button onclick="showInfo('Rémi DEBROCK', 'Collège René Cassin - Lillers', ['Sciences de la Vie et de la Terre', 'PIX', 'Eléa'])">Rémi DEBROCK</button>
-            <button onclick="showInfo('Mathieu MALFOY', 'LP Professeur Clerc Outreau', ['Maths sciences', 'FABLAB', 'Micro:bit', 'Yes We Code'])">Mathieu MALFOY</button>
-            <button onclick="showInfo('Farid HAMIDAT', 'Collège Franklin à Lille', ['Mathématiques', 'FABLAB', 'PIX'])">Farid HAMIDAT</button>
-            <button onclick="showInfo('ANTHELME HAUCHECORNE', 'LYCÉE GASTON BERGER (LILLE)', ['Gestion de l\'Information Touristique', 'PIX', 'Intelligence artificielle'])">ANTHELME HAUCHECORNE</button>
-            <button onclick="showInfo('Fleury WILFRID', 'Lycée Guy Mollet Arras', ['Mathématiques', 'Sciences Numériques et Technologiques', 'Drone', 'FABLAB'])">Fleury WILFRID</button>
-            <button onclick="showInfo('Ugo BARBAY', 'Émile Zola Wattrelos', ['Droit & Économie', 'ENT', 'PIX'])">Ugo BARBAY</button>
-            <button onclick="showInfo('Karine POISSONNIER', 'Collège Boris Vian à Marck', ['Documentation', 'ENT', 'PIX', 'BCDI'])">Karine POISSONNIER</button>
-            <button onclick="showInfo('Christine ROUBISCOUL', 'College Simone Veil', ['SVT', 'ENT', 'PIX', 'Classe inversée'])">Christine ROUBISCOUL</button>
-            <button onclick="showInfo('Stéphane ROUBISCOUL', 'Collège Philippe de Commynes, Comines', ['Mathématiques', 'ENT', 'Escape game', 'Ludification'])">Stéphane ROUBISCOUL</button>
-            <button onclick="showInfo('Christophe DUBOIS', 'Lycée des 2 caps Marquise', ['économie gestion option commerce et vente', 'ENT', 'Livres numériques'])">Christophe DUBOIS</button>
-            <button onclick="showInfo('Nathalie MILLET', 'Lycée FENELON, LILLE', ['SVT', 'Escape game', 'Réalité virtuelle', 'Intelligence artificielle'])">Nathalie MILLET</button>
-            <button onclick="showInfo('JEROME CORNOLLE', 'LP LAVOISIER ROUBAIX', ['Lettres-Histoire-Geographie'])">JEROME CORNOLLE</button>
-            <button onclick="showInfo('Amandine QUIEVRYN', 'Lycée Maxence Van Der Meersch (ROUBAIX)', ['italien', 'ENT', 'PIX', 'Classe flexible', 'e-twinning', 'Erasmus+'])">Amandine QUIEVRYN</button>
-            <button onclick="showInfo('VALERIE PETIT', 'LP beaupré HAUBOURDIN', ['Eco-gestion', 'ENT', 'PIX', 'Escape game', 'Ludification'])">VALERIE PETIT</button>
-        </div>
-        <div class="info">
-            <h2>Informations</h2>
-            <div id="personInfo">
-                <h3 id="personName"></h3>
-                <p><strong>Établissement :</strong> <span id="personEstablishment"></span></p>
-                <p><strong>Compétences :</strong></p>
-                <ul id="personSkills"></ul>
-            </div>
-        </div>
-    </div>
+    <div id="root"></div>
 
-    <script>
-        function showInfo(name, establishment, skills) {
-            document.getElementById('personName').textContent = name;
-            document.getElementById('personEstablishment').textContent = establishment;
-            const skillsList = document.getElementById('personSkills');
-            skillsList.innerHTML = '';
-            skills.forEach(skill => {
-                const li = document.createElement('li');
-                li.textContent = skill;
-                skillsList.appendChild(li);
-            });
-            document.getElementById('personInfo').style.display = 'block';
+    <script type="text/babel">
+        const { useState } = React;
+
+        // Icônes SVG
+        const VideoIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+        );
+
+        const GamepadIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 00.658-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z" />
+            </svg>
+        );
+
+        const RobotIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 3.75H6.912a2.25 2.25 0 00-2.15 1.588L2.35 13.177a2.25 2.25 0 00-.1.661V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859M12 3v8.25m0 0l-3-3m3 3l3-3" />
+            </svg>
+        );
+
+        const BrainIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+            </svg>
+        );
+
+        const LightbulbIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+            </svg>
+        );
+
+        const WrenchIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z" />
+            </svg>
+        );
+
+        const DroneIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v3m0 0c-1.657 0-3 1.343-3 3v1.5m3-4.5c1.657 0 3 1.343 3 3v1.5M9 10.5v4.5m6-4.5v4.5m-9 0h12m-6 4.5h.01M8.25 19.5v-1.5m7.5 1.5v-1.5M4.5 9.75h1.5m12 0h1.5M6.75 6.75l1.5 1.5m7.5 0l1.5-1.5" />
+            </svg>
+        );
+
+        const VRIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        );
+
+        const ChevronDownIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+        );
+
+        const UsersIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+            </svg>
+        );
+
+        const ExternalLinkIcon = () => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            </svg>
+        );
+
+        const workshops = [
+            {
+                id: 1,
+                title: "Atelier WebTV \"Je fais de la télé\"",
+                gauge: 8,
+                icon: VideoIcon,
+                content: `Faire ses premiers pas avec la webTV :
+- Créer un projet d'animation en stop-motion motivant pour sa classe
+- Réaliser son premier reportage journalistique`
+            },
+            {
+                id: 2,
+                title: "Ludification et escape game",
+                gauge: 12,
+                icon: GamepadIcon,
+                content: `La ludification au service des apprentissages
+
+Au travers d'exemples concrets soutenus par un apport scientifique ciblé, vous découvrirez les potentiels de Genially pour la création d'aventures graphiques destinées à maintenir la motivation des élèves.`
+            },
+            {
+                id: 3,
+                title: "Atelier robotique",
+                gauge: 8,
+                icon: RobotIcon,
+                content: `Présentation de la liaison collèges/lycée autour du challenge Blaise Robotics : organisation, règlement, mise en place.
+
+Présentation des activités menées en cours d'années par les collégiens (classe de 3ème) et les lycéens (classe de 2nde SI-CIT)
+
+Présentation du Forum robotique et du club robotique (Lycée)
+
+Démonstration et activité de prise en main des robots Maqueen et Maqueen plus V3 (programmation graphique).`
+            },
+            {
+                id: 4,
+                title: "La bataille des IA",
+                gauge: 10,
+                icon: BrainIcon,
+                content: `Venez explorer les métiers de l'intelligence artificielle et réfléchir à ses enjeux. Imaginer une solution à un problème social ou environnemental en mobilisant des fonctions d'IA et en formant une équipe pluridisciplinaire.
+
+Des mini-jeux permettront de déconstruire les stéréotypes et aborder les questions de biais, de fiabilité et d'impact écologique de l'IA. Ces activités sont transférables et adaptables en classe sur d'autres sujets.`
+            },
+            {
+                id: 5,
+                title: "Construire sa pédagogie de projet avec les élèves",
+                gauge: 10,
+                icon: LightbulbIcon,
+                content: ""
+            },
+            {
+                id: 6,
+                title: "Fablab : donner vie à ses projets",
+                gauge: 10,
+                icon: WrenchIcon,
+                content: ""
+            },
+            {
+                id: 7,
+                title: "Atelier Drones - Découverte de l'option BIMD et du Drone Soccer",
+                gauge: 10,
+                icon: DroneIcon,
+                content: `Découverte de l'option BIMD (Brevet d'Initiation aux Métiers du Drone) et du Drone Soccer
+
+Initiation au monde des drones : pilotage, sécurité, usages professionnels et découverte du Drone Soccer, une activité mêlant technologie, esprit d'équipe et compétition.`
+            },
+            {
+                id: 8,
+                title: "La Réalité virtuelle au service de la relation client",
+                gauge: 10,
+                icon: VRIcon,
+                content: `Découverte de la réalité virtuelle pour se former à la relation client en situation immersive. On enfile un casque VR et on vit des scénarios concrets : accueil, écoute, gestion de conflit, conseil personnalisé.
+
+L'objectif est de développer empathie, posture professionnelle et aisance à l'oral grâce à un entraînement réaliste et ludique.`
+            }
+        ];
+
+        function WorkshopAccordion() {
+            const [activeId, setActiveId] = useState(null);
+
+            const toggleWorkshop = (id) => {
+                setActiveId(activeId === id ? null : id);
+            };
+
+            return (
+                <div className="container">
+                    <div className="main-layout">
+                        <div className="image-frame">
+                            <img 
+                                src="https://dane.site.ac-lille.fr/wp-content/uploads/sites/8/2025/12/Journee-de-linnovation-numerique-1.png" 
+                                alt="Journée de l'innovation numérique"
+                            />
+                        </div>
+
+                        <div className="workshops-section">
+                            <h1 className="section-title">Ateliers disponibles</h1>
+                            
+                            {workshops.map((workshop) => {
+                                const IconComponent = workshop.icon;
+                                const isActive = activeId === workshop.id;
+                                
+                                return (
+                                    <div key={workshop.id} className="workshop-item">
+                                        <div 
+                                            className={`workshop-header ${isActive ? 'active' : ''}`}
+                                            onClick={() => toggleWorkshop(workshop.id)}
+                                        >
+                                            <div className="workshop-icon">
+                                                <IconComponent />
+                                            </div>
+                                            <div className="workshop-title-container">
+                                                <div className="workshop-title">
+                                                    Atelier {workshop.id} : {workshop.title}
+                                                </div>
+                                                <div className="workshop-gauge">
+                                                    <UsersIcon />
+                                                    Jauge : {workshop.gauge} personnes
+                                                </div>
+                                            </div>
+                                            <div className="chevron">
+                                                <ChevronDownIcon />
+                                            </div>
+                                        </div>
+                                        <div className={`workshop-content ${isActive ? 'active' : ''}`}>
+                                            {workshop.content ? (
+                                                <div className="content-text">{workshop.content}</div>
+                                            ) : (
+                                                <div className="content-empty">Contenu à venir</div>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+
+                            <div className="inscription-container">
+                                <a href="#inscription" className="inscription-button">
+                                    <span>Cliquer ici pour vous inscrire</span>
+                                    <ExternalLinkIcon />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
         }
+
+        ReactDOM.render(<WorkshopAccordion />, document.getElementById('root'));
     </script>
 </body>
 </html>
