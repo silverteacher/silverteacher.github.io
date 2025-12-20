@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carte des Compétences Enseignantes</title>
+    <title>Ma carte des compétences</title>
     <style>
         * {
             margin: 0;
@@ -70,7 +70,7 @@
             width: 180px;
             height: 180px;
             border-radius: 50%;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            background: white;
             border: 4px solid #e2e8f0;
             display: flex;
             align-items: center;
@@ -80,6 +80,7 @@
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
         }
 
         .circle::before {
@@ -89,7 +90,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: rgba(102, 126, 234, 0.05);
             opacity: 0;
             transition: opacity 0.4s ease;
             border-radius: 50%;
@@ -97,22 +98,15 @@
 
         .competence-circle:hover .circle {
             transform: scale(1.15);
-            border-color: #667eea;
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .competence-circle:hover .circle::before {
-            opacity: 0.15;
+            opacity: 1;
         }
 
         .competence-circle.positioned .circle {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-color: #667eea;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
-        }
-
-        .competence-circle.positioned .circle::before {
-            opacity: 0;
+            transform: scale(1.05);
         }
 
         .competence-name {
@@ -123,10 +117,6 @@
             position: relative;
             z-index: 1;
             transition: color 0.3s ease;
-        }
-
-        .competence-circle.positioned .competence-name {
-            color: white;
         }
 
         .competence-icon {
@@ -146,11 +136,9 @@
             bottom: -15px;
             width: 12px;
             height: 12px;
-            background: #667eea;
             border-radius: 50%;
             opacity: 0;
             transition: all 0.3s ease;
-            box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
             animation: pulse 2s infinite;
         }
 
@@ -160,13 +148,16 @@
 
         @keyframes pulse {
             0% {
-                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+                transform: scale(1);
+                opacity: 1;
             }
             50% {
-                box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+                transform: scale(1.5);
+                opacity: 0.5;
             }
             100% {
-                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+                transform: scale(1);
+                opacity: 1;
             }
         }
 
@@ -175,7 +166,7 @@
             border-left: 5px solid #4299e1;
             padding: 25px 30px;
             border-radius: 15px;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
             color: #2c5282;
             font-size: 1.1em;
             line-height: 1.7;
@@ -183,6 +174,79 @@
 
         .instructions strong {
             color: #2d3748;
+        }
+
+        .identity-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .identity-input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .identity-input-group label {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 1em;
+            white-space: nowrap;
+        }
+
+        .identity-input-group input {
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: white;
+            min-width: 150px;
+        }
+
+        .identity-input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        #initialeInput {
+            min-width: 60px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 1.2em;
+        }
+
+        .identity-display {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 2px solid #667eea;
+            text-align: center;
+        }
+
+        .identity-display .identity-name {
+            font-size: 1.4em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .identity-placeholder {
+            color: #a0aec0;
+            font-style: italic;
         }
 
         .controls {
@@ -246,6 +310,13 @@
             margin-top: 10px;
         }
 
+        @media (max-width: 1024px) {
+            .competences-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 30px 20px;
@@ -255,18 +326,145 @@
                 font-size: 2em;
             }
 
+            .subtitle {
+                font-size: 1em;
+            }
+
+            .identity-card {
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+            }
+
+            .identity-input-group {
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .identity-input-group input {
+                width: 100%;
+            }
+
+            .identity-display {
+                width: 100%;
+                min-width: auto;
+            }
+
             .competences-grid {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 25px;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+                padding: 10px;
             }
 
             .circle {
-                width: 140px;
-                height: 140px;
+                width: 150px;
+                height: 150px;
+                padding: 15px;
             }
 
             .competence-name {
+                font-size: 0.95em;
+            }
+
+            .competence-icon {
+                font-size: 1.8em;
+            }
+
+            .instructions {
+                padding: 20px;
+                font-size: 1em;
+            }
+
+            .stats {
+                padding: 20px;
+            }
+
+            .stats-value {
+                font-size: 2.5em;
+            }
+
+            .btn {
+                padding: 12px 24px;
                 font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .subtitle {
+                font-size: 0.9em;
+            }
+
+            .competences-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+
+            .circle {
+                width: 120px;
+                height: 120px;
+                padding: 10px;
+            }
+
+            .competence-name {
+                font-size: 0.8em;
+            }
+
+            .competence-icon {
+                font-size: 1.5em;
+                margin-bottom: 5px;
+            }
+
+            .instructions {
+                padding: 15px;
+                font-size: 0.9em;
+            }
+
+            .stats-value {
+                font-size: 2em;
+            }
+
+            .stats-label {
+                font-size: 0.9em;
+            }
+
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 14px 20px;
+            }
+
+            .tooltip {
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .circle {
+                width: 100px;
+                height: 100px;
+            }
+
+            .competence-name {
+                font-size: 0.75em;
+            }
+
+            .competence-icon {
+                font-size: 1.3em;
             }
         }
 
@@ -322,12 +520,26 @@
     
     <div class="container">
         <header>
-            <h1>🎯 Mes Compétences Enseignantes</h1>
+            <h1>🎯 Ma carte des compétences</h1>
             <p class="subtitle">Positionnez-vous en cliquant sur chaque compétence</p>
         </header>
 
         <div class="instructions">
             💡 <strong>Mode d'emploi :</strong> Cliquez sur les cercles des compétences où vous vous sentez à l'aise. Les cercles sélectionnés changent de couleur. Vous pouvez cliquer à nouveau pour déselectionner.
+        </div>
+
+        <div class="identity-card">
+            <div class="identity-input-group">
+                <label for="prenomInput">👤 Prénom :</label>
+                <input type="text" id="prenomInput" placeholder="Entrez votre prénom" />
+            </div>
+            <div class="identity-input-group">
+                <label for="initialeInput">🔤 Initiale du nom :</label>
+                <input type="text" id="initialeInput" maxlength="1" placeholder="Ex: M" />
+            </div>
+            <div class="identity-display" id="identityDisplay">
+                <span class="identity-placeholder">Votre identité apparaîtra ici</span>
+            </div>
         </div>
 
         <div class="competences-grid" id="competencesGrid">
@@ -347,18 +559,18 @@
 
     <script>
         const competences = [
-            { name: 'Créativité', icon: '💡' },
-            { name: 'Planification', icon: '📅' },
-            { name: 'Gestion de classe', icon: '👥' },
-            { name: 'Évaluations', icon: '📝' },
-            { name: 'Différenciation', icon: '🎯' },
-            { name: 'Inclusion', icon: '🤝' },
-            { name: 'Numérique', icon: '💻' },
-            { name: 'Correction copies/cahiers', icon: '✍️' },
-            { name: 'Suivi des élèves', icon: '📊' },
-            { name: 'Empathie', icon: '❤️' },
-            { name: 'Communication', icon: '💬' },
-            { name: 'Adaptation', icon: '🔄' }
+            { name: 'Créativité', icon: '💡', color: '#a78bca' },
+            { name: 'Planification', icon: '📅', color: '#f9a8c0' },
+            { name: 'Gestion de classe', icon: '👥', color: '#f4e04d' },
+            { name: 'Évaluations', icon: '📝', color: '#9da3a6' },
+            { name: 'Différenciation', icon: '🎯', color: '#9dc1da' },
+            { name: 'Inclusion', icon: '🤝', color: '#a78bca' },
+            { name: 'Numérique', icon: '💻', color: '#f9a8c0' },
+            { name: 'Correction copies/cahiers', icon: '✍️', color: '#f4e04d' },
+            { name: 'Suivi des élèves', icon: '📊', color: '#9da3a6' },
+            { name: 'Empathie', icon: '❤️', color: '#9dc1da' },
+            { name: 'Communication', icon: '💬', color: '#a78bca' },
+            { name: 'Adaptation', icon: '🔄', color: '#f9a8c0' }
         ];
 
         let positionedCompetences = new Set();
@@ -371,6 +583,7 @@
                 const div = document.createElement('div');
                 div.className = 'competence-circle';
                 div.dataset.index = index;
+                div.dataset.color = comp.color;
                 div.innerHTML = `
                     <div class="circle">
                         <div style="text-align: center;">
@@ -382,7 +595,7 @@
                 `;
 
                 div.addEventListener('click', function() {
-                    togglePosition(this, index);
+                    togglePosition(this, index, comp.color);
                 });
 
                 div.addEventListener('mouseenter', function(e) {
@@ -399,13 +612,29 @@
             updateStats();
         }
 
-        function togglePosition(element, index) {
+        function togglePosition(element, index, color) {
+            const circle = element.querySelector('.circle');
+            const marker = element.querySelector('.position-marker');
+            const name = element.querySelector('.competence-name');
+            
             if (positionedCompetences.has(index)) {
+                // Désélectionner : retour à l'état vide
                 positionedCompetences.delete(index);
                 element.classList.remove('positioned');
+                circle.style.background = 'white';
+                circle.style.borderColor = '#e2e8f0';
+                circle.style.boxShadow = 'none';
+                name.style.color = '#2d3748';
+                marker.style.background = '';
             } else {
+                // Sélectionner : appliquer la couleur
                 positionedCompetences.add(index);
                 element.classList.add('positioned');
+                circle.style.background = color;
+                circle.style.borderColor = color;
+                circle.style.boxShadow = `0 10px 30px ${color}80`;
+                name.style.color = 'white';
+                marker.style.background = color;
             }
             updateStats();
         }
@@ -416,11 +645,22 @@
         }
 
         function resetAll() {
-            if (confirm('Voulez-vous vraiment réinitialiser tous les positionnements ?')) {
+            if (confirm('Voulez-vous vraiment réinitialiser tous les positionnements et votre identité ?')) {
                 positionedCompetences.clear();
                 document.querySelectorAll('.competence-circle').forEach(el => {
                     el.classList.remove('positioned');
+                    const circle = el.querySelector('.circle');
+                    const marker = el.querySelector('.position-marker');
+                    const name = el.querySelector('.competence-name');
+                    circle.style.background = 'white';
+                    circle.style.borderColor = '#e2e8f0';
+                    circle.style.boxShadow = 'none';
+                    name.style.color = '#2d3748';
+                    marker.style.background = '';
                 });
+                prenomInput.value = '';
+                initialeInput.value = '';
+                updateIdentity();
                 updateStats();
             }
         }
@@ -456,6 +696,29 @@
 
         // Initialisation
         initCompetences();
+
+        // Gestion de l'identité
+        const prenomInput = document.getElementById('prenomInput');
+        const initialeInput = document.getElementById('initialeInput');
+        const identityDisplay = document.getElementById('identityDisplay');
+
+        function updateIdentity() {
+            const prenom = prenomInput.value.trim();
+            const initiale = initialeInput.value.trim().toUpperCase();
+
+            if (prenom || initiale) {
+                const fullName = prenom + (initiale ? ` ${initiale}.` : '');
+                identityDisplay.innerHTML = `<span class="identity-name">${fullName}</span>`;
+            } else {
+                identityDisplay.innerHTML = '<span class="identity-placeholder">Votre identité apparaîtra ici</span>';
+            }
+        }
+
+        prenomInput.addEventListener('input', updateIdentity);
+        initialeInput.addEventListener('input', function() {
+            this.value = this.value.toUpperCase();
+            updateIdentity();
+        });
     </script>
 </body>
 </html>
