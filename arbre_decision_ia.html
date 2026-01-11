@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arbre de Décision IA - DNE Hauts-de-France</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e0e0e0;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #4a5568;
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #4a5568;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .author {
+            color: #718096;
+            font-size: 0.85em;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #4a5568;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: #f7fafc;
+            border: 2px solid #cbd5e0;
+            padding: 18px 25px;
+            border-radius: 8px;
+            font-size: 1.05em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            color: #2d3748;
+        }
+
+        .option-btn:hover {
+            background: #edf2f7;
+            border-color: #4a5568;
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-btn.selected {
+            background: #4a5568;
+            color: white;
+            border-color: #4a5568;
+        }
+
+        .yes-no-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .yes-no-btn {
+            flex: 1;
+            max-width: 200px;
+            padding: 20px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid;
+        }
+
+        .yes-btn {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: #4CAF50;
+            color: #4CAF50;
+        }
+
+        .yes-btn:hover, .yes-btn.selected {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .no-btn {
+            background: rgba(244, 67, 54, 0.1);
+            border-color: #f44336;
+            color: #f44336;
+        }
+
+        .no-btn:hover, .no-btn.selected {
+            background: #f44336;
+            color: white;
+        }
+
+        .result-container {
+            display: none;
+            text-align: center;
+        }
+
+        .result-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 2em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .result-success {
+            color: #4CAF50;
+        }
+
+        .result-warning {
+            color: #ff9800;
+        }
+
+        .result-danger {
+            color: #f44336;
+        }
+
+        .result-content {
+            background: rgba(0, 0, 0, 0.03);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .result-content h3 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .result-content ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        .result-content li {
+            margin-bottom: 8px;
+        }
+
+        .recommendation-box {
+            background: #f7fafc;
+            border-left: 4px solid #4a5568;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .danger-box {
+            background: #f8d7da;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #4a5568;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2d3748;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .step-indicator {
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .question {
+                font-size: 1.1em;
+            }
+
+            .option-btn {
+                padding: 15px 20px;
+                font-size: 0.95em;
+            }
+
+            .yes-no-container {
+                flex-direction: column;
+            }
+
+            .yes-no-btn {
+                max-width: 100%;
+            }
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Puis-je utiliser l'IA ?</h1>
+            <p class="subtitle">Arbre de décision - Cadre DNE Hauts-de-France</p>
+            <p class="author">Créée par Amélie Silvert avec l'aide de l'IA</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <div class="step-indicator" id="stepIndicator">Question 1/5</div>
+
+        <!-- Question initiale : Type de contenu -->
+        <div class="question-container active" id="q0">
+            <div class="question">Quel type de contenu souhaitez-vous créer avec l'IA ?</div>
+            <div class="options">
+                <button class="option-btn" onclick="selectType('image')">
+                    🖼️ Une IMAGE<br>
+                    <small style="opacity: 0.7;">Illustration, schéma, pictogramme, support visuel...</small>
+                </button>
+                <button class="option-btn" onclick="selectType('text')">
+                    📝 Un TEXTE<br>
+                    <small style="opacity: 0.7;">Cours, exercice, reformulation, ressource pédagogique...</small>
+                </button>
+            </div>
+        </div>
+
+        <!-- Questions pour IMAGES -->
+        <div class="question-container" id="q1_image">
+            <div class="question">Savez-vous créer cette image vous-même (dessin, photo, montage simple) ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('competence_image', true)">OUI</button>
+                <button class="yes-no-btn no-btn" onclick="answer('competence_image', false)">NON</button>
+            </div>
+        </div>
+
+        <div class="question-container" id="q2_image">
+            <div class="question">Avez-vous cherché dans des banques d'images libres (Unsplash, Pexels, Pixabay, Wikimedia Commons) ou de pictogrammes (Arasaac, Sclera, The Noun Project) ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('recherche_ressources_image', true)">OUI</button>
+                <button class="yes-no-btn no-btn" onclick="answer('recherche_ressources_image', false)">NON</button>
+            </div>
+        </div>
+
+        <div class="question-container" id="q3_image">
+            <div class="question">Avez-vous trouvé une ressource existante qui convient ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('ressource_trouvee_image', true)">OUI</button>
+                <button class="yes-no-btn no-btn" onclick="answer('ressource_trouvee_image', false)">NON</button>
+            </div>
+        </div>
+
+        <div class="question-container" id="q4_image">
+            <div class="question">Avez-vous le temps de créer cette image vous-même ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('temps_image', true)">OUI</button>
+                <button class="yes-no-btn no-btn" onclick="answer('temps_image', false)">NON</button>
+            </div>
+        </div>
+
+        <div class="question-container" id="q5_image">
+            <div class="question">L'image contiendra-t-elle des données personnelles ou des visages de personnes réelles/identifiables ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('donnees_perso_image', true)">OUI</button>
+                <button class="yes-no-btn no-btn" onclick="answer('donnees_perso_image', false)">NON</button>
+            </div>
+        </div>
+
+        <div class="question-container" id="q6_image">
+            <div class="question">Est-ce vraiment nécessaire ou est-ce surtout par confort ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('necessite_image', true)">VRAIMENT NÉCESSAIRE</button>
+                <button class="yes-no-btn no-btn" onclick="answer('necessite_image', false)">PAR CONFORT</button>
+            </div>
+        </div>
+
+        <!-- Questions pour TEXTES -->
+        <div class="question-container" id="q1_text">
+            <div class="question">Savez-vous rédiger/créer ce texte vous-même ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('competence_text', true)">OUI</button>
+                <button class="yes-no-btn no-btn" onclick="answer('competence_text', false)">NON</button>
+            </div>
+        </div>
+
+        <div class="question-container" id="q2_text">
+            <div class="question">Avez-vous cherché dans des ressources existantes (Éduscol, Canopé, Wikipedia, Google Scholar, manuels, mutualisation entre collègues) ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('recherche_ressources_text', true)">OUI</button>
+                <button class="yes-no-btn no-btn" onclick="answer('recherche_ressources_text', false)">NON</button>
+            </div>
+        </div>
+
+        <div class="question-container" id="q3_text">
+            <div class="question">Avez-vous trouvé une ressource existante qui convient ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('ressource_trouvee_text', true)">OUI</button>
+                <button class="yes-no-btn no-btn" onclick="answer('ressource_trouvee_text', false)">NON</button>
+            </div>
+        </div>
+
+        <div class="question-container" id="q4_text">
+            <div class="question">Avez-vous le temps de le rédiger vous-même ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('temps_text', true)">OUI</button>
+                <button class="yes-no-btn no-btn" onclick="answer('temps_text', false)">NON</button>
+            </div>
+        </div>
+
+        <div class="question-container" id="q5_text">
+            <div class="question">Le texte contiendra-t-il des données personnelles (noms d'élèves, informations sensibles) ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('donnees_perso_text', true)">OUI</button>
+                <button class="yes-no-btn no-btn" onclick="answer('donnees_perso_text', false)">NON</button>
+            </div>
+        </div>
+
+        <div class="question-container" id="q6_text">
+            <div class="question">Est-ce vraiment nécessaire ou est-ce surtout par confort ?</div>
+            <div class="yes-no-container">
+                <button class="yes-no-btn yes-btn" onclick="answer('necessite_text', true)">VRAIMENT NÉCESSAIRE</button>
+                <button class="yes-no-btn no-btn" onclick="answer('necessite_text', false)">PAR CONFORT</button>
+            </div>
+        </div>
+
+        <!-- Résultats -->
+        <div class="result-container" id="result"></div>
+
+        <div class="btn-container">
+            <button class="btn btn-primary" id="restartBtn" onclick="restart()" style="display: none;">🔄 Recommencer</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        let totalSteps = 7; // 1 type + 6 questions
+        let contentType = '';
+        let answers = {};
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('stepIndicator').textContent = `Question ${currentStep + 1}/${totalSteps}`;
+        }
+
+        function selectType(type) {
+            contentType = type;
+            answers.type = type;
+            document.getElementById('q0').classList.remove('active');
+            
+            if (type === 'image') {
+                document.getElementById('q1_image').classList.add('active');
+            } else {
+                document.getElementById('q1_text').classList.add('active');
+            }
+            
+            currentStep++;
+            updateProgress();
+        }
+
+        function answer(question, value) {
+            answers[question] = value;
+            
+            // Définir la séquence des questions
+            const imageQuestions = ['q1_image', 'q2_image', 'q3_image', 'q4_image', 'q5_image', 'q6_image'];
+            const textQuestions = ['q1_text', 'q2_text', 'q3_text', 'q4_text', 'q5_text', 'q6_text'];
+            const currentQuestions = contentType === 'image' ? imageQuestions : textQuestions;
+            
+            // Trouver la question active
+            let currentIndex = -1;
+            for (let i = 0; i < currentQuestions.length; i++) {
+                if (document.getElementById(currentQuestions[i]).classList.contains('active')) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+            
+            if (currentIndex !== -1) {
+                document.getElementById(currentQuestions[currentIndex]).classList.remove('active');
+                
+                // Logique de décision anticipée pour certaines réponses
+                if (contentType === 'image') {
+                    if (question === 'competence_image' && value === true) {
+                        showResult(); return;
+                    }
+                    if (question === 'recherche_ressources_image' && value === false) {
+                        showResult(); return;
+                    }
+                    if (question === 'ressource_trouvee_image' && value === true) {
+                        showResult(); return;
+                    }
+                    if (question === 'temps_image' && value === true) {
+                        showResult(); return;
+                    }
+                    if (question === 'donnees_perso_image' && value === true) {
+                        showResult(); return;
+                    }
+                    if (question === 'necessite_image' && value === false) {
+                        showResult(); return;
+                    }
+                } else {
+                    if (question === 'competence_text' && value === true) {
+                        showResult(); return;
+                    }
+                    if (question === 'recherche_ressources_text' && value === false) {
+                        showResult(); return;
+                    }
+                    if (question === 'ressource_trouvee_text' && value === true) {
+                        showResult(); return;
+                    }
+                    if (question === 'temps_text' && value === true) {
+                        showResult(); return;
+                    }
+                    if (question === 'donnees_perso_text' && value === true) {
+                        showResult(); return;
+                    }
+                    if (question === 'necessite_text' && value === false) {
+                        showResult(); return;
+                    }
+                }
+                
+                // Continuer à la question suivante
+                if (currentIndex < currentQuestions.length - 1) {
+                    document.getElementById(currentQuestions[currentIndex + 1]).classList.add('active');
+                    currentStep++;
+                    updateProgress();
+                } else {
+                    showResult();
+                }
+            }
+        }
+
+        function showResult() {
+            currentStep = totalSteps;
+            updateProgress();
+            document.getElementById('stepIndicator').style.display = 'none';
+            
+            let result = evaluateAnswers();
+            
+            const resultContainer = document.getElementById('result');
+            resultContainer.innerHTML = result.html;
+            resultContainer.classList.add('active');
+            
+            document.getElementById('restartBtn').style.display = 'block';
+        }
+
+        function evaluateAnswers() {
+            if (contentType === 'image') {
+                return evaluateImageAnswers();
+            } else {
+                return evaluateTextAnswers();
+            }
+        }
+
+        function evaluateImageAnswers() {
+            // STOP 1 : Vous savez le faire
+            if (answers.competence_image === true) {
+                return {
+                    html: `
+                        <div class="result-icon">🎨</div>
+                        <div class="result-title" style="color: #2d3748;">N'utilisez PAS l'IA</div>
+                        <div class="result-content">
+                            <div class="info-box">
+                                <strong>✨ Utilisez vos compétences humaines</strong>
+                                <p>Vous savez créer cette image vous-même : c'est la meilleure option !</p>
+                            </div>
+                            
+                            <h3>Pourquoi privilégier votre création ?</h3>
+                            <ul>
+                                <li><strong>Pédagogie :</strong> vous montrez l'exemple à vos élèves</li>
+                                <li><strong>Qualité :</strong> adaptée précisément à votre besoin</li>
+                                <li><strong>Authenticité :</strong> votre touche personnelle</li>
+                                <li><strong>Frugalité numérique :</strong> impact environnemental minimal</li>
+                                <li><strong>Développement professionnel :</strong> vous enrichissez vos compétences</li>
+                            </ul>
+                            
+                            <h3>🛠️ Outils simples pour créer :</h3>
+                            <div class="recommendation-box">
+                                <ul>
+                                    <li><strong>Dessin/schéma :</strong> papier-crayon puis scanner/photo</li>
+                                    <li><strong>Photo :</strong> smartphone, appareil photo</li>
+                                    <li><strong>Montage simple :</strong> PowerPoint, Canva gratuit, GIMP</li>
+                                    <li><strong>Infographie :</strong> Canva, Piktochart, Genially</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="warning-box">
+                                <strong>💡 Réflexion :</strong> Quel message envoyons-nous aux élèves si nous utilisons l'IA pour des tâches que nous maîtrisons ?
+                            </div>
+                        </div>
+                    `
+                };
+            }
+            
+            // STOP 2 : Pas cherché de ressources
+            if (answers.recherche_ressources_image === false) {
+                return {
+                    html: `
+                        <div class="result-icon">🔍</div>
+                        <div class="result-title" style="color: #2d3748;">Cherchez d'abord des ressources existantes</div>
+                        <div class="result-content">
+                            <div class="warning-box">
+                                <strong>⚠️ Principe de réutilisation</strong>
+                                <p>Avant de générer quoi que ce soit, explorez les ressources libres et gratuites déjà disponibles.</p>
+                            </div>
+                            
+                            <h3>📚 Banques d'images libres et gratuites :</h3>
+                            <div class="recommendation-box">
+                                <strong>Photographies :</strong>
+                                <ul>
+                                    <li><strong>Unsplash :</strong> <a href="https://unsplash.com" target="_blank">unsplash.com</a> - Photos haute qualité</li>
+                                    <li><strong>Pexels :</strong> <a href="https://pexels.com" target="_blank">pexels.com</a> - Photos et vidéos</li>
+                                    <li><strong>Pixabay :</strong> <a href="https://pixabay.com" target="_blank">pixabay.com</a> - Images et illustrations</li>
+                                    <li><strong>Wikimedia Commons :</strong> <a href="https://commons.wikimedia.org" target="_blank">commons.wikimedia.org</a> - Ressources éducatives</li>
+                                </ul>
+                                
+                                <strong>Pictogrammes et icônes :</strong>
+                                <ul>
+                                    <li><strong>Arasaac :</strong> <a href="https://arasaac.org" target="_blank">arasaac.org</a> - CAA (Communication Alternative)</li>
+                                    <li><strong>Sclera :</strong> <a href="https://sclera.be" target="_blank">sclera.be</a> - Pictogrammes noir et blanc</li>
+                                    <li><strong>The Noun Project :</strong> <a href="https://thenounproject.com" target="_blank">thenounproject.com</a> - Icônes (version gratuite)</li>
+                                </ul>
+                                
+                                <strong>Illustrations éducatives :</strong>
+                                <ul>
+                                    <li><strong>OpenClipart :</strong> cliparts vectoriels</li>
+                                    <li><strong>Flaticon :</strong> icônes et illustrations simples</li>
+                                </ul>
+                            </div>
+                            
+                            <h3>✅ Après avoir cherché :</h3>
+                            <ul>
+                                <li>Si vous trouvez → utilisez la ressource existante</li>
+                                <li>Si vous ne trouvez vraiment rien → recommencez l'arbre de décision</li>
+                            </ul>
+                            
+                            <div class="info-box">
+                                <strong>🌱 Frugalité numérique :</strong> Réutiliser des ressources existantes est plus écologique que générer de nouvelles images avec l'IA.
+                            </div>
+                        </div>
+                    `
+                };
+            }
+            
+            // STOP 3 : Ressource trouvée
+            if (answers.ressource_trouvee_image === true) {
+                return {
+                    html: `
+                        <div class="result-icon">✅</div>
+                        <div class="result-title" style="color: #2d3748;">Utilisez la ressource existante</div>
+                        <div class="result-content">
+                            <div class="recommendation-box">
+                                <strong>👍 Excellente démarche !</strong>
+                                <p>Vous avez trouvé une ressource qui convient : utilisez-la plutôt que l'IA.</p>
+                            </div>
+                            
+                            <h3>Avantages de la réutilisation :</h3>
+                            <ul>
+                                <li><strong>Gain de temps :</strong> pas de génération, vérification, ajustements</li>
+                                <li><strong>Qualité garantie :</strong> ressources souvent créées par des professionnels</li>
+                                <li><strong>Frugalité :</strong> impact environnemental minimal</li>
+                                <li><strong>Fiabilité :</strong> pas de risque de biais algorithmiques</li>
+                                <li><strong>Légalité :</strong> licences libres claires</li>
+                            </ul>
+                            
+                            <h3>⚖️ Points de vigilance :</h3>
+                            <div class="warning-box">
+                                <ul>
+                                    <li><strong>Licence :</strong> vérifiez les conditions d'utilisation (CC0, CC-BY...)</li>
+                                    <li><strong>Attribution :</strong> citez la source si nécessaire</li>
+                                    <li><strong>Modification :</strong> vérifiez si vous pouvez adapter l'image</li>
+                                    <li><strong>Usage commercial :</strong> certaines licences l'interdisent</li>
+                                </ul>
+                            </div>
+                            
+                            <h3>💡 Pour aller plus loin :</h3>
+                            <ul>
+                                <li>Créez une bibliothèque personnelle de ressources favorites</li>
+                                <li>Partagez vos trouvailles avec vos collègues</li>
+                                <li>Apprenez à vos élèves à chercher des ressources libres</li>
+                            </ul>
+                        </div>
+                    `
+                };
+            }
+            
+            // STOP 4 : Vous avez le temps
+            if (answers.temps_image === true) {
+                return {
+                    html: `
+                        <div class="result-icon">⏰</div>
+                        <div class="result-title" style="color: #2d3748;">Privilégiez votre création personnelle</div>
+                        <div class="result-content">
+                            <div class="info-box">
+                                <strong>🎯 Vous avez le temps : c'est l'occasion parfaite !</strong>
+                                <p>Créer l'image vous-même sera plus enrichissant et pédagogiquement pertinent.</p>
+                            </div>
+                            
+                            <h3>Pourquoi créer plutôt que générer ?</h3>
+                            <ul>
+                                <li><strong>Modèle pour les élèves :</strong> vous incarnez la créativité et l'effort</li>
+                                <li><strong>Personnalisation :</strong> exactement ce dont vous avez besoin</li>
+                                <li><strong>Développement professionnel :</strong> enrichissement de vos compétences</li>
+                                <li><strong>Authenticité :</strong> votre style, votre vision</li>
+                                <li><strong>Impact environnemental :</strong> création locale vs serveurs IA</li>
+                            </ul>
+                            
+                            <h3>🛠️ Suggestions selon votre besoin :</h3>
+                            <div class="recommendation-box">
+                                <strong>Pour un schéma/infographie :</strong>
+                                <ul>
+                                    <li>PowerPoint ou Keynote (formes, SmartArt)</li>
+                                    <li>Canva gratuit (nombreux templates)</li>
+                                    <li>Draw.io / Diagrams.net (gratuit, schémas)</li>
+                                </ul>
+                                
+                                <strong>Pour une illustration simple :</strong>
+                                <ul>
+                                    <li>Dessin papier + scan/photo</li>
+                                    <li>Applications tablette (Procreate, Concepts...)</li>
+                                    <li>GIMP (gratuit, retouche photo)</li>
+                                </ul>
+                                
+                                <strong>Pour un pictogramme :</strong>
+                                <ul>
+                                    <li>Powerpoint (formes géométriques)</li>
+                                    <li>Inkscape (gratuit, dessin vectoriel)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="warning-box">
+                                <strong>💭 Question de fond :</strong> Si nous prenons le temps de préparer nos cours mais pas de créer nos supports, quel message envoyons-nous sur la valeur du processus créatif ?
+                            </div>
+                        </div>
+                    `
+                };
+            }
+            
+            // STOP 5 : Données personnelles
+            if (answers.donnees_perso_image === true) {
+                return {
+                    html: `
+                        <div class="result-icon">❌</div>
+                        <div class="result-title result-danger">N'utilisez JAMAIS l'IA</div>
+                        <div class="result-content">
+                            <div class="danger-box">
+                                <strong>⚠️ RGPD - Interdiction absolue</strong>
+                                <p>Utiliser l'IA avec des données personnelles ou visages identifiables est une violation du RGPD.</p>
+                            </div>
+                            
+                            <h3>Pourquoi c'est interdit ?</h3>
+                            <ul>
+                                <li><strong>Protection des mineurs :</strong> obligation légale stricte</li>
+                                <li><strong>Données biométriques :</strong> catégorie sensible du RGPD</li>
+                                <li><strong>Droit à l'image :</strong> protection des personnes</li>
+                                <li><strong>Traçabilité impossible :</strong> où vont les données ?</li>
+                                <li><strong>Sanctions :</strong> amendes jusqu'à 4% du CA ou 20M€</li>
+                            </ul>
+                            
+                            <h3>✅ Alternatives conformes :</h3>
+                            <div class="recommendation-box">
+                                <ul>
+                                    <li><strong>Photos de banques d'images :</strong> personnes non identifiables</li>
+                                    <li><strong>Illustrations/dessins :</strong> personnages fictifs</li>
+                                    <li><strong>Pictogrammes :</strong> représentations schématiques</li>
+                                    <li><strong>Silhouettes :</strong> formes sans détails identifiants</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `
+                };
+            }
+            
+            // STOP 6 : Par confort
+            if (answers.necessite_image === false) {
+                return {
+                    html: `
+                        <div class="result-icon">🌱</div>
+                        <div class="result-title" style="color: #2d3748;">Frugalité numérique : n'utilisez pas l'IA</div>
+                        <div class="result-content">
+                            <div class="warning-box">
+                                <strong>⚠️ Impact environnemental</strong>
+                                <p>Générer une image par IA consomme autant d'énergie que charger complètement un smartphone. Par confort n'est pas une raison suffisante.</p>
+                            </div>
+                            
+                            <h3>Enjeux de la frugalité numérique :</h3>
+                            <ul>
+                                <li><strong>Consommation électrique :</strong> datacenter énergivores</li>
+                                <li><strong>Empreinte carbone :</strong> équivalent à plusieurs km en voiture</li>
+                                <li><strong>Ressources en eau :</strong> refroidissement des serveurs</li>
+                                <li><strong>Modèle éducatif :</strong> quelle sobriété enseignons-nous ?</li>
+                            </ul>
+                            
+                            <h3>🎯 Principe de nécessité :</h3>
+                            <div class="recommendation-box">
+                                <p>L'IA générative devrait être réservée aux cas où :</p>
+                                <ul>
+                                    <li>C'est <strong>impossible</strong> autrement (compétences manquantes)</li>
+                                    <li>Aucune <strong>ressource existante</strong> ne convient</li>
+                                    <li>Le <strong>temps est critique</strong> pour une urgence réelle</li>
+                                    <li>La <strong>valeur pédagogique</strong> justifie le coût environnemental</li>
+                                </ul>
+                            </div>
+                            
+                            <h3>✅ Alternatives rapides :</h3>
+                            <ul>
+                                <li><strong>Banques d'images :</strong> recherche en 2-3 minutes</li>
+                                <li><strong>Réutilisation :</strong> vos anciennes créations</li>
+                                <li><strong>Mutualisation :</strong> demandez à vos collègues</li>
+                                <li><strong>Simplification :</strong> avez-vous vraiment besoin de cette image ?</li>
+                            </ul>
+                            
+                            <div class="info-box">
+                                <strong>💡 Éducation à la sobriété :</strong> En tant qu'enseignants, nous formons les citoyens de demain. Nos choix numériques sont aussi un enseignement.
+                            </div>
+                        </div>
+                    `
+                };
+            }
+            
+            // RARE : Si toutes les étapes sont passées
+            return {
+                html: `
+                    <div class="result-icon">⚠️</div>
+                    <div class="result-title result-warning">L'IA peut être envisagée avec vigilance</div>
+                    <div class="result-content">
+                        <div class="recommendation-box">
+                            <strong>Votre situation :</strong>
+                            <ul>
+                                <li>✓ Vous ne savez pas créer cette image</li>
+                                <li>✓ Vous avez cherché dans les ressources existantes</li>
+                                <li>✓ Aucune ressource ne convient</li>
+                                <li>✓ Vous n'avez pas le temps de l'apprendre</li>
+                                <li>✓ Pas de données personnelles</li>
+                                <li>✓ C'est vraiment nécessaire</li>
+                            </ul>
+                        </div>
+                        
+                        <p style="margin: 20px 0;">Dans ce cas rare, l'IA peut être une option acceptable. Mais restez vigilant !</p>
+                        
+                        <h3>⚠️ Obligations strictes :</h3>
+                        <div class="warning-box">
+                            <ul>
+                                <li><strong>Vérification systématique :</strong> biais, stéréotypes, exactitude</li>
+                                <li><strong>Transparence :</strong> mentionnez "Image générée par IA"</li>
+                                <li><strong>Esprit critique :</strong> expliquez aux élèves le processus</li>
+                                <li><strong>Plusieurs générations :</strong> comparez 3-4 versions minimum</li>
+                                <li><strong>Prompts précis :</strong> décrivez contexte, style, diversité</li>
+                            </ul>
+                        </div>
+                        
+                        <h3>🎯 Checklist avant génération :</h3>
+                        <ol>
+                            <li>Ai-je vraiment épuisé toutes les alternatives ?</li>
+                            <li>La valeur pédagogique justifie-t-elle l'impact environnemental ?</li>
+                            <li>Suis-je prêt à vérifier et corriger les biais éventuels ?</li>
+                            <li>Vais-je être transparent avec les élèves ?</li>
+                            <li>Puis-je en faire une opportunité d'apprentissage ?</li>
+                        </ol>
+                        
+                        <h3>🛠️ Si vous décidez de l'utiliser :</h3>
+                        <div class="recommendation-box">
+                            <p>Cherchez des outils respectueux :</p>
+                            <ul>
+                                <li>Privilégiez les outils avec hébergement européen</li>
+                                <li>Vérifiez les politiques de confidentialité</li>
+                                <li>Évitez les services qui réutilisent vos données</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="info-box">
+                            <strong>💭 Dernière réflexion :</strong> Même dans ce cas limite, demandez-vous si apprendre à créer cette image vous-même ne serait pas finalement plus enrichissant à long terme.
+                        </div>
+                    </div>
+                `
+            };
+        }
+
+        function evaluateTextAnswers() {
+            // STOP 1 : Vous savez le faire
+            if (answers.competence_text === true) {
+                return {
+                    html: `
+                        <div class="result-icon">✍️</div>
+                        <div class="result-title" style="color: #2d3748;">N'utilisez PAS l'IA</div>
+                        <div class="result-content">
+                            <div class="info-box">
+                                <strong>✨ Utilisez votre expertise</strong>
+                                <p>Vous savez rédiger ce texte vous-même : c'est la meilleure option !</p>
+                            </div>
+                            
+                            <h3>Pourquoi privilégier votre rédaction ?</h3>
+                            <ul>
+                                <li><strong>Expertise disciplinaire :</strong> votre connaissance approfondie du sujet</li>
+                                <li><strong>Adaptation pédagogique :</strong> vous connaissez vos élèves</li>
+                                <li><strong>Authenticité :</strong> votre voix, votre style d'enseignement</li>
+                                <li><strong>Modèle pour les élèves :</strong> vous incarnez l'effort intellectuel</li>
+                                <li><strong>Frugalité numérique :</strong> impact environnemental minimal</li>
+                                <li><strong>Propriété intellectuelle :</strong> votre travail reste vôtre</li>
+                            </ul>
+                            
+                            <h3>💡 Avantages pédagogiques :</h3>
+                            <div class="recommendation-box">
+                                <ul>
+                                    <li>Vous adaptez le niveau de langue précisément</li>
+                                    <li>Vous intégrez les exemples de votre contexte</li>
+                                    <li>Vous prévoyez les difficultés spécifiques</li>
+                                    <li>Vous créez une progression cohérente</li>
+                                    <li>Vous développez vos compétences rédactionnelles</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="warning-box">
+                                <strong>🎯 Question essentielle :</strong> Si l'IA peut faire notre travail intellectuel à notre place, quelle est alors notre valeur ajoutée en tant qu'enseignants ?
+                            </div>
+                        </div>
+                    `
+                };
+            }
+            
+            // STOP 2 : Pas cherché de ressources
+            if (answers.recherche_ressources_text === false) {
+                return {
+                    html: `
+                        <div class="result-icon">🔍</div>
+                        <div class="result-title" style="color: #2d3748;">Cherchez d'abord des ressources existantes</div>
+                        <div class="result-content">
+                            <div class="warning-box">
+                                <strong>⚠️ Principe de réutilisation</strong>
+                                <p>Des milliers de ressources pédagogiques de qualité existent déjà. Cherchez avant de générer !</p>
+                            </div>
+                            
+                            <h3>📚 Ressources pédagogiques officielles :</h3>
+                            <div class="recommendation-box">
+                                <strong>Institutions :</strong>
+                                <ul>
+                                    <li><strong>Éduscol :</strong> <a href="https://eduscol.education.fr" target="_blank">eduscol.education.fr</a> - Ressources officielles MEN</li>
+                                    <li><strong>Canopé :</strong> <a href="https://www.reseau-canope.fr" target="_blank">reseau-canope.fr</a> - Formation et ressources</li>
+                                    <li><strong>Académies :</strong> sites disciplinaires de votre académie</li>
+                                    <li><strong>CNED :</strong> ressources pédagogiques publiques</li>
+                                </ul>
+                                
+                                <strong>Bases de connaissances :</strong>
+                                <ul>
+                                    <li><strong>Wikipedia :</strong> <a href="https://fr.wikipedia.org" target="_blank">fr.wikipedia.org</a> - Connaissance encyclopédique</li>
+                                    <li><strong>Wikiversité :</strong> <a href="https://fr.wikiversity.org" target="_blank">fr.wikiversity.org</a> - Cours libres</li>
+                                    <li><strong>Vikidia :</strong> encyclopédie pour les 8-13 ans</li>
+                                </ul>
+                                
+                                <strong>Recherche académique :</strong>
+                                <ul>
+                                    <li><strong>Google Scholar :</strong> <a href="https://scholar.google.com" target="_blank">scholar.google.com</a> - Articles scientifiques</li>
+                                    <li><strong>HAL :</strong> <a href="https://hal.science" target="_blank">hal.science</a> - Archives ouvertes françaises</li>
+                                    <li><strong>OpenEdition :</strong> revues en sciences humaines et sociales</li>
+                                </ul>
+                                
+                                <strong>Mutualisation :</strong>
+                                <ul>
+                                    <li><strong>Collègues :</strong> votre équipe pédagogique</li>
+                                    <li><strong>Réseaux disciplinaires :</strong> listes de diffusion, forums</li>
+                                    <li><strong>Manuels scolaires :</strong> ressources complémentaires en ligne</li>
+                                </ul>
+                            </div>
+                            
+                            <h3>✅ Méthodologie de recherche :</h3>
+                            <ol>
+                                <li>Définissez précisément votre besoin</li>
+                                <li>Consultez d'abord les ressources officielles (Éduscol, Canopé)</li>
+                                <li>Explorez les sites académiques disciplinaires</li>
+                                <li>Cherchez dans Wikipedia/Wikiversité pour le contenu</li>
+                                <li>Contactez vos collègues (mutualisation)</li>
+                                <li>Seulement après → envisagez autre chose</li>
+                            </ol>
+                            
+                            <div class="info-box">
+                                <strong>🌱 Frugalité et qualité :</strong> Les ressources existantes sont souvent créées par des experts, validées, et leur réutilisation est écologique.
+                            </div>
+                        </div>
+                    `
+                };
+            }
+            
+            // STOP 3 : Ressource trouvée
+            if (answers.ressource_trouvee_text === true) {
+                return {
+                    html: `
+                        <div class="result-icon">✅</div>
+                        <div class="result-title" style="color: #2d3748;">Utilisez et adaptez la ressource existante</div>
+                        <div class="result-content">
+                            <div class="recommendation-box">
+                                <strong>👍 Excellente démarche !</strong>
+                                <p>Vous avez trouvé une ressource : utilisez-la et adaptez-la à votre contexte plutôt que de générer avec l'IA.</p>
+                            </div>
+                            
+                            <h3>Avantages de l'adaptation :</h3>
+                            <ul>
+                                <li><strong>Qualité vérifiée :</strong> ressources souvent créées par des experts</li>
+                                <li><strong>Gain de temps :</strong> adaptation plus rapide que création</li>
+                                <li><strong>Apprentissage :</strong> vous enrichissez vos compétences</li>
+                                <li><strong>Frugalité :</strong> impact environnemental minimal</li>
+                                <li><strong>Fiabilité :</strong> sources vérifiables et citables</li>
+                                <li><strong>Pas d'hallucinations :</strong> contrairement à l'IA</li>
+                            </ul>
+                            
+                            <h3>🛠️ Comment adapter une ressource :</h3>
+                            <div class="recommendation-box">
+                                <ol>
+                                    <li><strong>Évaluez la pertinence :</strong> correspond-elle à votre objectif ?</li>
+                                    <li><strong>Adaptez le niveau :</strong> simplifiez ou complexifiez</li>
+                                    <li><strong>Contextualisez :</strong> exemples locaux, actualité</li>
+                                    <li><strong>Personnalisez :</strong> ajoutez votre touche pédagogique</li>
+                                    <li><strong>Citez la source :</strong> respect de la propriété intellectuelle</li>
+                                </ol>
+                            </div>
+                            
+                            <h3>⚖️ Propriété intellectuelle :</h3>
+                            <div class="warning-box">
+                                <ul>
+                                    <li><strong>Licence :</strong> vérifiez les droits (CC, domaine public...)</li>
+                                    <li><strong>Citation :</strong> mentionnez l'auteur et la source</li>
+                                    <li><strong>Modification :</strong> respectez les conditions de la licence</li>
+                                    <li><strong>Diffusion :</strong> respectez les restrictions éventuelles</li>
+                                </ul>
+                            </div>
+                            
+                            <h3>💡 Pour aller plus loin :</h3>
+                            <ul>
+                                <li>Créez une bibliothèque de ressources favorites</li>
+                                <li>Partagez vos adaptations avec vos collègues</li>
+                                <li>Apprenez aux élèves à chercher et adapter des sources</li>
+                            </ul>
+                        </div>
+                    `
+                };
+            }
+            
+            // STOP 4 : Vous avez le temps
+            if (answers.temps_text === true) {
+                return {
+                    html: `
+                        <div class="result-icon">⏰</div>
+                        <div class="result-title" style="color: #2d3748;">Rédigez vous-même ce texte</div>
+                        <div class="result-content">
+                            <div class="info-box">
+                                <strong>🎯 Vous avez le temps : profitez-en !</strong>
+                                <p>Rédiger vous-même sera plus enrichissant professionnellement et pédagogiquement plus pertinent.</p>
+                            </div>
+                            
+                            <h3>Pourquoi rédiger plutôt que générer ?</h3>
+                            <ul>
+                                <li><strong>Réflexion pédagogique :</strong> le processus d'écriture structure votre pensée</li>
+                                <li><strong>Expertise renforcée :</strong> vous approfondissez vos connaissances</li>
+                                <li><strong>Adaptation parfaite :</strong> exactement ce dont vos élèves ont besoin</li>
+                                <li><strong>Modèle pour les élèves :</strong> vous incarnez l'effort intellectuel</li>
+                                <li><strong>Propriété intellectuelle :</strong> c'est vraiment votre travail</li>
+                                <li><strong>Pas d'hallucinations :</strong> vous maîtrisez la véracité</li>
+                            </ul>
+                            
+                            <h3>💡 Bénéfices du processus de rédaction :</h3>
+                            <div class="recommendation-box">
+                                <ul>
+                                    <li>Vous identifiez les points difficiles pour les élèves</li>
+                                    <li>Vous anticipez leurs questions et incompréhensions</li>
+                                    <li>Vous créez une progression cohérente</li>
+                                    <li>Vous développez votre expertise disciplinaire</li>
+                                    <li>Vous enrichissez vos compétences rédactionnelles</li>
+                                </ul>
+                            </div>
+                            
+                            <h3>🛠️ Outils d'aide à la rédaction (sans IA) :</h3>
+                            <ul>
+                                <li><strong>Correcteurs :</strong> Antidote, LanguageTool, correcteurs intégrés</li>
+                                <li><strong>Dictionnaires :</strong> CNRTL, dictionnaires en ligne</li>
+                                <li><strong>Thésaurus :</strong> enrichissement vocabulaire</li>
+                                <li><strong>Vérificateurs :</strong> Wikipedia, sources académiques</li>
+                            </ul>
+                            
+                            <div class="warning-box">
+                                <strong>💭 Réflexion pédagogique :</strong> Si nous déléguons notre réflexion à l'IA quand nous avons le temps, que demandons-nous réellement aux élèves lorsqu'ils doivent rédiger ?
+                            </div>
+                        </div>
+                    `
+                };
+            }
+            
+            // STOP 5 : Données personnelles
+            if (answers.donnees_perso_text === true) {
+                return {
+                    html: `
+                        <div class="result-icon">❌</div>
+                        <div class="result-title result-danger">N'utilisez JAMAIS l'IA</div>
+                        <div class="result-content">
+                            <div class="danger-box">
+                                <strong>⚠️ RGPD - Interdiction absolue</strong>
+                                <p>Utiliser l'IA avec des données personnelles est une violation grave du RGPD.</p>
+                            </div>
+                            
+                            <h3>Pourquoi c'est interdit ?</h3>
+                            <ul>
+                                <li><strong>Protection des mineurs :</strong> obligation légale stricte</li>
+                                <li><strong>Confidentialité :</strong> où vont les données ?</li>
+                                <li><strong>Traçabilité impossible :</strong> réutilisation potentielle</li>
+                                <li><strong>Sanctions :</strong> amendes jusqu'à 4% du CA ou 20M€</li>
+                                <li><strong>Confiance :</strong> responsabilité éthique envers les familles</li>
+                            </ul>
+                            
+                            <h3>Données personnelles concernées :</h3>
+                            <ul>
+                                <li>Noms et prénoms d'élèves</li>
+                                <li>Informations sur la santé, le handicap</li>
+                                <li>Résultats scolaires individuels</li>
+                                <li>Adresses, coordonnées</li>
+                                <li>Toute information permettant l'identification</li>
+                            </ul>
+                            
+                            <h3>✅ Solutions conformes :</h3>
+                            <div class="recommendation-box">
+                                <ul>
+                                    <li><strong>Anonymisation complète :</strong> remplacer par codes (Élève A, B, C)</li>
+                                    <li><strong>Données fictives uniquement :</strong> créer des exemples génériques</li>
+                                    <li><strong>Travail hors ligne :</strong> outils locaux si nécessaire</li>
+                                    <li><strong>Demandez-vous :</strong> ai-je vraiment besoin de ces données ?</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `
+                };
+            }
+            
+            // STOP 6 : Par confort
+            if (answers.necessite_text === false) {
+                return {
+                    html: `
+                        <div class="result-icon">🌱</div>
+                        <div class="result-title" style="color: #2d3748;">Frugalité numérique : n'utilisez pas l'IA</div>
+                        <div class="result-content">
+                            <div class="warning-box">
+                                <strong>⚠️ Impact environnemental</strong>
+                                <p>Une requête à ChatGPT consomme 10x plus d'énergie qu'une recherche Google. Par confort n'est pas une raison suffisante.</p>
+                            </div>
+                            
+                            <h3>Enjeux de la frugalité numérique :</h3>
+                            <ul>
+                                <li><strong>Consommation électrique :</strong> datacenters très énergivores</li>
+                                <li><strong>Empreinte carbone :</strong> équivalent à plusieurs km en voiture</li>
+                                <li><strong>Ressources en eau :</strong> refroidissement des serveurs IA</li>
+                                <li><strong>Extraction de ressources :</strong> métaux rares pour les GPUs</li>
+                                <li><strong>Modèle éducatif :</strong> quelle sobriété enseignons-nous ?</li>
+                            </ul>
+                            
+                            <h3>🎯 Principe de nécessité absolue :</h3>
+                            <div class="recommendation-box">
+                                <p>L'IA générative devrait être réservée aux cas où :</p>
+                                <ul>
+                                    <li>Vous <strong>ne savez vraiment pas faire</strong> (compétences absentes)</li>
+                                    <li><strong>Aucune ressource existante</strong> ne convient après recherche approfondie</li>
+                                    <li>Vous <strong>n'avez vraiment pas le temps</strong> (urgence justifiée)</li>
+                                    <li>La <strong>valeur pédagogique</strong> compense largement l'impact</li>
+                                </ul>
+                                <p><strong>Le confort personnel ne suffit PAS.</strong></p>
+                            </div>
+                            
+                            <h3>✅ Alternatives rapides et écologiques :</h3>
+                            <ul>
+                                <li><strong>Recherche documentaire :</strong> 5-10 minutes dans Éduscol/Canopé</li>
+                                <li><strong>Réutilisation :</strong> vos anciens cours</li>
+                                <li><strong>Mutualisation :</strong> message à vos collègues</li>
+                                <li><strong>Simplification :</strong> est-ce vraiment indispensable ?</li>
+                                <li><strong>Rédaction rapide :</strong> brouillon puis amélioration</li>
+                            </ul>
+                            
+                            <div class="info-box">
+                                <strong>🎓 Cohérence éducative :</strong> Nous enseignons le développement durable et l'esprit critique. Nos pratiques numériques doivent refléter ces valeurs.
+                            </div>
+                            
+                            <div class="warning-box">
+                                <strong>💭 Question éthique :</strong> Si nous utilisons l'IA par simple confort alors que nous avons le temps et les compétences, quel message envoyons-nous aux élèves sur l'effort, l'apprentissage et la responsabilité environnementale ?
+                            </div>
+                        </div>
+                    `
+                };
+            }
+            
+            // RARE : Si toutes les étapes sont passées
+            return {
+                html: `
+                    <div class="result-icon">⚠️</div>
+                    <div class="result-title result-warning">L'IA peut être envisagée avec vigilance extrême</div>
+                    <div class="result-content">
+                        <div class="recommendation-box">
+                            <strong>Votre situation :</strong>
+                            <ul>
+                                <li>✓ Vous ne savez pas rédiger ce contenu</li>
+                                <li>✓ Vous avez cherché dans les ressources existantes</li>
+                                <li>✓ Aucune ressource ne convient</li>
+                                <li>✓ Vous n'avez vraiment pas le temps</li>
+                                <li>✓ Pas de données personnelles</li>
+                                <li>✓ C'est vraiment nécessaire</li>
+                            </ul>
+                        </div>
+                        
+                        <p style="margin: 20px 0;">Dans ce cas exceptionnel, l'IA peut être envisagée. Mais restez extrêmement vigilant !</p>
+                        
+                        <h3>⚠️ Obligations strictes et non négociables :</h3>
+                        <div class="danger-box">
+                            <ul>
+                                <li><strong>Fact-checking systématique :</strong> l'IA invente des informations (hallucinations)</li>
+                                <li><strong>Vérification des sources :</strong> recoupez avec sources fiables</li>
+                                <li><strong>Réécriture substantielle :</strong> ne copiez JAMAIS tel quel</li>
+                                <li><strong>Propriété intellectuelle :</strong> ne présentez jamais comme votre œuvre originale</li>
+                                <li><strong>Transparence :</strong> mentionnez l'usage de l'IA si diffusé</li>
+                            </ul>
+                        </div>
+                        
+                        <h3>🎯 Checklist avant d'utiliser l'IA :</h3>
+                        <ol>
+                            <li>Ai-je <strong>vraiment</strong> épuisé toutes les alternatives ?</li>
+                            <li>La valeur pédagogique justifie-t-elle l'impact environnemental ?</li>
+                            <li>Suis-je capable de vérifier l'exactitude du contenu généré ?</li>
+                            <li>Vais-je réécrire substantiellement avec mon expertise ?</li>
+                            <li>Puis-je assumer la responsabilité du contenu ?</li>
+                        </ol>
+                        
+                        <h3>✅ Si vous décidez vraiment de l'utiliser :</h3>
+                        <div class="recommendation-box">
+                            <strong>Utilisez l'IA comme outil d'aide, PAS comme rédacteur :</strong>
+                            <ul>
+                                <li><strong>Brainstorming :</strong> idées de plan, angles d'approche</li>
+                                <li><strong>Structure :</strong> proposition d'organisation</li>
+                                <li><strong>Brouillon :</strong> base à retravailler entièrement</li>
+                            </ul>
+                            
+                            <strong>Processus recommandé :</strong>
+                            <ol>
+                                <li>Générez plusieurs versions</li>
+                                <li>Vérifiez TOUTES les informations factuelles</li>
+                                <li>Réécrivez avec vos mots et votre expertise</li>
+                                <li>Adaptez à votre contexte pédagogique</li>
+                                <li>Relisez comme si c'était votre texte (car ça le devient)</li>
+                            </ol>
+                        </div>
+                        
+                        <h3>⚠️ Risques spécifiques aux textes générés par IA :</h3>
+                        <div class="warning-box">
+                            <ul>
+                                <li><strong>Hallucinations :</strong> inventions de faits, dates, citations</li>
+                                <li><strong>Sources fantômes :</strong> références inexistantes</li>
+                                <li><strong>Biais culturels :</strong> perspective anglo-saxonne dominante</li>
+                                <li><strong>Généralités :</strong> manque de spécificité et profondeur</li>
+                                <li><strong>Obsolescence :</strong> données de formation limitées dans le temps</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="info-box">
+                            <strong>💭 Ultime réflexion :</strong> Même dans ce cas limite, est-ce que prendre le temps d'apprendre à créer ce contenu ne serait pas plus enrichissant pour votre développement professionnel à long terme ? L'IA est un outil, pas un substitut à l'expertise pédagogique.
+                        </div>
+                    </div>
+                `
+            };
+        }
+
+        function restart() {
+            currentStep = 0;
+            contentType = '';
+            answers = {};
+            
+            // Réinitialiser toutes les questions
+            document.querySelectorAll('.question-container').forEach(q => q.classList.remove('active'));
+            document.getElementById('q0').classList.add('active');
+            
+            // Cacher le résultat
+            document.getElementById('result').classList.remove('active');
+            document.getElementById('restartBtn').style.display = 'none';
+            
+            // Réinitialiser la barre de progression
+            updateProgress();
+            document.getElementById('stepIndicator').style.display = 'block';
+        }
+
+        // Initialisation
+        updateProgress();
+    </script>
+</body>
+</html>
