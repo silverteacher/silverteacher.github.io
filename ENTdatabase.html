@@ -28,7 +28,6 @@ html { height: auto; }
 body{
   font-family:'Segoe UI', system-ui, sans-serif;
   margin:0;
-  /* DÉGRADÉ DE FOND CONSERVÉ POUR LA VUE ET L'EXPORT */
   background:linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
   min-height:100vh;
   color:var(--text-main);
@@ -129,7 +128,44 @@ body{
 
 .hidden { display:none !important; }
 
-/* NOUVEAU: Style des crédits */
+/* ═══ NOUVEAU : Filtre Profil ═══ */
+.profile-filter-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.profile-pill {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 2px solid #cbd5e1;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.18s;
+  background: #f1f5f9;
+  color: #334155;
+}
+.profile-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+.profile-pill.active {
+  color: white !important;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+}
+
+/* Badge profil dominant dans le tableau */
+.profil-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  color: white;
+}
+
+/* Crédits */
 .credits {
   text-align: center;
   margin-top: 40px;
@@ -231,9 +267,16 @@ body{
         </div>
       </div>
 
+      <!-- ═══ NOUVEAU : Sélecteur de profil ═══ -->
+      <div class="card" id="profileFilterCard">
+        <div class="card-title">🎭 Filtrer par profil utilisateur</div>
+        <div class="profile-filter-wrap" id="profileFilterBtns"></div>
+      </div>
+      <!-- ══════════════════════════════════════ -->
+
       <div style="display:flex; flex-direction:column; gap:20px;">
         <div class="card">
-          <div class="card-title">📊 Top Usages Établissement</div>
+          <div class="card-title" id="chartDetailAppsTitle">📊 Top Usages Établissement</div>
           <div class="chart-container-sm">
             <canvas id="chartDetailApps"></canvas>
           </div>
@@ -247,7 +290,7 @@ body{
       </div>
 
       <div class="card" style="margin-top:20px;">
-        <div class="card-title">📋 Statistiques détaillées</div>
+        <div class="card-title" id="tableDetailTitle">📋 Statistiques détaillées</div>
         <table style="width:100%; border-collapse:collapse; font-size:13px;">
           <thead style="background:#e2e8f0; text-align:left;">
             <tr>
@@ -256,7 +299,7 @@ body{
               <th style="padding:12px; font-weight:800; color:#0f172a; border-bottom:2px solid #94a3b8;">Profil Dominant</th>
             </tr>
           </thead>
-          <tbody id="detailTableBody"> </tbody>
+          <tbody id="detailTableBody"></tbody>
         </table>
       </div>
 
@@ -266,180 +309,328 @@ body{
 </div>
 
 <footer class="credits">
-  Crédits : **Amélie Silvert** (<a href="mailto:amelie.silvert@region-academique-hdf.fr" style="color:#64748b; text-decoration:none;">amelie.silvert@region-academique-hdf.fr</a>) - DRANE de Lille
+  Crédits : <strong>Amélie Silvert</strong> (<a href="mailto:amelie.silvert@region-academique-hdf.fr" style="color:#64748b; text-decoration:none;">amelie.silvert@region-academique-hdf.fr</a>) - DRANE de Lille
 </footer>
 
 <script>
-// --- GLOBAL STATE ---
+// ─── ÉTAT GLOBAL ───────────────────────────────────────────────
 let DATA = {
   schools: {},
   globalStats: { totalAccess:0, totalSchools:0, meanAccess:0, profiles:{}, apps:{}}
 };
-let currentView = 'global';
-let currentUAI = null;
-let charts = {}; // Stocke les instances de Chart.js
+let currentView      = 'global';
+let currentUAI       = null;
+let selectedProfiles = new Set(); // Set vide = tous les profils
+let charts           = {};
 
-// --- PARSER ---
+// ─── Palette couleurs par profil ───────────────────────────────
+const PROFILE_PALETTE = {
+  'Élève':      '#1e40af',
+  'Enseignant': '#059669',
+  'Parent':     '#d97706',
+  'Personnel':  '#7c3aed',
+  'Direction':  '#dc2626',
+  'Invité':     '#0891b2',
+};
+const PROFILE_EMOJI = {
+  'Élève': '🎒', 'Enseignant': '📚', 'Parent': '👪',
+  'Personnel': '🏫', 'Direction': '🏛️', 'Invité': '👤'
+};
+function profilColor(p)  { return PROFILE_PALETTE[p] || '#64748b'; }
+function profilEmoji(p)  { return PROFILE_EMOJI[p]   || '👤'; }
+
+// ─── UPLOAD ────────────────────────────────────────────────────
 const fileInput = document.getElementById('fileInput');
 document.getElementById('uploadZone').addEventListener('click', () => fileInput.click());
 fileInput.addEventListener('change', handleFile);
-
-document.getElementById('uploadZone').addEventListener('dragover', e => { e.preventDefault(); e.currentTarget.style.borderColor = 'blue'; });
-document.getElementById('uploadZone').addEventListener('dragleave', e => { e.preventDefault(); e.currentTarget.style.borderColor = '#94a3b8'; });
+document.getElementById('uploadZone').addEventListener('dragover',  e => { e.preventDefault(); e.currentTarget.style.borderColor='blue'; });
+document.getElementById('uploadZone').addEventListener('dragleave', e => { e.preventDefault(); e.currentTarget.style.borderColor='#94a3b8'; });
 document.getElementById('uploadZone').addEventListener('drop', e => {
   e.preventDefault();
-  e.currentTarget.style.borderColor = '#94a3b8';
+  e.currentTarget.style.borderColor='#94a3b8';
   if(e.dataTransfer.files[0]) handleFile({target:{files:e.dataTransfer.files}});
 });
 
 function handleFile(e){
   const file = e.target.files[0];
   if(!file) return;
-
   const reader = new FileReader();
-  reader.onload = function(evt){
-    const text = evt.target.result;
-    processCSV(text);
+  reader.onload = evt => {
+    processCSV(evt.target.result);
     document.getElementById('uploadText').innerHTML = `✅ <strong>${file.name}</strong>`;
     document.getElementById('searchBox').disabled = false;
   };
   reader.readAsText(file);
 }
 
+// ─── PARSING CSV ───────────────────────────────────────────────
 function processCSV(text){
-  // Reset Data
-  DATA = { schools: {}, globalStats: { totalAccess:0, totalSchools:0, meanAccess:0, profiles:{}, apps:{}} };
+  DATA = { schools:{}, globalStats:{ totalAccess:0, totalSchools:0, meanAccess:0, profiles:{}, apps:{}} };
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
-  // Détection du séparateur: utilise le point-virgule (;) si présent, sinon la virgule (,)
-  const sep = lines[0].includes(';') ? ';' : ',';
-
-  let countRows = 0;
+  const sep   = lines[0].includes(';') ? ';' : ',';
 
   for(let i=1; i<lines.length; i++){
-    const cols = lines[i].split(sep).map(c => c.replace(/"/g, '').trim());
+    const cols   = lines[i].split(sep).map(c => c.replace(/"/g,'').trim());
     if(cols.length < 5) continue;
-
-    // Colonnes : [0]Établissement, [1]UAI, [3]Profil, [4]Application, [5]Nombre d'accès
-    const name = cols[0];
-    const uai = cols[1];
+    const name   = cols[0];
+    const uai    = cols[1];
     const profil = cols[3] || 'Autre';
-    const app = cols[4] || 'Inconnu';
-    const access = parseInt(cols[5]) || 0; 
-
+    const app    = cols[4] || 'Inconnu';
+    const access = parseInt(cols[5]) || 0;
     if(!uai) continue;
 
-    if(!DATA.schools[uai]){
-      DATA.schools[uai] = { uai, name, totalAccess: 0, apps: {}, profiles: {} };
-    }
+    if(!DATA.schools[uai])
+      DATA.schools[uai] = { uai, name, totalAccess:0, apps:{}, profiles:{}, byProfile:{} };
 
     const s = DATA.schools[uai];
-    s.totalAccess += access;
-    s.apps[app] = (s.apps[app] || 0) + access;
-    s.profiles[profil] = (s.profiles[profil] || 0) + access;
+    s.totalAccess      += access;
+    s.apps[app]         = (s.apps[app]    || 0) + access;
+    s.profiles[profil]  = (s.profiles[profil] || 0) + access;
 
-    DATA.globalStats.totalAccess += access;
-    DATA.globalStats.apps[app] = (DATA.globalStats.apps[app] || 0) + access;
-    DATA.globalStats.profiles[profil] = (DATA.globalStats.profiles[profil] || 0) + access;
+    // ← NOUVEAU : ventilation par profil
+    if(!s.byProfile[profil]) s.byProfile[profil] = {};
+    s.byProfile[profil][app] = (s.byProfile[profil][app] || 0) + access;
 
-    countRows++;
+    DATA.globalStats.totalAccess          += access;
+    DATA.globalStats.apps[app]             = (DATA.globalStats.apps[app]     || 0) + access;
+    DATA.globalStats.profiles[profil]      = (DATA.globalStats.profiles[profil] || 0) + access;
   }
 
   const uais = Object.keys(DATA.schools);
   DATA.globalStats.totalSchools = uais.length;
-  DATA.globalStats.meanAccess = DATA.globalStats.totalAccess / (uais.length || 1);
+  DATA.globalStats.meanAccess   = DATA.globalStats.totalAccess / (uais.length || 1);
 
   renderSchoolList();
   renderGlobalDashboard();
 }
 
-// --- RENDERING VIEWS ---
-
-function renderSchoolList(filter = ""){
+// ─── LISTE ÉTABLISSEMENTS ──────────────────────────────────────
+function renderSchoolList(filter=""){
   const list = document.getElementById('schoolList');
   list.innerHTML = "";
-
-  const sortedUAIs = Object.keys(DATA.schools).sort((a,b) => DATA.schools[b].totalAccess - DATA.schools[a].totalAccess);
-
-  sortedUAIs.forEach(uai => {
-    const s = DATA.schools[uai];
-    if(filter && !s.name.toLowerCase().includes(filter.toLowerCase()) && !uai.toLowerCase().includes(filter.toLowerCase())) return;
-
-    const div = document.createElement('div');
-    div.className = 'list-item';
-    div.innerHTML = `
-      <div class="item-name">${s.name}</div>
-      <div class="item-meta">
-        <span>${uai}</span>
-        <span class="badge" style="background:#dbeafe; color:#1e3a8a; border:2px solid #93c5fd; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:800;">${s.totalAccess.toLocaleString()} accès</span>
-      </div>
-    `;
-    div.onclick = () => showDetail(uai);
-    list.appendChild(div);
-  });
+  Object.keys(DATA.schools)
+    .sort((a,b) => DATA.schools[b].totalAccess - DATA.schools[a].totalAccess)
+    .forEach(uai => {
+      const s = DATA.schools[uai];
+      if(filter && !s.name.toLowerCase().includes(filter.toLowerCase()) && !uai.toLowerCase().includes(filter.toLowerCase())) return;
+      const div = document.createElement('div');
+      div.className = 'list-item';
+      div.innerHTML = `
+        <div class="item-name">${s.name}</div>
+        <div class="item-meta">
+          <span>${uai}</span>
+          <span class="badge" style="background:#dbeafe;color:#1e3a8a;border:2px solid #93c5fd;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:800;">${s.totalAccess.toLocaleString()} accès</span>
+        </div>`;
+      div.onclick = () => showDetail(uai);
+      list.appendChild(div);
+    });
 }
+document.getElementById('searchBox').addEventListener('input', e => renderSchoolList(e.target.value));
 
-document.getElementById('searchBox').addEventListener('input', (e) => renderSchoolList(e.target.value));
-
+// ─── VUE GLOBALE ───────────────────────────────────────────────
 function renderGlobalDashboard(){
   currentView = 'global';
   document.getElementById('globalDashboard').classList.remove('hidden');
   document.getElementById('detailView').style.display = 'none';
   document.getElementById('btnBack').classList.add('hidden');
 
-  document.getElementById('kpi-etabs').innerText = DATA.globalStats.totalSchools;
+  document.getElementById('kpi-etabs').innerText  = DATA.globalStats.totalSchools;
   document.getElementById('kpi-access').innerText = DATA.globalStats.totalAccess.toLocaleString();
-  document.getElementById('kpi-apps').innerText = Object.keys(DATA.globalStats.apps).length;
-  document.getElementById('kpi-avg').innerText = Math.round(DATA.globalStats.meanAccess).toLocaleString();
+  document.getElementById('kpi-apps').innerText   = Object.keys(DATA.globalStats.apps).length;
+  document.getElementById('kpi-avg').innerText    = Math.round(DATA.globalStats.meanAccess).toLocaleString();
 
-  createBarChart('chartTopAppsGlobal', DATA.globalStats.apps, 'Top Applications (Global)');
+  createBarChart('chartTopAppsGlobal',  DATA.globalStats.apps,     'Top Applications (Global)', '#1e40af');
   createPieChart('chartProfilesGlobal', DATA.globalStats.profiles, 'Répartition Profils');
 }
 
+// ─── VUE DÉTAIL ────────────────────────────────────────────────
 function showDetail(uai){
-  currentView = 'detail';
-  currentUAI = uai;
-  const s = DATA.schools[uai];
+  currentView      = 'detail';
+  currentUAI       = uai;
+  selectedProfiles = new Set();
 
+  const s = DATA.schools[uai];
   document.getElementById('globalDashboard').classList.add('hidden');
-  const dView = document.getElementById('detailView');
-  dView.style.display = 'block';
+  document.getElementById('detailView').style.display = 'block';
   document.getElementById('btnBack').classList.remove('hidden');
 
-  document.getElementById('detailName').innerText = s.name;
-  document.getElementById('detailUAI').innerText = `${s.uai}`;
+  document.getElementById('detailName').innerText  = s.name;
+  document.getElementById('detailUAI').innerText   = s.uai;
   document.getElementById('detailTotal').innerText = s.totalAccess.toLocaleString();
 
-  // Logic for the Usage Rule Bar
-  const mean = DATA.globalStats.meanAccess;
-  const ratio = s.totalAccess / (mean * 2);
-  let percent = Math.min(ratio * 100, 100);
-
-  const barFill = document.getElementById('ruleBarFill');
-  barFill.style.width = `${percent}%`;
-  if(s.totalAccess < mean * 0.5) barFill.style.background = "#f59e0b";
-  else if(s.totalAccess > mean * 1.5) barFill.style.background = "#10b981";
-  else barFill.style.background = "#3b82f6";
-
+  // Barre de positionnement
+  const mean    = DATA.globalStats.meanAccess;
+  const percent = Math.min((s.totalAccess / (mean * 2)) * 100, 100);
+  const bar     = document.getElementById('ruleBarFill');
+  bar.style.width = `${percent}%`;
+  bar.style.background = s.totalAccess < mean * 0.5 ? '#f59e0b'
+                        : s.totalAccess > mean * 1.5 ? '#10b981'
+                        : '#3b82f6';
   document.getElementById('txtMeanVal').innerText = Math.round(mean).toLocaleString();
 
-  createBarChart('chartDetailApps', s.apps, 'Top Applications');
+  // Pills de profil + rendu initial (Set vide = tous)
+  buildProfilePills(uai);
+  renderDetailCharts(uai, selectedProfiles);
+}
+
+// ─── PILLS DE PROFIL (multi-sélection) ────────────────────────
+function buildProfilePills(uai){
+  const s         = DATA.schools[uai];
+  const container = document.getElementById('profileFilterBtns');
+  container.innerHTML = '';
+
+  // Séparateur visuel
+  const hint = document.createElement('span');
+  hint.style.cssText = 'font-size:11px;color:#94a3b8;font-weight:600;align-self:center;margin-right:4px;';
+  hint.textContent = 'Cliquer pour combiner :';
+  container.appendChild(hint);
+
+  // Un pill par profil, trié par volume décroissant
+  Object.entries(s.profiles)
+    .sort((a,b) => b[1] - a[1])
+    .forEach(([profil, total]) => {
+      const pill = makePill(
+        `${profilEmoji(profil)} ${profil} <span style="font-size:11px;opacity:0.75;">(${total.toLocaleString()})</span>`,
+        profilColor(profil),
+        false
+      );
+      pill.dataset.profil = profil;
+      pill.onclick = () => toggleProfile(uai, profil, pill);
+      container.appendChild(pill);
+    });
+
+  // Bouton "Tout réinitialiser"
+  const resetBtn = document.createElement('button');
+  resetBtn.id = 'pillReset';
+  resetBtn.className = 'profile-pill';
+  resetBtn.innerHTML = '↺ Tous';
+  resetBtn.style.cssText = 'border-color:#0f172a;margin-left:8px;';
+  resetBtn.onclick = () => resetProfiles(uai);
+  container.appendChild(resetBtn);
+}
+
+function makePill(html, color, active){
+  const btn = document.createElement('button');
+  btn.className = 'profile-pill' + (active ? ' active' : '');
+  btn.innerHTML = html;
+  btn.style.borderColor = color;
+  if(active){ btn.style.background = color; btn.style.color = 'white'; }
+  return btn;
+}
+
+function toggleProfile(uai, profil, clickedPill){
+  const color = profilColor(profil);
+  if(selectedProfiles.has(profil)){
+    // Déselectionner
+    selectedProfiles.delete(profil);
+    clickedPill.classList.remove('active');
+    clickedPill.style.background = '#f1f5f9';
+    clickedPill.style.color      = '#334155';
+  } else {
+    // Sélectionner
+    selectedProfiles.add(profil);
+    clickedPill.classList.add('active');
+    clickedPill.style.background = color;
+    clickedPill.style.color      = 'white';
+  }
+  renderDetailCharts(uai, selectedProfiles);
+}
+
+function resetProfiles(uai){
+  selectedProfiles = new Set();
+  document.querySelectorAll('#profileFilterBtns .profile-pill[data-profil]').forEach(p => {
+    p.classList.remove('active');
+    p.style.background = '#f1f5f9';
+    p.style.color      = '#334155';
+  });
+  renderDetailCharts(uai, selectedProfiles);
+}
+
+// ─── RENDU GRAPHIQUES + TABLEAU (multi-profils) ────────────────
+function renderDetailCharts(uai, profilesSet){
+  const s = DATA.schools[uai];
+  const none = profilesSet.size === 0; // Set vide = tous
+
+  // Agrégation des apps selon les profils sélectionnés
+  let appsData = {};
+  if(none){
+    appsData = s.apps;
+  } else {
+    profilesSet.forEach(profil => {
+      const profileApps = s.byProfile[profil] || {};
+      Object.entries(profileApps).forEach(([app, count]) => {
+        appsData[app] = (appsData[app] || 0) + count;
+      });
+    });
+  }
+
+  // Label de sélection
+  let suffix, barColor;
+  if(none){
+    suffix   = '';
+    barColor = '#1e40af';
+  } else if(profilesSet.size === 1){
+    const p  = [...profilesSet][0];
+    suffix   = ` — ${profilEmoji(p)} ${p}`;
+    barColor = profilColor(p);
+  } else {
+    const labels = [...profilesSet].map(p => `${profilEmoji(p)} ${p}`).join(' + ');
+    suffix   = ` — ${labels}`;
+    barColor = null; // multi → barres colorées par profil
+  }
+
+  document.getElementById('chartDetailAppsTitle').textContent = `📊 Top Usages Établissement${suffix}`;
+  document.getElementById('tableDetailTitle').textContent     = `📋 Statistiques détaillées${suffix}`;
+
+  // Graphique bars : multi-couleurs si plusieurs profils
+  if(profilesSet.size > 1){
+    createBarChartMulti('chartDetailApps', appsData, profilesSet, s);
+  } else {
+    createBarChart('chartDetailApps', appsData, 'Top Applications', barColor || '#1e40af');
+  }
+
+  // Graphique doughnut profils (toujours l'ensemble)
   createPieChart('chartDetailProfiles', s.profiles, 'Profils');
 
-  // Populate detail table (limit to top 15 apps)
+  // Tableau
   const tbody = document.getElementById('detailTableBody');
   tbody.innerHTML = '';
-  const sortedApps = Object.entries(s.apps).sort((a,b) => b[1] - a[1]);
+  Object.entries(appsData)
+    .sort((a,b) => b[1]-a[1])
+    .slice(0,15)
+    .forEach(([app, count]) => {
+      // Profil dominant sur cette app
+      let domProfil = '-', domCount = 0;
+      Object.entries(s.byProfile).forEach(([p, apps]) => {
+        const c = apps[app] || 0;
+        if(c > domCount){ domCount = c; domProfil = p; }
+      });
 
-  sortedApps.slice(0, 15).forEach(([app, count]) => {
-    const tr = document.createElement('tr');
-    tr.style.borderBottom = "2px solid #cbd5e1";
-    tr.innerHTML = `
-      <td style="padding:10px; font-weight:700; color:#0f172a;">${app}</td>
-      <td style="padding:10px; font-weight:800; color:#1e3a8a; font-size:14px;">${count.toLocaleString()}</td>
-      <td style="padding:10px; color:#64748b; font-size:11px; font-weight:700;">-</td>
-    `;
-    tbody.appendChild(tr);
-  });
+      // Détail par profil sélectionné si multi
+      let profilDetail = '';
+      if(!none && profilesSet.size > 1){
+        const parts = [...profilesSet]
+          .map(p => {
+            const c = (s.byProfile[p] || {})[app] || 0;
+            if(!c) return null;
+            return `<span class="profil-badge" style="background:${profilColor(p)};margin-right:3px;">${profilEmoji(p)} ${c.toLocaleString()}</span>`;
+          })
+          .filter(Boolean).join('');
+        profilDetail = `<div style="margin-top:4px;">${parts}</div>`;
+      }
+
+      const badgeColor = domProfil !== '-' ? profilColor(domProfil) : '#94a3b8';
+      const emoji      = domProfil !== '-' ? profilEmoji(domProfil) : '';
+      const tr = document.createElement('tr');
+      tr.style.borderBottom = '2px solid #cbd5e1';
+      tr.innerHTML = `
+        <td style="padding:10px;font-weight:700;color:#0f172a;">${app}</td>
+        <td style="padding:10px;font-weight:800;color:#1e3a8a;font-size:14px;">${count.toLocaleString()}${profilDetail}</td>
+        <td style="padding:10px;">
+          <span class="profil-badge" style="background:${badgeColor};">${emoji} ${domProfil}</span>
+        </td>`;
+      tbody.appendChild(tr);
+    });
 }
 
 document.getElementById('btnBack').addEventListener('click', () => {
@@ -447,32 +638,57 @@ document.getElementById('btnBack').addEventListener('click', () => {
   document.querySelectorAll('.list-item').forEach(i => i.classList.remove('active'));
 });
 
-// --- CHARTS HELPERS ---
-function createBarChart(canvasId, dataObj, label){
+// ─── CHARTS HELPERS ────────────────────────────────────────────
+function createBarChart(canvasId, dataObj, label, color='#1e40af'){
   if(charts[canvasId]) charts[canvasId].destroy();
-  const sorted = Object.entries(dataObj).sort((a,b) => b[1] - a[1]).slice(0, 10);
-  const ctx = document.getElementById(canvasId).getContext('2d');
+  const sorted = Object.entries(dataObj).sort((a,b) => b[1]-a[1]).slice(0,10);
+  const ctx    = document.getElementById(canvasId).getContext('2d');
   charts[canvasId] = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: sorted.map(i => i[0]),
-      datasets: [{
-        label: 'Accès',
-        data: sorted.map(i => i[1]),
-        backgroundColor: '#1e40af',
-        borderColor: '#1e3a8a',
-        borderWidth: 2,
-        borderRadius: 6
-      }]
+      datasets: [{ label:'Accès', data: sorted.map(i => i[1]),
+        backgroundColor: color, borderColor: color,
+        borderWidth:2, borderRadius:6 }]
     },
     options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: {display:false}, datalabels: { display: false } },
+      indexAxis: 'y', responsive:true, maintainAspectRatio:false,
+      plugins: { legend:{display:false}, datalabels:{display:false} },
+      scales: { x:{grid:{color:'#cbd5e1',lineWidth:2}}, y:{grid:{display:false}} }
+    }
+  });
+}
+
+// Graphique multi-profils : barres empilées avec une couleur par profil
+function createBarChartMulti(canvasId, aggregatedData, profilesSet, schoolData){
+  if(charts[canvasId]) charts[canvasId].destroy();
+  const sorted   = Object.entries(aggregatedData).sort((a,b) => b[1]-a[1]).slice(0,10);
+  const appNames = sorted.map(i => i[0]);
+  const profiles = [...profilesSet];
+
+  const datasets = profiles.map(profil => ({
+    label: `${profilEmoji(profil)} ${profil}`,
+    data: appNames.map(app => (schoolData.byProfile[profil]||{})[app] || 0),
+    backgroundColor: profilColor(profil),
+    borderColor:     profilColor(profil),
+    borderWidth: 1,
+    borderRadius: 4
+  }));
+
+  const ctx = document.getElementById(canvasId).getContext('2d');
+  charts[canvasId] = new Chart(ctx, {
+    type: 'bar',
+    data: { labels: appNames, datasets },
+    options: {
+      indexAxis: 'y', responsive:true, maintainAspectRatio:false,
+      plugins: {
+        legend:{ display:true, position:'top',
+          labels:{ color:'#0f172a', font:{weight:'700', size:12}, padding:12 } },
+        datalabels:{ display:false }
+      },
       scales: {
-        x: { grid: { color: '#cbd5e1', lineWidth: 2 } },
-        y: { grid: { display: false } }
+        x:{ stacked:true, grid:{color:'#cbd5e1',lineWidth:2} },
+        y:{ stacked:true, grid:{display:false} }
       }
     }
   });
@@ -487,192 +703,123 @@ function createPieChart(canvasId, dataObj, label){
       labels: Object.keys(dataObj),
       datasets: [{
         data: Object.values(dataObj),
-        backgroundColor: ['#1e40af', '#059669', '#d97706', '#7c3aed', '#dc2626', '#0891b2'],
-        borderColor: '#ffffff',
-        borderWidth: 4
+        backgroundColor: Object.keys(dataObj).map(p => profilColor(p)),
+        borderColor: '#ffffff', borderWidth: 4
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive:true, maintainAspectRatio:false,
       plugins: {
-        legend: {
-          position:'bottom',
-          labels: { color: '#0f172a', font: { weight: '700', size: 13 }, padding: 15 }
-        },
-        datalabels: { display: false }
+        legend: { position:'bottom', labels:{ color:'#0f172a', font:{weight:'700',size:13}, padding:15 } },
+        datalabels: { display:false }
       }
     }
   });
 }
 
-// Fonction pour forcer la mise à jour des graphiques avant la capture
-function redrawCharts() {
-    for (const id in charts) {
-        if (charts[id]) {
-            charts[id].resize(); 
-            charts[id].update('none'); 
-        }
-    }
+function redrawCharts(){
+  for(const id in charts){
+    if(charts[id]){ charts[id].resize(); charts[id].update('none'); }
+  }
 }
 
-
-// --- EXPORT FUNCTION (ULTRA-FIABILISÉE AVEC PAGINATION) ---
+// ─── EXPORT (inchangé) ─────────────────────────────────────────
 document.getElementById('exportPDF').addEventListener('click', () => exportDoc('pdf'));
 document.getElementById('exportPNG').addEventListener('click', () => exportDoc('png'));
 
 async function exportDoc(format){
   let elementId, titlePrefix;
-
-  if(currentView === 'global'){
-    elementId = 'globalDashboard';
-    titlePrefix = 'Rapport_Global';
+  if(currentView==='global'){
+    elementId='globalDashboard'; titlePrefix='Rapport_Global';
   } else {
-    elementId = 'detailView';
-    const s = DATA.schools[currentUAI];
-    titlePrefix = `Fiche_${s.name.replace(/\s+/g, '_')}`;
+    elementId='detailView';
+    const s=DATA.schools[currentUAI];
+    titlePrefix=`Fiche_${s.name.replace(/\s+/g,'_')}`;
   }
 
   const elementToCapture = document.getElementById(elementId);
-  const mainContent = document.getElementById('mainContent');
-  const sidebar = document.getElementById('sidebarPanel');
+  const mainContent   = document.getElementById('mainContent');
+  const sidebar       = document.getElementById('sidebarPanel');
   const mainContainer = document.getElementById('mainContainer');
-  const btnDiv = document.querySelector('.toolbar');
-  const htmlElement = document.documentElement;
+  const btnDiv        = document.querySelector('.toolbar');
+  const htmlElement   = document.documentElement;
 
-  // 1. Sauvegarde des styles originaux pour la restauration
   const originalStyles = {
-    htmlHeight: htmlElement.style.height,
-    bodyOverflow: document.body.style.overflow,
-    bodyMinHeight: document.body.style.minHeight,
-    mainContentOverflow: mainContent.style.overflow,
-    mainContentHeight: mainContent.style.height,
-    sidebarHeight: sidebar.style.height,
-    mainContainerHeight: mainContainer.style.height,
-    btnDivOpacity: btnDiv.style.opacity
+    htmlHeight:           htmlElement.style.height,
+    bodyOverflow:         document.body.style.overflow,
+    bodyMinHeight:        document.body.style.minHeight,
+    mainContentOverflow:  mainContent.style.overflow,
+    mainContentHeight:    mainContent.style.height,
+    sidebarHeight:        sidebar.style.height,
+    mainContainerHeight:  mainContainer.style.height,
+    btnDivOpacity:        btnDiv.style.opacity
   };
-
-  // NOUVEAU: Stockage des canvases originaux pour la restauration
   const originalCanvases = {};
 
   try {
-    // 2. Préparation du layout pour la capture complète (suppression des scrollbars et expansion)
-    btnDiv.style.opacity = '0'; // Cache la barre d'outils (comme demandé)
-    htmlElement.style.height = 'auto';
-    document.body.style.overflow = 'auto';
-    document.body.style.minHeight = 'auto';
-    
-    // Rendre les containers expansibles pour capturer tout le contenu
-    mainContainer.style.height = 'auto';
-    sidebar.style.height = 'auto';
-    mainContent.style.overflow = 'visible';
-    mainContent.style.height = 'auto';
-    
+    btnDiv.style.opacity        = '0';
+    htmlElement.style.height    = 'auto';
+    document.body.style.overflow   = 'auto';
+    document.body.style.minHeight  = 'auto';
+    mainContainer.style.height  = 'auto';
+    sidebar.style.height        = 'auto';
+    mainContent.style.overflow  = 'visible';
+    mainContent.style.height    = 'auto';
     redrawCharts();
-    window.scrollTo(0, 0);
-    
-    // Délai nécessaire pour que le navigateur recalcule les hauteurs et le DOM
-    await new Promise(resolve => setTimeout(resolve, 300)); 
+    window.scrollTo(0,0);
+    await new Promise(r => setTimeout(r,300));
 
-    // --- FIX CRITIQUE: Remplacer les Canvases par des Images Statiques ---
-    for (const id in charts) {
-        const canvasElement = document.getElementById(id);
-        if (canvasElement && canvasElement.tagName === 'CANVAS') {
-            originalCanvases[id] = canvasElement;
-            
-            // Créer l'image statique à partir du contenu du canvas
-            const img = new Image();
-            img.src = canvasElement.toDataURL('image/png');
-            img.style.width = '100%';
-            img.style.height = '100%'; 
-            img.id = id; // Garder l'ID pour pouvoir le retrouver facilement dans le finally
-            
-            canvasElement.parentNode.replaceChild(img, canvasElement);
-        }
-    }
-    // --- FIN FIX CRITIQUE ---
-
-    // 3. Capture de l'élément en haute résolution
-    const canvas = await html2canvas(elementToCapture, {
-        scale: 2, // Haute résolution
-        scrollY: 0,
-        backgroundColor: null, // Conserve l'arrière-plan du body (dégradé)
-        useCORS: true,
-    });
-    
-    // 4. Vérification de la validité du Canvas
-    if (!canvas || canvas.width === 0 || canvas.height === 0) {
-        throw new Error("La capture de l'écran est vide. Vérifiez que la page n'est pas vide.");
-    }
-
-    const dateStamp = new Date().toISOString().slice(0,10).replace(/-/g, '');
-    const fileName = `${titlePrefix}_${dateStamp}.${format}`;
-
-    // 5. Exportation
-    if(format === 'png'){
-      const link = document.createElement('a');
-      link.download = fileName;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    } else {
-      // Export PDF avec gestion de la pagination A4
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgData = canvas.toDataURL('image/png');
-      
-      const imgProps = pdf.getImageProperties(imgData);
-      const pdfWidth = pdf.internal.pageSize.getWidth(); // Largeur A4 en mm
-      // Hauteur totale de l'image capturée, ajustée à l'échelle A4
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; 
-      const pageHeight = pdf.internal.pageSize.getHeight(); // Hauteur A4 en mm (297)
-      
-      let heightLeft = pdfHeight;
-      let position = 0; // Position de découpe Y
-
-      // Première page (la hauteur restante est déduite)
-      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
-      heightLeft -= pageHeight;
-      
-      // Pages suivantes
-      while (heightLeft > 0) {
-        // La position négative décale l'image vers le haut (montre la partie basse)
-        position -= pageHeight; 
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, pdfHeight);
-        heightLeft -= pageHeight;
+    for(const id in charts){
+      const el = document.getElementById(id);
+      if(el && el.tagName==='CANVAS'){
+        originalCanvases[id] = el;
+        const img = new Image();
+        img.src = el.toDataURL('image/png');
+        img.style.width='100%'; img.style.height='100%'; img.id=id;
+        el.parentNode.replaceChild(img,el);
       }
-      
+    }
+
+    const canvas = await html2canvas(elementToCapture, { scale:2, scrollY:0, backgroundColor:null, useCORS:true });
+    if(!canvas||canvas.width===0||canvas.height===0) throw new Error("La capture de l'écran est vide.");
+
+    const dateStamp = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    const fileName  = `${titlePrefix}_${dateStamp}.${format}`;
+
+    if(format==='png'){
+      const link=document.createElement('a');
+      link.download=fileName; link.href=canvas.toDataURL('image/png'); link.click();
+    } else {
+      const {jsPDF}=window.jspdf;
+      const pdf=new jsPDF('p','mm','a4');
+      const imgData=canvas.toDataURL('image/png');
+      const imgProps=pdf.getImageProperties(imgData);
+      const pdfW=pdf.internal.pageSize.getWidth();
+      const pdfH=(imgProps.height*pdfW)/imgProps.width;
+      const pageH=pdf.internal.pageSize.getHeight();
+      let heightLeft=pdfH, pos=0;
+      pdf.addImage(imgData,'PNG',0,pos,pdfW,pdfH); heightLeft-=pageH;
+      while(heightLeft>0){ pos-=pageH; pdf.addPage(); pdf.addImage(imgData,'PNG',0,pos,pdfW,pdfH); heightLeft-=pageH; }
       pdf.save(fileName);
     }
   } catch(e){
-    console.error("Erreur export :", e);
-    alert(`Erreur critique lors de l'exportation. ${e.message || "Problème inconnu."} Veuillez vérifier la console (F12) pour plus de détails.`);
+    console.error("Erreur export :",e);
+    alert(`Erreur critique lors de l'exportation. ${e.message||"Problème inconnu."}`);
   } finally {
-    // 6. Restauration des Canvases originaux
-    for (const id in originalCanvases) {
-        const tempElement = document.getElementById(id); // Qui est maintenant une balise <img>
-        if (tempElement && originalCanvases[id]) {
-            tempElement.parentNode.replaceChild(originalCanvases[id], tempElement); // Remplacement de l'<img> par le <canvas> original
-        }
+    for(const id in originalCanvases){
+      const el=document.getElementById(id);
+      if(el&&originalCanvases[id]) el.parentNode.replaceChild(originalCanvases[id],el);
     }
-    
-    // 7. Restauration des styles initiaux
-    htmlElement.style.height = originalStyles.htmlHeight;
-    document.body.style.overflow = originalStyles.bodyOverflow;
-    document.body.style.minHeight = originalStyles.bodyMinHeight;
-    
-    mainContainer.style.height = originalStyles.mainContainerHeight;
-    mainContent.style.overflow = originalStyles.mainContentOverflow;
-    mainContent.style.height = originalStyles.mainContentHeight;
-    sidebar.style.height = originalStyles.sidebarHeight;
-    
-    // Restaure la visibilité du bouton export
-    btnDiv.style.opacity = originalStyles.btnDivOpacity;
-    
-    // Redessiner les graphiques restaurés
+    htmlElement.style.height         = originalStyles.htmlHeight;
+    document.body.style.overflow     = originalStyles.bodyOverflow;
+    document.body.style.minHeight    = originalStyles.bodyMinHeight;
+    mainContainer.style.height       = originalStyles.mainContainerHeight;
+    mainContent.style.overflow       = originalStyles.mainContentOverflow;
+    mainContent.style.height         = originalStyles.mainContentHeight;
+    sidebar.style.height             = originalStyles.sidebarHeight;
+    btnDiv.style.opacity             = originalStyles.btnDivOpacity;
     redrawCharts();
-
-    window.scrollTo(0, 0);
+    window.scrollTo(0,0);
   }
 }
 </script>
